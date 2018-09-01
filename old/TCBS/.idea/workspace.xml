@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="printScope" value="4" />
+    <option name="PRINT_LINE_NUMBERS" value="true" />
+    <option name="OPEN_IN_BROWSER" value="true" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../htmlTest" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="TCBS" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Setup Script" />
+        <option value="XML Properties File" />
+        <option value="HTML File" />
+        <option value="Python Stub" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>updatesets</find>
+      <find>multRDict = {}</find>
+      <find>Network_updateunits</find>
+      <find>activeBUnits</find>
+      <find>activeRUnits</find>
+      <find>== &quot;options&quot;</find>
+      <find>placeUnits</find>
+      <find>battle</find>
+      <find>pygame.display.set_icon</find>
+      <find>https:</find>
+      <find>pygame.display.set_i</find>
+      <find>take_screens</find>
+      <find>updatecost</find>
+      <find>raw</find>
+      <find>Network_updatebullets</find>
+      <find>Network_battleover</find>
+      <find>Network_ceasefire</find>
+      <find>updateoptions</find>
+      <find>False</find>
+      <find>lastbulletping</find>
+      <find>rawList</find>
+      <find>62215</find>
+      <find>serverTxt =</find>
+      <find>createBt</find>
+      <find>[64, 64, 64]</find>
+      <find>print</find>
+      <find>log</find>
+      <find>except</find>
+      <find>PodSix</find>
+      <find>fontList =</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>#</replace>
+      <replace>&quot;screenshots/&quot;+str(datetime.datetime.now())+&quot;.png&quot;</replace>
+      <replace>buttons.update</replace>
+      <replace>set_music(&quot;resources/sounds/in-gameMusic.wav&quot;)</replace>
+      <replace>menuMusic.mp</replace>
+      <replace>menuMusic.mp3</replace>
+      <replace>in-gameMusic.mp3</replace>
+      <replace>grass_green</replace>
+      <replace>sky_blue</replace>
+      <replace>activeBDict</replace>
+      <replace>activeRDict</replace>
+      <replace>antialias</replace>
+      <replace>[128, 128, 128]</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="ROTARTSI82 &lt;38170305+rotartsi82@users.noreply.github.com&gt;" />
+        <option value="ROTARTSI &lt;rotartsi0482@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/units/exampleUnit/unit.py" />
+        <option value="$PROJECT_DIR$/__main__.py" />
+        <option value="$PROJECT_DIR$/resources/scripts/funcsAndClasses.py" />
+        <option value="$PROJECT_DIR$/resources/scripts/load.py" />
+        <option value="$PROJECT_DIR$/resources/scripts/multiplayer.py" />
+        <option value="$PROJECT_DIR$/resources/scripts/mainloop.py" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/PodSixNet/Channel.py" />
+        <option value="$PROJECT_DIR$/_config.yml" />
+        <option value="$PROJECT_DIR$/LICENSE" />
+        <option value="$PROJECT_DIR$/tools/__init__.py" />
+        <option value="$PROJECT_DIR$/TCBSTools/__init__.py" />
+        <option value="$PROJECT_DIR$/data/units/temptest.py" />
+        <option value="$PROJECT_DIR$/data/resources/lang/español.json" />
+        <option value="$PROJECT_DIR$/data/resources/options.pkl" />
+        <option value="$PROJECT_DIR$/docs/TCBSinf.json" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/templates/includes/_navbar.html" />
+        <option value="$PROJECT_DIR$/docs/gallery.html" />
+        <option value="$PROJECT_DIR$/docs/index.html" />
+        <option value="$PROJECT_DIR$/data/units/exampleUnit/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/infantryman/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/peasant/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/swordsman/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/turret/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/wizard/unit.py" />
+        <option value="$PROJECT_DIR$/stubtest.pyi" />
+        <option value="$PROJECT_DIR$/data/resources/scripts/multiplayer.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/unit.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/wizard.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/turret.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/peasant.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/infantryman.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/exampleUnit.py" />
+        <option value="$PROJECT_DIR$/data/units/vanilla/swordsman.py" />
+        <option value="$PROJECT_DIR$/docs/downloads.html" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/uncompyle2/magics.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/data/requirements.txt" />
+        <option value="$PROJECT_DIR$/disassembled_bytecode.txt" />
+        <option value="$PROJECT_DIR$/data/CONFIG.py" />
+        <option value="$PROJECT_DIR$/data/__main__.py" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/PodSixNetPython3/EndPoint.py" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/PodSixNetPython3/Connection.py" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/PodSixNetPython3/Channel.py" />
+        <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/PodSixNetPython3/Server.py" />
+        <option value="$PROJECT_DIR$/data/runCompiled.py" />
+        <option value="$PROJECT_DIR$/data/resources/lang/test.json" />
+        <option value="$PROJECT_DIR$/data/resources/lang/template.json" />
+        <option value="$PROJECT_DIR$/data/resources/scripts/mainloop.py" />
+        <option value="$PROJECT_DIR$/data/resources/scripts/load.py" />
+        <option value="$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py" />
+      </list>
+    </option>
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="false" />
+    <option name="FILTER_DEBUG" value="false" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="815" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Changed Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="TCBS" type="cbb8eebc:String" user="TCBS" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="TCBS" type="cbb8eebc:String" user="TCBS" />
+              <item name="data" type="cbb8eebc:String" user="data" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="TCBS" type="cbb8eebc:String" user="TCBS" />
+              <item name="data" type="cbb8eebc:String" user="data" />
+              <item name="resources" type="cbb8eebc:String" user="resources" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="TCBS" type="cbb8eebc:String" user="TCBS" />
+              <item name="data" type="cbb8eebc:String" user="data" />
+              <item name="resources" type="cbb8eebc:String" user="resources" />
+              <item name="scripts" type="cbb8eebc:String" user="scripts" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ChangesTree.GroupingKeys" value="directory" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="346" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="347" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="346" />
+    <property name="SearchEverywhereHistoryKey" value="__main__&#9;FILE&#9;file:///Users/Grant/Desktop/TCBS/data/__main__.py&#10;java&#9;null&#9;null&#10;updaterects&#9;null&#9;null&#10;PodSixNet&#9;FILE&#9;file:///Users/Grant/Desktop/TCBS/venv/lib/python2.7/site-packages/PodSixNet&#10;'&#9;ACTION&#9;EditorBreadcrumbsHideBoth" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="CommandLine" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="CommandLine" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
+    <property name="vcs.patch.path" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/fonts" />
+      <recent name="$PROJECT_DIR$/resources/scripts" />
+      <recent name="$PROJECT_DIR$/venv/lib/python2.7/site-packages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.TCBS">
+    <configuration name="TCBS" type="PythonConfigurationType" factoryName="Python">
+      <module name="TCBS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="runCompiled" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TCBS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/runCompiled.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="temptest" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TCBS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data/units" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/units/temptest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="tools" type="PythonConfigurationType" factoryName="Python">
+      <module name="TCBS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/data/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/__init__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="unit" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TCBS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data/units/infantryman" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/units/infantryman/infantryman.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.TCBS" />
+      <item itemvalue="Python.tools" />
+      <item itemvalue="Python.temptest" />
+      <item itemvalue="Python.unit" />
+      <item itemvalue="Python.runCompiled" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.runCompiled" />
+        <item itemvalue="Python.unit" />
+        <item itemvalue="Python.temptest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="" />
+      <created>1522947002160</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1522947002160</updated>
+    </task>
+    <task id="LOCAL-00047" summary="README.md update">
+      <created>1527728158588</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1527728158588</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Multiplayer features">
+      <created>1528250158206</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1528250158206</updated>
+    </task>
+    <task id="LOCAL-00050" summary="SegFault Fixed!!! :)">
+      <created>1528294673745</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1528294673746</updated>
+    </task>
+    <task id="LOCAL-00051" summary="logging">
+      <created>1528398351880</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1528398351881</updated>
+    </task>
+    <task id="LOCAL-00052" summary="bullets">
+      <created>1528413638957</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1528413638959</updated>
+    </task>
+    <task id="LOCAL-00053" summary="unit movement in multiplayer">
+      <created>1528468082489</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1528468082490</updated>
+    </task>
+    <task id="LOCAL-00054" summary="multiplayer finish">
+      <created>1528482192968</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1528482192968</updated>
+    </task>
+    <task id="LOCAL-00055" summary="debug">
+      <created>1528487176835</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1528487176836</updated>
+    </task>
+    <task id="LOCAL-00056" summary="onBattleEnd for multiplayer">
+      <created>1528660502142</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1528660502142</updated>
+    </task>
+    <task id="LOCAL-00057" summary="clear fix">
+      <created>1528661550564</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1528661550565</updated>
+    </task>
+    <task id="LOCAL-00058" summary="force end /w escape &amp; cancel ready">
+      <created>1528675642316</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1528675642317</updated>
+    </task>
+    <task id="LOCAL-00059" summary="ceasefire">
+      <created>1528770245415</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1528770245416</updated>
+    </task>
+    <task id="LOCAL-00060" summary="bugfix, place units in real time">
+      <created>1528815219534</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1528815219537</updated>
+    </task>
+    <task id="LOCAL-00061" summary="display multiplayer mode">
+      <created>1528851872032</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1528851872034</updated>
+    </task>
+    <task id="LOCAL-00062" summary="fix serverTxt">
+      <created>1529192685133</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1529192685134</updated>
+    </task>
+    <task id="LOCAL-00063" summary="keyboard shortcuts!">
+      <created>1529251654595</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1529251654596</updated>
+    </task>
+    <task id="LOCAL-00064" summary="title">
+      <created>1529427653152</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1529427653153</updated>
+    </task>
+    <task id="LOCAL-00065" summary="options not updating fix">
+      <created>1529455206263</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1529455206264</updated>
+    </task>
+    <task id="LOCAL-00066" summary="server lag fix">
+      <created>1529520923380</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1529520923381</updated>
+    </task>
+    <task id="LOCAL-00067" summary="go to start multiplayer bug">
+      <created>1529533084838</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1529533084838</updated>
+    </task>
+    <task id="LOCAL-00068" summary="done!">
+      <created>1529597697409</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1529597697410</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Multiplayer target bug fixed">
+      <created>1529625716359</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1529625716360</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Homing bullet bug fix">
+      <created>1529682761459</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1529682761460</updated>
+    </task>
+    <task id="LOCAL-00071" summary="display adjustments">
+      <created>1529719450961</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1529719450961</updated>
+    </task>
+    <task id="LOCAL-00072" summary="github pages test">
+      <created>1529720597885</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1529720597885</updated>
+    </task>
+    <task id="LOCAL-00073" summary="index.html">
+      <created>1529721278437</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1529721278437</updated>
+    </task>
+    <task id="LOCAL-00074" summary="github pages">
+      <created>1529722292574</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1529722292575</updated>
+    </task>
+    <task id="LOCAL-00075" summary="update instructions.">
+      <created>1529723251334</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1529723251335</updated>
+    </task>
+    <task id="LOCAL-00076" summary="fix downloads">
+      <created>1529723836233</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1529723836233</updated>
+    </task>
+    <task id="LOCAL-00077" summary="fix home page">
+      <created>1529724361102</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1529724361102</updated>
+    </task>
+    <task id="LOCAL-00078" summary="update README.md &amp; add related links">
+      <created>1529766400352</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1529766400353</updated>
+    </task>
+    <task id="LOCAL-00079" summary="gallery">
+      <created>1529780917241</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1529780917242</updated>
+    </task>
+    <task id="LOCAL-00080" summary="fix images">
+      <created>1529781318712</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1529781318712</updated>
+    </task>
+    <task id="LOCAL-00081" summary="style images">
+      <created>1529781649690</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1529781649690</updated>
+    </task>
+    <task id="LOCAL-00082" summary="fix home link">
+      <created>1529782414945</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1529782414946</updated>
+    </task>
+    <task id="LOCAL-00083" summary="unit packs">
+      <created>1529981619613</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1529981619614</updated>
+    </task>
+    <task id="LOCAL-00084" summary="bullet dict, anti-aliasing">
+      <created>1530066004588</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1530066004589</updated>
+    </task>
+    <task id="LOCAL-00085" summary="vanilla unit pack">
+      <created>1530378596025</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1530378596026</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Run compiled">
+      <created>1530556659161</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1530556659162</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Run compiled">
+      <created>1530556743183</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1530556743183</updated>
+    </task>
+    <task id="LOCAL-00088" summary="re-do button hover">
+      <created>1530630443207</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1530630443210</updated>
+    </task>
+    <task id="LOCAL-00089" summary="fix cost bug in sandbox">
+      <created>1531167061032</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1531167061033</updated>
+    </task>
+    <task id="LOCAL-00090" summary="bugfix">
+      <created>1534815597511</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1534815597512</updated>
+    </task>
+    <task id="LOCAL-00091" summary="update pygame">
+      <created>1534828405416</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1534828405416</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Update logo">
+      <created>1534875546699</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1534875546701</updated>
+    </task>
+    <task id="LOCAL-00093" summary="venv optional">
+      <created>1534878548123</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1534878548123</updated>
+    </task>
+    <task id="LOCAL-00094" summary="lang changes">
+      <created>1534888287193</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1534888287193</updated>
+    </task>
+    <task id="LOCAL-00095" summary="sysfont &amp; font bugfix">
+      <created>1535301065287</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1535301065289</updated>
+    </task>
+    <task id="LOCAL-00096" summary="fix TxtOrBt.update() crashing">
+      <created>1535301274211</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1535301274211</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="3">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="815" extended-state="0" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5045807" side_tool="true" weight="0.31497175" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.32344633" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32344633" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49541932" weight="0.3226257" />
+      <window_info id="Structure" order="1" sideWeight="0.5400411" side_tool="true" weight="0.25369978" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4982382" weight="0.3226257" />
+      <window_info id="Favorites" order="2" sideWeight="0.5010352" side_tool="true" weight="0.2508711" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.36827195" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32857144" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32859176" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4982382" weight="0.3257143" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48447204" visible="true" weight="0.25369978" />
+      <window_info id="Structure" order="1" sideWeight="0.51552796" side_tool="true" weight="0.25369978" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4947146" weight="0.31586403" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32857144" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32394367" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3711048" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4982382" weight="0.3243626" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5017618" side_tool="true" weight="0.3257143" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4982382" weight="0.3257143" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.32394367" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32859176" />
+      <window_info id="Favorites" order="2" sideWeight="0.5010352" side_tool="true" weight="0.2508711" />
+    </layout-to-restore>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="display adjustments" />
+    <MESSAGE value="github pages test" />
+    <MESSAGE value="index.html" />
+    <MESSAGE value="github pages" />
+    <MESSAGE value="update instructions." />
+    <MESSAGE value="fix downloads" />
+    <MESSAGE value="fix home page" />
+    <MESSAGE value="update README.md &amp; add related links" />
+    <MESSAGE value="gallery" />
+    <MESSAGE value="fix images" />
+    <MESSAGE value="style images" />
+    <MESSAGE value="fix home link" />
+    <MESSAGE value="unit packs" />
+    <MESSAGE value="bullet dict, anti-aliasing" />
+    <MESSAGE value="vanilla unit pack" />
+    <MESSAGE value="Run compiled" />
+    <MESSAGE value="re-do button hover" />
+    <MESSAGE value="fix cost bug in sandbox" />
+    <MESSAGE value="bugfix" />
+    <MESSAGE value="update pygame" />
+    <MESSAGE value="Update logo" />
+    <MESSAGE value="venv optional" />
+    <MESSAGE value="lang changes" />
+    <MESSAGE value="sysfont &amp; font bugfix" />
+    <MESSAGE value="fix TxtOrBt.update() crashing" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix TxtOrBt.update() crashing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog>
+          <selected-grouping-rules>
+            <grouping-rule id="by-file" />
+          </selected-grouping-rules>
+        </breakpoints-dialog>
+      </breakpoints-dialog>
+      <default-breakpoints>
+        <breakpoint log-message="true" log-stack="true" type="python-exception">
+          <properties notifyOnlyOnFirst="true" notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+            <option name="notifyOnlyOnFirst" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="25" />
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="activeBBullets" language="Python" />
+        <watch expression="activeRBullets" language="Python" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>activeRBullets</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>activeBBullets</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>nextRID</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/resources/lang/template.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="42" column="14" selection-start-line="42" selection-start-column="14" selection-end-line="42" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

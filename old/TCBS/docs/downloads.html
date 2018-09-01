@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>TCBS Website</title>
+        <link rel="icon" href="/TCBS/icon.png">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+          <a class="navbar-brand" href="/TCBS">TCBS</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                  aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS/downloads.html">Downloads</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS/gallery.html">Gallery</a>
+                </li>
+              </ul>
+          </div>
+        </nav>
+
+        <div class="container">
+            <iframe id="my_iframe" style="display:none;"></iframe>
+            <script>
+            function Download(url) {
+                document.getElementById('my_iframe').src = url;
+            };
+            </script>
+            <div class="jumbotron text-center">
+                <h1>Downloads</h1>
+            </div>
+            <div class="jumbotron text-left">
+                <h1>How to Install and Run</h1>
+                <ol>
+                    <li>
+                        <p>Download <strong>TCBS</strong> and <strong>VENV</strong> below</p>
+                    </li>
+                    <li>
+                        <p>Unzip both <strong>TCBS-master.zip</strong> and <strong>venv-master.zip</strong>.</p>
+                    </li>
+                    <li>
+                        <p>
+                            Rename the <strong>venv-master</strong> folder to <strong>venv</strong>
+                            and drag it into the <strong>data</strong> folder. The <strong>data</strong>
+                            folder could be found inside of the <strong>TCBS-master</strong> folder.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            If you are using Mac, run <strong>TCBS-Launcher</strong> by double-clicking it.
+                            <strong>TCBS-Launcher</strong> could be found inside the
+                            <strong>TCBS-master</strong> folder.
+                        </p>
+                        <ul>
+                            <li>
+                                <p>
+                                    NOTE: You may need admin permission to run <strong>TCBS-Launcher</strong>.
+                                    If you can't get admin permission, or if <strong>TCBS-Launcher</strong>
+                                    isn't working, just follow the instructions for running <strong>TCBS</strong>
+                                    on Linux below.
+                                </p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>
+                            If you are using Linux, open a terminal window and change the directory to the
+                            <strong>data</strong> folder inside of the <strong>TCBS-master</strong> folder.
+                        </p>
+                        <code>cd ~/Downloads/TCBS-master/data</code>
+                        <p>
+                            Then, run <strong>__main__.py</strong> using <strong>venv/bin/python</strong>.
+                        </p>
+                        <code>venv/bin/python __main__.py</code>
+                    </li>
+                </ol>
+            </div>
+            <div class="jumbotron text-left">
+                <h1>Download TCBS </h1>
+                <p class="lead">
+                    Click to download Totally Customizable Battle Simulator!
+                </p>
+                <button onclick="Download('https://github.com/ROTARTSI82/TCBS/archive/master.zip')">
+                    Download TCBS
+                </button>
+            </div>
+            <div class="jumbotron text-left">
+                <h1>Download VENV </h1>
+                <p class="lead">
+                    Click to download the virtual environment!
+                </p>
+                <button onclick="Download('https://github.com/ROTARTSI82/venv/archive/master.zip')">
+                    Download VENV
+                </button>
+            </div>
+        </div>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    </body>
+</html>
