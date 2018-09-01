@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,7 +22,11 @@
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" column="19" lean-forward="true" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -175,28 +177,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Changed Files">
           <expand>
@@ -221,6 +201,28 @@
               <item name="data" type="cbb8eebc:String" user="data" />
               <item name="resources" type="cbb8eebc:String" user="resources" />
               <item name="scripts" type="cbb8eebc:String" user="scripts" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TCBS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TCBS" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -756,17 +758,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="815" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5045807" side_tool="true" weight="0.31497175" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.32344633" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32344633" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49541932" weight="0.3226257" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" visible="true" weight="0.3231198" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32344633" />
       <window_info id="Structure" order="1" sideWeight="0.5400411" side_tool="true" weight="0.25369978" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4982382" weight="0.3226257" />
-      <window_info id="Favorites" order="2" sideWeight="0.5010352" side_tool="true" weight="0.2508711" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36827195" />
+      <window_info id="Favorites" order="2" sideWeight="0.5010352" side_tool="true" weight="0.2508711" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -780,23 +783,23 @@
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48447204" visible="true" weight="0.25369978" />
       <window_info id="Structure" order="1" sideWeight="0.51552796" side_tool="true" weight="0.25369978" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.32394367" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4947146" weight="0.31586403" />
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32857144" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32394367" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3711048" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4982382" weight="0.3243626" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5017618" side_tool="true" weight="0.3257143" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4982382" weight="0.3257143" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.32394367" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32859176" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5010352" side_tool="true" weight="0.2508711" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4982382" weight="0.3257143" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32859176" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32394367" />
     </layout-to-restore>
   </component>
   <component name="UnknownFeatures">
@@ -919,6 +922,9 @@
     <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/lang/template.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -927,7 +933,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="19" lean-forward="true" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">
