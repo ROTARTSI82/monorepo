@@ -213,6 +213,7 @@ class TCBSClient(ConnectionListener):
             for i in multRUnits:
                 _args = list(i.oldpack())
                 _args[2] = nextRID
+                _args[3] = 0
                 new_unit = type(i)(*_args)
                 oldRUnits.append(new_unit)
                 multRDict[nextRID] = new_unit
@@ -220,6 +221,7 @@ class TCBSClient(ConnectionListener):
             for i in multBUnits:
                 _args = list(i.oldpack())
                 _args[2] = nextBID
+                _args[3] = 0
                 new_unit = type(i)(*_args)
                 oldBUnits.append(new_unit)
                 multBDict[nextBID] = new_unit
