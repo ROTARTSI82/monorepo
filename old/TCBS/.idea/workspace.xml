@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/resources/scripts/multiplayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/resources/scripts/multiplayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/downloads.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/downloads.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,11 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="downloads.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="downloads.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/downloads.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
+            <state relative-caret-position="105">
+              <caret line="7" column="11" lean-forward="true" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
               <folding>
                 <element signature="e#1882#1888#0" expanded="true" />
                 <element signature="e#1922#1928#0" expanded="true" />
@@ -73,14 +69,18 @@
       </file>
       <file leaf-file-name="mainloop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/resources/scripts/mainloop.py">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="143">
+              <caret line="267" column="32" selection-start-line="267" selection-start-column="20" selection-end-line="267" selection-end-column="32" />
+            </state>
+          </provider>
         </entry>
       </file>
-      <file leaf-file-name="multiplayer.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="multiplayer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/resources/scripts/multiplayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="221" column="35" selection-start-line="221" selection-start-column="35" selection-end-line="221" selection-end-column="35" />
+            <state relative-caret-position="276">
+              <caret line="223" column="28" selection-start-line="223" selection-start-column="28" selection-end-line="223" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -88,8 +88,8 @@
       <file leaf-file-name="swordsman.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/units/vanilla/swordsman.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="71" column="13" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="13" />
+            <state relative-caret-position="213">
+              <caret line="49" column="26" lean-forward="true" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -154,9 +154,9 @@
       <find>PodSix</find>
       <find>fontList =</find>
       <find>pack =</find>
+      <find>oldRUnits =</find>
+      <find>oldRUnits =</find>
       <find>pack(</find>
-      <find>oldRUnits =</find>
-      <find>oldRUnits =</find>
     </findStrings>
     <replaceStrings>
       <replace>#</replace>
@@ -515,13 +515,6 @@
       <option name="presentableId" value="Default" />
       <updated>1522947002160</updated>
     </task>
-    <task id="LOCAL-00050" summary="SegFault Fixed!!! :)">
-      <created>1528294673745</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1528294673746</updated>
-    </task>
     <task id="LOCAL-00051" summary="logging">
       <created>1528398351880</created>
       <option name="number" value="00051" />
@@ -858,7 +851,14 @@
       <option name="project" value="LOCAL" />
       <updated>1536364200737</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="ico update, rot update">
+      <created>1536365063972</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1536365063974</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -877,7 +877,7 @@
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5045807" side_tool="true" weight="0.31497175" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49541932" visible="true" weight="0.321727" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49541932" weight="0.321727" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.3231198" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32344633" />
       <window_info id="Structure" order="1" sideWeight="0.5400411" side_tool="true" weight="0.25369978" />
@@ -960,7 +960,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="index.html" />
     <MESSAGE value="github pages" />
     <MESSAGE value="update instructions." />
     <MESSAGE value="fix downloads" />
@@ -985,7 +984,8 @@
     <MESSAGE value="fix TxtOrBt.update() crashing" />
     <MESSAGE value="website update" />
     <MESSAGE value="site update2" />
-    <option name="LAST_COMMIT_MESSAGE" value="site update2" />
+    <MESSAGE value="ico update, rot update" />
+    <option name="LAST_COMMIT_MESSAGE" value="ico update, rot update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1155,46 +1155,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/downloads.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
-          <folding>
-            <element signature="e#1882#1888#0" expanded="true" />
-            <element signature="e#1922#1928#0" expanded="true" />
-            <element signature="e#2170#2176#0" expanded="true" />
-            <element signature="e#2351#2357#0" expanded="true" />
-            <element signature="e#2529#2535#0" expanded="true" />
-            <element signature="e#2547#2553#0" expanded="true" />
-            <element signature="e#2832#2838#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/gallery.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-29" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/units/vanilla/swordsman.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="71" column="13" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="13" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/load.py">
@@ -1205,12 +1168,53 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/mainloop.py">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="267" column="32" selection-start-line="267" selection-start-column="20" selection-end-line="267" selection-end-column="32" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/multiplayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="221" column="35" selection-start-line="221" selection-start-column="35" selection-end-line="221" selection-end-column="35" />
+        <state relative-caret-position="276">
+          <caret line="223" column="28" selection-start-line="223" selection-start-column="28" selection-end-line="223" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/units/vanilla/swordsman.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="49" column="26" lean-forward="true" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/gallery.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/downloads.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="11" lean-forward="true" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+          <folding>
+            <element signature="e#1882#1888#0" expanded="true" />
+            <element signature="e#1922#1928#0" expanded="true" />
+            <element signature="e#2170#2176#0" expanded="true" />
+            <element signature="e#2351#2357#0" expanded="true" />
+            <element signature="e#2529#2535#0" expanded="true" />
+            <element signature="e#2547#2553#0" expanded="true" />
+            <element signature="e#2832#2838#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
