@@ -22,6 +22,8 @@ updateoptions()
 updaterects()
 
 while running:
+    cursor.rect.center = pygame.mouse.get_pos()
+    cursor.rect.center = (cursor.rect.center[0] * resWinRate[0], cursor.rect.center[1] * resWinRate[1])
     clock.tick(desiredFPS)
     cbCollide = pygame.sprite.spritecollide(cursor, buttons, False)
     buttons.update(cbCollide)
@@ -42,8 +44,9 @@ while running:
         screen.blit(optionsBt.image, optionsBt.rect)
         screen.blit(tcbs_title.image, tcbs_title.rect)
         screen.blit(tcbs_subtitle.image, tcbs_subtitle.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 if optionsBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -73,16 +76,6 @@ while running:
                     updateselectedunit(0)
                     set_music("resources/sounds/in-gameMusic.mp3")
                     red, green, blue = grass_green
-            if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
-            if event.type == QUIT:
-                running = False
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updaterects()
     if state == "options":
         screen.blit(backBt.image, backBt.rect)
         screen.blit(coinRRBt.image, coinRRBt.rect)
@@ -95,8 +88,9 @@ while running:
         screen.blit(langBt.image, langBt.rect)
         screen.blit(check4updatesBt.image, check4updatesBt.rect)
         screen.blit(onBattleEndBt.image, onBattleEndBt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 if backBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -210,17 +204,6 @@ while running:
                     elif not check4updates:
                         options['check4updates'] = True
                     updateoptions()
-            if event.type == QUIT:
-                running = False
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updatecost()
-                updaterects()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
-            if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
     if state == "sndbx-placeUnits":
         pygame.draw.line(screen, [0, 200, 0], [screen.get_width() / 2, -5],
                          [screen.get_width() / 2, screen.get_height() + 5], 5)
@@ -238,8 +221,9 @@ while running:
         screen.blit(teamSelectBt.image, teamSelectBt.rect)
         screen.blit(clearBlueBt.image, clearBlueBt.rect)
         screen.blit(clearRedBt.image, clearRedBt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 if teamSelectBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -309,8 +293,6 @@ while running:
                     pygame.sprite.spritecollide(cursor, sndbxRUnits, True)
                     updatecost()
             if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
                 if event.key == toggleTeamKey:
                     menuBlip.play()
                     if selectedTeam == "red":
@@ -346,14 +328,6 @@ while running:
                     menuBlip.play()
                     sndbxRUnits = pygame.sprite.Group()
                     updatecost()
-            if event.type == QUIT:
-                running = False
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updatecost()
-                updaterects()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
     if state == "sndbx-battle":
         if len(sndbxRUnits) == 0 and len(sndbxBUnits) == 0:
             log("BATTLE", "Draw!")
@@ -363,7 +337,7 @@ while running:
                              [None, 50])
             vicMsg.rect.center = [screen.get_width() / 2, screen.get_height() / 2]
             screen.blit(vicMsg.image, vicMsg.rect)
-            pygame.display.flip()
+            updatesurf()
             state = "sndbx-placeUnits"
             pygame.time.wait(1000)
         if len(sndbxRUnits) == 0 and len(sndbxBUnits) > 0:
@@ -374,7 +348,7 @@ while running:
                              [None, 50])
             vicMsg.rect.center = [screen.get_width() / 2, screen.get_height() / 2]
             screen.blit(vicMsg.image, vicMsg.rect)
-            pygame.display.flip()
+            updatesurf()
             state = "sndbx-placeUnits"
             pygame.time.wait(1000)
         if len(sndbxBUnits) == 0 and len(sndbxRUnits) > 0:
@@ -385,7 +359,7 @@ while running:
                              [None, 50])
             vicMsg.rect.center = [screen.get_width()/2, screen.get_height()/2]
             screen.blit(vicMsg.image, vicMsg.rect)
-            pygame.display.flip()
+            updatesurf()
             state = "sndbx-placeUnits"
             pygame.time.wait(1000)
         if state == "sndbx-placeUnits":
@@ -441,12 +415,9 @@ while running:
         screen.blit(redBar.image, redBar.rect)
         screen.blit(blueBar.image, blueBar.rect)
         screen.blit(selectedUnitTxt.image, selectedUnitTxt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
-            if event.type == QUIT:
-                running = False
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 if teamSelectBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -486,13 +457,7 @@ while running:
                     menuBlip.play()
                     pygame.sprite.spritecollide(cursor, sndbxBUnits, True)
                     pygame.sprite.spritecollide(cursor, sndbxRUnits, True)
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updatecost()
-                updaterects()
             if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
                 if event.key == toggleTeamKey:
                     menuBlip.play()
                     if selectedTeam == "red":
@@ -528,8 +493,9 @@ while running:
         screen.blit(createBt.image, createBt.rect)
         screen.blit(serverHelpBt.image, serverHelpBt.rect)
         screen.blit(serverTxt.image, serverTxt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == KEYDOWN:
                 if event.key == copyKey:
                     menuBlip.play()
@@ -547,8 +513,6 @@ while running:
                     serverTxt.rect.center = [screen.get_width() / 2,
                                              screen.get_height() / 2]
                     continue
-                if event.key == screenshotKey:
-                    take_screenshot()
                 if event.key == K_SPACE:
                     menuBlip.play()
                     serverStr += " "
@@ -621,21 +585,15 @@ while running:
                 if backBt in cbCollide and event.button == 1:
                     menuBlip.play()
                     state = "menu"
-            if event.type == QUIT:
-                running = False
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updaterects()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
     if state == "mult-wait4players":
         c.loop()
         if selfIsHost:
             s.loop()
         screen.blit(backBt.image, backBt.rect)
         screen.blit(wait4plyrsTxt.image, wait4plyrsTxt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 if backBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -646,20 +604,12 @@ while running:
                         s.shutdown()
                     set_music("resources/sounds/menuMusic.mp3")
                     red, green, blue = sky_blue
-            if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
             if event.type == QUIT:
                 c.Send({"action": "leave"})
                 c.loop()
                 if selfIsHost:
                     s.shutdown()
                 running = False
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updaterects()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
     if state == "mult-placeUnits":
         c.loop()
         if selfIsHost:
@@ -695,8 +645,9 @@ while running:
         screen.blit(prevBt.image, prevBt.rect)
         screen.blit(redBar.image, redBar.rect)
         screen.blit(blueBar.image, blueBar.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == MOUSEBUTTONDOWN:
                 # c.Send({"action": "test"})
                 if clearRedBt in cbCollide and event.button == 1 and not selfIsHost:
@@ -778,8 +729,6 @@ while running:
                         coinsLeft[1] += i.cost
                     updatecost()
             if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
                 if event.key == prevUnitKey:
                     menuBlip.play()
                     updateselectedunit(-1)
@@ -815,12 +764,6 @@ while running:
                 c.loop()
                 if selfIsHost:
                     s.shutdown()
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updatecost()
-                updaterects()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
     if state == "mult-battle":
         c.loop()
         if selfIsHost:
@@ -888,8 +831,9 @@ while running:
         screen.blit(blueBar.image, blueBar.rect)
         screen.blit(selectedUnitTxt.image, selectedUnitTxt.rect)
         screen.blit(ceasefireBt.image, ceasefireBt.rect)
-        pygame.display.flip()
+        updatesurf()
         for event in pygame.event.get():
+            updateevent()
             if event.type == USEREVENT+1 and selfIsHost:
                 s.sendtoall({"action": "addcoins", "amount": vCoinRR})
             if event.type == QUIT:
@@ -898,8 +842,6 @@ while running:
                 c.loop()
                 if selfIsHost:
                     s.shutdown()
-            if event.type == MOUSEMOTION:
-                cursor.rect.center = event.pos
             if event.type == MOUSEBUTTONDOWN:
                 if nextBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -948,13 +890,7 @@ while running:
                             alreadyHandled.append(str(e))
                             log("EXCEPTION", "Failed to update AI: " + str(e))
                     updatecost()
-            if event.type == VIDEORESIZE:
-                screen = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
-                updatecost()
-                updaterects()
             if event.type == KEYDOWN:
-                if event.key == screenshotKey:
-                    take_screenshot()
                 if event.key == prevUnitKey:
                     menuBlip.play()
                     updateselectedunit(-1)

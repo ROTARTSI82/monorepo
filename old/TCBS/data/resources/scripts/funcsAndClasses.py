@@ -376,6 +376,28 @@ def updateoptions():
         pickle.dump(options, fp)
 
 
+def updatesurf():
+    #screen.blit(cursor.image, cursor.rect)
+    masterSurf.blit(pygame.transform.scale(screen, [masterSurf.get_width(), masterSurf.get_height()]), [0, 0])
+    pygame.display.flip()
+
+
+def updateevent():
+    global screen, running, masterSurf, resWinRate
+    #if event.type == pygame.MOUSEBUTTONDOWN:
+    #if event.button == 1: pygame.event.set_grab(True)
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE: pygame.event.set_grab(False)
+        if event.key == screenshotKey: take_screenshot()
+    if event.type == QUIT:
+        running = False
+    if event.type == VIDEORESIZE:
+        masterSurf = pygame.display.set_mode(event.dict['size'], *screenArgs[1:])
+        resWinRate = [float(res[0]) / event.dict['size'][0], float(res[1]) / event.dict['size'][1]]
+        updatecost()
+        updaterects()
+
+
 def updaterects():
     """
     Update the rects of all sprites when screen size is adjusted

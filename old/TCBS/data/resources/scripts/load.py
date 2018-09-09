@@ -57,7 +57,10 @@ executefile("resources/scripts/funcsAndClasses.py")
 executefile("resources/scripts/multiplayer.py")
 
 pygame.init()
-screen = pygame.display.set_mode(*screenArgs)
+#screen = pygame.display.set_mode(*screenArgs)
+masterSurf = pygame.display.set_mode(*screenArgs)
+screen = pygame.Surface(res)
+resWinRate = [float(res[0]) / screenArgs[0][0], float(res[1]) / screenArgs[0][1]]
 pygame.key.set_repeat(*keyRR)
 pygame.time.set_timer(USEREVENT + 1, 1000)
 
@@ -69,6 +72,7 @@ screen.fill([255, 255, 255])
 simpleFont = pygame.font.Font(None, 50)
 screen.blit(simpleFont.render("Loading...", False, [255, 0, 0]),
             [screen.get_width()/2-50, screen.get_height()/2-50])
+masterSurf.blit(pygame.transform.scale(screen, [masterSurf.get_width(), masterSurf.get_height()]), [0, 0])
 pygame.display.flip()
 
 running = True
