@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8cd188f7-82cb-4c55-b1d4-c0f0c16b7d48" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/CONFIG.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/CONFIG.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/resources/scripts/load.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/resources/scripts/load.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/resources/scripts/mainloop.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/resources/scripts/mainloop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/downloads.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/downloads.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,8 +28,35 @@
       <file leaf-file-name="CONFIG.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
+            <state relative-caret-position="110">
+              <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="355">
+              <caret line="114" column="5" selection-start-line="114" selection-start-column="5" selection-end-line="114" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="downloads.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/downloads.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="193">
+              <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="91" column="28" lean-forward="true" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -44,10 +70,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="funcsAndClasses.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="funcsAndClasses.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
+            <state relative-caret-position="159">
               <caret line="387" column="4" selection-start-line="387" selection-start-column="4" selection-end-line="387" selection-end-column="4" />
             </state>
           </provider>
@@ -74,7 +100,7 @@
       <file leaf-file-name="load.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/resources/scripts/load.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
+            <state relative-caret-position="486">
               <caret line="83" column="14" lean-forward="true" selection-start-line="83" selection-start-column="14" selection-end-line="83" selection-end-column="14" />
             </state>
           </provider>
@@ -195,7 +221,6 @@
         <option value="$PROJECT_DIR$/data/units/vanilla/exampleUnit.py" />
         <option value="$PROJECT_DIR$/data/units/vanilla/swordsman.py" />
         <option value="$PROJECT_DIR$/data/venv/lib/python2.7/site-packages/uncompyle2/magics.py" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/data/requirements.txt" />
         <option value="$PROJECT_DIR$/disassembled_bytecode.txt" />
         <option value="$PROJECT_DIR$/data/__main__.py" />
@@ -208,13 +233,14 @@
         <option value="$PROJECT_DIR$/data/resources/lang/template.json" />
         <option value="$PROJECT_DIR$/docs/downloads.bak.html" />
         <option value="$PROJECT_DIR$/docs/gallery.html" />
-        <option value="$PROJECT_DIR$/docs/index.html" />
-        <option value="$PROJECT_DIR$/docs/downloads.html" />
         <option value="$PROJECT_DIR$/data/resources/scripts/multiplayer.py" />
-        <option value="$PROJECT_DIR$/data/CONFIG.py" />
         <option value="$PROJECT_DIR$/data/resources/scripts/load.py" />
         <option value="$PROJECT_DIR$/data/resources/scripts/mainloop.py" />
         <option value="$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py" />
+        <option value="$PROJECT_DIR$/docs/downloads.html" />
+        <option value="$PROJECT_DIR$/docs/index.html" />
+        <option value="$PROJECT_DIR$/data/CONFIG.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -492,13 +518,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1522947002160</updated>
-    </task>
-    <task id="LOCAL-00051" summary="logging">
-      <created>1528398351880</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1528398351881</updated>
     </task>
     <task id="LOCAL-00052" summary="bullets">
       <created>1528413638957</created>
@@ -836,7 +855,14 @@
       <option name="project" value="LOCAL" />
       <updated>1536365063974</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="added resolution">
+      <created>1536517536858</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1536517536859</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -852,10 +878,10 @@
     <frame x="0" y="23" width="1440" height="815" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45995894" visible="true" weight="0.25369978" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32857144" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5045807" side_tool="true" weight="0.31497175" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49541932" visible="true" weight="0.32033426" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49541932" visible="true" weight="0.32033426" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49612403" weight="0.3231198" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32344633" />
       <window_info id="Structure" order="1" sideWeight="0.5400411" side_tool="true" weight="0.25369978" />
@@ -938,7 +964,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="github pages" />
     <MESSAGE value="update instructions." />
     <MESSAGE value="fix downloads" />
     <MESSAGE value="fix home page" />
@@ -963,7 +988,8 @@
     <MESSAGE value="website update" />
     <MESSAGE value="site update2" />
     <MESSAGE value="ico update, rot update" />
-    <option name="LAST_COMMIT_MESSAGE" value="ico update, rot update" />
+    <MESSAGE value="added resolution" />
+    <option name="LAST_COMMIT_MESSAGE" value="added resolution" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1011,13 +1037,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data/resources/scripts/load.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3525">
-          <caret line="245" column="27" selection-start-line="245" selection-start-column="21" selection-end-line="245" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/downloads.bak.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1650">
@@ -1296,27 +1315,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="81" selection-start-line="5" selection-start-column="81" selection-end-line="5" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/downloads.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="11" lean-forward="true" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/multiplayer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -1331,13 +1329,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/resources/scripts/load.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="83" column="14" lean-forward="true" selection-start-line="83" selection-start-column="14" selection-end-line="83" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/mainloop.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -1345,10 +1336,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/resources/scripts/load.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="83" column="14" lean-forward="true" selection-start-line="83" selection-start-column="14" selection-end-line="83" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/resources/scripts/funcsAndClasses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
+        <state relative-caret-position="159">
           <caret line="387" column="4" selection-start-line="387" selection-start-column="4" selection-end-line="387" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/downloads.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="91" column="28" lean-forward="true" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/CONFIG.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="114" column="5" selection-start-line="114" selection-start-column="5" selection-end-line="114" selection-end-column="5" />
         </state>
       </provider>
     </entry>
