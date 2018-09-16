@@ -47,6 +47,7 @@ if majorPyVer == 2:
     from PodSixNet.Channel import Channel
     from PodSixNet.Connection import connection, ConnectionListener
     from PodSixNet.rencode import serializable
+    from PodSixNet.version import __version__ as podsixnetVer
 elif majorPyVer == 3:
     from PodSixNetPython3.Server import Server
     from PodSixNetPython3.Channel import Channel
@@ -167,16 +168,16 @@ except KeyError:
 
 pythonver = str(sys.version_info.major)+"."+str(sys.version_info.minor)+"."+str(sys.version_info.micro)
 pygamever = pygame.ver
-log("VERSIONS", "Got Python {} and Pygame {}".format(pythonver, pygame.ver))
-log("VERSIONS", "Expected Python 2.7 and Pygame 1.9")
+log("VERSIONS", "Got Python {}, Pygame {}, and PodSixNet {}".format(pythonver, pygame.ver, podsixnetVer))
+log("VERSIONS", "Expected Python 2.7.x, Pygame 1.9.x, and PodSixNet 0.9.4")
 badVerDetect = False
 badVerWarn = TxtOrBt(["Bad Version Detected!", False, [0, 0, 0], [255, 0, 0]], [None, 35])
 badVerWarn.rect.topleft = [10, 10]
-if (not pygamever.startswith("1.9")) or (not pythonver.startswith("2.7")):
-    log("WARNING", "Bad python/pygame version detected!")
+if (not pygamever.startswith("1.9")) or (not pythonver.startswith("2.7")) or (not podsixnetVer.startswith("0.9")):
+    log("WARNING", "Bad python/pygame/PodSixNet version detected!")
     badVerDetect = True
 else:
-    log("VERSIONS", "Python and Pygame versions up to date.")
+    log("VERSIONS", "Python, Pygame, and PodSixNet versions up to date.")
 jsonUrl = "https://rotartsi82.github.io/TCBS/TCBSinf.json"
 newUpDetect = False
 newUpNote = TxtOrBt(["New Update Detected!", False, [0, 0, 0], [0, 255, 0]], [None, 35])

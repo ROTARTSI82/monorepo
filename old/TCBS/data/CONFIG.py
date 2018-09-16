@@ -17,7 +17,7 @@ screenArgs = ([800, 600], RESIZABLE)
 res = (1200, 900)
 # If __debugMode__ is enabled, TCBS will print logs,
 # show FPS, show cursor-tracking sprite, show ping times, etc
-__debugMode__ = False
+__debugMode__ = True
 # Controls. See https://www.pygame.org/docs/ref/key.html
 screenshotKey = K_F1
 copyKey = K_F2
