@@ -39,8 +39,8 @@ class TCBSClient(ConnectionListener):
         :rtype: None
         """
         global selfIsHost, c, s, state, serverMsg
-        global log, TxtOrBt, set_music, sky_blue
-        global screen, connection, red, green, blue
+        global log, TxtOrBt, set_music, sky_blue, resWinRate
+        global screen, connection, red, green, blue, res
         try:
             connection.Pump()
             self.Pump()
@@ -63,6 +63,9 @@ class TCBSClient(ConnectionListener):
             state = "mult-start"
             set_music("resources/sounds/menuMusic.mp3")
             red, green, blue = sky_blue
+            res = origRes
+            resWinRate = [float(res[0]) / masterSurf.get_width(), float(res[1]) / masterSurf.get_height()]
+            screen = pygame.Surface(res)
 
     def Network_kick(self, data):
         """
@@ -170,12 +173,16 @@ class TCBSClient(ConnectionListener):
         :rtype: None
         """
         global vCoinRR, vStartBdgt, coinsLeft, multBDict, multRDict, activeRDict
-        global multBUnits, multRUnits, nextRID, nextBID, vOnBattleEnd, activeBDict
+        global multBUnits, multRUnits, nextRID, nextBID, vOnBattleEnd, activeBDict, resWinRate
+        global screen, res
         log("CHANNEL", "vCoinRR = %s" % str(data['coinRR']))
         log("CHANNEL", "vStartBdgt = %s" % str(data['startBdgt']))
         vCoinRR = data['coinRR']
         vStartBdgt = data['startBdgt']
         vOnBattleEnd = data['battleEnd']
+        res = data['res']
+        screen = pygame.Surface(res)
+        resWinRate = [float(res[0]) / masterSurf.get_width(), float(res[1]) / masterSurf.get_height()]
         coinsLeft = [vStartBdgt, vStartBdgt]
         multBDict = {}
         multRDict = {}
@@ -213,7 +220,7 @@ class TCBSClient(ConnectionListener):
             for i in multRUnits:
                 _args = list(i.oldpack())
                 _args[2] = nextRID
-                _args[3] = 0
+                #_args[3] = 0
                 new_unit = type(i)(*_args)
                 oldRUnits.append(new_unit)
                 multRDict[nextRID] = new_unit
@@ -221,7 +228,7 @@ class TCBSClient(ConnectionListener):
             for i in multBUnits:
                 _args = list(i.oldpack())
                 _args[2] = nextBID
-                _args[3] = 0
+                #_args[3] = 0
                 new_unit = type(i)(*_args)
                 oldBUnits.append(new_unit)
                 multBDict[nextBID] = new_unit
@@ -306,7 +313,7 @@ class TCBSClient(ConnectionListener):
             if __debugMode__:
                 self.unitping = time.time() - self.lastunitping
                 self.lastunitping = time.time()
-        elif not data["sentbyhost"] and selfIsHost:
+        elif (not data["sentbyhost"]) and selfIsHost:
             multRUnits = pygame.sprite.Group(*data["units"])
             # c.Send({"action": "updateunits", "sentbyhost": selfIsHost, "units": multBUnits.sprites()})
             updatecost()
@@ -334,7 +341,7 @@ class TCBSClient(ConnectionListener):
             log("CLIENT", "Starting game...")
             state = "mult-placeUnits"
             if selfIsHost:
-                c.Send({"action": "updatesets", "coinRR": coinRR,
+                c.Send({"action": "updatesets", "coinRR": coinRR, "res": origRes,
                         "startBdgt": startBdgt, "battleEnd": onBattleEnd})
             updatecost()
             updateselectedunit(0)
@@ -470,12 +477,16 @@ class TCBSChannel(Channel):
         :rtype: None
         """
         global vCoinRR, vStartBdgt, coinsLeft, multBDict, multRDict, activeRDict
-        global multBUnits, multRUnits, nextBID, nextRID, vOnBattleEnd, activeBDict
+        global multBUnits, multRUnits, nextBID, nextRID, vOnBattleEnd, activeBDict, resWinRate
+        global screen, res
         log("CHANNEL", "vCoinRR = %s" % str(data['coinRR']))
         log("CHANNEL", "vStartBdgt = %s" % str(data['startBdgt']))
         vCoinRR = data['coinRR']
         vStartBdgt = data['startBdgt']
         vOnBattleEnd = data['battleEnd']
+        res = data['res']
+        screen = pygame.Surface(res)
+        resWinRate = [float(res[0]) / masterSurf.get_width(), float(res[1]) / masterSurf.get_height()]
         coinsLeft = [vStartBdgt, vStartBdgt]
         multBDict = {}
         multRDict = {}
@@ -530,7 +541,7 @@ class TCBSChannel(Channel):
             log("CHANNEL", "Starting game...")
             state = "mult-placeUnits"
             if selfIsHost:
-                c.Send({"action": "updatesets", "coinRR": coinRR,
+                c.Send({"action": "updatesets", "coinRR": coinRR, "res": origRes,
                         "startBdgt": startBdgt, "battleEnd": onBattleEnd})
             updatecost()
             updateselectedunit(0)
@@ -653,7 +664,7 @@ class TCBSServer(Server):
         """
         global selfIsHost, c, s, state, serverMsg
         global log, TxtOrBt, set_music, sky_blue
-        global screen, red, green, blue
+        global screen, red, green, blue, res, resWinRate
         try:
             self.Pump()
         except Exception as e:
@@ -671,6 +682,9 @@ class TCBSServer(Server):
                     pass
                 if selfIsHost:
                     s.shutdown()
+            res = origRes
+            screen = pygame.Surface(res)
+            resWinRate = [float(origRes[0]) / masterSurf.get_width(), float(origRes[1]) / masterSurf.get_height()]
             state = "mult-start"
             set_music("resources/sounds/menuMusic.mp3")
             red, green, blue = sky_blue

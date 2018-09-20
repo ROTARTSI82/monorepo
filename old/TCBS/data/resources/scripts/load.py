@@ -59,6 +59,7 @@ executefile("resources/scripts/multiplayer.py")
 
 pygame.init()
 #screen = pygame.display.set_mode(*screenArgs)
+res = origRes
 masterSurf = pygame.display.set_mode(*screenArgs)
 screen = pygame.Surface(res)
 resWinRate = [float(res[0]) / screenArgs[0][0], float(res[1]) / screenArgs[0][1]]
@@ -263,7 +264,7 @@ for i in rawList:
             except Exception as e:
                 if __debugMode__ and os.path.isdir("units/"+i):
                     raise
-                log("UNITS", "Bullet %s.%s failed: %s"%(i, bul, str(e)))
+                log("UNITS", "Bullet %s.%s failed: %s" % (i, bul, str(e)))
         log("UNITS", "Multiplayer %s was added" % i)
     except Exception as e:
         if __debugMode__ and os.path.isdir("units/"+i):

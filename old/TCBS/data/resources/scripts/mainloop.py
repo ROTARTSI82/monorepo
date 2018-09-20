@@ -598,6 +598,9 @@ while running:
                 if backBt in cbCollide and event.button == 1:
                     menuBlip.play()
                     state = "mult-start"
+                    res = origRes
+                    screen = pygame.Surface(res)
+                    resWinRate = [float(res[0]) / masterSurf.get_width(), float(res[1]) / masterSurf.get_height()]
                     c.Send({"action": "leave"})
                     c.loop()
                     if selfIsHost:
@@ -679,6 +682,9 @@ while running:
                 if backBt in cbCollide and event.button == 1:
                     menuBlip.play()
                     state = "mult-start"
+                    res = origRes
+                    screen = pygame.Surface(res)
+                    resWinRate = [float(res[0]) / masterSurf.get_width(), float(res[1]) / masterSurf.get_height()]
                     c.Send({"action": "leave"})
                     c.loop()
                     if selfIsHost:

@@ -14,7 +14,7 @@ keyRR = (650, 100)
 # See https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
 # AND https://www.pygame.org/docs/ref/display.html#pygame.display.list_modes
 screenArgs = ([800, 600], RESIZABLE)
-res = (1200, 900)
+origRes = (1200, 900)
 # If __debugMode__ is enabled, TCBS will print logs,
 # show FPS, show cursor-tracking sprite, show ping times, etc
 __debugMode__ = True
