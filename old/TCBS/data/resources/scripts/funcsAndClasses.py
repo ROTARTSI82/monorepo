@@ -349,7 +349,7 @@ def updateoptions():
     fontBt = TxtOrBt([font_str, False, [0, 0, 0], [255, 255, 0]], [None, 40])
 
     wait4plyrsTxt = TxtOrBt(["Waiting for players...", False, [255, 0, 0]], [None, 50])
-    if serverStr.strip() == "":
+    if serverStr == "":
         serverTxt = TxtOrBt(["host:port", False, [128, 128, 128]], [None, 45])
     else:
         serverTxt = TxtOrBt([serverStr, False, [0, 0, 0]], [None, 45], "ignoreTranslations")

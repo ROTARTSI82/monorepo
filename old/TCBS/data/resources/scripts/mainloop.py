@@ -555,8 +555,7 @@ while running:
                             log("EXCEPTION", "Cannot join game: "+str(e))
                             alreadyHandled.append(str(e))
                         serverMsg = TxtOrBt([str(e), False, [255, 0, 0]], [None, 45])
-                        serverMsg.rect.center = [screen.get_width()/2,
-                                                 screen.get_height()/2-45]
+                        serverMsg.rect.center = [screen.get_width()/2, screen.get_height()/2-45]
                 if createBt in cbCollide and event.button == 1:
                     menuBlip.play()
                     try:
@@ -572,8 +571,7 @@ while running:
                             log("EXCEPTION", "Cannot create game: "+str(e))
                             alreadyHandled.append(str(e))
                         serverMsg = TxtOrBt([str(e), False, [255, 0, 0]], [None, 45])
-                        serverMsg.rect.center = [screen.get_width()/2,
-                                                 screen.get_height()/2-45]
+                        serverMsg.rect.center = [screen.get_width()/2, screen.get_height()/2-45]
                 if serverHelpBt in cbCollide and event.button == 1:
                     menuBlip.play()
                     try:
