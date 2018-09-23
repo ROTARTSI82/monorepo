@@ -75,18 +75,21 @@
                 <button onclick="Download('https://github.com/ROTARTSI82/TCBS/archive/master.zip')">
                     Download TCBS
                 </button>
-            </div>
-            <div class="jumbotron text-left">
-                <h1>Download Virtual Environment </h1>
-                <p class="lead">
-                    Click to download the virtual environment!
+                <div>
+                    <br/>
+                    <br/>
+                    <strong>NOTE:</strong> the source code doest not include the virtual environment. TCBS
+                    was written in Python 2.7. It requires pygame==1.9.4, and PodSixNet==0.9.4<br/>
+                    It is very important that you install PodSixNet==0.9.4 and not PodSixNet==0.10.0<br/>
+                    To install these packages, run<br/>
+                    <code>
+                        pip install pygame==1.9.4<br/>
+                        pip install PodSixNet==0.9.4
+                    </code>
+                </div>
                 </p>
-                <button onclick="Download('https://github.com/ROTARTSI82/venv/archive/master.zip')">
-                    Download VENV
-                </button>
             </div>
         </div>
-
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     </body>
 </html>
