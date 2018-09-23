@@ -33,13 +33,33 @@ startKey = K_SPACE
 # RGBA, CMY, HSVA, HSLA, and I1I2I3 are not supported.
 sky_blue = (160, 210, 255)
 grass_green = (155, 205, 50)
-# Change rates of certain options.
-startBdgtCR = 50
-coinRRCR = 50
-fpsCR = 15
-musicCR = 0.0625
-effectsCR = 0.0625
-scaleCR = 0.0625
+# Change rates and clamp ranges of certain options.
+optionAttr = {
+    "srtBdgt": {
+        "cr": 50,
+        "max": float("inf"),
+        "min": 0},
+    "coinRR": {
+        "cr": 50,
+        "max": float("inf"),
+        "min": float("-inf")},
+    "fps": {
+        "cr": 15,
+        "max": float("inf"),
+        "min": 0},
+    "music": {
+        "cr": 0.0625,
+        "max": 1,
+        "min": 0},
+    "effects": {
+        "cr": 0.0625,
+        "max": 1,
+        "min": 0},
+    "scale": {
+        "cr": 0.0625,
+        "max": float("inf"),
+        "min": 0}
+}
 # Antialias text.
 antialias = True
 # Button customization

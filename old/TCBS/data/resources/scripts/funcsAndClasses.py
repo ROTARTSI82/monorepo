@@ -237,6 +237,19 @@ def updateselectedunit(movenum):
     updaterects()
 
 
+def clamp_option(option):
+    """
+    Clamp option to range using max(minimum, min(maximum, value))
+
+    :param option: option string
+    :return:
+    """
+    global optionAttr, options
+    options[option] = \
+        type(options[option])(max(optionAttr[option]['min'], min(optionAttr[option]['max'], options[option])))
+    return options[option]
+
+
 def updateoptions():
     """
     Update the text sprites in profile
@@ -253,12 +266,12 @@ def updateoptions():
     global tcbs_subtitle, tcbs_title, __appName__, __version__, pickle
     global redCostTxt, blueCostTxt, onBattleEndBt, check4updatesBt, check4updates
 
-    startBdgt = options['srtBdgt']
-    coinRR = options['coinRR']
-    desiredFPS = options['fps']
-    musicVol = options['music']
-    effectsVol = options['effects']
-    GUIScale = options['scale']
+    startBdgt = clamp_option('srtBdgt')
+    coinRR = clamp_option('coinRR')
+    desiredFPS = clamp_option('fps')
+    musicVol = clamp_option('music')
+    effectsVol = clamp_option('effects')
+    GUIScale = clamp_option('scale')
     langFile = options['lang']
     langFont = options['font']
     onBattleEnd = options['battleEnd']

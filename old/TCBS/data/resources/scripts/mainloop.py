@@ -97,51 +97,51 @@ while running:
                     state = "menu"
                 if coinRRBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['coinRR'] += coinRRCR
+                    options['coinRR'] += optionAttr['coinRR']['cr']
                     updateoptions()
                 if coinRRBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['coinRR'] -= coinRRCR
+                    options['coinRR'] -= optionAttr['coinRR']['cr']
                     updateoptions()
                 if startBdgtBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['srtBdgt'] += startBdgtCR
+                    options['srtBdgt'] += optionAttr['srtBdgt']['cr']
                     updateoptions()
                 if startBdgtBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['srtBdgt'] -= startBdgtCR
+                    options['srtBdgt'] -= optionAttr['srtBdgt']['cr']
                     updateoptions()
                 if fpsBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['fps'] += fpsCR
+                    options['fps'] += optionAttr['fps']['cr']
                     updateoptions()
                 if fpsBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['fps'] -= fpsCR
+                    options['fps'] -= optionAttr['fps']['cr']
                     updateoptions()
                 if guiScaleBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['scale'] += scaleCR
+                    options['scale'] += optionAttr['scale']['cr']
                     updateoptions()
                 if guiScaleBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['scale'] -= scaleCR
+                    options['scale'] -= optionAttr['scale']['cr']
                     updateoptions()
                 if musicVolBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['music'] += musicCR
+                    options['music'] += optionAttr['music']['cr']
                     updateoptions()
                 if musicVolBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['music'] -= musicCR
+                    options['music'] -= optionAttr['music']['cr']
                     updateoptions()
                 if effectsVolBt in cbCollide and event.button == 1:
                     menuBlip.play()
-                    options['effects'] += effectsCR
+                    options['effects'] += optionAttr['effects']['cr']
                     updateoptions()
                 if effectsVolBt in cbCollide and event.button == 3:
                     menuBlip.play()
-                    options['effects'] -= effectsCR
+                    options['effects'] -= optionAttr['effects']['cr']
                     updateoptions()
                 if langBt in cbCollide and event.button == 1:
                     menuBlip.play()
@@ -199,10 +199,7 @@ while running:
                     updateoptions()
                 if check4updatesBt in cbCollide and event.button in [1, 3]:
                     menuBlip.play()
-                    if check4updates:
-                        options['check4updates'] = False
-                    elif not check4updates:
-                        options['check4updates'] = True
+                    options['check4updates'] ^= True
                     updateoptions()
     if state == "sndbx-placeUnits":
         pygame.draw.line(screen, [0, 200, 0], [screen.get_width() / 2, -5],
