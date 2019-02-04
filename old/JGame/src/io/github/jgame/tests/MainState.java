@@ -19,11 +19,15 @@ import java.util.logging.Logger;
 
 public class MainState extends State {
     private final Logger logger;
+    private final boolean displayRects = false;
+
     Sprite player;
     Group enemies;
     Group bullets;
-    Random rand = new Random();
     Sound fire;
+    Shape testShape;
+
+    Random rand = new Random();
     ImageLoader imageLoader = new ImageLoader();
     HashMap<String, Image> images = new HashMap<>();
 
@@ -35,8 +39,9 @@ public class MainState extends State {
 
         tryImageFromFile("assets/sprite.png", "sprite");
         tryImageFromFile("assets/bullet.png", "bullet");
-
-        player = new Sprite(images.get("sprite"));
+        int size = 32;
+        testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
+        player = new Sprite(testShape, 1);  // Use 1 since it's a polygon.
         enemies = new Group();
         bullets = new Group();
         enemies.add(new Enemy(640, 480, images.get("sprite")));
@@ -68,11 +73,15 @@ public class MainState extends State {
         g.setColor(Color.BLACK);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        player.blitRect(g2d);
+        if (displayRects) {
+            player.blitRect(g2d);
+        }
         player.blitRotozoom(player.pos.angleTo(mouseHandler.pos), new double[]{1, 1}, g2d);
         for (Sprite enemy : enemies.sprites) {
             enemy.update();
-            enemy.blitRect(g2d);
+            if (displayRects) {
+                enemy.blitRect(g2d);
+            }
             enemy.blitRotozoom(0, new double[]{1, 1}, g2d);
         }
         for (Object bullet : (LinkedList) bullets.sprites.clone()) {
@@ -85,7 +94,9 @@ public class MainState extends State {
                     }
                 }
                 bsprite.update();
-                bsprite.blitRect(g2d);
+                if (displayRects) {
+                    bsprite.blitRect(g2d);
+                }
                 bsprite.blit(g2d);
             }
         }
