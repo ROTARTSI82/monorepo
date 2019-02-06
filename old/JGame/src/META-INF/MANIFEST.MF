@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: /Users/Grant/Desktop/IntelliJ/JGame/out/production/JGame/
+Main-Class: io.github.jgame.tests.Main
+

@@ -1,17 +1,16 @@
 package io.github.jgame.tests;
 
 import io.github.jgame.game.State;
-import io.github.jgame.image.ImageLoader;
+import io.github.jgame.image.ImageManager;
 import io.github.jgame.logging.GenericLogger;
 import io.github.jgame.math.Vector2;
-import io.github.jgame.mixer.Sound;
+import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
 import io.github.jgame.sprite.Sprite;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -24,12 +23,11 @@ public class MainState extends State {
     Sprite player;
     Group enemies;
     Group bullets;
-    Sound fire;
     Shape testShape;
 
     Random rand = new Random();
-    ImageLoader imageLoader = new ImageLoader();
-    HashMap<String, Image> images = new HashMap<>();
+    SoundManager soundManager = new SoundManager();
+    ImageManager imageLoader = new ImageManager();
 
     public MainState() {
         super();
@@ -37,23 +35,15 @@ public class MainState extends State {
         logger = Logger.getLogger(this.getClass().getName());
         logger.info("env: " + System.getenv());
 
-        tryImageFromFile("assets/sprite.png", "sprite");
-        tryImageFromFile("assets/bullet.png", "bullet");
+        imageLoader.fromFile("assets/sprite.png", "sprite");
+        imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
         testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
         player = new Sprite(testShape, 1);  // Use 1 since it's a polygon.
         enemies = new Group();
         bullets = new Group();
-        enemies.add(new Enemy(640, 480, images.get("sprite")));
-        fire = new Sound("assets/fireball.wav", Sound.LoadModes.FROM_FILE);
-    }
-
-    public void tryImageFromFile(String img, String id) {
-        try {
-            images.put(id, imageLoader.fromFile(img));
-        } catch (Exception e) {
-            logger.warning(String.format("Failed to load %s:\n%s", img, GenericLogger.getStackTrace(e)));
-        }
+        enemies.add(new Enemy(640, 480, imageLoader.get("sprite")));
+        soundManager.fromFile("assets/fireball.wav", "fireball");
     }
 
     @Override
@@ -82,7 +72,7 @@ public class MainState extends State {
             if (displayRects) {
                 enemy.blitRect(g2d);
             }
-            enemy.blitRotozoom(0, new double[]{1, 1}, g2d);
+            enemy.blitRotozoom(enemy.pos.angleTo(player.pos), new double[]{1, 1}, g2d);
         }
         for (Object bullet : (LinkedList) bullets.sprites.clone()) {
             if (bullet instanceof BulletSprite) {
@@ -90,7 +80,7 @@ public class MainState extends State {
                 for (Sprite col : bsprite.collidesWith(enemies)) {
                     col.kill();
                     for (int i = 0; i < 2; i++) {
-                        enemies.add(new Enemy(rand.nextInt(1440), rand.nextInt(900), images.get("sprite")));
+                        enemies.add(new Enemy(rand.nextInt(1440), rand.nextInt(900), imageLoader.get("sprite")));
                     }
                 }
                 bsprite.update();
@@ -113,6 +103,7 @@ public class MainState extends State {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case (KeyEvent.VK_UP): {
+                    System.out.println(soundManager.get("fireball").getVolume());
                     player.vel.y = -1;
                     break;
                 }
@@ -159,8 +150,8 @@ public class MainState extends State {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            bullets.add(new BulletSprite(mouseHandler.pos, player.pos, images.get("bullet")));
-            fire.play(true);
+            bullets.add(new BulletSprite(mouseHandler.pos, player.pos, imageLoader.get("bullet")));
+            soundManager.play("fireball", true, 0f);
         }
     }
 }
