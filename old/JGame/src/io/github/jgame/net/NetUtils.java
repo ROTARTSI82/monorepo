@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class NetUtils {
     private static Logger logger = Logger.getLogger("NetUtils");
-
     public static String extractString(DatagramPacket packet) {
         return new String(packet.getData()).replace("\0", "");
     }
@@ -32,25 +31,30 @@ public class NetUtils {
         return new byte[0];
     }
 
+    public static HashMap<String, Object> datFromObject(Object o) {
+        if (o instanceof HashMap) {
+            HashMap<String, Object> finalOut = new HashMap<>();
+            HashMap objMap = (HashMap) o;
+            for (Object key : objMap.keySet()) {
+                if (key instanceof String) {
+                    finalOut.put((String) key, objMap.get(key));
+                } else {
+                    logger.info("Failed to deserialize key: " + key.toString());
+                }
+            }
+            return finalOut;
+        } else {
+            logger.info("Deserialization didn't return HashMap: " + o.toString());
+        }
+        return null;
+    }
+
     public static HashMap<String, Object> deserialize(byte[] bytes) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             Object o = ois.readObject();
             ois.close();
-            if (o instanceof HashMap) {
-                HashMap<String, Object> finalOut = new HashMap<>();
-                HashMap objMap = (HashMap) o;
-                for (Object key : objMap.keySet()) {
-                    if (key instanceof String) {
-                        finalOut.put((String) key, objMap.get(key));
-                    } else {
-                        logger.info("Failed to deserialize key: " + key.toString());
-                    }
-                }
-                return finalOut;
-            } else {
-                logger.info("Deserialization didn't return HashMap: " + o.toString());
-            }
+            return datFromObject(o);
         } catch (Exception e) {
             logger.info(String.format("Deserialization failed: %s\n%s ",
                     Arrays.toString(bytes), GenericLogger.getStackTrace(e)));

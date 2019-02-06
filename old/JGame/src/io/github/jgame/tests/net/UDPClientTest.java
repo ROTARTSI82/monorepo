@@ -1,6 +1,5 @@
 package io.github.jgame.tests.net;
 
-import io.github.jgame.net.NetUtils;
 import io.github.jgame.net.UDPClient;
 
 import java.net.DatagramPacket;
@@ -18,7 +17,7 @@ public class UDPClientTest extends UDPClient {
             UDPClientTest client = new UDPClientTest("127.0.0.1", 3000);
             HashMap<String, Object> toSend = new HashMap<>();
             toSend.put("iternum", pingNum);
-            client.send(toSend);
+            client.addVerifyPacket(toSend, 100);
             while (true) {
                 try {
                     client.update();
@@ -32,15 +31,14 @@ public class UDPClientTest extends UDPClient {
     }
 
     @Override
-    public void parse(DatagramPacket p) {
+    public void parse(HashMap<String, Object> datagram, DatagramPacket p) {
         pingNum++;
-        super.parse(p);
         System.out.println(String.format("My num: %s Serv num: %s", pingNum,
-                NetUtils.deserialize(p.getData()).get("iternum")));
+                datagram.get("iternum")));
         try {
             HashMap<String, Object> toSend = new HashMap<>();
             toSend.put("iternum", pingNum);
-            send(toSend);
+            addVerifyPacket(toSend, 100);
         } catch (Exception e) {
             e.printStackTrace();
         }
