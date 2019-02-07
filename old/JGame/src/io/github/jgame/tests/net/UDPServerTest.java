@@ -20,7 +20,7 @@ public class UDPServerTest extends UDPServer {
         try {
             server = new UDPServerTest("127.0.0.1", 3000);
             while (true) {
-                // Thread.sleep(1000);
+                Thread.sleep(500);
                 try {
                     server.update();
                 } catch (Exception e) {

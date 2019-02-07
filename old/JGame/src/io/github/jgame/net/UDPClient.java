@@ -86,19 +86,20 @@ public class UDPClient {
     }
 
     public class VerifyPacket {
-        Timer timer;
         String id;
-        TimerTask trySend;
         HashMap<String, Object> rawSend;
 
-        boolean verified = false;
-        boolean hasSent = false;
+        final TimerTask trySend;
+        final Timer timer;
+
+        volatile boolean verified = false;
+        volatile boolean hasSent = false;
 
         public VerifyPacket(HashMap<String, Object> datagram, int frequency) {
             rawSend = new HashMap<>();
             rawSend.put("action", "verifySend");
             rawSend.put("data", datagram);
-            id = UUID.randomUUID().toString();  // Use currentTimeMillis() instead?
+            id = UUID.randomUUID().toString();
             rawSend.put("id", id);
 
             timer = new Timer();
@@ -106,9 +107,12 @@ public class UDPClient {
                 @Override
                 public void run() {
                     if (verified && hasSent) {
-                        trySend.cancel();
-                        timer.cancel();
-                        timer.purge();
+                        synchronized (trySend) {
+                            trySend.cancel();
+                        } synchronized (timer) {
+                            timer.cancel();
+                            timer.purge();
+                        }
                     } else {
                         try {
                             send(rawSend);

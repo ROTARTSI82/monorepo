@@ -22,7 +22,7 @@ public class UDPClientTest extends UDPClient {
             toSend.put("iternum", pingNum);
             client.addVerifyPacket(toSend, 1000);
             while (true) {
-                // Thread.sleep(1000);
+                Thread.sleep(500);
                 try {
                     client.update();
                 } catch (Exception e) {

@@ -93,15 +93,16 @@ public class UDPServer {
     }
 
     public class VerifyPacket {
-        Timer timer;
-        TimerTask trySend;
         String id;
         HashMap<String, Object> rawSend;
         InetAddress myHost;
         int myPort;
 
-        boolean verified = false;
-        boolean hasSent = false;
+        final Timer timer;
+        final TimerTask trySend;
+
+        volatile boolean verified = false;
+        volatile boolean hasSent = false;
 
         public VerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {
             rawSend = new HashMap<>();
@@ -117,9 +118,13 @@ public class UDPServer {
                 @Override
                 public void run() {
                     if (verified && hasSent) {
-                        trySend.cancel();
-                        timer.cancel();
-                        timer.purge();
+                        synchronized (trySend) {
+                            trySend.cancel();
+                        }
+                        synchronized (timer) {
+                            timer.cancel();
+                            timer.purge();
+                        }
                     } else {
                         try {
                             send(rawSend, myHost, myPort);
