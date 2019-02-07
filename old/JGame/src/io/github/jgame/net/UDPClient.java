@@ -3,15 +3,11 @@ package io.github.jgame.net;
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class UDPClient {
@@ -20,8 +16,8 @@ public class UDPClient {
     private InetAddress host;
     private int port;
 
-    private HashMap<Long, VerifyPacket> pendingPackets = new HashMap<>();
-    private LinkedList<Long> verifiedByMe = new LinkedList<>();
+    private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
+    private LinkedList<String> verifiedByMe = new LinkedList<>();
 
     public UDPClient(String listenHost, int listenPort) throws Exception {
         host = InetAddress.getByName(listenHost);
@@ -42,23 +38,35 @@ public class UDPClient {
         if (packetDict == null) {
             return;
         }
+        logger.finest(String.format("[?->%s:%s] Got packet %s from %s:%s", host, port, packetDict,
+                packet.getAddress(), packet.getPort()));
         String action = (String) packetDict.get("action");
         switch (action) {
             case "verifySend": {
-                Long id = (Long) packetDict.get("id");
+                String id = (String) packetDict.get("id");
                 if (!verifiedByMe.contains(id)) {
+                    logger.finest(String.format("[?->%s:%s] Packet<id=%s> from server was verified.",
+                            host, port, id));
                     parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                     verifiedByMe.add(id);
+                } else {
+                    logger.fine(String.format("[?->%s:%s] Got duplicate Packet<id=%s>", host, port, id));
                 }
                 HashMap<String, Object> rawSend = new HashMap<>();
-                rawSend.put("action", "confirm");
+                rawSend.put("action", "confirmPacket");
                 rawSend.put("id", id);
                 send(rawSend);
                 return;
             }
-            case "confirm": {
-                Long id = (Long) packetDict.get("id");
-                pendingPackets.get(id).onConfirm();
+            case "confirmPacket": {
+                String id = (String) packetDict.get("id");
+                if (pendingPackets.containsKey(id)) {
+                    logger.finest(String.format("[?->%s:%s] Packet<id=%s> was confirmed.", host, port, id));
+                    pendingPackets.get(id).onConfirm();
+                    pendingPackets.remove(id);
+                } else {
+                    logger.fine(String.format("[?->%s:%s] Packet<id=%s> doesn't exist!", host, port, id));
+                }
                 return;
             }
         }
@@ -70,9 +78,17 @@ public class UDPClient {
         pendingPackets.put(packet.id, packet);
     }
 
-    public class VerifyPacket implements ActionListener {
+    public void send(HashMap<String, Object> datagram) throws IOException {
+        logger.finest(String.format("[?->%s:%s] Sent %s", host, port, datagram));
+        byte[] bytes = NetUtils.serialize(datagram);
+        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
+        socket.send(packet);
+    }
+
+    public class VerifyPacket {
         Timer timer;
-        long id;
+        String id;
+        TimerTask trySend;
         HashMap<String, Object> rawSend;
 
         boolean verified = false;
@@ -82,36 +98,33 @@ public class UDPClient {
             rawSend = new HashMap<>();
             rawSend.put("action", "verifySend");
             rawSend.put("data", datagram);
-            id = System.currentTimeMillis();
+            id = UUID.randomUUID().toString();  // Use currentTimeMillis() instead?
             rawSend.put("id", id);
 
-            timer = new Timer(frequency, this);  // Frequency in milliseconds
-            timer.start();
+            timer = new Timer();
+            trySend = new TimerTask() {
+                @Override
+                public void run() {
+                    if (verified && hasSent) {
+                        trySend.cancel();
+                        timer.cancel();
+                        timer.purge();
+                    } else {
+                        try {
+                            send(rawSend);
+                            hasSent = true;
+                        } catch (IOException err) {
+                            logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                                    GenericLogger.getStackTrace(err)));
+                        }
+                    }
+                }
+            };
+            timer.schedule(trySend, 0, frequency);
         }
 
         public void onConfirm() {
             verified = true;
         }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (verified && hasSent) {
-                timer.stop();
-            } else {
-                try {
-                    send(rawSend);
-                    hasSent = true;
-                } catch (IOException err) {
-                    logger.info(String.format("Failed to resend %s:\n%s", rawSend,
-                            GenericLogger.getStackTrace(err)));
-                }
-            }
-        }
-    }
-
-    public void send(HashMap<String, Object> datagram) throws IOException {
-        byte[] bytes = NetUtils.serialize(datagram);
-        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
-        socket.send(packet);
     }
 }

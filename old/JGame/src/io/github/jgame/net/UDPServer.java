@@ -2,16 +2,11 @@ package io.github.jgame.net;
 
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
-import javafx.util.Pair;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class UDPServer {
@@ -20,9 +15,9 @@ public class UDPServer {
     private Logger logger;
     private int port;
 
-    private LinkedList<Long> verifiedByMe = new LinkedList<>();
-    private HashMap<Long, VerifyPacket> pendingPackets = new HashMap<>();
-    private HashMap<Pair<InetAddress, Integer>, ClientHandler> clients = new HashMap<>();
+    private LinkedList<String> verifiedByMe = new LinkedList<>();
+    private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
+    private HashMap<String, ClientHandler> clients = new HashMap<>();
 
     public UDPServer(String host, int listenPort) throws Exception {
         address = InetAddress.getByName(host);
@@ -31,9 +26,10 @@ public class UDPServer {
         logger = Logger.getLogger(this.getClass().getName());
     }
 
-    public void send(HashMap<String, Object> datagram, InetAddress address, int port) throws Exception {
+    public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws Exception {
+        logger.finest(String.format("[%s:%s] Sent %s to %s:%s", address, port, datagram, datAddress, datPort));
         byte[] bytes = NetUtils.serialize(datagram);
-        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, port);
+        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
         socket.send(packet);
     }
 
@@ -46,36 +42,48 @@ public class UDPServer {
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
         socket.receive(packet);
 
-        Pair<InetAddress, Integer> addressPair = new Pair<>(packet.getAddress(), packet.getPort());
-        if (!clients.containsKey(addressPair)) {
-            clients.put(addressPair, new ClientHandler(addressPair, this));
+        String packAddr = packet.getAddress().toString() + ":" + packet.getPort();
+        if (!clients.containsKey(packAddr)) {
+            clients.put(packAddr, new ClientHandler(packet.getAddress(), packet.getPort(), this));
+            logger.info(String.format("[%s:%s] New client at %s", address, port, packAddr));
         }
-        clients.get(addressPair).parse(packet);
 
         HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData());
         if (packetDict == null) {
             return;
         }
+        logger.finest(String.format("[%s:%s] Got packet %s from %s", address, port, packetDict, packAddr));
         String action = (String) packetDict.get("action");
         switch (action) {
             case "verifySend": {
-                Long id = (Long) packetDict.get("id");
+                String id = (String) packetDict.get("id");
                 if (!verifiedByMe.contains(id)) {
+                    logger.finest(String.format("[%s:%s] Packet<id=%s> from client was verified.",
+                            address, port, id));
                     parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                     verifiedByMe.add(id);
+                } else {
+                    logger.fine(String.format("[%s:%s] Got duplicate Packet<id=%s>", address, port, id));
                 }
                 HashMap<String, Object> rawSend = new HashMap<>();
-                rawSend.put("action", "confirm");
+                rawSend.put("action", "confirmPacket");
                 rawSend.put("id", id);
                 send(rawSend, packet.getAddress(), packet.getPort());
                 return;
             }
-            case "confirm": {
-                Long id = (Long) packetDict.get("id");
-                pendingPackets.get(id).onConfirm();
+            case "confirmPacket": {
+                String id = (String) packetDict.get("id");
+                if (pendingPackets.containsKey(id)) {
+                    pendingPackets.get(id).onConfirm();
+                    pendingPackets.remove(id);
+                    logger.finest(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
+                } else {
+                    logger.fine(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
+                }
                 return;
             }
         }
+        clients.get(packAddr).parse(packetDict, packet);
         parse(packetDict, packet);
     }
 
@@ -84,9 +92,10 @@ public class UDPServer {
         pendingPackets.put(packet.id, packet);
     }
 
-    public class VerifyPacket implements ActionListener {
+    public class VerifyPacket {
         Timer timer;
-        long id;
+        TimerTask trySend;
+        String id;
         HashMap<String, Object> rawSend;
         InetAddress myHost;
         int myPort;
@@ -98,32 +107,35 @@ public class UDPServer {
             rawSend = new HashMap<>();
             rawSend.put("action", "verifySend");
             rawSend.put("data", datagram);
-            id = System.currentTimeMillis();
+            id = UUID.randomUUID().toString();
             rawSend.put("id", id);
             myHost = host;
             myPort = port;
 
-            timer = new Timer(frequency, this);  // Frequency in milliseconds
-            timer.start();
+            timer = new Timer();
+            trySend = new TimerTask() {
+                @Override
+                public void run() {
+                    if (verified && hasSent) {
+                        trySend.cancel();
+                        timer.cancel();
+                        timer.purge();
+                    } else {
+                        try {
+                            send(rawSend, myHost, myPort);
+                            hasSent = true;
+                        } catch (Exception err) {
+                            logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                                    GenericLogger.getStackTrace(err)));
+                        }
+                    }
+                }
+            };
+            timer.schedule(trySend, 0, frequency);
         }
 
         public void onConfirm() {
             verified = true;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (verified && hasSent) {
-                timer.stop();
-            } else {
-                try {
-                    send(rawSend, myHost, myPort);
-                    hasSent = true;
-                } catch (Exception err) {
-                    logger.info(String.format("Failed to resend %s:\n%s", rawSend,
-                            GenericLogger.getStackTrace(err)));
-                }
-            }
         }
     }
 }

@@ -1,7 +1,5 @@
 package io.github.jgame.net;
 
-import javafx.util.Pair;
-
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -11,9 +9,9 @@ public class ClientHandler {
     int port;
     UDPServer factory;
 
-    public ClientHandler(Pair<InetAddress, Integer> listenAddr, UDPServer parent) {
-        address = listenAddr.getKey();
-        port = listenAddr.getValue();
+    public ClientHandler(InetAddress listenHost, int listenPort, UDPServer parent) {
+        address = listenHost;
+        port = listenPort;
         factory = parent;
     }
 
@@ -21,7 +19,7 @@ public class ClientHandler {
         factory.send(datagram, address, port);
     }
 
-    public void parse(DatagramPacket datagram) {
+    public void parse(HashMap<String, Object> packetDict, DatagramPacket datagram) {
 
     }
 }
