@@ -7,6 +7,7 @@ import io.github.jgame.math.Vector2;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
 import io.github.jgame.sprite.Sprite;
+import io.github.jgame.sprite.TextSprite;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 
 public class MainState extends State {
     private final Logger logger;
-    private final boolean displayRects = false;
+    private final boolean displayRects = true;
 
     Sprite player;
     Group enemies;
@@ -39,7 +40,8 @@ public class MainState extends State {
         imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
         testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
-        player = new Sprite(testShape, 1);  // Use 1 since it's a polygon.
+        player = new TextSprite("HelloWorld!",
+                new Font("Arial", Font.PLAIN, 50), Color.BLACK);
         enemies = new Group();
         bullets = new Group();
         enemies.add(new Enemy(640, 480, imageLoader.get("sprite")));
@@ -80,7 +82,8 @@ public class MainState extends State {
                 for (Sprite col : bsprite.collidesWith(enemies)) {
                     col.kill();
                     for (int i = 0; i < 2; i++) {
-                        enemies.add(new Enemy(rand.nextInt(1440), rand.nextInt(900), imageLoader.get("sprite")));
+                        enemies.add(new Enemy(rand.nextInt(1440), rand.nextInt(900),
+                                imageLoader.get("sprite")));
                     }
                 }
                 bsprite.update();
@@ -103,7 +106,6 @@ public class MainState extends State {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case (KeyEvent.VK_UP): {
-                    System.out.println(soundManager.get("fireball").getVolume());
                     player.vel.y = -1;
                     break;
                 }

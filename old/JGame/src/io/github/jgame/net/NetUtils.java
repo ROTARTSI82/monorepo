@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class NetUtils {
-    private static Logger logger = Logger.getLogger("NetUtils");
+    private static Logger logger = Logger.getLogger("io.github.jgame.net.NetUtils");
     public static String extractString(DatagramPacket packet) {
         return new String(packet.getData()).replace("\0", "");
     }

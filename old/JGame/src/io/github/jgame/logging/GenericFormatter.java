@@ -1,7 +1,5 @@
 package io.github.jgame.logging;
 
-import io.github.jgame.Constants;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
@@ -32,12 +30,6 @@ public class GenericFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        String className = record.getSourceClassName();
-        if ((className.contains("java.awt") || className.contains("javax.swing.") ||
-                className.contains("sun.awt.")) && Constants.SILENCE_AWT_LOGS) {
-            // This is java.swing's logging; Ignore it.
-            return "";
-        }
         date.setTime(record.getMillis());
         return String.format(format,
                 dateFormat.format(date),

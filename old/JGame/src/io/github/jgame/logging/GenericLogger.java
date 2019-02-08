@@ -1,5 +1,7 @@
 package io.github.jgame.logging;
 
+import io.github.jgame.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,8 +10,13 @@ import java.util.Date;
 import java.util.logging.*;
 
 public class GenericLogger {
-    private static final Logger logger = Logger.getLogger("GenericLogger");
+    private static final Logger logger = Logger.getLogger("io.github.jgame.logging.GenericLogger");
     private static boolean setupDone = false;
+
+    public static void setLogger(String name, Level level) {
+        Logger loggerInstance = Logger.getLogger(name);
+        loggerInstance.setLevel(level);
+    }
 
     public static void setup(Level CONSOLE_LEVEL, Level LATEST_LEVEL, Level LOG_LEVEL) {
         if (setupDone) {
@@ -47,6 +54,12 @@ public class GenericLogger {
             }
         } catch (IOException e) {
             logger.severe("Failed to add handler: \n" + getStackTrace(e));
+        }
+
+        if (Constants.SILENCE_AWT_LOGS) {
+            setLogger("java.awt", Level.CONFIG);
+            setLogger("java.swing", Level.CONFIG);
+            setLogger("sun.awt", Level.CONFIG);
         }
         setupDone = true;
     }
