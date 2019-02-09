@@ -52,21 +52,30 @@ public class Sound {
         }
     }
 
-    public float getVolume() {
-        FloatControl gainControl = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        return (float) Math.pow(10f, gainControl.getValue() / 20f);
+    private float getControlVal(FloatControl control) {
+        float min = control.getMinimum();
+        float max = control.getMaximum();
+        return (control.getValue() - min) / (max - min);
     }
 
-    public void setVolume(float volume) {
-        if (volume > 1) {
-            logger.info(String.format("volume=%s passed to setVolume(). Using volume=1", volume));
-            volume = 1;
-        } else if (volume < 0) {
-            logger.info(String.format("volume=%s passed to setVolume(). Using volume=0", volume));
-            volume = 0;
-        }
-        FloatControl gainControl = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(20f * (float) Math.log10(volume));
+    public boolean isPlaying() {
+        return sound.isActive();
+    }
+
+    public float getVolume() {
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        return getControlVal(volume);
+    }
+
+    public void setVolume(float newVolume) {
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        volume.setValue(scaleToRange(newVolume, volume));
+    }
+
+    private float scaleToRange(float x, FloatControl control) {
+        float min = control.getMinimum();
+        float max = control.getMaximum();
+        return x * (max - min) + min;
     }
 
     public void play(boolean reset) {

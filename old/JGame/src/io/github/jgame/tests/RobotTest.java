@@ -25,12 +25,12 @@ public class RobotTest {
                 robot.clickMouse(0, rand.nextInt(3) + 1);
                 robot.mouseWheel(rand.nextInt(range) - range / 2);
                 */
-                robot.delay(1);
+                robot.delay(75);
                 robot.keyPress(KeyEvent.VK_SHIFT);
                 robot.keyPress(KeyEvent.VK_W);
                 robot.keyPress(KeyEvent.VK_D);
 
-                robot.delay(400);
+                robot.delay(500);
 
                 robot.keyRelease(KeyEvent.VK_SHIFT);
                 robot.keyRelease(KeyEvent.VK_W);

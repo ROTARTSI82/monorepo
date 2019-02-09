@@ -143,7 +143,7 @@ public class MainState extends State {
     }
 
     public class MouseHandler extends State.MouseHandler {
-        Vector2 pos = new Vector2(0, 0);
+        volatile Vector2 pos = new Vector2(0, 0);
 
         @Override
         public void mouseMoved(MouseEvent e) {
@@ -154,7 +154,8 @@ public class MainState extends State {
         @Override
         public void mousePressed(MouseEvent e) {
             bullets.add(new BulletSprite(mouseHandler.pos, player.pos, imageLoader.get("bullet")));
-            soundManager.play("fireball", true, 0f);
+            soundManager.play("fireball", true, 0.2f);
+            // System.out.println(soundManager.get("fireball").getVolume());
         }
     }
 }

@@ -106,20 +106,19 @@ public class UDPClient {
             trySend = new TimerTask() {
                 @Override
                 public void run() {
-                    if (verified && hasSent) {
-                        synchronized (trySend) {
+                    synchronized (VerifyPacket.class) {
+                        if (verified && hasSent) {
                             trySend.cancel();
-                        } synchronized (timer) {
                             timer.cancel();
                             timer.purge();
-                        }
-                    } else {
-                        try {
-                            send(rawSend);
-                            hasSent = true;
-                        } catch (IOException err) {
-                            logger.info(String.format("Failed to resend %s:\n%s", rawSend,
-                                    GenericLogger.getStackTrace(err)));
+                        } else {
+                            try {
+                                send(rawSend);
+                                hasSent = true;
+                            } catch (IOException err) {
+                                logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                                        GenericLogger.getStackTrace(err)));
+                            }
                         }
                     }
                 }

@@ -117,21 +117,19 @@ public class UDPServer {
             trySend = new TimerTask() {
                 @Override
                 public void run() {
-                    if (verified && hasSent) {
-                        synchronized (trySend) {
+                    synchronized (VerifyPacket.class) {
+                        if (verified && hasSent) {
                             trySend.cancel();
-                        }
-                        synchronized (timer) {
                             timer.cancel();
                             timer.purge();
-                        }
-                    } else {
-                        try {
-                            send(rawSend, myHost, myPort);
-                            hasSent = true;
-                        } catch (Exception err) {
-                            logger.info(String.format("Failed to resend %s:\n%s", rawSend,
-                                    GenericLogger.getStackTrace(err)));
+                        } else {
+                            try {
+                                send(rawSend, myHost, myPort);
+                                hasSent = true;
+                            } catch (Exception err) {
+                                logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                                        GenericLogger.getStackTrace(err)));
+                            }
                         }
                     }
                 }
