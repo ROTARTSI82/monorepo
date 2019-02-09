@@ -21,16 +21,15 @@ public class MainState extends State {
     private final Logger logger;
     private final boolean displayRects = true;
 
-    Sprite player;
-    Group enemies;
-    Group bullets;
-    Shape testShape;
+    private Sprite player;
+    private Group enemies;
+    private Group bullets;
 
-    Random rand = new Random();
-    SoundManager soundManager = new SoundManager();
-    ImageManager imageLoader = new ImageManager();
+    private Random rand = new Random();
+    private SoundManager soundManager = new SoundManager();
+    private ImageManager imageLoader = new ImageManager();
 
-    public MainState() {
+    MainState() {
         super();
         GenericLogger.setup(Level.FINE, Level.FINE, Level.OFF);
         logger = Logger.getLogger(this.getClass().getName());
@@ -39,7 +38,8 @@ public class MainState extends State {
         imageLoader.fromFile("assets/sprite.png", "sprite");
         imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
-        testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
+        // Here for testing purposes
+        Shape testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
         player = new TextSprite("HelloWorld!",
                 new Font("Arial", Font.PLAIN, 50), Color.BLACK);
         enemies = new Group();

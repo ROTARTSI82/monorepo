@@ -58,8 +58,9 @@ public class GenericLogger {
 
         if (Constants.SILENCE_AWT_LOGS) {
             setLogger("java.awt", Level.CONFIG);
-            setLogger("java.swing", Level.CONFIG);
+            setLogger("javax.swing", Level.CONFIG);
             setLogger("sun.awt", Level.CONFIG);
+            setLogger("sun.lwawt", Level.CONFIG);
         }
         setupDone = true;
     }

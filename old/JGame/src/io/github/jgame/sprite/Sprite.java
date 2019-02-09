@@ -34,8 +34,7 @@ public class Sprite {
         AffineTransform id = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
-        Vector2 center = new Vector2(0, 0);
-        center = new Vector2(this.image.getWidth(null) / 2d,
+        Vector2 center = new Vector2(this.image.getWidth(null) / 2d,
                 this.image.getHeight(null) / 2d);
         trans.translate(center.x, center.y);
         trans.rotate(Math.toRadians(rot));
@@ -49,8 +48,7 @@ public class Sprite {
 
     public void blitRotozoomTo(double rot, double[] zoom, Graphics2D screen) {
         double[] multiplier;
-        Vector2 dim = new Vector2(0, 0);
-        dim = new Vector2(this.image.getWidth(null), this.image.getHeight(null));
+        Vector2 dim = new Vector2(this.image.getWidth(null), this.image.getHeight(null));
         multiplier = new double[]{zoom[0] / dim.x, zoom[1] / dim.y};
         blitRotozoom(rot, multiplier, screen);
     }
