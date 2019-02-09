@@ -11,6 +11,7 @@ public class GameRunner extends JFrame {
 
     public GameRunner(Game gameInst) {
         game = gameInst;
+        game.setParent(this);
         add(game);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

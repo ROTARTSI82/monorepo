@@ -9,7 +9,10 @@ public class State {
     public KeyHandler keyHandler;
     public MouseHandler mouseHandler;
 
-    public State() {
+    protected Game game;
+
+    public State(Game parent) {
+        game = parent;
         keyHandler = getKeyHandler();
         mouseHandler = getMouseHandler();
     }

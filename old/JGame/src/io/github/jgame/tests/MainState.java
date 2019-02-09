@@ -1,5 +1,6 @@
 package io.github.jgame.tests;
 
+import io.github.jgame.game.Game;
 import io.github.jgame.game.State;
 import io.github.jgame.image.ImageManager;
 import io.github.jgame.logging.GenericLogger;
@@ -29,8 +30,8 @@ public class MainState extends State {
     private SoundManager soundManager = new SoundManager();
     private ImageManager imageLoader = new ImageManager();
 
-    MainState() {
-        super();
+    MainState(Game game) {
+        super(game);
         GenericLogger.setup(Level.FINE, Level.FINE, Level.OFF);
         logger = Logger.getLogger(this.getClass().getName());
         logger.info("env: " + System.getenv());

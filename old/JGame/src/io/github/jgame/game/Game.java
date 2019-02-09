@@ -7,11 +7,16 @@ import java.util.HashMap;
 
 public class Game extends JPanel implements ActionListener {
 
-    public HashMap<String, State> states = new HashMap<>();
-    private String state = "main";
+    public GameRunner runner;
+    protected HashMap<String, State> states = new HashMap<>();
+    protected String state = "main";
 
     public Game() {
-        states.put("main", new State());
+        states.put("main", new State(this));
+    }
+
+    public void setParent(GameRunner parent) {
+        runner = parent;
     }
 
     public void run() {
