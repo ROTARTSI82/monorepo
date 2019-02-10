@@ -20,7 +20,7 @@ public class TonePlayer extends Thread {
         loadedStereo = stereoSound;
         playVolume = volume;
         this.setDaemon(true);  // Program can exit before we finish
-        this.run();
+        this.start();
     }
 
     TonePlayer(SoundArray player, double[] monoSound, float volume) {
@@ -30,7 +30,7 @@ public class TonePlayer extends Thread {
         loadedMono = monoSound;
         playVolume = volume;
         this.setDaemon(true);  // Program can exit before we finish
-        this.run();
+        this.start();
     }
 
     @Override

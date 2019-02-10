@@ -1,5 +1,6 @@
 package io.github.jgame.tests;
 
+import io.github.jgame.Constants;
 import io.github.jgame.game.Game;
 import io.github.jgame.game.State;
 import io.github.jgame.image.ImageManager;
@@ -65,7 +66,7 @@ public class MainState extends State {
         g.fillRect(0, 0, 1440, 900);
         g.setColor(Color.BLACK);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         if (displayRects) {
             player.blitRect(g2d);
         }

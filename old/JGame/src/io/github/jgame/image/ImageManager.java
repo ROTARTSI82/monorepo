@@ -1,5 +1,6 @@
 package io.github.jgame.image;
 
+import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,7 @@ public class ImageManager {
                 BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = buffered.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         g2d.drawImage(img, 0, 0, null);
         g2d.dispose();
 
@@ -40,6 +42,7 @@ public class ImageManager {
         BufferedImage buffered = new BufferedImage(rect.width, rect.height, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = buffered.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         g2d.setColor(color);
         g2d.draw(shape);
         g2d.dispose();
@@ -51,6 +54,7 @@ public class ImageManager {
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = img.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         g2d.setFont(font);
 
         FontMetrics fm = g2d.getFontMetrics();
@@ -60,6 +64,7 @@ public class ImageManager {
 
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         g2d = img.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         g2d.setFont(font);
         fm = g2d.getFontMetrics();
         g2d.setColor(color);

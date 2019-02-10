@@ -1,5 +1,6 @@
 package io.github.jgame.game;
 
+import io.github.jgame.Constants;
 import io.github.jgame.math.Vector2;
 
 import java.awt.*;
@@ -43,7 +44,7 @@ public class State {
     }
 
     public void updateGraphics(Graphics g) {
-
+        ((Graphics2D) g).setRenderingHints(Constants.RENDER_HINTS);
     }
 
     public class KeyHandler extends KeyAdapter {

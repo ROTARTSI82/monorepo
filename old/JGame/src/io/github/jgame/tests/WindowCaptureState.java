@@ -1,5 +1,6 @@
 package io.github.jgame.tests;
 
+import io.github.jgame.Constants;
 import io.github.jgame.event.EventRobot;
 import io.github.jgame.game.Game;
 import io.github.jgame.game.State;
@@ -25,6 +26,7 @@ public class WindowCaptureState extends State {
     @Override
     public void updateGraphics(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         Sprite sprite = new Sprite(robot.createScreenCapture(area));
         Dimension d = game.runner.getSize();
         sprite.pos = new Vector2(d.width / 2d, d.height / 2d);

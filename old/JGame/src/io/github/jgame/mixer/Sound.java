@@ -34,6 +34,7 @@ public class Sound {
             }
         }
         try {
+            assert url != null;
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);

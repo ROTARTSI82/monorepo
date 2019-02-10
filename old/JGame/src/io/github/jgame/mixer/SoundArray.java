@@ -3,7 +3,6 @@ package io.github.jgame.mixer;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.SourceDataLine;
-import java.util.Arrays;
 
 public class SoundArray {
     private float rate;
@@ -15,44 +14,59 @@ public class SoundArray {
         size = sampleSize;
     }
 
-    public static byte[] combine(byte[] a, byte[] b) {
-        byte[] c = new byte[a.length + b.length];
+    public static double[] combine(double[] a, double[] b) {
+        double[] c = new double[a.length + b.length];
         System.arraycopy(a, 0, c, 0, a.length);
         System.arraycopy(b, 0, c, a.length, b.length);
         return c;
     }
 
-    public static byte[][] combine(byte[][] a, byte[][] b) {
-        byte[][] c = new byte[a.length + b.length][2];
+    public static double[][] combine(double[][] a, double[][] b) {
+        double[][] c = new double[a.length + b.length][2];
         System.arraycopy(a, 0, c, 0, a.length);
         System.arraycopy(b, 0, c, a.length, b.length);
         return c;
     }
 
     public static void main(String[] args) {
-        byte[][] a = new byte[][]{{0, 127}, {64, 32}};
-        byte[][] b = new byte[][]{{-128, 64}, {-16, -8}};
-        System.out.print("{");
-        for (byte[] coords : combine(a, b)) {
-            System.out.print(Arrays.toString(coords));
-            System.out.print(", ");
-        }
-        System.out.println("}");
-
-        byte[] c = new byte[]{0, 64};
-        byte[] d = new byte[]{-128, 127};
-        System.out.println(Arrays.toString(combine(c, d)));
-
         SoundArray arr = new SoundArray(44100, -16);
         try {
-            arr.playStereo(arr.getStereo(440, 340, 5), 100);
-            Tone tone = new Tone(arr, arr.getMono(440, 5), 100);
-            tone.play();
-            Thread.sleep(5000);
-            tone.play();
+            Note[] notes = new Note[]{
+                    new Note("E4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.5),
+                    new Note("E4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.5),
+                    new Note("C4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.5),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("E4", 0.5, 0.25),
+                    new Note("D4", 0.5, 0.25),
+                    new Note("C4", 0.5, 0.5)
+            };
+            Tone song = new Tone(arr, arr.fromNoteArray(notes), 100);
+            song.play();
+            while (song.isPlaying()) {
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public double[] fromNoteArray(Note[] notes) {
+        double[] ret = new double[0];
+        for (Note note : notes) {
+            double[] rest = new double[(int) (rate * note.restTime)];
+            double[] tone = getMono(note.frequency, note.holdTime);
+            ret = combine(ret, combine(tone, rest));
+        }
+        return ret;
     }
 
     public void playMono(double[] tones, float volume) throws Exception {
@@ -113,7 +127,7 @@ public class SoundArray {
         return buf;
     }
 
-    public double[] getMono(float tone, float length) {
+    public double[] getMono(double tone, double length) {
         double[] buf = new double[(int) (rate * length)];
         for (int i = 0; i < rate * length; i++) {
             buf[i] = tone;
