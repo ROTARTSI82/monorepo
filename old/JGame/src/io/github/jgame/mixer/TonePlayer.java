@@ -9,26 +9,13 @@ public class TonePlayer extends Thread {
     private Logger logger;
     private boolean isStereo;
     private SoundArray soundPlayer;
-    private double[] loadedMono;
-    private double[][] loadedStereo;
-    private float playVolume;
+    private byte[] tone;
 
-    TonePlayer(SoundArray player, double[][] stereoSound, float volume) {
+    TonePlayer(SoundArray player, byte[] data, boolean stereo) {
         logger = Logger.getLogger(this.getClass().getName());
-        isStereo = true;
+        isStereo = stereo;
         soundPlayer = player;
-        loadedStereo = stereoSound;
-        playVolume = volume;
-        this.setDaemon(true);  // Program can exit before we finish
-        this.start();
-    }
-
-    TonePlayer(SoundArray player, double[] monoSound, float volume) {
-        logger = Logger.getLogger(this.getClass().getName());
-        isStereo = false;
-        soundPlayer = player;
-        loadedMono = monoSound;
-        playVolume = volume;
+        tone = data;
         this.setDaemon(true);  // Program can exit before we finish
         this.start();
     }
@@ -37,11 +24,7 @@ public class TonePlayer extends Thread {
     public void run() {
         synchronized (TonePlayer.class) {
             try {
-                if (isStereo) {
-                    soundPlayer.playStereo(loadedStereo, playVolume);
-                } else {
-                    soundPlayer.playMono(loadedMono, playVolume);
-                }
+                soundPlayer.play(tone, !isStereo);
             } catch (Exception e) {
                 logger.warning(String.format("Failed to play tone:\n%s",
                         GenericLogger.getStackTrace(e)));

@@ -1,4 +1,4 @@
-package io.github.jgame.tests;
+package io.github.jgame.tests.window;
 
 import io.github.jgame.Constants;
 import io.github.jgame.event.EventRobot;

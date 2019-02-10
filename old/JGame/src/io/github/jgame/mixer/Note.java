@@ -162,13 +162,22 @@ public class Note {
     double frequency;
     double holdTime;
     double restTime;
+    float noteVolume;
 
-    public Note(String name, double hold, double rest) {
+    public Note(String name, double hold, double rest, float volume) {
         if (notes.containsKey(name)) {
             frequency = notes.get(name);
         } else {
             frequency = 0;
         }
+        noteVolume = volume;
+        holdTime = hold;
+        restTime = rest;
+    }
+
+    public Note(double freq, double hold, double rest, float volume) {
+        frequency = freq;
+        noteVolume = volume;
         holdTime = hold;
         restTime = rest;
     }
