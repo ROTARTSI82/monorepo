@@ -4,16 +4,17 @@ import io.github.jgame.math.Vector2;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class Sprite {
     public Vector2 pos, vel;
     Rectangle rect;
-    Image image;
+    BufferedImage image;
     LinkedList<Group> groups = new LinkedList<>();
     Vector2 size, absPos;
 
-    public Sprite(Image spriteImage) {
+    public Sprite(BufferedImage spriteImage) {
         image = spriteImage;
         size = new Vector2(image.getWidth(null), image.getHeight(null));
         rect = new Rectangle(100, 100, (int) size.x, (int) size.y);

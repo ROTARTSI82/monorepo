@@ -3,14 +3,24 @@ package io.github.jgame.mixer;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.SourceDataLine;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.util.Objects;
 
-public class SoundArray {
-    private float rate;
+public class SoundGenerator {
+    public float rate;
     private int size;
 
-    public SoundArray(float sampleRate, int sampleSize) {
+    public SoundGenerator(float sampleRate, int sampleSize) {
         rate = sampleRate;
         size = sampleSize;
+    }
+
+    public SoundGenerator() {
+        rate = 44100;
+        size = -16;
     }
 
     public static byte[] combine(byte[] a, byte[] b) {
@@ -23,7 +33,7 @@ public class SoundArray {
     public byte[] fromNoteArray(Note[] notes) {
         byte[] ret = new byte[0];
         for (Note note : notes) {
-            byte[] rest = new byte[(int) (rate * note.restTime * 2)];  // 2 bytes per frame
+            byte[] rest = new byte[(int) (rate * note.restTime * 2)];
             byte[] tone = getMono(note.frequency, note.holdTime, note.noteVolume);
             ret = combine(ret, combine(tone, rest));
         }
@@ -47,10 +57,20 @@ public class SoundArray {
         buf = new byte[4];
         int index = 0;
         while (ret.length < right.length + left.length) {
-            buf[0] = left[index];
-            buf[1] = left[index + 1];
-            buf[2] = right[index];
-            buf[3] = right[index + 1];
+            try {
+                buf[0] = left[index];
+                buf[1] = left[index + 1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                buf[0] = 0;
+                buf[1] = 0;
+            }
+            try {
+                buf[2] = right[index];
+                buf[3] = right[index + 1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                buf[2] = 0;
+                buf[3] = 0;
+            }
             ret = combine(ret, buf);
             index += 2;
         }
@@ -73,10 +93,6 @@ public class SoundArray {
         return ret;
     }
 
-    public void save() {
-
-    }
-
     public byte[] parse(double[][] tones, float volume) {
         byte[] buf = new byte[4];  // {L, L, R, R}
         byte[] ret = new byte[]{};
@@ -96,15 +112,36 @@ public class SoundArray {
         return ret;
     }
 
-    public void play(byte[] buf, boolean isMono) throws Exception {
+    public void play(byte[] buf, boolean isStereo) throws Exception {
         AudioFormat af = new AudioFormat(rate, Math.abs(size),
-                isMono ? 1 : 2, size < 0, false);
+                isStereo ? 2 : 1, size < 0, false);
         SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
         sdl.open();
         sdl.start();
         sdl.write(buf, 0, buf.length);
         sdl.drain();
         sdl.stop();
+    }
+
+    public void save(byte[] data, String file) {
+        try {
+            DataOutputStream outStream = new DataOutputStream(new FileOutputStream(new File(file)));
+            outStream.write(data);
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Tone load(String file, boolean stereo) throws Exception {
+        File inFile = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource(file)).toURI());
+        byte[] buf = Files.readAllBytes(inFile.toPath());
+        if (stereo) {
+            byte[] tone = new byte[buf.length - 1];
+            System.arraycopy(buf, 1, tone, 0, buf.length - 1);
+            return new Tone(this, tone, true);
+        }
+        return new Tone(this, buf, false);
     }
 
     public byte[] getStereo(double left, double right, double length, float volume) {

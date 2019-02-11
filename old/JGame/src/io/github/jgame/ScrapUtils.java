@@ -1,4 +1,4 @@
-package io.github.jgame.scrap;
+package io.github.jgame;
 
 import io.github.jgame.logging.GenericLogger;
 
@@ -8,7 +8,7 @@ import java.awt.datatransfer.StringSelection;
 import java.util.logging.Logger;
 
 public class ScrapUtils {
-    private static Logger logger = Logger.getLogger("io.github.jgame.scrap.ScrapUtils");
+    private static Logger logger = Logger.getLogger("io.github.jgame.ScrapUtils");
 
     public static void setClipboard(String string) {
         StringSelection selection = new StringSelection(string);

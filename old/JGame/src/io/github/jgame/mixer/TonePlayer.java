@@ -8,10 +8,10 @@ public class TonePlayer extends Thread {
 
     private Logger logger;
     private boolean isStereo;
-    private SoundArray soundPlayer;
+    private SoundGenerator soundPlayer;
     private byte[] tone;
 
-    TonePlayer(SoundArray player, byte[] data, boolean stereo) {
+    TonePlayer(SoundGenerator player, byte[] data, boolean stereo) {
         logger = Logger.getLogger(this.getClass().getName());
         isStereo = stereo;
         soundPlayer = player;
@@ -24,7 +24,7 @@ public class TonePlayer extends Thread {
     public void run() {
         synchronized (TonePlayer.class) {
             try {
-                soundPlayer.play(tone, !isStereo);
+                soundPlayer.play(tone, isStereo);
             } catch (Exception e) {
                 logger.warning(String.format("Failed to play tone:\n%s",
                         GenericLogger.getStackTrace(e)));

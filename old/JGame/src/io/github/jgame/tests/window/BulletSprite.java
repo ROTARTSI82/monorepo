@@ -4,6 +4,7 @@ import io.github.jgame.math.Vector2;
 import io.github.jgame.sprite.Sprite;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class BulletSprite extends Sprite {
     private double rot;
@@ -11,7 +12,7 @@ public class BulletSprite extends Sprite {
     private Vector2 target;
     private boolean rotInit = false;
 
-    public BulletSprite(Vector2 myTarget, Vector2 myPos, Image img) {
+    public BulletSprite(Vector2 myTarget, Vector2 myPos, BufferedImage img) {
         super(img);
         pos = myPos;
         updateRect();

@@ -4,7 +4,6 @@ import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
 
 public class ImageManager {
     private final Logger logger;
-    private HashMap<String, Image> images = new HashMap<>();
+    private HashMap<String, BufferedImage> images = new HashMap<>();
 
     public ImageManager() {
         logger = Logger.getLogger(this.getClass().getName());
@@ -86,7 +85,7 @@ public class ImageManager {
         URL url = this.getClass().getClassLoader().getResource(file);
         assert url != null;
         try {
-            images.put(id, new ImageIcon(ImageIO.read(url)).getImage());
+            images.put(id, ImageIO.read(url));
         } catch (IOException e) {
             logger.warning(String.format("Failed to load %s:\n%s", file, GenericLogger.getStackTrace(e)));
         }
@@ -95,13 +94,13 @@ public class ImageManager {
     public void fromUrl(String url, String id) {
         try {
             URL urlObj = new URL(url);
-            images.put(id, new ImageIcon(ImageIO.read(urlObj)).getImage());
+            images.put(id, ImageIO.read(urlObj));
         } catch (IOException e) {
             logger.warning(String.format("Failed to load %s:\n%s", url, GenericLogger.getStackTrace(e)));
         }
     }
 
-    public Image get(String id) {
+    public BufferedImage get(String id) {
         return images.get(id);
     }
 }

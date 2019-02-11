@@ -9,7 +9,6 @@ import io.github.jgame.math.Vector2;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
 import io.github.jgame.sprite.Sprite;
-import io.github.jgame.sprite.TextSprite;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -42,8 +41,9 @@ public class MainState extends State {
         int size = 32;
         // Here for testing purposes
         Shape testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
-        player = new TextSprite("HelloWorld!",
-                new Font("Arial", Font.PLAIN, 50), Color.BLACK);
+        //player = new TextSprite("HelloWorld!",
+        //        new Font("Arial", Font.PLAIN, 50), Color.BLACK);
+        player = new Sprite(ImageManager.fromShape(testShape, Color.BLACK));
         enemies = new Group();
         bullets = new Group();
         enemies.add(new Enemy(640, 480, imageLoader.get("sprite")));

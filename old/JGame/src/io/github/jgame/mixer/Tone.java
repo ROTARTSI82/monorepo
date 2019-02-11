@@ -4,13 +4,13 @@ import java.util.LinkedList;
 
 public class Tone {
     private boolean isStereo;
-    private byte[] data;
-    private SoundArray parent;
+    public byte[] data;
+    private SoundGenerator parent;
 
     private LinkedList<TonePlayer> threads = new LinkedList<>();
 
-    public Tone(SoundArray player, byte[] tone, boolean isMono) {
-        isStereo = !isMono;
+    public Tone(SoundGenerator player, byte[] tone, boolean stereo) {
+        isStereo = stereo;
         data = tone;
         parent = player;
     }
@@ -29,10 +29,6 @@ public class Tone {
     }
 
     public void play() {
-        if (isStereo) {
-            threads.add(new TonePlayer(parent, data, isStereo));
-        } else {
-            threads.add(new TonePlayer(parent, data, isStereo));
-        }
+        threads.add(new TonePlayer(parent, data, isStereo));
     }
 }
