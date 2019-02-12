@@ -4,6 +4,8 @@ import io.github.jgame.mixer.Note;
 import io.github.jgame.mixer.SoundGenerator;
 import io.github.jgame.mixer.Tone;
 
+import java.util.Arrays;
+
 public class SoundTest {
     public static void main(String[] args) {
         SoundGenerator arr = new SoundGenerator(44100, -16);
@@ -16,9 +18,10 @@ public class SoundTest {
             System.out.println("Building..");
 
             long start = System.currentTimeMillis();
-            //Tone song = arr.load("test.wav.bin", false);
-            Tone song = new Tone(arr, arr.fromNoteArray(notes), true);
-            arr.save(song.data, "resources/test.wav.bin");
+            Tone song = arr.load("test.wav.bin", true);
+            //Tone song = new Tone(arr, arr.fromNoteArray(notes), true);
+            //arr.save(song.data, "resources/test.wav.bin");
+            System.out.println(Arrays.toString(song.data));
             System.out.println("Compiled " + (song.data.length / arr.rate / 2) * 1000 + "ms of audio in "
                     + (System.currentTimeMillis() - start) + "ms. Playing");
             song.play();

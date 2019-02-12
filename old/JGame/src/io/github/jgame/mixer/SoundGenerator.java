@@ -136,17 +136,12 @@ public class SoundGenerator {
     public Tone load(String file, boolean stereo) throws Exception {
         File inFile = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource(file)).toURI());
         byte[] buf = Files.readAllBytes(inFile.toPath());
-        if (stereo) {
-            byte[] tone = new byte[buf.length - 1];
-            System.arraycopy(buf, 1, tone, 0, buf.length - 1);
-            return new Tone(this, tone, true);
-        }
-        return new Tone(this, buf, false);
+        return new Tone(this, buf, stereo);
     }
 
     public byte[] getStereo(double left, double right, double length, float volume) {
         double[][] buf = new double[(int) (rate * length)][2];
-        for (int i = 0; i < rate * length; i++) {
+        for (int i = 0; i < (long) (rate * length); i++) {
             buf[i][0] = left;
             buf[i][1] = right;
         }
@@ -155,7 +150,7 @@ public class SoundGenerator {
 
     public byte[] getMono(double tone, double length, float volume) {
         double[] buf = new double[(int) (rate * length)];
-        for (int i = 0; i < rate * length; i++) {
+        for (int i = 0; i < (long) (rate * length); i++) {
             buf[i] = tone;
         }
         return parse(buf, volume);
