@@ -31,6 +31,9 @@ public class EventRobot extends Robot {
     }
 
     public void clickMouse(int holdTime, int button) {
+        if (button < 1 || button > 3) {
+            throw new IllegalArgumentException("Button needs to be between 1 and 3, not " + button);
+        }
         this.mousePress(1 << (9 + button));
         this.delay(holdTime);
         this.mouseRelease(1 << (9 + button));

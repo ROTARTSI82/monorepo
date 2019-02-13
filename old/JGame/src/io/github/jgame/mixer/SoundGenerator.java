@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
-import java.util.Objects;
 
 public class SoundGenerator {
     public float rate;
@@ -123,9 +122,9 @@ public class SoundGenerator {
         sdl.stop();
     }
 
-    public void save(byte[] data, String file) {
+    public void save(byte[] data, File file) {
         try {
-            DataOutputStream outStream = new DataOutputStream(new FileOutputStream(new File(file)));
+            DataOutputStream outStream = new DataOutputStream(new FileOutputStream(file));
             outStream.write(data);
             outStream.close();
         } catch (Exception e) {
@@ -133,9 +132,8 @@ public class SoundGenerator {
         }
     }
 
-    public Tone load(String file, boolean stereo) throws Exception {
-        File inFile = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource(file)).toURI());
-        byte[] buf = Files.readAllBytes(inFile.toPath());
+    public Tone load(File file, boolean stereo) throws Exception {
+        byte[] buf = Files.readAllBytes(file.toPath());
         return new Tone(this, buf, stereo);
     }
 

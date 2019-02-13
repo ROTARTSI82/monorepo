@@ -1,19 +1,24 @@
 package io.github.jgame.mixer;
 
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import java.io.File;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class SoundGeneratorTest {
+    private final int monoPlaylenMargin = 500;
+    private Tone mono;
+
     private final int monoLengthMargin = 2;
     private final int stereoLengthMargin = 2;
     private final int stereoPlaylenMargin = 125;
-    private final int monoPlaylenMargin = 375;
+    private Tone stereo;
     private SoundGenerator gen;
 
-    @BeforeMethod
+    @BeforeSuite
     public void setUp() {
         gen = new SoundGenerator();
     }
@@ -34,11 +39,11 @@ public class SoundGeneratorTest {
         assertTrue(expectedLen - monoLengthMargin <= raw.length &&
                 expectedLen + monoLengthMargin >= raw.length);
 
-        Tone tone = new Tone(gen, raw, false);
-        tone.play();
+        mono = new Tone(gen, raw, false);
+        mono.play();
 
         long start = System.currentTimeMillis();
-        while (tone.isPlaying()) {
+        while (mono.isPlaying()) {
             assertTrue((System.currentTimeMillis() - start) <= (625 + monoPlaylenMargin));
         }
         assertTrue((System.currentTimeMillis() - start) >= 625);
@@ -61,13 +66,32 @@ public class SoundGeneratorTest {
         assertTrue(expectedLen - stereoLengthMargin <= raw.length &&
                 expectedLen + stereoLengthMargin >= raw.length);
 
-        Tone tone = new Tone(gen, raw, true);
-        tone.play();
+        stereo = new Tone(gen, raw, true);
+        stereo.play();
 
         long start = System.currentTimeMillis();
-        while (tone.isPlaying()) {
+        while (stereo.isPlaying()) {
             assertTrue((System.currentTimeMillis() - start) <= (625 + stereoPlaylenMargin));
         }
         assertTrue((System.currentTimeMillis() - start) >= 625);
+    }
+
+    @Test(dependsOnMethods = {"testFromNoteArray"})
+    public void testMonoSave() throws Exception {
+        File tmp = File.createTempFile("mono", ".tmp");
+        gen.save(mono.data, tmp);
+        Tone recovered = gen.load(tmp, false);
+        assertEquals(recovered.data, mono.data);
+
+        assertTrue(tmp.delete());
+    }
+
+    @Test(dependsOnMethods = {"testFromNoteArray1"})
+    public void testStereoSave() throws Exception {
+        File tmp = File.createTempFile("stereo", ".tmp");
+        gen.save(stereo.data, tmp);
+        Tone recovered = gen.load(tmp, true);
+        assertEquals(recovered.data, stereo.data);
+        assertTrue(tmp.delete());
     }
 }

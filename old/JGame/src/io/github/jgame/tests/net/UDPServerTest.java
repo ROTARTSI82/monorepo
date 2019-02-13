@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+@Deprecated
 public class UDPServerTest extends UDPServer {
     static long pingNum = 0;
 

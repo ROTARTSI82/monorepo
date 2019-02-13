@@ -30,6 +30,8 @@ public class Game extends JPanel implements ActionListener {
 
         Timer timer = new Timer(0, this);
         timer.start();
+
+        states.get(state).enter("INIT");
     }
 
     public void setNoEraseBackground() {
