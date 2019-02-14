@@ -6,12 +6,12 @@ import java.net.DatagramPacket;
 import java.util.HashMap;
 
 public class UDPTest {
-    @Test(timeOut = 1000)
+    @Test(timeOut = 2000)
     public void testUDP() throws Exception {
         Server testServ = new Server("127.0.0.1", 3000);
         Client testCli = new Client("127.0.0.1", 3000, System.nanoTime());
         while (!testCli.done) {
-            //Thread.sleep(25);
+            Thread.sleep(25);
             testServ.update();
             testCli.update();
         }

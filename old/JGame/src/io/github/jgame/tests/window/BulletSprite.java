@@ -6,6 +6,10 @@ import io.github.jgame.sprite.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * @deprecated Only use for blitting tests.
+ */
+@Deprecated
 public class BulletSprite extends Sprite {
     private double rot;
     private long life;

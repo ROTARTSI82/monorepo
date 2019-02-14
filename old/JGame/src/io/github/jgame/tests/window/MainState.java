@@ -18,6 +18,10 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @deprecated Use SpriteTest. Only useful for testing blitting.
+ */
+@Deprecated
 public class MainState extends State {
     private final Logger logger;
     private final boolean displayRects = true;

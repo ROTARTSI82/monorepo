@@ -2,6 +2,10 @@ package io.github.jgame.tests.window;
 
 import io.github.jgame.game.Game;
 
+/**
+ * @deprecated Only use for blitting tests.
+ */
+@Deprecated
 public class TestGame extends Game {
     public TestGame() {
         super();

@@ -10,6 +10,10 @@ import io.github.jgame.math.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * @deprecated Use SurfaceMapTest. Only useful for testing blitting.
+ */
+@Deprecated
 public class WindowCaptureState extends State {
     private EventRobot robot;
     private Rectangle area;

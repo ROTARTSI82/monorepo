@@ -4,6 +4,10 @@ import io.github.jgame.game.GameRunner;
 
 import java.awt.*;
 
+/**
+ * @deprecated Only use for blitting tests.
+ */
+@Deprecated
 public class Main extends GameRunner {
     Main(TestGame inst) {
         super(inst);

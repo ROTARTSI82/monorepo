@@ -6,6 +6,10 @@ import io.github.jgame.sprite.Sprite;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+/**
+ * @deprecated Only use for blitting tests.
+ */
+@Deprecated
 public class Enemy extends Sprite {
     Random rand = new Random();
 

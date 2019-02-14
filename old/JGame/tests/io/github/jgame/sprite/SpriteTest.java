@@ -4,6 +4,7 @@ import io.github.jgame.math.Vector2;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static org.testng.Assert.assertEquals;
@@ -35,6 +36,21 @@ public class SpriteTest {
         other.updateRect();
 
         assertEquals(other.collidesWith(group).size(), 1);
+    }
+
+    @Test
+    public void testShapeSprite() {
+        Polygon testShape = new Polygon(new int[]{16, 0, 32}, new int[]{0, 32, 32}, 3);
+        ShapeSprite test = new ShapeSprite(testShape, 1);
+
+        assertEquals(test.size.x, 32);
+        assertEquals(test.size.y, 32);
+    }
+
+    @Test
+    public void testTextSprite() {
+        TextSprite testText = new TextSprite("Hello World!", new Font("Arial", Font.PLAIN, 50),
+                Color.BLACK);
     }
 
     @Test
