@@ -63,7 +63,10 @@ public class UserDatabase implements Serializable {
         return ret;
     }
 
-    public void createAccount(String username, char[] password) throws Exception {
+    public boolean createAccount(String username, char[] password) throws Exception {
+        if (accountExists(username)) {
+            return false;
+        }
         byte[] salt = getRandomSalt(saltLen);
         passwords.put(username, toWrapper(hmac(password, salt)));
         salts.put(username, toWrapper(salt));
@@ -72,6 +75,7 @@ public class UserDatabase implements Serializable {
         byte[] ivBytes = new byte[16];
         random.nextBytes(ivBytes);
         ivs.put(username, new IvParameterSpec(ivBytes));
+        return true;
     }
 
     public boolean verifyPassword(String username, char[] password) throws Exception {
@@ -88,9 +92,9 @@ public class UserDatabase implements Serializable {
         return new SecretKeySpec(key, "AES");
     }
 
-    public void setUserData(String username, char[] password, Object data) throws Exception {
+    public boolean setUserData(String username, char[] password, Object data) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
-            return;
+            return false;
         }
         ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
         ObjectOutputStream serializer = new ObjectOutputStream(bytesOut);
@@ -100,20 +104,22 @@ public class UserDatabase implements Serializable {
 
         cipher.init(Cipher.ENCRYPT_MODE, getKey(password, toPrimitive(salts.get(username))), ivs.get(username));
         userData.put(username, toWrapper(cipher.doFinal(rawData)));
+        return true;
     }
 
     public boolean accountExists(String username) {
         return passwords.containsKey(username);
     }
 
-    public void deleteAccount(String username, char[] password) throws Exception {
+    public boolean deleteAccount(String username, char[] password) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
-            return;
+            return false;
         }
         salts.remove(username);
         passwords.remove(username);
         userData.remove(username);
         ivs.remove(username);
+        return true;
     }
 
     public Object getUserData(String username, char[] password) throws Exception {
