@@ -57,5 +57,5 @@ public class Constants {
                 put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
                 put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             }});
-    public final static RenderingHints RENDER_HINTS = QUALITY_RENDER_HINTS;
+    public final static RenderingHints RENDER_HINTS = SPEED_RENDER_HINTS;
 }

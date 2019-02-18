@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 public class DesktopUtils {
@@ -62,6 +63,21 @@ public class DesktopUtils {
             }
         } catch (IOException e) {
             logger.warning("Failed to mail to URI:\n" + GenericLogger.getStackTrace(e));
+        }
+        return false;
+    }
+
+    public static boolean mailTo(String sendTo, String subject, String cc, String body, String bcc) {
+        try {
+            if (supported && desktop.isSupported(Desktop.Action.MAIL)) {
+                desktop.mail(new URI(String.format("mailto:%s?subject=%s&cc=%s&body=%s&bcc=%s",
+                        sendTo, subject, cc, body, bcc)));
+                return true;
+            }
+        } catch (IOException e) {
+            logger.warning("Failed to mail to URI:\n" + GenericLogger.getStackTrace(e));
+        } catch (URISyntaxException e) {
+            logger.warning("Malformed uri:\n" + GenericLogger.getStackTrace(e));
         }
         return false;
     }

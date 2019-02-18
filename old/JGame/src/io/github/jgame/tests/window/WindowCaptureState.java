@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
  */
 @Deprecated
 public class WindowCaptureState extends State {
+    // Make these volatile?
     private EventRobot robot;
     private Rectangle area;
     private SurfaceMap map;
@@ -31,14 +32,18 @@ public class WindowCaptureState extends State {
     }
 
     @Override
-    public void updateGraphics(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHints(Constants.RENDER_HINTS);
+    public void updateLogic() {
         BufferedImage sprite = robot.createScreenCapture(area);
         map.getGraphics().drawImage(sprite, 0, 0, null);
         Dimension d = game.runner.getSize();
         map.getScroll(new Vector2(0, 0), d, new Vector2(0, 0), true, true);
         map.getResized(d, new double[]{1, 1});
+    }
+
+    @Override
+    public void updateGraphics(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
         map.blitTo(g2d);
         g2d.dispose();
     }

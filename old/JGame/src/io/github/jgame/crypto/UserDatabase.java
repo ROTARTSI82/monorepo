@@ -16,11 +16,7 @@ import java.util.HashMap;
 public class UserDatabase implements Serializable {
     private final static SecureRandom random = new SecureRandom();
 
-    private HashMap<String, Byte[]> passwords = new HashMap<>();
-    private HashMap<String, Byte[]> salts = new HashMap<>();
-    private HashMap<String, Byte[]> userData = new HashMap<>();
-
-    private HashMap<String, IvParameterSpec> ivs = new HashMap<>();
+    private HashMap<String, HashMap<String, Byte[]>> userData = new HashMap<>();
 
     private Cipher cipher;
     private int saltLen;
@@ -48,7 +44,7 @@ public class UserDatabase implements Serializable {
 
         int j = 0;
         for (Byte b : bytes) {
-            ret[j++] = b.byteValue();
+            ret[j++] = b;
         }
         return ret;
     }
@@ -68,25 +64,24 @@ public class UserDatabase implements Serializable {
             return false;
         }
         byte[] salt = getRandomSalt(saltLen);
-        passwords.put(username, toWrapper(hmac(password, salt)));
-        salts.put(username, toWrapper(salt));
-        userData.put(username, new Byte[]{});
-
-        byte[] ivBytes = new byte[16];
-        random.nextBytes(ivBytes);
-        ivs.put(username, new IvParameterSpec(ivBytes));
+        HashMap<String, Byte[]> data = new HashMap<>();
+        data.put("password", toWrapper(hmac(password, salt)));
+        data.put("salt", toWrapper(salt));
+        data.put("data", new Byte[]{});
+        data.put("iv", toWrapper(getRandomSalt(16)));
+        userData.put(username, data);
         return true;
     }
 
     public boolean verifyPassword(String username, char[] password) throws Exception {
-        byte[] expected = toPrimitive(passwords.get(username));
-        byte[] actual = hmac(password, toPrimitive(salts.get(username)));
+        byte[] expected = toPrimitive(userData.get(username).get("password"));
+        byte[] actual = hmac(password, toPrimitive(userData.get(username).get("salt")));
         return Arrays.equals(expected, actual);
     }
 
     private SecretKeySpec getKey(char[] password, byte[] salt) throws Exception {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256); // AES-256
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] key = f.generateSecret(spec).getEncoded();
 
         return new SecretKeySpec(key, "AES");
@@ -102,23 +97,22 @@ public class UserDatabase implements Serializable {
         serializer.close();
         byte[] rawData = bytesOut.toByteArray();
 
-        cipher.init(Cipher.ENCRYPT_MODE, getKey(password, toPrimitive(salts.get(username))), ivs.get(username));
-        userData.put(username, toWrapper(cipher.doFinal(rawData)));
+        byte[] salt = toPrimitive(userData.get(username).get("salt"));
+        cipher.init(Cipher.ENCRYPT_MODE, getKey(password, salt),
+                new IvParameterSpec(toPrimitive(userData.get(username).get("iv"))));
+        userData.get(username).put("data", toWrapper(cipher.doFinal(rawData)));
         return true;
     }
 
     public boolean accountExists(String username) {
-        return passwords.containsKey(username);
+        return userData.containsKey(username);
     }
 
     public boolean deleteAccount(String username, char[] password) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return false;
         }
-        salts.remove(username);
-        passwords.remove(username);
         userData.remove(username);
-        ivs.remove(username);
         return true;
     }
 
@@ -126,10 +120,11 @@ public class UserDatabase implements Serializable {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return null;
         }
-        byte[] enc = toPrimitive(userData.get(username));
-        byte[] salt = toPrimitive(salts.get(username));
+        byte[] enc = toPrimitive(userData.get(username).get("data"));
 
-        cipher.init(Cipher.DECRYPT_MODE, getKey(password, salt), ivs.get(username));
+        byte[] salt = toPrimitive(userData.get(username).get("salt"));
+        cipher.init(Cipher.DECRYPT_MODE, getKey(password, salt),
+                new IvParameterSpec(toPrimitive(userData.get(username).get("iv"))));
 
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(cipher.doFinal(enc)));
         Object o = ois.readObject();

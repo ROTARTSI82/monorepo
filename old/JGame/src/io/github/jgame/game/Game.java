@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-public class Game extends JPanel implements ActionListener {
+public class Game extends JPanel {
 
     public GameRunner runner;
     protected HashMap<String, State> states = new HashMap<>();
@@ -28,8 +28,19 @@ public class Game extends JPanel implements ActionListener {
         setFocusable(true);
         requestFocusInWindow();
 
-        Timer timer = new Timer(0, this);
-        timer.start();
+        Timer logicUpdate = new Timer(0, e -> {
+            synchronized (this) {
+                updateLogic();
+            }
+        });
+        logicUpdate.start();
+
+        Timer graphicsUpdate = new Timer(0, e -> {
+            synchronized (this) {
+                repaint();
+            }
+        });
+        graphicsUpdate.start();
 
         states.get(state).enter("INIT");
     }
@@ -46,15 +57,13 @@ public class Game extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent event) {
-        states.get(state).updateLogic();
-        repaint();
-    }
-
-    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         states.get(state).updateGraphics(g);
+    }
+
+    private void updateLogic() {
+        states.get(state).updateLogic();
     }
 
     private class GameKeyHandler extends KeyAdapter {
