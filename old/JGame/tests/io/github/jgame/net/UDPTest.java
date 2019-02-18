@@ -19,7 +19,7 @@ public class UDPTest {
 
     private class Server extends UDPServer {
         Server(String host, int port) throws Exception {
-            super(host, port);
+            super(host, port, 1);
         }
 
         @Override

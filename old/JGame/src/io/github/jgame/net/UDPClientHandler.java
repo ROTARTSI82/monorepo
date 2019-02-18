@@ -4,12 +4,12 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
 
-public class ClientHandler {
+public class UDPClientHandler {
     InetAddress address;
     int port;
     UDPServer factory;
 
-    public ClientHandler(InetAddress listenHost, int listenPort, UDPServer parent) {
+    public UDPClientHandler(InetAddress listenHost, int listenPort, UDPServer parent) {
         address = listenHost;
         port = listenPort;
         factory = parent;

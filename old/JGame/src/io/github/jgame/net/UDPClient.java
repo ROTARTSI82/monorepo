@@ -58,6 +58,10 @@ public class UDPClient {
                 send(rawSend);
                 return;
             }
+            case "kick": {
+                onKick((String) packetDict.get("reason"));
+                return;
+            }
             case "confirmPacket": {
                 String id = (String) packetDict.get("id");
                 if (pendingPackets.containsKey(id)) {
@@ -71,6 +75,10 @@ public class UDPClient {
             }
         }
         parse(packetDict, packet);
+    }
+
+    public void onKick(String reason) {
+
     }
 
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency) {

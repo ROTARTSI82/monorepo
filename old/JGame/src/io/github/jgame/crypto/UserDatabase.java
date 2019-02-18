@@ -81,7 +81,7 @@ public class UserDatabase implements Serializable {
 
     private SecretKeySpec getKey(char[] password, byte[] salt) throws Exception {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256); // AES-256
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
         byte[] key = f.generateSecret(spec).getEncoded();
 
         return new SecretKeySpec(key, "AES");

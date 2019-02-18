@@ -3,6 +3,7 @@ package io.github.jgame.net;
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,20 +18,36 @@ public class UDPServer {
 
     private LinkedList<String> verifiedByMe = new LinkedList<>();
     private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
-    private HashMap<String, ClientHandler> clients = new HashMap<>();
+    private HashMap<String, UDPClientHandler> clients = new HashMap<>();
 
-    public UDPServer(String host, int listenPort) throws Exception {
+    private int clientLimit;
+
+    public UDPServer(String host, int listenPort, int maxClients) throws Exception {
         address = InetAddress.getByName(host);
         port = listenPort;
+        clientLimit = maxClients;
         socket = new DatagramSocket(listenPort, address);
         logger = Logger.getLogger(this.getClass().getName());
     }
 
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws Exception {
-        logger.finest(String.format("[%s:%s] Sent %s to %s:%s", address, port, datagram, datAddress, datPort));
+        logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, datAddress, datPort));
         byte[] bytes = NetUtils.serialize(datagram);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
         socket.send(packet);
+    }
+
+    public void sendToAll(HashMap<String, Object> datagram) {
+        for (UDPClientHandler client : clients.values()) {
+            logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, client.address, client.port));
+            try {
+                byte[] bytes = NetUtils.serialize(datagram);
+                DatagramPacket packet = new DatagramPacket(bytes, bytes.length, client.address, client.port);
+                socket.send(packet);
+            } catch (IOException e) {
+                logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
+            }
+        }
     }
 
     public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
@@ -42,9 +59,17 @@ public class UDPServer {
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
         socket.receive(packet);
 
+        if (clients.size() >= clientLimit) {
+            HashMap<String, Object> kickMsg = new HashMap<>();
+            kickMsg.put("action", "kick");
+            kickMsg.put("reason", "Server already full");
+
+            send(kickMsg, packet.getAddress(), packet.getPort());
+            return;
+        }
         String packAddr = packet.getAddress().toString() + ":" + packet.getPort();
         if (!clients.containsKey(packAddr)) {
-            clients.put(packAddr, new ClientHandler(packet.getAddress(), packet.getPort(), this));
+            clients.put(packAddr, new UDPClientHandler(packet.getAddress(), packet.getPort(), this));
             logger.info(String.format("[%s:%s] New client at %s", address, port, packAddr));
         }
 
@@ -55,6 +80,10 @@ public class UDPServer {
         logger.finest(String.format("[%s:%s] Got packet %s from %s", address, port, packetDict, packAddr));
         String action = (String) packetDict.get("action");
         switch (action) {
+            case "clientShutdown": {
+                onClientShutdown(packet);
+                return;
+            }
             case "verifySend": {
                 String id = (String) packetDict.get("id");
                 if (!verifiedByMe.contains(id)) {
@@ -85,6 +114,10 @@ public class UDPServer {
         }
         clients.get(packAddr).parse(packetDict, packet);
         parse(packetDict, packet);
+    }
+
+    public void onClientShutdown(DatagramPacket packet) {
+        clients.remove(packet.getAddress().toString() + ":" + packet.getPort());
     }
 
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {

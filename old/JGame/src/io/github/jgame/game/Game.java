@@ -28,19 +28,13 @@ public class Game extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        Timer logicUpdate = new Timer(0, e -> {
+        Timer update = new Timer(0, e -> {
             synchronized (this) {
                 updateLogic();
-            }
-        });
-        logicUpdate.start();
-
-        Timer graphicsUpdate = new Timer(0, e -> {
-            synchronized (this) {
                 repaint();
             }
         });
-        graphicsUpdate.start();
+        update.start();
 
         states.get(state).enter("INIT");
     }
