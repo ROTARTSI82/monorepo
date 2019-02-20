@@ -10,7 +10,6 @@ public class Projectile extends Sprite {
     private Vector2 myTarget;
     private double mySpeed;
 
-    private double rotation;
     private int projectileLife;
     private long born;
 
@@ -21,7 +20,7 @@ public class Projectile extends Sprite {
         projectileLife = life;
         born = System.currentTimeMillis();
 
-        rotation = pos.angleTo(target);
+        rot = pos.angleTo(target);
         vel = pos.velocityTo(target, speed);
         myTarget = target;
         mySpeed = speed;
@@ -34,9 +33,9 @@ public class Projectile extends Sprite {
         kill();
     }
 
-    public void recalculate(boolean rot, boolean velocity) {
-        if (rot) {
-            rotation = pos.angleTo(myTarget);
+    public void recalculate(boolean rotation, boolean velocity) {
+        if (rotation) {
+            rot = pos.angleTo(myTarget);
         }
         if (velocity) {
             vel = pos.velocityTo(myTarget, mySpeed);
@@ -55,7 +54,7 @@ public class Projectile extends Sprite {
 
     @Override
     public void blit(Graphics2D screen) {
-        blitRotozoom(rotation, new double[]{1, 1}, screen);
+        blitTo(screen);
     }
 
 }

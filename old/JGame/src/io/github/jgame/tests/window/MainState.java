@@ -74,13 +74,15 @@ public class MainState extends State {
         if (displayRects) {
             player.blitRect(g2d);
         }
-        player.blitRotozoom(player.pos.angleTo(mouseHandler.pos), new double[]{1, 1}, g2d);
+        player.rot = player.pos.angleTo(mouseHandler.pos);
+        player.blitTo(g2d);
         for (Sprite enemy : enemies.sprites) {
             enemy.update();
             if (displayRects) {
                 enemy.blitRect(g2d);
             }
-            enemy.blitRotozoom(enemy.pos.angleTo(player.pos), new double[]{1, 1}, g2d);
+            enemy.rot = enemy.pos.angleTo(player.pos);
+            enemy.blitTo(g2d);
         }
         for (Object bullet : (LinkedList) bullets.sprites.clone()) {
             if (bullet instanceof BulletSprite) {

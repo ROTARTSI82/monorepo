@@ -9,6 +9,8 @@ import java.util.LinkedList;
 
 public class Sprite {
     public Vector2 pos, vel;
+    public double rot = 0;
+    public double[] zoom = {1, 1};
     Rectangle rect;
     BufferedImage image;
     LinkedList<Group> groups = new LinkedList<>();
@@ -31,7 +33,13 @@ public class Sprite {
     public void blit(Graphics2D screen) {
     }
 
-    public void blitRotozoom(double rot, double[] zoom, Graphics2D screen) {
+    public void updateImage(BufferedImage img) {
+        image = img;
+        size = new Vector2(img.getWidth(), img.getHeight());
+        updateRect();
+    }
+
+    public void blitTo(Graphics2D screen) {
         AffineTransform id = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
@@ -47,11 +55,9 @@ public class Sprite {
         screen.drawImage(this.image, trans, null);
     }
 
-    public void blitRotozoomTo(double rot, double[] zoom, Graphics2D screen) {
-        double[] multiplier;
+    public void zoomTo(double[] z) {
         Vector2 dim = new Vector2(this.image.getWidth(null), this.image.getHeight(null));
-        multiplier = new double[]{zoom[0] / dim.x, zoom[1] / dim.y};
-        blitRotozoom(rot, multiplier, screen);
+        zoom = new double[]{z[0] / dim.x, z[1] / dim.y};
     }
 
     public void blitRect(Graphics2D screen) {

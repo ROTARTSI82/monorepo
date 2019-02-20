@@ -32,7 +32,7 @@ public class ShapeSprite extends Sprite {
     }
 
     @Override
-    public void blitRotozoom(double rot, double[] zoom, Graphics2D g2d) {
+    public void blitTo(Graphics2D g2d) {
         AffineTransform id = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
@@ -55,10 +55,10 @@ public class ShapeSprite extends Sprite {
     }
 
     @Override
-    public void blitRotozoomTo(double rot, double[] zoom, Graphics2D screen) {
+    public void zoomTo(double[] z) {
         Rectangle tmpRect = shape.getBounds();
         Vector2 dim = new Vector2(tmpRect.width, tmpRect.height);
 
-        blitRotozoom(rot, new double[]{zoom[0] / dim.x, zoom[1] / dim.y}, screen);
+        zoom = new double[]{z[0] / dim.x, z[1] / dim.y};
     }
 }

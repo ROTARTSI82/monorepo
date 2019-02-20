@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
  */
 @Deprecated
 public class BulletSprite extends Sprite {
-    private double rot;
     private long life;
     private Vector2 target;
     private boolean rotInit = false;
@@ -26,7 +25,7 @@ public class BulletSprite extends Sprite {
 
     @Override
     public void blit(Graphics2D screen) {
-        blitRotozoom(rot + 180, new double[]{1, 1}, screen);
+        blitTo(screen);
     }
 
     @Override
@@ -35,7 +34,7 @@ public class BulletSprite extends Sprite {
             kill();
         }
         if (!rotInit) {
-            rot = pos.angleTo(target);
+            rot = pos.angleTo(target) + 180;
             vel = pos.velocityTo(target, 1);
             rotInit = true;
         }
