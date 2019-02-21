@@ -4,7 +4,6 @@ import io.github.jgame.Constants;
 import io.github.jgame.game.Game;
 import io.github.jgame.game.State;
 import io.github.jgame.image.ImageManager;
-import io.github.jgame.logging.GenericLogger;
 import io.github.jgame.math.Vector2;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
@@ -15,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -36,7 +34,6 @@ public class MainState extends State {
 
     MainState(Game game) {
         super(game);
-        GenericLogger.setup(Level.FINE, Level.FINE, Level.OFF);
         logger = Logger.getLogger(this.getClass().getName());
         logger.info("env: " + System.getenv());
 

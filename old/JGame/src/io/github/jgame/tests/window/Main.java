@@ -1,8 +1,10 @@
 package io.github.jgame.tests.window;
 
 import io.github.jgame.game.GameRunner;
+import io.github.jgame.logging.GenericLogger;
 
 import java.awt.*;
+import java.util.logging.Level;
 
 /**
  * @deprecated Only use for blitting tests.
@@ -14,6 +16,7 @@ public class Main extends GameRunner {
     }
 
     public static void main(String[] args) {
+        GenericLogger.setup(Level.FINE, Level.FINE, Level.OFF);
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

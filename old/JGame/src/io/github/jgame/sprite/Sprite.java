@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class Sprite {
+    public boolean visible, active;
     public Vector2 pos, vel;
     public double rot = 0;
     public double[] zoom = {1, 1};
@@ -17,10 +18,12 @@ public class Sprite {
     Vector2 size, absPos;
 
     public Sprite(BufferedImage spriteImage) {
+        visible = true;
+        active = true;
         image = spriteImage;
         size = new Vector2(image.getWidth(null), image.getHeight(null));
-        rect = new Rectangle(100, 100, (int) size.x, (int) size.y);
-        pos = new Vector2(100, 100);
+        rect = new Rectangle(0, 0, (int) size.x, (int) size.y);
+        pos = new Vector2(0, 0);
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
         vel = new Vector2(0, 0);
     }
@@ -53,6 +56,14 @@ public class Sprite {
         updateRect();
         trans.translate(-center.x, -center.y);
         screen.drawImage(this.image, trans, null);
+    }
+
+    public void updateHover(boolean isHovering, Vector2 mousePos) {
+
+    }
+
+    public void onClick(Vector2 mousePos) {
+
     }
 
     public void zoomTo(double[] z) {

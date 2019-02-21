@@ -80,4 +80,9 @@ public class RSA implements Serializable {
     public String toString() {
         return String.format("RSA<private=%s public=%s mod=%s bits=%s>", privateKey, publicKey, modulus, nBits);
     }
+
+    public static void main(String[] args) {
+        RSA trsa = new RSA(64);
+        System.out.println(trsa);
+    }
 }

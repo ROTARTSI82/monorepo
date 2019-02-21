@@ -11,6 +11,7 @@ public class TestGame extends Game {
         super();
         states.put("main", new MainState(this));
         states.put("win_capture", new WindowCaptureState(this));
-        state = "win_capture";
+        states.put("btTest", new ButtonTestState(this));
+        state = "btTest";
     }
 }
