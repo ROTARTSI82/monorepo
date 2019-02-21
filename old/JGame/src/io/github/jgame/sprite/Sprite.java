@@ -11,11 +11,12 @@ public class Sprite {
     public boolean visible, active;
     public Vector2 pos, vel;
     public double rot = 0;
-    public double[] zoom = {1, 1};
+    protected Vector2 absPos;
     Rectangle rect;
     BufferedImage image;
     LinkedList<Group> groups = new LinkedList<>();
-    Vector2 size, absPos;
+    double[] zoom = {1, 1};
+    Vector2 size;
 
     public Sprite(BufferedImage spriteImage) {
         visible = true;
