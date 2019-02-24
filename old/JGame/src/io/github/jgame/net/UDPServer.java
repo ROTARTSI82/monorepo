@@ -19,6 +19,8 @@ public class UDPServer {
     private LinkedList<String> verifiedByMe = new LinkedList<>();
     private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
     private HashMap<String, UDPClientHandler> clients = new HashMap<>();
+    private HashMap<String, Integer> serialTable;
+    private HashMap<Integer, String> deserialTable;
 
     private int clientLimit;
 
@@ -28,11 +30,21 @@ public class UDPServer {
         clientLimit = maxClients;
         socket = new DatagramSocket(listenPort, address);
         logger = Logger.getLogger(this.getClass().getName());
+
+        serialTable = getActionTable();
+        deserialTable = new HashMap<>();
+        for (String action : serialTable.keySet()) {
+            deserialTable.put(serialTable.get(action), action);
+        }
+    }
+
+    public HashMap<String, Integer> getActionTable() {
+        return Constants.BUILTIN_ACTIONS;
     }
 
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws Exception {
         logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, datAddress, datPort));
-        byte[] bytes = NetUtils.serialize(datagram);
+        byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
         socket.send(packet);
     }
@@ -41,7 +53,7 @@ public class UDPServer {
         for (UDPClientHandler client : clients.values()) {
             logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, client.address, client.port));
             try {
-                byte[] bytes = NetUtils.serialize(datagram);
+                byte[] bytes = NetUtils.serialize(datagram, serialTable);
                 DatagramPacket packet = new DatagramPacket(bytes, bytes.length, client.address, client.port);
                 socket.send(packet);
             } catch (IOException e) {
@@ -73,7 +85,7 @@ public class UDPServer {
             logger.info(String.format("[%s:%s] New client at %s", address, port, packAddr));
         }
 
-        HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData());
+        HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData(), deserialTable);
         if (packetDict == null) {
             return;
         }
@@ -118,6 +130,16 @@ public class UDPServer {
 
     public void onClientShutdown(DatagramPacket packet) {
         clients.remove(packet.getAddress().toString() + ":" + packet.getPort());
+    }
+
+    public void shutdown() throws Exception {
+        for (UDPClientHandler client : clients.values()) {
+            try {
+                client.shutdown();
+            } catch (Exception e) {
+                logger.info("Failed to shutdown client: " + GenericLogger.getStackTrace(e));
+            }
+        }
     }
 
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {

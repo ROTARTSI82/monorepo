@@ -19,22 +19,41 @@ public class UDPClient {
     private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
     private LinkedList<String> verifiedByMe = new LinkedList<>();
 
+    private HashMap<String, Integer> serialTable;
+    private HashMap<Integer, String> deserialTable;
+
     public UDPClient(String listenHost, int listenPort) throws Exception {
         host = InetAddress.getByName(listenHost);
         port = listenPort;
         socket = new DatagramSocket();
         logger = Logger.getLogger(this.getClass().getName());
+
+        serialTable = getActionTable();
+        deserialTable = new HashMap<>();
+        for (String action : serialTable.keySet()) {
+            deserialTable.put(serialTable.get(action), action);
+        }
     }
 
     public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
 
     }
 
+    public void shutdown() throws Exception {
+        HashMap<String, Object> shutdownMsg = new HashMap<>();
+        shutdownMsg.put("action", "clientShutdown");
+        send(shutdownMsg);
+    }
+
+    public HashMap<String, Integer> getActionTable() {
+        return Constants.BUILTIN_ACTIONS;
+    }
+
     public void update() throws IOException {
         byte[] recv = new byte[Constants.NET_PACKET_SIZE];
         DatagramPacket packet = new DatagramPacket(recv, recv.length);
         socket.receive(packet);
-        HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData());
+        HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData(), deserialTable);
         if (packetDict == null) {
             return;
         }
@@ -42,6 +61,10 @@ public class UDPClient {
                 packet.getAddress(), packet.getPort()));
         String action = (String) packetDict.get("action");
         switch (action) {
+            case "serverShutdown": {
+                onServerShutdown();
+                return;
+            }
             case "verifySend": {
                 String id = (String) packetDict.get("id");
                 if (!verifiedByMe.contains(id)) {
@@ -77,6 +100,10 @@ public class UDPClient {
         parse(packetDict, packet);
     }
 
+    public void onServerShutdown() {
+
+    }
+
     public void onKick(String reason) {
 
     }
@@ -88,7 +115,7 @@ public class UDPClient {
 
     public void send(HashMap<String, Object> datagram) throws IOException {
         logger.finest(String.format("[?->%s:%s] Sent %s", host, port, datagram));
-        byte[] bytes = NetUtils.serialize(datagram);
+        byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
         socket.send(packet);
     }

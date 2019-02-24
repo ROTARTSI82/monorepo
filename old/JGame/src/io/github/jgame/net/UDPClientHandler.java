@@ -22,4 +22,10 @@ public class UDPClientHandler {
     public void parse(HashMap<String, Object> packetDict, DatagramPacket datagram) {
 
     }
+
+    public void shutdown() throws Exception {
+        HashMap<String, Object> shutdownMsg = new HashMap<>();
+        shutdownMsg.put("action", "serverShutdown");
+        send(shutdownMsg);
+    }
 }

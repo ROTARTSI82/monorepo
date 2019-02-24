@@ -18,15 +18,18 @@ public class TCPClientHandler {
         factory = parent;
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+
     }
 
     public void send(HashMap<String, Object> datagram) {
-        String send = Base64.getEncoder().encodeToString(NetUtils.serialize(datagram));
+        String send = Base64.getEncoder().encodeToString(NetUtils.serialize(datagram, factory.serialTable));
         out.println(send);
     }
 
     public void update() throws Exception {
-        HashMap<String, Object> dat = NetUtils.deserialize(Base64.getDecoder().decode(in.readLine()));
+        HashMap<String, Object> dat = NetUtils.deserialize(Base64.getDecoder().decode(in.readLine()),
+                factory.deserialTable);
         if (dat == null) {
             return;
         }

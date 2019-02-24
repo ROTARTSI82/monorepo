@@ -25,6 +25,7 @@ public class TCPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, TCPClientHandler client) {
+            System.out.println("Server got " + datagram);
             HashMap<String, Object> ack = new HashMap<>();
             ack.put("ack", datagram.get("id"));
             client.send(ack);
@@ -45,6 +46,7 @@ public class TCPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram) {
+            System.out.println("Client got " + datagram);
             if (((long) datagram.get("ack")) == id) {
                 done = true;
             }

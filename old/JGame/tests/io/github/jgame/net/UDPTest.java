@@ -15,6 +15,8 @@ public class UDPTest {
             testServ.update();
             testCli.update();
         }
+        testCli.shutdown();
+        testServ.shutdown();
     }
 
     private class Server extends UDPServer {

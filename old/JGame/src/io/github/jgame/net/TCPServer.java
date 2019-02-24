@@ -1,5 +1,6 @@
 package io.github.jgame.net;
 
+import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
 import java.net.InetAddress;
@@ -18,12 +19,22 @@ public class TCPServer {
     private int clientLimit;
     private Logger logger;
 
+    public HashMap<String, Integer> serialTable;
+    public HashMap<Integer, String> deserialTable;
+
     public TCPServer(String hostname, int portNum, int maxClients) throws Exception {
         clientLimit = maxClients;
         logger = Logger.getLogger(this.getClass().getName());
         host = InetAddress.getByName(hostname);
         port = portNum;
         serverSocket = new ServerSocket(port, 50, host);
+
+        serialTable = getActionTable();
+
+        deserialTable = new HashMap<>();
+        for (String action : serialTable.keySet()) {
+            deserialTable.put(serialTable.get(action), action);
+        }
     }
 
     public void acceptNewClients() throws Exception {
@@ -45,6 +56,10 @@ public class TCPServer {
         } else {
             logger.warning("Client's address already exists! ignoring...");
         }
+    }
+
+    public HashMap<String, Integer> getActionTable() {
+        return Constants.BUILTIN_ACTIONS;
     }
 
     public void removeClient(TCPClientHandler client) {

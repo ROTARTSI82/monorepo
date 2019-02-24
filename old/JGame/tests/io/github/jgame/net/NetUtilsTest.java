@@ -20,14 +20,21 @@ public class NetUtilsTest {
     @Test
     public void testSerialize() {
         HashMap<String, Object> dat = new HashMap<>();
+        dat.put("action", "testAction");
         dat.put("int", 153);
         dat.put("double", 3.1415d);
         dat.put("arr", new byte[]{0, 2, 3});
 
-        byte[] serial = NetUtils.serialize(dat);
-        HashMap<String, Object> out = NetUtils.deserialize(serial);
+        byte[] serial = NetUtils.serialize(dat, new HashMap<>() {{
+            put("testAction", 0xabcd);
+        }});
+
+        HashMap<String, Object> out = NetUtils.deserialize(serial, new HashMap<>() {{
+            put(0xabcd, "testAction");
+        }});
 
         assertNotNull(out);
+        assertEquals(out.get("action"), "testAction");
         assertEquals(out.get("int"), 153);
         assertEquals(out.get("double"), 3.1415d);
         assertEquals(out.get("arr"), new byte[]{0, 2, 3});
