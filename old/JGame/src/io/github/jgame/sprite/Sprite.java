@@ -4,18 +4,20 @@ import io.github.jgame.math.Vector2;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class Sprite {
     public boolean visible, active;
+    public boolean flipVertical, flipHorizontal;
     public Vector2 pos, vel;
     public double rot = 0;
     protected Vector2 absPos;
     Rectangle rect;
     BufferedImage image;
     LinkedList<Group> groups = new LinkedList<>();
-    double[] zoom = {1, 1};
+    public double[] zoom = {1, 1};
     Vector2 size;
 
     public Sprite(BufferedImage spriteImage) {
@@ -44,19 +46,28 @@ public class Sprite {
     }
 
     public void blitTo(Graphics2D screen) {
+        BufferedImage blitImg = image;
+        if (flipHorizontal) {
+            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+            tx.translate(-blitImg.getWidth(null), 0);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            blitImg = op.filter(blitImg, null);
+        }
+
         AffineTransform id = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
+
         Vector2 center = new Vector2(this.image.getWidth(null) / 2d,
                 this.image.getHeight(null) / 2d);
-        trans.translate(center.x, center.y);
-        trans.rotate(Math.toRadians(rot));
+        trans.translate(center.x * zoom[0], center.y * zoom[1]);
+        trans.rotate(Math.toRadians(rot + (flipVertical ? 180 : 0)));
         trans.scale(zoom[0], zoom[1]);
         size.x = center.x * 2 * zoom[0];
         size.y = center.y * 2 * zoom[1];
         updateRect();
         trans.translate(-center.x, -center.y);
-        screen.drawImage(this.image, trans, null);
+        screen.drawImage(blitImg, trans, null);
     }
 
     public void updateHover(boolean isHovering, Vector2 mousePos) {

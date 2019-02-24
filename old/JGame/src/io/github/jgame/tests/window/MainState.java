@@ -7,6 +7,7 @@ import io.github.jgame.image.ImageManager;
 import io.github.jgame.math.Vector2;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
+import io.github.jgame.sprite.ShapeSprite;
 import io.github.jgame.sprite.Sprite;
 
 import java.awt.*;
@@ -37,17 +38,23 @@ public class MainState extends State {
         logger = Logger.getLogger(this.getClass().getName());
         logger.info("env: " + System.getenv());
 
-        imageLoader.fromFile("assets/sprite.png", "sprite");
+        imageLoader.fromFile("assets/p1.jpg", "sprite");
         imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
         // Here for testing purposes
         Shape testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
         //player = new TextSprite("HelloWorld!",
         //        new Font("Arial", Font.PLAIN, 50), Color.BLACK);
-        player = new Sprite(ImageManager.fromShape(testShape, Color.BLACK));
+        //player = new Sprite(ImageManager.fromShape(testShape, Color.BLACK));
+        //player = new Sprite(imageLoader.get("sprite"));
+        //player.zoomTo(new double[]{64, 64});
+        player = new ShapeSprite(testShape, 1);
+        player.zoomTo(new double[]{64, 64});
         enemies = new Group();
         bullets = new Group();
-        enemies.add(new Enemy(640, 480, imageLoader.get("sprite")));
+        Enemy enemy = new Enemy(640, 480, imageLoader.get("sprite"));
+        enemy.zoomTo(new double[]{64, 64});
+        enemies.add(enemy);
         soundManager.fromFile("assets/fireball.wav", "fireball");
     }
 
@@ -87,8 +94,10 @@ public class MainState extends State {
                 for (Sprite col : bsprite.collidesWith(enemies)) {
                     col.kill();
                     for (int i = 0; i < 2; i++) {
-                        enemies.add(new Enemy(rand.nextInt(1440), rand.nextInt(900),
-                                imageLoader.get("sprite")));
+                        Enemy enemy = new Enemy(rand.nextInt(1440), rand.nextInt(900),
+                                imageLoader.get("sprite"));
+                        enemy.zoomTo(new double[]{64, 64});
+                        enemies.add(enemy);
                     }
                 }
                 bsprite.update();
@@ -102,6 +111,8 @@ public class MainState extends State {
 
     @Override
     public void updateLogic() {
+        player.flipHorizontal = true;
+        player.flipVertical = true;
         player.pos = player.pos.add(player.vel);
         player.updateRect();
     }

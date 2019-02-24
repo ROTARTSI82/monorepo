@@ -6,6 +6,7 @@ import io.github.jgame.math.Vector2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+@Deprecated
 public class ShapeSprite extends Sprite {
     private Shape shape;
     private double multiplier;
@@ -43,8 +44,8 @@ public class ShapeSprite extends Sprite {
         trans = AffineTransform.getTranslateInstance(rect.x, rect.y);
         trans.setTransform(id);
 
-        trans.translate(center.x, center.y);
-        trans.rotate(Math.toRadians(rot));
+        trans.translate(center.x * zoom[0], center.y * zoom[1]);
+        trans.rotate(Math.toRadians(rot + (flipVertical ? 180 : 0)));
         trans.scale(zoom[0], zoom[1]);
         size.x = center.x * 2 * zoom[0];
         size.y = center.y * 2 * zoom[1];

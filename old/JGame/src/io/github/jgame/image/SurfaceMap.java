@@ -37,7 +37,7 @@ public class SurfaceMap extends BufferedImage {
 
     /**
      * Convert a position the {@code SurfaceMap} to a position on a screen
-     * based on what was calculated in {@link #getScroll)}
+     * based on what was calculated in {@link #getScroll}
      * <p>
      * NOTE: THIS METHOD DEPENDS ON {@link #getScroll}
      *
