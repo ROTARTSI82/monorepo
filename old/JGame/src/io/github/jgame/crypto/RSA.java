@@ -1,5 +1,7 @@
 package io.github.jgame.crypto;
 
+import groovy.transform.NotYetImplemented;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -31,7 +33,8 @@ public class RSA implements Serializable {
     private BigInteger q;
 
     /**
-     * generate an N-bit (roughly) public and private key
+     * Keep generating public and private keys until the modulus is exactly N bits
+     * and the {@code gcd(phi, publicKey) != 1}
      *
      * @param N number of bits for the keys.
      */
@@ -54,6 +57,12 @@ public class RSA implements Serializable {
         privateKey = publicKey.modInverse(phi);
     }
 
+    /**
+     * Encrypt a BigInteger that is smaller than modulus using the public key.
+     *
+     * @param message BigInteger to encrypt
+     * @return encrypted BigInteger
+     */
     BigInteger rawEncrypt(BigInteger message) {
         if (message.compareTo(modulus) >= 0) {
             throw new IllegalArgumentException("Message is larger than (or equals) modulus");
@@ -61,28 +70,57 @@ public class RSA implements Serializable {
         return message.modPow(publicKey, modulus);
     }
 
+    /**
+     * All integers to be encrypted must be smaller than this value.
+     *
+     * @return Modulus
+     */
     BigInteger getModulus() {
         return modulus;
     }
 
+    /**
+     * Decrypt an encrypted BigInteger using the private key.
+     *
+     * @param encrypted BigInteger to decrypt
+     * @return decrypted Biginteger
+     */
     BigInteger rawDecrypt(BigInteger encrypted) {
         return encrypted.modPow(privateKey, modulus);
     }
 
-    /* TODO: implement these!
-    BigInteger encryptString(String msg) {
+    // TODO: implement these!
+
+    /**
+     * Not implemented YET!
+     * <p>
+     * Split the msg into {@code chunkSize} chucks and evaluate the hex. Then, use {@link #rawEncrypt(BigInteger)}
+     * to encrypt each BigInteger.
+     *
+     * @param msg       String message to encrypt
+     * @param chunkSize How big each chunk should be.
+     * @return encrypted BigInteger array
+     */
+    @NotYetImplemented
+    BigInteger[] encryptString(String msg, int chunkSize) {
+        return new BigInteger[]{one};
     }
 
-    String decryptString(BigInteger encrypted) {
+    /**
+     * Not implemented YET!
+     * <p>
+     * Decrypt all the BigIntegers using {@link #rawDecrypt(BigInteger)} and turn them into hex and interpret
+     * the hex as ascii text.
+     *
+     * @param encrypted Encrypted message
+     * @return Decrepted string
+     */
+    @NotYetImplemented
+    String decryptString(BigInteger[] encrypted) {
+        return "";
     }
-    */
 
     public String toString() {
         return String.format("RSA<private=%s public=%s mod=%s bits=%s>", privateKey, publicKey, modulus, nBits);
-    }
-
-    public static void main(String[] args) {
-        RSA trsa = new RSA(64);
-        System.out.println(trsa);
     }
 }

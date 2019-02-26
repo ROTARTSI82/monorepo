@@ -9,6 +9,12 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Support for different "states" of a game.
+ * <p>
+ * The game will execute different main loop code and
+ * handle events differently in different states.
+ */
 public class State {
     public KeyHandler keyHandler;
     public MouseHandler mouseHandler;
@@ -23,14 +29,29 @@ public class State {
         menuHandler = getMenuHandler();
     }
 
+    /**
+     * Get the handler instance that should be invoked for key events.
+     *
+     * @return Key handler.
+     */
     public KeyHandler getKeyHandler() {
         return new KeyHandler();
     }
 
+    /**
+     * Get the handler instance that should be invoked for mouse events.
+     *
+     * @return Mouse handler.
+     */
     public MouseHandler getMouseHandler() {
         return new MouseHandler();
     }
 
+    /**
+     * Get the {@link MenuHandler} instance to use. (which is a glorified {@link JMenuBar})
+     *
+     * @return Menu bar.
+     */
     public MenuHandler getMenuHandler() {
         return new MenuHandler();
     }
@@ -44,10 +65,20 @@ public class State {
 
     }
 
+    /**
+     * Called whenever the Game's state to this state.
+     *
+     * @param old_state The state that the game was updated from.
+     */
     public void enter(String old_state) {
         game.runner.setJMenuBar(menuHandler);
     }
 
+    /**
+     * Called whenever the Game's state is updated from this state.
+     *
+     * @param new_state The state that the game was updated to.
+     */
     public void exit(String new_state) {
 
     }
@@ -56,55 +87,77 @@ public class State {
         ((Graphics2D) g).setRenderingHints(Constants.RENDER_HINTS);
     }
 
+    /**
+     * Menu to be displayed.
+     * Extension of {@link javax.swing.JMenuBar}
+     */
     public class MenuHandler extends JMenuBar {
         public MenuHandler() {
             super();
-            JMenu test = new JMenu("Hey");
+            JMenu test = new JMenu("ExampleMenu");
             test.addMenuListener(new MenuListener() {
                 @Override
                 public void menuSelected(MenuEvent e) {
-                    System.out.println("select");
+
                 }
 
                 @Override
                 public void menuDeselected(MenuEvent e) {
-                    System.out.println("deselect");
+
                 }
 
                 @Override
                 public void menuCanceled(MenuEvent e) {
-                    System.out.println("cancel");
+
                 }
             });
 
-            JMenu submenu = new JMenu("item");
+            JMenu submenu = new JMenu("SubMenu");
 
-            JMenuItem item = new JMenuItem("sub1");
-            item.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("click!");
-                }
-            });
+            JMenuItem item = new JMenuItem("MenuItem");
             setHotkey(item, 'N', false);
+            item.addActionListener(e -> {
+
+            });
+
             submenu.add(item);
 
             test.addSeparator();
             test.add(submenu);
-            //add(test);
         }
 
+        /**
+         * Set the hotkey for a {@link JMenuItem}
+         * <p>
+         * NOTE: This uses {@code Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()} which is deprecated.
+         * See {@link #setHotkey(JMenuItem, Character, int)}
+         *
+         * @param item  JMenuItem to update
+         * @param key   The hotkey in the form of a character
+         * @param shift Require a the shift key to be held
+         */
         private void setHotkey(JMenuItem item, Character key, boolean shift) {
             item.setAccelerator(KeyStroke.getKeyStroke(key,
                     Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
                             (shift ? InputEvent.SHIFT_DOWN_MASK : 0)));
         }
 
+        /**
+         * Set the hotkey for a {@link JMenuItem}
+         * See {@link #setHotkey(JMenuItem, Character, boolean)}
+         *
+         * @param item JMenuItem to update
+         * @param key Key as a character
+         * @param modifiers Mask of key modifiers that are required as an integer
+         */
         private void setHotkey(JMenuItem item, Character key, int modifiers) {
             item.setAccelerator(KeyStroke.getKeyStroke(key, modifiers));
         }
     }
 
+    /**
+     * Handles all key events.
+     */
     public class KeyHandler extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -126,6 +179,9 @@ public class State {
         }
     }
 
+    /**
+     * Handles all mouse events
+     */
     public class MouseHandler extends MouseAdapter {
         public Vector2 pos = new Vector2(0, 0);
 

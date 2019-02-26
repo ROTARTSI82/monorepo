@@ -33,7 +33,23 @@ public class TCPServer {
 
         deserialTable = new HashMap<>();
         for (String action : serialTable.keySet()) {
-            deserialTable.put(serialTable.get(action), action);
+            int actionID = serialTable.get(action);
+
+            if (actionID > 0 && actionID <= 0xffff) {
+                deserialTable.put(actionID, action);
+            } else {
+                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+            }
+        }
+    }
+
+    public void sendToAll(HashMap<String, Object> datagram) {
+        for (TCPClientHandler handler : clients.values()) {
+            try {
+                handler.send(datagram);
+            } catch (Exception e) {
+                logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
+            }
         }
     }
 

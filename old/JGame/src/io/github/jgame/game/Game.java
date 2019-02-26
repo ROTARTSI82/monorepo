@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
+/**
+ * Extension of {@link javax.swing.JPanel}
+ * <p>
+ * Manages multiple states and inputs from keyboard and mouse.
+ */
 public class Game extends JPanel {
 
     public GameRunner runner;
@@ -19,6 +24,9 @@ public class Game extends JPanel {
         runner = parent;
     }
 
+    /**
+     * Launch the game and start the main loop.
+     */
     public void run() {
         setNoEraseBackground();
         addMouseListener(new GameMouseHandler());
@@ -39,10 +47,19 @@ public class Game extends JPanel {
         states.get(state).enter("INIT");
     }
 
+    /**
+     * Seems to have no effect. Doesn't work.
+     */
     public void setNoEraseBackground() {
         System.setProperty("sun.awt.noerasebackground", "true");
     }
 
+    /**
+     * Handle switching the state of the game.
+     * Call the oldState's exit() function and the newState's enter() function
+     *
+     * @param newState State to update to.
+     */
     public void updateState(String newState) {
         states.get(state).exit(newState);
         String oldState = state;
@@ -50,16 +67,27 @@ public class Game extends JPanel {
         states.get(state).enter(oldState);
     }
 
+    /**
+     * Call current state's {@code updateGraphics()}
+     *
+     * @param g Graphics to draw to.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         states.get(state).updateGraphics(g);
     }
 
+    /**
+     * Call current state's {@code updateLogic()}
+     */
     private void updateLogic() {
         states.get(state).updateLogic();
     }
 
+    /**
+     * Forward all Keyboard events to the current state's event handler.
+     */
     private class GameKeyHandler extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -77,6 +105,9 @@ public class Game extends JPanel {
         }
     }
 
+    /**
+     * Forward all mouse motion events to the current state's event handler.
+     */
     private class GameMouseMotionHandler extends MouseMotionAdapter {
         @Override
         public void mouseMoved(MouseEvent e) {
@@ -84,6 +115,9 @@ public class Game extends JPanel {
         }
     }
 
+    /**
+     * Forward all mouse wheel events to the current state's event handler.
+     */
     private class GameMouseWheelHandler implements MouseWheelListener {
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
@@ -91,6 +125,10 @@ public class Game extends JPanel {
         }
     }
 
+    /**
+     * Forward all mouse events (excluding mouse wheel and mouse motion events. See {@link GameMouseHandler}
+     * and {@link GameMouseWheelHandler}) to the current state's event handler.
+     */
     private class GameMouseHandler extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {

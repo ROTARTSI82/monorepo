@@ -3,12 +3,19 @@ package io.github.jgame.game;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Template for the main program.
+ * <p>
+ * Extension of {@link javax.swing.JFrame}
+ */
 public class GameRunner extends JFrame {
     public Game game;
 
-    public GameRunner() {
-    }
-
+    /**
+     * Run the game instance!
+     *
+     * @param gameInst Game instance to run. See {@link Game}
+     */
     public GameRunner(Game gameInst) {
         game = gameInst;
         game.setParent(this);
@@ -21,14 +28,16 @@ public class GameRunner extends JFrame {
         setSize(640, 480);
     }
 
+    /**
+     * Add our game's main loop to the AWT event loop.
+     *
+     * @param args Ignored. Doesn't matter.
+     */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                GameRunner app = new GameRunner(new Game());
-                app.game.run();
-                app.setVisible(true);
-            }
+        EventQueue.invokeLater(() -> {
+            GameRunner app = new GameRunner(new Game());
+            app.game.run();
+            app.setVisible(true);
         });
     }
 }

@@ -31,7 +31,13 @@ public class UDPClient {
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
         for (String action : serialTable.keySet()) {
-            deserialTable.put(serialTable.get(action), action);
+            int actionID = serialTable.get(action);
+
+            if (actionID > 0 && actionID <= 0xffff) {
+                deserialTable.put(actionID, action);
+            } else {
+                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+            }
         }
     }
 
@@ -60,41 +66,43 @@ public class UDPClient {
         logger.finest(String.format("[?->%s:%s] Got packet %s from %s:%s", host, port, packetDict,
                 packet.getAddress(), packet.getPort()));
         String action = (String) packetDict.get("action");
-        switch (action) {
-            case "serverShutdown": {
-                onServerShutdown();
-                return;
-            }
-            case "verifySend": {
-                String id = (String) packetDict.get("id");
-                if (!verifiedByMe.contains(id)) {
-                    logger.finest(String.format("[?->%s:%s] Packet<id=%s> from server was verified.",
-                            host, port, id));
-                    parse(NetUtils.datFromObject(packetDict.get("data")), packet);
-                    verifiedByMe.add(id);
-                } else {
-                    logger.fine(String.format("[?->%s:%s] Got duplicate Packet<id=%s>", host, port, id));
+        if (action != null) {
+            switch (action) {
+                case "serverShutdown": {
+                    onServerShutdown();
+                    return;
                 }
-                HashMap<String, Object> rawSend = new HashMap<>();
-                rawSend.put("action", "confirmPacket");
-                rawSend.put("id", id);
-                send(rawSend);
-                return;
-            }
-            case "kick": {
-                onKick((String) packetDict.get("reason"));
-                return;
-            }
-            case "confirmPacket": {
-                String id = (String) packetDict.get("id");
-                if (pendingPackets.containsKey(id)) {
-                    logger.finest(String.format("[?->%s:%s] Packet<id=%s> was confirmed.", host, port, id));
-                    pendingPackets.get(id).onConfirm();
-                    pendingPackets.remove(id);
-                } else {
-                    logger.fine(String.format("[?->%s:%s] Packet<id=%s> doesn't exist!", host, port, id));
+                case "verifySend": {
+                    String id = (String) packetDict.get("id");
+                    if (!verifiedByMe.contains(id)) {
+                        logger.finest(String.format("[?->%s:%s] Packet<id=%s> from server was verified.",
+                                host, port, id));
+                        parse(NetUtils.datFromObject(packetDict.get("data")), packet);
+                        verifiedByMe.add(id);
+                    } else {
+                        logger.fine(String.format("[?->%s:%s] Got duplicate Packet<id=%s>", host, port, id));
+                    }
+                    HashMap<String, Object> rawSend = new HashMap<>();
+                    rawSend.put("action", "confirmPacket");
+                    rawSend.put("id", id);
+                    send(rawSend);
+                    return;
                 }
-                return;
+                case "kick": {
+                    onKick((String) packetDict.get("reason"));
+                    return;
+                }
+                case "confirmPacket": {
+                    String id = (String) packetDict.get("id");
+                    if (pendingPackets.containsKey(id)) {
+                        logger.finest(String.format("[?->%s:%s] Packet<id=%s> was confirmed.", host, port, id));
+                        pendingPackets.get(id).onConfirm();
+                        pendingPackets.remove(id);
+                    } else {
+                        logger.fine(String.format("[?->%s:%s] Packet<id=%s> doesn't exist!", host, port, id));
+                    }
+                    return;
+                }
             }
         }
         parse(packetDict, packet);
@@ -131,9 +139,14 @@ public class UDPClient {
         volatile boolean hasSent = false;
 
         public VerifyPacket(HashMap<String, Object> datagram, int frequency) {
+            if (!datagram.containsKey("action")) {
+                datagram.put("action", null);
+            }
+
             rawSend = new HashMap<>();
             rawSend.put("action", "verifySend");
             rawSend.put("data", datagram);
+
             id = UUID.randomUUID().toString();
             rawSend.put("id", id);
 

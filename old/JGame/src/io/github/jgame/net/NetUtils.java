@@ -29,11 +29,13 @@ public class NetUtils {
     public static byte[] serialize(HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
         try {
             String action = (String) data.get("action");
-            data.remove("action");
+
+            HashMap<String, Object> sendDat = new HashMap<>(data);
+            sendDat.remove("action");  // Create a copy so we don't modify original HashMap
 
             ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
             ObjectOutputStream serializer = new ObjectOutputStream(bytesOut);
-            serializer.writeObject(data);
+            serializer.writeObject(sendDat);
             serializer.close();
 
             byte[] ret = new byte[bytesOut.size() + 2];

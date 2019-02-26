@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.util.HashMap;
 
 public class UDPTest {
-    @Test(timeOut = 2000)
+    @Test()
     public void testUDP() throws Exception {
         Server testServ = new Server("127.0.0.1", 3000);
         Client testCli = new Client("127.0.0.1", 3000, System.nanoTime());
@@ -31,6 +31,7 @@ public class UDPTest {
             dat.put("ack", datagram.get("id"));
             try {
                 this.addVerifyPacket(dat, 100, packet.getAddress(), packet.getPort());
+                //this.send(dat, packet.getAddress(), packet.getPort());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -48,6 +49,7 @@ public class UDPTest {
             HashMap<String, Object> dat = new HashMap<>();
             dat.put("id", id);
             this.addVerifyPacket(dat, 100);
+            //this.send(dat);
         }
 
         @Override

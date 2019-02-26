@@ -6,6 +6,11 @@ import io.github.jgame.math.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Extension of {@link java.awt.image.BufferedImage}
+ * <p>
+ * For scaling coordinates between two panes and blitting it to the screen.
+ */
 public class SurfaceMap extends BufferedImage {
     private BufferedImage resized;
     private Vector2 scroll;
@@ -49,6 +54,13 @@ public class SurfaceMap extends BufferedImage {
                 pos.y * resized.getHeight() / this.getHeight() + scroll.y);
     }
 
+    /**
+     * Get resized BufferedImage relative to dimensions.
+     *
+     * @param dim         Size of the screen
+     * @param multipliers Multipliers (multiplied by the size of the screen to get the size of the new image)
+     * @return BufferedImage
+     */
     public BufferedImage getResized(Dimension dim, double[] multipliers) {
         int newWidth = Double.valueOf(dim.width * multipliers[0]).intValue();
         int newHeight = Double.valueOf(dim.height * multipliers[1]).intValue();
@@ -63,6 +75,8 @@ public class SurfaceMap extends BufferedImage {
     }
 
     /**
+     * Blit the SurfaceMap to the screen.
+     *
      * NOTE: THIS METHOD DEPENDS ON {@link #getResized}
      *
      * @param screen Graphics to blit to

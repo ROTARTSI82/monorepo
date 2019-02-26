@@ -35,7 +35,7 @@ public class ButtonTestState extends State {
         ButtonManager.register(testBt);
 
         testBar = new ProgressBar(10, 20, 10, new Dimension(250, 25), 5,
-                Color.RED, Color.BLACK);
+                Color.RED, Color.BLACK, Color.GRAY);
         testBar.pos = new Vector2(250, 100);
         testBar.updateRect();
     }

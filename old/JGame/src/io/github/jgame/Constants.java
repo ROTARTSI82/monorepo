@@ -8,7 +8,7 @@ public class Constants {
     public final static boolean SILENCE_AWT_LOGS = true;
 
     public final static Version JGAME_VERSION = new Version("dev%s",
-            (byte) 0, (byte) 19, (byte) 2, (byte) 11);
+            (byte) 0, (byte) 19, (byte) 2, (byte) 24);
 
     public final static RenderingHints QUALITY_RENDER_HINTS = new RenderingHints(
             new HashMap<>() {{

@@ -25,7 +25,13 @@ public class TCPClient {
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
         for (String action : serialTable.keySet()) {
-            deserialTable.put(serialTable.get(action), action);
+            int actionID = serialTable.get(action);
+
+            if (actionID > 0 && actionID <= 0xffff) {
+                deserialTable.put(actionID, action);
+            } else {
+                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+            }
         }
     }
 

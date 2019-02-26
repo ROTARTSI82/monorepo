@@ -3,7 +3,7 @@ package io.github.jgame.mixer;
 import java.util.HashMap;
 
 public class Note {
-    private static HashMap<String, Double> notes = new HashMap<String, Double>() {{
+    private static HashMap<String, Double> notes = new HashMap<>() {{
         put("REST", 0d);
         put("A#0", 29.14);
         put("A#1", 58.27);

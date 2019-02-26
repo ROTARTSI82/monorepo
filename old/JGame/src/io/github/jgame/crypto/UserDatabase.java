@@ -13,6 +13,9 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Handles logins and encrypts user data using their passcode.
+ */
 public class UserDatabase implements Serializable {
     private final static SecureRandom random = new SecureRandom();
 
@@ -21,6 +24,11 @@ public class UserDatabase implements Serializable {
     private Cipher cipher;
     private int saltLen;
 
+    /**
+     * Create a new UserDatabase
+     *
+     * @throws Exception Cipher creation may fail if AES/CBC/PKCS5Padding is missing
+     */
     public UserDatabase() throws Exception {
         cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         saltLen = 16;
@@ -59,6 +67,16 @@ public class UserDatabase implements Serializable {
         return ret;
     }
 
+    /**
+     * Initialize an account with random Initialization Vector and salt.
+     * <p>
+     * (Will abort if account already exists.)
+     *
+     * @param username Username to create account for
+     * @param password Corresponding passcode
+     * @return Returns true if account creation succeeds.
+     * @throws Exception hmac hashing may fail.
+     */
     public boolean createAccount(String username, char[] password) throws Exception {
         if (accountExists(username)) {
             return false;
@@ -73,6 +91,14 @@ public class UserDatabase implements Serializable {
         return true;
     }
 
+    /**
+     * Check if the password matches the account
+     *
+     * @param username Account to check
+     * @param password passcode
+     * @return true if the passcode matches the account.
+     * @throws Exception hmac hashing may fail.
+     */
     public boolean verifyPassword(String username, char[] password) throws Exception {
         byte[] expected = toPrimitive(userData.get(username).get("password"));
         byte[] actual = hmac(password, toPrimitive(userData.get(username).get("salt")));
@@ -87,6 +113,17 @@ public class UserDatabase implements Serializable {
         return new SecretKeySpec(key, "AES");
     }
 
+    /**
+     * Serialize and encrypt the data and store it.
+     * - Data is encrypted using key generated with {@link #getKey}
+     * Will abort if password doesn't match the given username.
+     *
+     * @param username Account
+     * @param password passcode
+     * @param data     data to store
+     * @return true if successful
+     * @throws Exception Encryption and serialization may fail.
+     */
     public boolean setUserData(String username, char[] password, Object data) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return false;
@@ -104,10 +141,24 @@ public class UserDatabase implements Serializable {
         return true;
     }
 
+    /**
+     * Check if account exists. No passcode required.
+     *
+     * @param username account
+     * @return true if account exists.
+     */
     public boolean accountExists(String username) {
         return userData.containsKey(username);
     }
 
+    /**
+     * Delete account if the passcode is correct.
+     *
+     * @param username Account
+     * @param password passcode
+     * @return true if account is successfully deleted.
+     * @throws Exception passcode verifacation may fail.
+     */
     public boolean deleteAccount(String username, char[] password) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return false;
@@ -116,6 +167,14 @@ public class UserDatabase implements Serializable {
         return true;
     }
 
+    /**
+     * Retrieve user data stored using {@link #setUserData(String, char[], Object)} only if the passcode is valid.
+     *
+     * @param username Account
+     * @param password passcode
+     * @return Retrieved object. null if passcode verification failed or account doesn't exist.
+     * @throws Exception Decryption and deserialization may fail.
+     */
     public Object getUserData(String username, char[] password) throws Exception {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return null;

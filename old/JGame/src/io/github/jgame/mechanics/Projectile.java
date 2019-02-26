@@ -27,6 +27,8 @@ public class Projectile extends Sprite {
     }
 
     /**
+     * Called when the Projectile needs to be killed, such as when it hits a wall.
+     *
      * Override this function if the projectile could only be killed in certain conditions.
      */
     public void requestKill() {

@@ -3,7 +3,6 @@ package io.github.jgame.net;
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -34,7 +33,13 @@ public class UDPServer {
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
         for (String action : serialTable.keySet()) {
-            deserialTable.put(serialTable.get(action), action);
+            int actionID = serialTable.get(action);
+
+            if (actionID > 0 && actionID <= 0xffff) {
+                deserialTable.put(actionID, action);
+            } else {
+                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+            }
         }
     }
 
@@ -51,12 +56,9 @@ public class UDPServer {
 
     public void sendToAll(HashMap<String, Object> datagram) {
         for (UDPClientHandler client : clients.values()) {
-            logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, client.address, client.port));
             try {
-                byte[] bytes = NetUtils.serialize(datagram, serialTable);
-                DatagramPacket packet = new DatagramPacket(bytes, bytes.length, client.address, client.port);
-                socket.send(packet);
-            } catch (IOException e) {
+                send(datagram, client.address, client.port);
+            } catch (Exception e) {
                 logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
             }
         }
@@ -71,16 +73,16 @@ public class UDPServer {
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
         socket.receive(packet);
 
-        if (clients.size() >= clientLimit) {
-            HashMap<String, Object> kickMsg = new HashMap<>();
-            kickMsg.put("action", "kick");
-            kickMsg.put("reason", "Server already full");
-
-            send(kickMsg, packet.getAddress(), packet.getPort());
-            return;
-        }
         String packAddr = packet.getAddress().toString() + ":" + packet.getPort();
         if (!clients.containsKey(packAddr)) {
+            if (clients.size() >= clientLimit) {
+                HashMap<String, Object> kickMsg = new HashMap<>();
+                kickMsg.put("action", "kick");
+                kickMsg.put("reason", "Server already full");
+
+                send(kickMsg, packet.getAddress(), packet.getPort());
+                return;
+            }
             clients.put(packAddr, new UDPClientHandler(packet.getAddress(), packet.getPort(), this));
             logger.info(String.format("[%s:%s] New client at %s", address, port, packAddr));
         }
@@ -91,37 +93,39 @@ public class UDPServer {
         }
         logger.finest(String.format("[%s:%s] Got packet %s from %s", address, port, packetDict, packAddr));
         String action = (String) packetDict.get("action");
-        switch (action) {
-            case "clientShutdown": {
-                onClientShutdown(packet);
-                return;
-            }
-            case "verifySend": {
-                String id = (String) packetDict.get("id");
-                if (!verifiedByMe.contains(id)) {
-                    logger.finest(String.format("[%s:%s] Packet<id=%s> from client was verified.",
-                            address, port, id));
-                    parse(NetUtils.datFromObject(packetDict.get("data")), packet);
-                    verifiedByMe.add(id);
-                } else {
-                    logger.fine(String.format("[%s:%s] Got duplicate Packet<id=%s>", address, port, id));
+        if (action != null) {
+            switch (action) {
+                case "clientShutdown": {
+                    onClientShutdown(packet);
+                    return;
                 }
-                HashMap<String, Object> rawSend = new HashMap<>();
-                rawSend.put("action", "confirmPacket");
-                rawSend.put("id", id);
-                send(rawSend, packet.getAddress(), packet.getPort());
-                return;
-            }
-            case "confirmPacket": {
-                String id = (String) packetDict.get("id");
-                if (pendingPackets.containsKey(id)) {
-                    pendingPackets.get(id).onConfirm();
-                    pendingPackets.remove(id);
-                    logger.finest(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
-                } else {
-                    logger.fine(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
+                case "verifySend": {
+                    String id = (String) packetDict.get("id");
+                    if (!verifiedByMe.contains(id)) {
+                        logger.finest(String.format("[%s:%s] Packet<id=%s> from client was verified.",
+                                address, port, id));
+                        parse(NetUtils.datFromObject(packetDict.get("data")), packet);
+                        verifiedByMe.add(id);
+                    } else {
+                        logger.fine(String.format("[%s:%s] Got duplicate Packet<id=%s>", address, port, id));
+                    }
+                    HashMap<String, Object> rawSend = new HashMap<>();
+                    rawSend.put("action", "confirmPacket");
+                    rawSend.put("id", id);
+                    send(rawSend, packet.getAddress(), packet.getPort());
+                    return;
                 }
-                return;
+                case "confirmPacket": {
+                    String id = (String) packetDict.get("id");
+                    if (pendingPackets.containsKey(id)) {
+                        pendingPackets.get(id).onConfirm();
+                        pendingPackets.remove(id);
+                        logger.finest(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
+                    } else {
+                        logger.fine(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
+                    }
+                    return;
+                }
             }
         }
         clients.get(packAddr).parse(packetDict, packet);
@@ -132,7 +136,7 @@ public class UDPServer {
         clients.remove(packet.getAddress().toString() + ":" + packet.getPort());
     }
 
-    public void shutdown() throws Exception {
+    public void shutdown() {
         for (UDPClientHandler client : clients.values()) {
             try {
                 client.shutdown();
@@ -160,9 +164,14 @@ public class UDPServer {
         volatile boolean hasSent = false;
 
         public VerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {
+            if (!datagram.containsKey("action")) {
+                datagram.put("action", null);
+            }
+
             rawSend = new HashMap<>();
             rawSend.put("action", "verifySend");
             rawSend.put("data", datagram);
+
             id = UUID.randomUUID().toString();
             rawSend.put("id", id);
             myHost = host;
