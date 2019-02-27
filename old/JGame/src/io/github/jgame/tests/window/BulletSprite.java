@@ -34,7 +34,7 @@ public class BulletSprite extends Sprite {
             kill();
         }
         if (!rotInit) {
-            rot = pos.angleTo(target) + 180;
+            rot = pos.angleTo(target);
             vel = pos.velocityTo(target, 1);
             rotInit = true;
         }

@@ -2,6 +2,9 @@ package io.github.jgame.mixer;
 
 import java.util.LinkedList;
 
+/**
+ * TODO: add javadoc
+ */
 public class Tone {
     private boolean isStereo;
     public byte[] data;

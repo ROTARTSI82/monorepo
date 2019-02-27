@@ -1,8 +1,12 @@
 package io.github.jgame.mixer;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+/**
+ * TODO: add javadoc
+ */
 public class SoundManager {
     private Logger logger;
     private HashMap<String, Sound> sounds = new HashMap<>();
@@ -11,11 +15,11 @@ public class SoundManager {
     }
 
     public void fromFile(String file, String id) {
-        sounds.put(id, new Sound(file, Sound.LoadModes.FROM_FILE));
+        sounds.put(id, new Sound(file));
     }
 
-    public void fromURL(String url, String id) {
-        sounds.put(id, new Sound(url, Sound.LoadModes.FROM_URL));
+    public void fromURL(URL url, String id) {
+        sounds.put(id, new Sound(url));
     }
 
     public Sound get(String id) {

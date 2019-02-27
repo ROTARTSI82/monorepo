@@ -1,18 +1,13 @@
 package io.github.jgame.crypto;
 
-import groovy.transform.NotYetImplemented;
-
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.LinkedList;
 
 /**
  * Modified version of code <a href="https://introcs.cs.princeton.edu/java/99crypto/RSA.java.html">this code</a>
- * that addresses the known bugs.
- * <p>
- * Copyright © 2000–2017, Robert Sedgewick and Kevin Wayne.
- * Last updated: Fri Oct 20 14:12:12 EDT 2017.
- * <p>
+ * by Robert Sedgewick and Kevin Wayne that addresses the known bugs.
  * Generate an N-bit public and private RSA key and use to encrypt
  * and decrypt a random message.
  */
@@ -58,12 +53,29 @@ public class RSA implements Serializable {
     }
 
     /**
+     * Get all the characters used in a string literal without duplicate values.
+     *
+     * @param str String
+     * @return List of all characters
+     */
+    public static LinkedList<Integer> getAlphabet(String str) {
+        LinkedList<Integer> ret = new LinkedList<>();
+        for (char c : str.toCharArray()) {
+            int intVal = (int) c;
+            if (!ret.contains(intVal)) {
+                ret.add(intVal);
+            }
+        }
+        return ret;
+    }
+
+    /**
      * Encrypt a BigInteger that is smaller than modulus using the public key.
      *
      * @param message BigInteger to encrypt
      * @return encrypted BigInteger
      */
-    BigInteger rawEncrypt(BigInteger message) {
+    public BigInteger rawEncrypt(BigInteger message) {
         if (message.compareTo(modulus) >= 0) {
             throw new IllegalArgumentException("Message is larger than (or equals) modulus");
         }
@@ -75,7 +87,7 @@ public class RSA implements Serializable {
      *
      * @return Modulus
      */
-    BigInteger getModulus() {
+    public BigInteger getModulus() {
         return modulus;
     }
 
@@ -85,39 +97,104 @@ public class RSA implements Serializable {
      * @param encrypted BigInteger to decrypt
      * @return decrypted Biginteger
      */
-    BigInteger rawDecrypt(BigInteger encrypted) {
+    public BigInteger rawDecrypt(BigInteger encrypted) {
         return encrypted.modPow(privateKey, modulus);
     }
 
-    // TODO: implement these!
-
     /**
-     * Not implemented YET!
-     * <p>
-     * Split the msg into {@code chunkSize} chucks and evaluate the hex. Then, use {@link #rawEncrypt(BigInteger)}
-     * to encrypt each BigInteger.
+     * Encrypt string using RSA.
      *
-     * @param msg       String message to encrypt
-     * @param chunkSize How big each chunk should be.
-     * @return encrypted BigInteger array
+     * Split the string into {@code chunkSize} and get the index of each character
+     * and encode it using the size of the alphabet array as the base.
+     * Then use {@link #rawEncrypt(BigInteger)} to encrypt each item.
+     *
+     * For example: msg="LOREMIPSUM" chunkSize=4 alphabet=['L', 'O', 'R', 'E', 'M', 'I', 'P', 'S', 'U']
+     * <ol>
+     *     <li>
+     *         Split the string into chunks of 4: ["LORE", "MIPS", "UM"]
+     *     </li>
+     *     <li>
+     *         Replace each character with it's index in the alphabet: [[0, 1, 2, 3], [4, 5, 6, 7], [8, 4]]
+     *     </li>
+     *     <li>
+     *         Encode each item using base8 (actually interprets literal backwards so that
+     *         the reverse greedy method returns the digits in the right order at
+     *         {@link #decryptString(BigInteger[], LinkedList)}):
+     *         [2358, 5638, 44]
+     *     </li>
+     *     <li>
+     *         RSA encrypt each item using {@link #rawEncrypt(BigInteger)}
+     *     </li>
+     * </ol>
+     *
+     * @param msg String to encrypt
+     * @param chunkSize Size to split into
+     * @param alphabet Valid characters
+     * @return Encrypted BigInteger[]
      */
-    @NotYetImplemented
-    BigInteger[] encryptString(String msg, int chunkSize) {
-        return new BigInteger[]{one};
+    public BigInteger[] encryptString(String msg, int chunkSize, LinkedList<Integer> alphabet) {
+        BigInteger base = new BigInteger(String.valueOf(alphabet.size() + 1));
+        String[] split = msg.split(String.format("(?<=\\G.{%s})", chunkSize));
+
+        LinkedList<BigInteger> ret = new LinkedList<>();
+        for (String x : split) {
+            BigInteger val = new BigInteger("0");
+            int place = 0;
+            for (char c : x.toCharArray()) {
+                int intVal = (int) c;
+                if (alphabet.contains(intVal)) {
+                    intVal = 1 + alphabet.indexOf(intVal);
+                } else {
+                    throw new IllegalArgumentException("Character in string not in alphabet");
+                }
+                val = val.add(base.pow(place).multiply(new BigInteger(String.valueOf(intVal))));
+                place++;
+            }
+            ret.add(rawEncrypt(val));
+        }
+        return ret.toArray(new BigInteger[0]);
     }
 
     /**
-     * Not implemented YET!
-     * <p>
-     * Decrypt all the BigIntegers using {@link #rawDecrypt(BigInteger)} and turn them into hex and interpret
-     * the hex as ascii text.
+     * Decrypt a BigInteger[] encrypted using {@link #encryptString(String, int, LinkedList)}
      *
-     * @param encrypted Encrypted message
-     * @return Decrepted string
+     * Use the reverse greedy method to interpret the base (which is the size of the alphabet) and
+     * add the character values to the StringBuilder
+     *
+     * For example: msg=[..., ] chunkSize=4 alphabet=['L', 'O', 'R', 'E', 'M', 'I', 'P', 'S', 'U']
+     * (See example at {@link #encryptString(String, int, LinkedList)}
+     * <ol>
+     *     <li>
+     *         RSA decrypt each item using {@link #rawDecrypt(BigInteger)}: [2358, 5638, 44]
+     *     </li>
+     *     <li>
+     *         Base8 decode each item using the reverse greedy method (this reconstructs the literal backwards because
+     *         the greedy method returns the least significant digit first,
+     *         but this reconstructs the literal correctly because
+     *         {@link #encryptString(String, int, LinkedList)} interprets literals backwards):
+     *         [[0, 1, 2, 3], [4, 5, 6, 7], [8, 4]]
+     *
+     *     </li>
+     *     <li>
+     *         Add the character values to the StringBuilder
+     *     </li>
+     * </ol>
+     * @param encrypted ciphertext
+     * @param alphabet valid chars
+     * @return original string
      */
-    @NotYetImplemented
-    String decryptString(BigInteger[] encrypted) {
-        return "";
+    public String decryptString(BigInteger[] encrypted, LinkedList<Integer> alphabet) {
+        BigInteger zero = new BigInteger("0");
+        BigInteger base = new BigInteger(String.valueOf(alphabet.size() + 1));
+        StringBuilder builder = new StringBuilder();
+        for (BigInteger i : encrypted) {
+            i = rawDecrypt(i);
+            while (i.compareTo(zero) != 0) {
+                builder.append((char) (int) alphabet.get(i.mod(base).intValue() - 1));
+                i = i.divide(base);
+            }
+        }
+        return builder.toString();
     }
 
     public String toString() {

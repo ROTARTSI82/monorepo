@@ -2,7 +2,13 @@ package io.github.jgame.mixer;
 
 import java.util.HashMap;
 
+/**
+ * Note. Basically a frequency to play for x amount of time and wait y amount of time afterwards.
+ */
 public class Note {
+    /**
+     * HashMap converts string notes to their frequencies.
+     */
     private static HashMap<String, Double> notes = new HashMap<>() {{
         put("REST", 0d);
         put("A#0", 29.14);
@@ -164,6 +170,14 @@ public class Note {
     double restTime;
     float noteVolume;
 
+    /**
+     * Notes!
+     *
+     * @param name   String note
+     * @param hold   Time to hold note in seconds
+     * @param rest   Time to rest in seconds
+     * @param volume Volume. Usually 100
+     */
     public Note(String name, double hold, double rest, float volume) {
         if (notes.containsKey(name)) {
             frequency = notes.get(name);
@@ -175,6 +189,14 @@ public class Note {
         restTime = rest;
     }
 
+    /**
+     * Note with frequency instead of string name
+     *
+     * @param freq Frequency
+     * @param hold Time to hold in seconds
+     * @param rest Time to rest in seconds
+     * @param volume Default to 100
+     */
     public Note(double freq, double hold, double rest, float volume) {
         frequency = freq;
         noteVolume = volume;

@@ -4,6 +4,9 @@ import io.github.jgame.logging.GenericLogger;
 
 import java.util.logging.Logger;
 
+/**
+ * TODO: add javadoc
+ */
 public class TonePlayer extends Thread {
 
     private Logger logger;

@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 
+/**
+ * TODO: add javadoc
+ */
 public class SoundGenerator {
     public float rate;
     private int size;

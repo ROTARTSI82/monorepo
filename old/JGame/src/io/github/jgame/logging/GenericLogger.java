@@ -13,11 +13,25 @@ public class GenericLogger {
     private static final Logger logger = Logger.getLogger("io.github.jgame.logging.GenericLogger");
     private static boolean setupDone = false;
 
+    /**
+     * Set the specified logger to the logging level.
+     *
+     * @param name  Logger name
+     * @param level Logging level
+     */
     public static void setLogger(String name, Level level) {
         Logger loggerInstance = Logger.getLogger(name);
         loggerInstance.setLevel(level);
     }
 
+    /**
+     * Setup the handlers and formatters. Safe to call more than once,
+     * as it aborts if it has already been called before.
+     *
+     * @param CONSOLE_LEVEL Logging level for ConsoleHandler
+     * @param LATEST_LEVEL Logging level for output to latest.log
+     * @param LOG_LEVEL Logging level for output to "${DATE}.log"
+     */
     public static void setup(Level CONSOLE_LEVEL, Level LATEST_LEVEL, Level LOG_LEVEL) {
         if (setupDone) {
             return;
@@ -65,6 +79,12 @@ public class GenericLogger {
         setupDone = true;
     }
 
+    /**
+     * Get the stack trace of a Throwable in the form of a string.
+     *
+     * @param e Throwable
+     * @return Stack trace as string.
+     */
     public static String getStackTrace(Throwable e) {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw, true);

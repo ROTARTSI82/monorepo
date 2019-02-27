@@ -180,8 +180,16 @@ class PlatformerPlayer(pygame.sprite.Sprite):
 
  */
 
+/**
+ * Not yet implemented...
+ * TODO: Implement this
+ */
 public class PlatformerPlayer extends Sprite {
+    /**
+     * Not yet implemented...
+     */
     public PlatformerPlayer(BufferedImage img) {
         super(img);
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

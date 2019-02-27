@@ -34,6 +34,14 @@ public class UserDatabase implements Serializable {
         saltLen = 16;
     }
 
+    /**
+     * Hash message with the salt. The salt prevents a dictionary attack.
+     *
+     * @param message Message to hash
+     * @param salt    salt
+     * @return Hashed message
+     * @throws Exception HMAC may fail (or HmacSHA512 is somehow missing)
+     */
     private static byte[] hmac(char[] message, byte[] salt) throws Exception {
         Mac sha512_HMAC = Mac.getInstance("HmacSHA512");
         SecretKeySpec keySpec = new SecretKeySpec(salt, "HmacSHA512");
@@ -41,12 +49,24 @@ public class UserDatabase implements Serializable {
         return sha512_HMAC.doFinal(String.valueOf(message).getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Generate {@code len} random bytes using a {@link SecureRandom} for use as salt or initialization vector
+     *
+     * @param len Salt len
+     * @return {@code} len random bytes
+     */
     private static byte[] getRandomSalt(int len) {
         byte[] ret = new byte[len];
         random.nextBytes(ret);
         return ret;
     }
 
+    /**
+     * "Unbox" an array. Convert {@code Byte[]} to {@code byte[]}
+     *
+     * @param bytes Wrapper array
+     * @return Primitive array
+     */
     private static byte[] toPrimitive(Byte[] bytes) {
         byte[] ret = new byte[bytes.length];
 
@@ -57,6 +77,12 @@ public class UserDatabase implements Serializable {
         return ret;
     }
 
+    /**
+     * "Box" an array. Convert {@code byte[]} to {@code Byte[]}
+     *
+     * @param bytes Primitive array
+     * @return Wrapper array
+     */
     private static Byte[] toWrapper(byte[] bytes) {
         Byte[] ret = new Byte[bytes.length];
 
@@ -86,7 +112,7 @@ public class UserDatabase implements Serializable {
         data.put("password", toWrapper(hmac(password, salt)));
         data.put("salt", toWrapper(salt));
         data.put("data", new Byte[]{});
-        data.put("iv", toWrapper(getRandomSalt(16)));
+        data.put("iv", toWrapper(getRandomSalt(16)));  // IV = Initialization Vector
         userData.put(username, data);
         return true;
     }
