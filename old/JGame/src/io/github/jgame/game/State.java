@@ -9,6 +9,8 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 /**
  * Support for different "states" of a game.
  * <p>
@@ -94,7 +96,7 @@ public class State {
     public class MenuHandler extends JMenuBar {
         public MenuHandler() {
             super();
-            JMenu test = new JMenu("ExampleMenu");
+            JMenu test = new JMenu(JGameStr.getString("game.State.exampleMenu"));
             test.addMenuListener(new MenuListener() {
                 @Override
                 public void menuSelected(MenuEvent e) {
@@ -112,9 +114,9 @@ public class State {
                 }
             });
 
-            JMenu submenu = new JMenu("SubMenu");
+            JMenu submenu = new JMenu(JGameStr.getString("game.State.exampleSubmenu"));
 
-            JMenuItem item = new JMenuItem("MenuItem");
+            JMenuItem item = new JMenuItem(JGameStr.getString("game.State.exampleMenuItem"));
             setHotkey(item, 'N', false);
             item.addActionListener(e -> {
 

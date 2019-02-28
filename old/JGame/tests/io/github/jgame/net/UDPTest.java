@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import java.net.DatagramPacket;
 import java.util.HashMap;
 
+import static io.github.jgame.util.StringManager.fmt;
+
 public class UDPTest {
     @Test()
     public void testUDP() throws Exception {
@@ -26,7 +28,7 @@ public class UDPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
-            System.out.println(String.format("Server got %s", datagram));
+            System.out.println(fmt("Server got %s", datagram));
             HashMap<String, Object> dat = new HashMap<>();
             dat.put("ack", datagram.get("id"));
             try {
@@ -54,7 +56,7 @@ public class UDPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
-            System.out.println(String.format("Client got %s", datagram));
+            System.out.println(fmt("Client got %s", datagram));
             done = ((long) datagram.get("ack")) == id;
         }
     }

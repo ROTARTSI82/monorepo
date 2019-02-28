@@ -1,5 +1,6 @@
 package io.github.jgame.net;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public class UDPClientHandler {
         factory = parent;
     }
 
-    public void send(HashMap<String, Object> datagram) throws Exception {
+    public void send(HashMap<String, Object> datagram) throws IOException {
         factory.send(datagram, address, port);
     }
 
@@ -23,7 +24,7 @@ public class UDPClientHandler {
 
     }
 
-    public void shutdown() throws Exception {
+    public void shutdown() throws IOException {
         HashMap<String, Object> shutdownMsg = new HashMap<>();
         shutdownMsg.put("action", "serverShutdown");
         send(shutdownMsg);

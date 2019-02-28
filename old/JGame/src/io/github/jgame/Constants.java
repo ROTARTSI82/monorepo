@@ -3,11 +3,14 @@ package io.github.jgame;
 import java.awt.*;
 import java.util.HashMap;
 
+import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.util.UniversalResources.settings;
+
 public class Constants {
     public final static int NET_PACKET_SIZE = 65535;
     public final static boolean SILENCE_AWT_LOGS = true;
 
-    public final static Version JGAME_VERSION = new Version("dev%s",
+    public final static Version JGAME_VERSION = new Version(JGameStr.getString("versionFormat"),
             (byte) 0, (byte) 19, (byte) 2, (byte) 24);
 
     public final static RenderingHints QUALITY_RENDER_HINTS = new RenderingHints(
@@ -55,7 +58,8 @@ public class Constants {
                 put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
                 put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             }});
-    public final static RenderingHints RENDER_HINTS = SPEED_RENDER_HINTS;
+    public final static RenderingHints RENDER_HINTS = settings.getString("renderHints").equals("quality") ?
+            QUALITY_RENDER_HINTS : SPEED_RENDER_HINTS;
 
     public final static HashMap<String, Integer> BUILTIN_ACTIONS = new HashMap<>() {{
         put("clientShutdown", 0x52_10);

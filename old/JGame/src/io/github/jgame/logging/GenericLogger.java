@@ -9,6 +9,10 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.*;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.util.UniversalResources.settings;
+
 public class GenericLogger {
     private static final Logger logger = Logger.getLogger("io.github.jgame.logging.GenericLogger");
     private static boolean setupDone = false;
@@ -36,7 +40,10 @@ public class GenericLogger {
         if (setupDone) {
             return;
         }
-        File logDir = new File("logs");
+        String handlerFail = JGameStr.getString("logging.GenericLogger.handlerFail");
+        String dir = settings.getString("logging.GenericLogger.logDir");
+
+        File logDir = new File(dir);
         if (!logDir.exists()) {
             logDir.mkdirs();
         }
@@ -52,29 +59,28 @@ public class GenericLogger {
         consoleHandler.setLevel(CONSOLE_LEVEL);
         root.addHandler(consoleHandler);
         try {
-            FileHandler fileHandler = new FileHandler("logs/latest.log");
+            FileHandler fileHandler = new FileHandler(dir + settings.getString("logging.GenericLogger.latestLog"));
             fileHandler.setFormatter(formatterTxt);
             fileHandler.setLevel(LATEST_LEVEL);
             root.addHandler(fileHandler);
         } catch (IOException e) {
-            logger.severe("Failed to add handler: \n" + getStackTrace(e));
+            logger.severe(handlerFail + getStackTrace(e));
         }
         try {
             if (LOG_LEVEL != Level.OFF) {
-                FileHandler logFileHandler = new FileHandler("logs/" + new Date().toString() + ".log");
+                FileHandler logFileHandler = new FileHandler(fmt(dir + "/%s.log", new Date().toString()));
                 logFileHandler.setFormatter(formatterTxt);
                 logFileHandler.setLevel(LOG_LEVEL);
                 root.addHandler(logFileHandler);
             }
         } catch (IOException e) {
-            logger.severe("Failed to add handler: \n" + getStackTrace(e));
+            logger.severe(handlerFail + getStackTrace(e));
         }
 
         if (Constants.SILENCE_AWT_LOGS) {
-            setLogger("java.awt", Level.CONFIG);
-            setLogger("javax.swing", Level.CONFIG);
-            setLogger("sun.awt", Level.CONFIG);
-            setLogger("sun.lwawt", Level.CONFIG);
+            for (String awtLogger : settings.getString("logging.GenericLogger.blockedLoggers").split(",")) {
+                setLogger(awtLogger, Level.CONFIG);
+            }
         }
         setupDone = true;
     }

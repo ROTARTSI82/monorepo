@@ -2,6 +2,9 @@ package io.github.jgame;
 
 import java.io.Serializable;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 public class Version implements Serializable {
     public transient String releaseMode;
     public transient byte modeValue;
@@ -58,7 +61,7 @@ public class Version implements Serializable {
 
     @Override
     public String toString() {
-        return String.format(releaseMode, String.format("%s.%s.%s", unsigned(major),
+        return fmt(releaseMode, fmt(JGameStr.getString("Version.toStringFormat"), unsigned(major),
                 unsigned(minor), unsigned(micro)));
     }
 

@@ -3,18 +3,23 @@ package io.github.jgame.net;
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.logging.Logger;
+
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class TCPServer {
     private ServerSocket serverSocket;
     private HashMap<String, TCPClientHandler> clients = new HashMap<>();
 
-    private InetAddress host;
-    private int port;
+    InetAddress host;
+    int port;
 
     private int clientLimit;
     private Logger logger;
@@ -22,7 +27,17 @@ public class TCPServer {
     public HashMap<String, Integer> serialTable;
     public HashMap<Integer, String> deserialTable;
 
-    public TCPServer(String hostname, int portNum, int maxClients) throws Exception {
+    /**
+     * Host a TCP server at a specific address
+     *
+     * @param hostname   Host to bind the server to
+     * @param portNum    Port to bind the server to
+     * @param maxClients maximum number of clients
+     * @throws java.net.UnknownHostException Invalid host is passed in {@code hostname}
+     * @throws IOException                   Error opening socket
+     * @throws IllegalArgumentException      If an actionID is out of range.
+     */
+    public TCPServer(String hostname, int portNum, int maxClients) throws UnknownHostException, IOException {
         clientLimit = maxClients;
         logger = Logger.getLogger(this.getClass().getName());
         host = InetAddress.getByName(hostname);
@@ -38,39 +53,35 @@ public class TCPServer {
             if (actionID > 0 && actionID <= 0xffff) {
                 deserialTable.put(actionID, action);
             } else {
-                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+                throw new IllegalArgumentException(JGameStr.getString("net.invalidActionID"));
             }
         }
     }
 
     public void sendToAll(HashMap<String, Object> datagram) {
         for (TCPClientHandler handler : clients.values()) {
-            try {
-                handler.send(datagram);
-            } catch (Exception e) {
-                logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
-            }
+            handler.send(datagram);
         }
     }
 
-    public void acceptNewClients() throws Exception {
+    public void acceptNewClients() throws IOException {
         Socket client = serverSocket.accept();
-        String key = String.format("%s:%s", client.getInetAddress().toString(), client.getPort());
+        String key = fmt("%s:%s", client.getInetAddress().toString(), client.getPort());
         TCPClientHandler handler = new TCPClientHandler(client, this);
 
         if (clients.size() >= clientLimit) {
             HashMap<String, Object> kickMsg = new HashMap<>();
             kickMsg.put("action", "kick");
-            kickMsg.put("reason", "Server already full");
+            kickMsg.put("reason", JGameStr.getString("net.alreadyFullMsg"));
             handler.send(kickMsg);
-            logger.info("Kicking client " + key + ": Server already full");
+            logger.info(fmt(JGameStr.getString("net.TCPServer.alreadyFullLog"), key));
             return;
         }
         if (!clients.containsKey(key)) {
             clients.put(key, handler);
-            logger.info("New client at " + key);
+            logger.info(fmt(JGameStr.getString("net.newClient"), host, port, key));
         } else {
-            logger.warning("Client's address already exists! ignoring...");
+            logger.warning(JGameStr.getString("net.TCPServer.alreadyExists"));
         }
     }
 
@@ -86,8 +97,8 @@ public class TCPServer {
         for (TCPClientHandler client : clients.values()) {
             try {
                 client.update();
-            } catch (Exception e) {
-                logger.warning("Failed to update client:\n" + GenericLogger.getStackTrace(e));
+            } catch (IOException e) {
+                logger.warning(JGameStr.getString("net.TCPServer.updateFail") + GenericLogger.getStackTrace(e));
             }
         }
     }
@@ -97,15 +108,16 @@ public class TCPServer {
     }
 
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) {
-        clients.get(datAddress.toString() + ":" + datPort).send(datagram);
+        logger.finest(fmt(JGameStr.getString("net.sendMSG"), host, port, datAddress, datPort, datagram));
+        clients.get(datAddress + ":" + datPort).send(datagram);
     }
 
-    public void shutdown() throws Exception {
+    public void shutdown() throws IOException {
         for (TCPClientHandler client : clients.values()) {
             try {
                 client.shutdown();
-            } catch (Exception e) {
-                logger.warning("Failed to shutdown client:\n" + GenericLogger.getStackTrace(e));
+            } catch (IOException e) {
+                logger.warning(JGameStr.getString("net.shutdownFail") + GenericLogger.getStackTrace(e));
             }
         }
         serverSocket.close();

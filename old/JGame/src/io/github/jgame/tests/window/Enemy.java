@@ -4,14 +4,14 @@ import io.github.jgame.math.Vector2;
 import io.github.jgame.sprite.Sprite;
 
 import java.awt.image.BufferedImage;
-import java.util.Random;
+
+import static io.github.jgame.util.UniversalResources.rand;
 
 /**
  * @deprecated Only use for blitting tests.
  */
 @Deprecated
 public class Enemy extends Sprite {
-    Random rand = new Random();
 
     public Enemy(int x, int y, BufferedImage img) {
         super(img);

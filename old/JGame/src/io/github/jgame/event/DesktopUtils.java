@@ -9,6 +9,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.util.UniversalResources.settings;
+
 /**
  * Easy way to perform actions such as opening the webbrowser and printing files to the local printer.
  */
@@ -38,7 +42,8 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning("Failed to open webbrowser:\n" + GenericLogger.getStackTrace(e));
+            logger.warning(JGameStr.getString("event.DesktopUtils.browserFail") +
+                    GenericLogger.getStackTrace(e));
         }
         return false;
     }
@@ -56,7 +61,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning("Failed to print file:\n" + GenericLogger.getStackTrace(e));
+            logger.warning(JGameStr.getString("event.DesktopUtils.printFail") + GenericLogger.getStackTrace(e));
         }
         return false;
     }
@@ -74,7 +79,8 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning("Failed to open file for editing:\n" + GenericLogger.getStackTrace(e));
+            logger.warning(JGameStr.getString("event.DesktopUtils.openFail") +
+                    GenericLogger.getStackTrace(e));
         }
         return false;
     }
@@ -92,9 +98,41 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning("Failed to mail to URI:\n" + GenericLogger.getStackTrace(e));
+            logger.warning(JGameStr.getString("event.DesktopUtils.mailFail3") +
+                    GenericLogger.getStackTrace(e));
         }
         return false;
+    }
+
+    public static boolean openFile(File file) {
+        try {
+            if (supported && desktop.isSupported(Desktop.Action.OPEN)) {
+                desktop.open(file);
+                return true;
+            }
+        } catch (IOException e) {
+            logger.warning(JGameStr.getString("event.DesktopUtils.viewFail") +
+                    GenericLogger.getStackTrace(e));
+        }
+        return false;
+    }
+
+    public static boolean moveToTrash(File file) {
+        if (supported && desktop.isSupported(Desktop.Action.MOVE_TO_TRASH)) {
+            desktop.moveToTrash(file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean browseDir(File file) {
+        if (supported && desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR)) {
+            desktop.browseFileDirectory(file);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -109,11 +147,12 @@ public class DesktopUtils {
      * @return true if successful
      */
     public static boolean mailTo(String sendTo, String subject, String cc, String body, String bcc) {
-        String uriStr = String.format("mailto:%s?subject=%s&cc=%s&body=%s&bcc=%s", sendTo, subject, cc, body, bcc);
+        String uriStr = fmt(settings.getString("event.DesktopUtils.uriFormat"),
+                sendTo, subject, cc, body, bcc);
         try {
             return mailTo(new URI(uriStr));
         } catch (URISyntaxException e) {
-            logger.warning(String.format("Failed to construct URI from '%s'", uriStr));
+            logger.warning(fmt(JGameStr.getString("event.DesktopUtils.mailFail"), uriStr));
         }
         return false;
     }
@@ -130,7 +169,8 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning("Failed to open mail:\n" + GenericLogger.getStackTrace(e));
+            logger.warning(JGameStr.getString("event.DesktopUtils.mailFail2") +
+                    GenericLogger.getStackTrace(e));
         }
         return false;
     }

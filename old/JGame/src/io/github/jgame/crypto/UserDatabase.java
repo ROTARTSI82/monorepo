@@ -1,23 +1,28 @@
 package io.github.jgame.crypto;
 
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.SecretKeyFactory;
+import io.github.jgame.util.UniversalResources;
+
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import static io.github.jgame.util.UniversalResources.settings;
 
 /**
  * Handles logins and encrypts user data using their passcode.
  */
 public class UserDatabase implements Serializable {
-    private final static SecureRandom random = new SecureRandom();
 
     private HashMap<String, HashMap<String, Byte[]>> userData = new HashMap<>();
 
@@ -26,11 +31,9 @@ public class UserDatabase implements Serializable {
 
     /**
      * Create a new UserDatabase
-     *
-     * @throws Exception Cipher creation may fail if AES/CBC/PKCS5Padding is missing
      */
     public UserDatabase() throws Exception {
-        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher = Cipher.getInstance(settings.getString("crypto.UserDatabase.cipher"));
         saltLen = 16;
     }
 
@@ -40,11 +43,13 @@ public class UserDatabase implements Serializable {
      * @param message Message to hash
      * @param salt    salt
      * @return Hashed message
-     * @throws Exception HMAC may fail (or HmacSHA512 is somehow missing)
+     *
+     * @throws IllegalStateException HMAC may fail
      */
-    private static byte[] hmac(char[] message, byte[] salt) throws Exception {
-        Mac sha512_HMAC = Mac.getInstance("HmacSHA512");
-        SecretKeySpec keySpec = new SecretKeySpec(salt, "HmacSHA512");
+    private static byte[] hmac(char[] message, byte[] salt) throws NoSuchAlgorithmException, InvalidKeyException {
+        String hmacAlgorithm = settings.getString("crypto.UserDatabase.hmac");
+        Mac sha512_HMAC = Mac.getInstance(hmacAlgorithm);
+        SecretKeySpec keySpec = new SecretKeySpec(salt, hmacAlgorithm);
         sha512_HMAC.init(keySpec);
         return sha512_HMAC.doFinal(String.valueOf(message).getBytes(StandardCharsets.UTF_8));
     }
@@ -57,7 +62,7 @@ public class UserDatabase implements Serializable {
      */
     private static byte[] getRandomSalt(int len) {
         byte[] ret = new byte[len];
-        random.nextBytes(ret);
+        UniversalResources.secureRand.nextBytes(ret);
         return ret;
     }
 
@@ -101,9 +106,9 @@ public class UserDatabase implements Serializable {
      * @param username Username to create account for
      * @param password Corresponding passcode
      * @return Returns true if account creation succeeds.
-     * @throws Exception hmac hashing may fail.
      */
-    public boolean createAccount(String username, char[] password) throws Exception {
+    public boolean createAccount(String username, char[] password) throws NoSuchAlgorithmException,
+            InvalidKeyException {
         if (accountExists(username)) {
             return false;
         }
@@ -123,20 +128,23 @@ public class UserDatabase implements Serializable {
      * @param username Account to check
      * @param password passcode
      * @return true if the passcode matches the account.
-     * @throws Exception hmac hashing may fail.
      */
-    public boolean verifyPassword(String username, char[] password) throws Exception {
+    public boolean verifyPassword(String username, char[] password) throws NoSuchAlgorithmException, InvalidKeyException {
+        if (!accountExists(username)) {
+            return false;
+        }
         byte[] expected = toPrimitive(userData.get(username).get("password"));
         byte[] actual = hmac(password, toPrimitive(userData.get(username).get("salt")));
         return Arrays.equals(expected, actual);
     }
 
-    private SecretKeySpec getKey(char[] password, byte[] salt) throws Exception {
+    private SecretKeySpec getKey(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256); // AES-256
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+        SecretKeyFactory f = SecretKeyFactory.getInstance(
+                settings.getString("crypto.UserDatabase.keyFactory"));
         byte[] key = f.generateSecret(spec).getEncoded();
 
-        return new SecretKeySpec(key, "AES");
+        return new SecretKeySpec(key, settings.getString("crypto.UserDatabase.cipherAlgorithm"));
     }
 
     /**
@@ -148,9 +156,11 @@ public class UserDatabase implements Serializable {
      * @param password passcode
      * @param data     data to store
      * @return true if successful
-     * @throws Exception Encryption and serialization may fail.
      */
-    public boolean setUserData(String username, char[] password, Object data) throws Exception {
+    public boolean setUserData(String username, char[] password, Object data) throws IOException, InvalidKeyException,
+            InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeySpecException,
+            IllegalBlockSizeException, BadPaddingException {
+
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return false;
         }
@@ -183,9 +193,9 @@ public class UserDatabase implements Serializable {
      * @param username Account
      * @param password passcode
      * @return true if account is successfully deleted.
-     * @throws Exception passcode verifacation may fail.
      */
-    public boolean deleteAccount(String username, char[] password) throws Exception {
+    public boolean deleteAccount(String username, char[] password) throws NoSuchAlgorithmException,
+            InvalidKeyException {
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return false;
         }
@@ -199,9 +209,11 @@ public class UserDatabase implements Serializable {
      * @param username Account
      * @param password passcode
      * @return Retrieved object. null if passcode verification failed or account doesn't exist.
-     * @throws Exception Decryption and deserialization may fail.
      */
-    public Object getUserData(String username, char[] password) throws Exception {
+    public Object getUserData(String username, char[] password) throws InvalidKeyException,
+            InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeySpecException, IOException,
+            IllegalBlockSizeException, BadPaddingException, ClassNotFoundException {
+
         if (!verifyPassword(username, password) || !accountExists(username)) {
             return null;
         }

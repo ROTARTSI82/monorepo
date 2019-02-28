@@ -7,6 +7,10 @@ import static org.testng.Assert.*;
 
 public class UserDatabaseTest {
     private UserDatabase users;
+    private final String account = "TestAccount";
+    private final String otheraccount = "NonExistantAccount";
+    private final char[] passcode = "Lorem Ipsum".toCharArray();
+    private final char[] otherpass = "incorrectPasscode".toCharArray();
 
     @BeforeSuite
     public void setUp() throws Exception {
@@ -15,34 +19,43 @@ public class UserDatabaseTest {
 
     @Test
     public void testCreateAccount() throws Exception {
-        assertTrue(users.createAccount("TestAccount", "Lorem Ipsum".toCharArray()));
-        assertTrue(users.accountExists("TestAccount"));
-
-        assertFalse(users.createAccount("TestAccount", "otherPass".toCharArray()));
+        assertTrue(users.createAccount(account, passcode));
+        assertTrue(users.accountExists(account));
+        assertFalse(users.createAccount(account, otherpass));
     }
 
     @Test(dependsOnMethods = {"testCreateAccount"})
     public void testVerifyPassword() throws Exception {
-        assertTrue(users.verifyPassword("TestAccount", "Lorem Ipsum".toCharArray()));
-        assertFalse(users.verifyPassword("TestAccount", "incorrectPasscode".toCharArray()));
+        assertTrue(users.verifyPassword(account, passcode));
+        assertFalse(users.verifyPassword(account, otherpass));
+
+        assertFalse(users.verifyPassword(otheraccount, otherpass));
+        assertFalse(users.verifyPassword(otheraccount, passcode));
     }
 
     @Test(dependsOnMethods = {"testCreateAccount"})
     public void testUserData() throws Exception {
-        assertFalse(users.setUserData("TestAccount", "incorrectPasscode".toCharArray(), "someData"));
+        assertFalse(users.setUserData(account, otherpass, "someData"));
 
-        assertTrue(users.setUserData("TestAccount", "Lorem Ipsum".toCharArray(), "Test data"));
-        assertNull(users.getUserData("TestAccount", "incorrectPasscode".toCharArray()));
-        String get = (String) users.getUserData("TestAccount", "Lorem Ipsum".toCharArray());
+        assertTrue(users.setUserData(account, passcode, "Test data"));
+        assertNull(users.getUserData(account, otherpass));
+
+        String get = (String) users.getUserData(account, passcode);
         assertEquals(get, "Test data");
+
+        assertNull(users.getUserData(otheraccount, otherpass));
+        assertNull(users.getUserData(otheraccount, passcode));
     }
 
     @Test(dependsOnMethods = {"testUserData", "testVerifyPassword"})
     public void testDeleteAccount() throws Exception {
-        assertFalse(users.deleteAccount("TestAccount", "incorrectPasscode".toCharArray()));
-        assertTrue(users.accountExists("TestAccount"));
+        assertFalse(users.deleteAccount(account, otherpass));
+        assertTrue(users.accountExists(account));
 
-        assertTrue(users.deleteAccount("TestAccount", "Lorem Ipsum".toCharArray()));
-        assertFalse(users.accountExists("TestAccount"));
+        assertTrue(users.deleteAccount(account, passcode));
+        assertFalse(users.accountExists(account));
+
+        assertFalse(users.accountExists(otheraccount));
+        assertFalse(users.deleteAccount(otheraccount, otherpass));
     }
 }

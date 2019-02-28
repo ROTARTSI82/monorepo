@@ -4,11 +4,12 @@ import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.*;
 import java.util.*;
 import java.util.logging.Logger;
+
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class UDPClient {
     private Logger logger;
@@ -22,7 +23,16 @@ public class UDPClient {
     private HashMap<String, Integer> serialTable;
     private HashMap<Integer, String> deserialTable;
 
-    public UDPClient(String listenHost, int listenPort) throws Exception {
+    /**
+     * Create a new UDP client at a random available address and listen to the specified port and host.
+     *
+     * @param listenHost Host to connect to
+     * @param listenPort Port to connect to
+     * @throws UnknownHostException     Invalid {@code hostname}
+     * @throws SocketException          Error opening DatagramSocket
+     * @throws IllegalArgumentException Invalid actionID
+     */
+    public UDPClient(String listenHost, int listenPort) throws UnknownHostException, SocketException {
         host = InetAddress.getByName(listenHost);
         port = listenPort;
         socket = new DatagramSocket();
@@ -36,7 +46,7 @@ public class UDPClient {
             if (actionID > 0 && actionID <= 0xffff) {
                 deserialTable.put(actionID, action);
             } else {
-                throw new IllegalArgumentException("actionIDs need to be between 0x0000 and 0xffff");
+                throw new IllegalArgumentException(JGameStr.getString("net.invalidActionID"));
             }
         }
     }
@@ -45,7 +55,7 @@ public class UDPClient {
 
     }
 
-    public void shutdown() throws Exception {
+    public void shutdown() throws IOException {
         HashMap<String, Object> shutdownMsg = new HashMap<>();
         shutdownMsg.put("action", "clientShutdown");
         send(shutdownMsg);
@@ -63,8 +73,7 @@ public class UDPClient {
         if (packetDict == null) {
             return;
         }
-        logger.finest(String.format("[?->%s:%s] Got packet %s from %s:%s", host, port, packetDict,
-                packet.getAddress(), packet.getPort()));
+        logger.finest(fmt(JGameStr.getString("net.recvMSG"), "?", "?", host, port, packetDict));
         String action = (String) packetDict.get("action");
         if (action != null) {
             switch (action) {
@@ -75,12 +84,12 @@ public class UDPClient {
                 case "verifySend": {
                     String id = (String) packetDict.get("id");
                     if (!verifiedByMe.contains(id)) {
-                        logger.finest(String.format("[?->%s:%s] Packet<id=%s> from server was verified.",
+                        logger.finest(fmt(JGameStr.getString("net.UDPClient.confirmServer"),
                                 host, port, id));
                         parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                         verifiedByMe.add(id);
                     } else {
-                        logger.fine(String.format("[?->%s:%s] Got duplicate Packet<id=%s>", host, port, id));
+                        logger.fine(fmt(JGameStr.getString("net.UDP.duplicatePacket"), host, port, id));
                     }
                     HashMap<String, Object> rawSend = new HashMap<>();
                     rawSend.put("action", "confirmPacket");
@@ -95,11 +104,11 @@ public class UDPClient {
                 case "confirmPacket": {
                     String id = (String) packetDict.get("id");
                     if (pendingPackets.containsKey(id)) {
-                        logger.finest(String.format("[?->%s:%s] Packet<id=%s> was confirmed.", host, port, id));
+                        logger.finest(fmt(JGameStr.getString("net.UDP.confirmedPacket"), host, port, id));
                         pendingPackets.get(id).onConfirm();
                         pendingPackets.remove(id);
                     } else {
-                        logger.fine(String.format("[?->%s:%s] Packet<id=%s> doesn't exist!", host, port, id));
+                        logger.fine(fmt(JGameStr.getString("net.UDP.outdatedPacket"), host, port, id));
                     }
                     return;
                 }
@@ -122,7 +131,7 @@ public class UDPClient {
     }
 
     public void send(HashMap<String, Object> datagram) throws IOException {
-        logger.finest(String.format("[?->%s:%s] Sent %s", host, port, datagram));
+        logger.finest(fmt(JGameStr.getString("net.sendMSG"), "?", "?", host, port, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
         socket.send(packet);
@@ -164,7 +173,7 @@ public class UDPClient {
                                 send(rawSend);
                                 hasSent = true;
                             } catch (IOException err) {
-                                logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                                logger.info(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend,
                                         GenericLogger.getStackTrace(err)));
                             }
                         }

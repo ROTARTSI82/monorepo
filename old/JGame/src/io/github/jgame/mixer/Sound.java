@@ -2,12 +2,13 @@ package io.github.jgame.mixer;
 
 import io.github.jgame.logging.GenericLogger;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
+
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
  * Sound object. Can be loaded from files or URLs
@@ -34,8 +35,8 @@ public class Sound {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);
-        } catch (Exception e) {
-            logger.warning(String.format("Failed to load %s:\n%s", name, GenericLogger.getStackTrace(e)));
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            logger.warning(fmt(JGameStr.getString("loadFail"), name, GenericLogger.getStackTrace(e)));
         }
     }
 
@@ -54,8 +55,8 @@ public class Sound {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);
-        } catch (Exception e) {
-            logger.warning(String.format("Failed to load %s:\n%s", name, GenericLogger.getStackTrace(e)));
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            logger.warning(fmt(JGameStr.getString("loadFail"), name, GenericLogger.getStackTrace(e)));
         }
     }
 
@@ -67,8 +68,9 @@ public class Sound {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);
-        } catch (Exception e) {
-            logger.warning(String.format("Failed to reset %s:\n%s", name, GenericLogger.getStackTrace(e)));
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            logger.warning(fmt(JGameStr.getString("mixer.Sound.resetFail"),
+                    name, GenericLogger.getStackTrace(e)));
         }
     }
 
@@ -138,16 +140,12 @@ public class Sound {
      * @param reset Resetting enabled (calls {@link #reset})
      */
     public void play(boolean reset) {
-        try {
-            if (reset) {
-                reset();
-            }
-            stop();
-            skipTo(0);
-            sound.start();
-        } catch (Exception e) {
-            logger.info(String.format("Failed to play %s:\n%s", name, GenericLogger.getStackTrace(e)));
+        if (reset) {
+            reset();
         }
+        stop();
+        skipTo(0);
+        sound.start();
     }
 
     /**

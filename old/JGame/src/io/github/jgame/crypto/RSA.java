@@ -1,9 +1,13 @@
 package io.github.jgame.crypto;
 
+import io.github.jgame.util.UniversalResources;
+
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.LinkedList;
+
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
  * Modified version of code <a href="https://introcs.cs.princeton.edu/java/99crypto/RSA.java.html">this code</a>
@@ -14,13 +18,10 @@ import java.util.LinkedList;
 
 public class RSA implements Serializable {
     // TODO: Make these values transient?
-    private final static BigInteger one = new BigInteger("1");
-    private final static SecureRandom random = new SecureRandom();
 
     private int nBits;
 
     private BigInteger privateKey;
-    private BigInteger publicKey;
     private BigInteger modulus;
 
     private BigInteger phi;
@@ -37,19 +38,19 @@ public class RSA implements Serializable {
         nBits = N;
         recalculateKey();
         // Calculates keys until the gcd is 1 and the bitLength is exactly N
-        while (phi.gcd(publicKey).compareTo(one) != 0 || modulus.bitLength() != nBits) {
+        while (phi.gcd(UniversalResources.universalPublic).compareTo(UniversalResources.one) != 0 ||
+                modulus.bitLength() != nBits) {
             recalculateKey();
         }
     }
 
     private void recalculateKey() {
-        p = BigInteger.probablePrime(nBits / 2, random);
-        q = BigInteger.probablePrime(nBits / 2, random);
-        phi = (p.subtract(one)).multiply(q.subtract(one));
+        p = BigInteger.probablePrime(nBits / 2, UniversalResources.secureRand);
+        q = BigInteger.probablePrime(nBits / 2, UniversalResources.secureRand);
+        phi = (p.subtract(UniversalResources.one)).multiply(q.subtract(UniversalResources.one));
 
         modulus = p.multiply(q);
-        publicKey = new BigInteger("65537");     // common value in practice = 2^16 + 1
-        privateKey = publicKey.modInverse(phi);
+        privateKey = UniversalResources.universalPublic.modInverse(phi);
     }
 
     /**
@@ -77,9 +78,9 @@ public class RSA implements Serializable {
      */
     public BigInteger rawEncrypt(BigInteger message) {
         if (message.compareTo(modulus) >= 0) {
-            throw new IllegalArgumentException("Message is larger than (or equals) modulus");
+            throw new IllegalArgumentException(JGameStr.getString("crypto.RSA.messageTooBig"));
         }
-        return message.modPow(publicKey, modulus);
+        return message.modPow(UniversalResources.universalPublic, modulus);
     }
 
     /**
@@ -134,7 +135,7 @@ public class RSA implements Serializable {
      */
     public BigInteger[] encryptString(String msg, int chunkSize, LinkedList<Integer> alphabet) {
         BigInteger base = new BigInteger(String.valueOf(alphabet.size() + 1));
-        String[] split = msg.split(String.format("(?<=\\G.{%s})", chunkSize));
+        String[] split = msg.split(fmt("(?<=\\G.{%s})", chunkSize));
 
         LinkedList<BigInteger> ret = new LinkedList<>();
         for (String x : split) {
@@ -145,7 +146,8 @@ public class RSA implements Serializable {
                 if (alphabet.contains(intVal)) {
                     intVal = 1 + alphabet.indexOf(intVal);
                 } else {
-                    throw new IllegalArgumentException("Character in string not in alphabet");
+                    throw new IllegalArgumentException(
+                            JGameStr.getString("crypto.RSA.invalidChar"));
                 }
                 val = val.add(base.pow(place).multiply(new BigInteger(String.valueOf(intVal))));
                 place++;
@@ -184,12 +186,11 @@ public class RSA implements Serializable {
      * @return original string
      */
     public String decryptString(BigInteger[] encrypted, LinkedList<Integer> alphabet) {
-        BigInteger zero = new BigInteger("0");
         BigInteger base = new BigInteger(String.valueOf(alphabet.size() + 1));
         StringBuilder builder = new StringBuilder();
         for (BigInteger i : encrypted) {
             i = rawDecrypt(i);
-            while (i.compareTo(zero) != 0) {
+            while (i.compareTo(UniversalResources.zero) != 0) {
                 builder.append((char) (int) alphabet.get(i.mod(base).intValue() - 1));
                 i = i.divide(base);
             }
@@ -198,6 +199,7 @@ public class RSA implements Serializable {
     }
 
     public String toString() {
-        return String.format("RSA<private=%s public=%s mod=%s bits=%s>", privateKey, publicKey, modulus, nBits);
+        return fmt(JGameStr.getString("crypto.RSA.toStringFormat"),
+                privateKey, modulus, nBits);
     }
 }

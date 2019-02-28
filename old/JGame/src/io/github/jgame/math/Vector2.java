@@ -1,5 +1,8 @@
 package io.github.jgame.math;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 /**
  * Vector2 useful for adding two sets of coordinates such as applying velocities.
  * <p>
@@ -108,6 +111,6 @@ public class Vector2 {
 
     @Override
     public String toString() {
-        return String.format("Vector2[%s, %s]", x, y);
+        return fmt(JGameStr.getString("math.Vector2.toStringFormat"), x, y);
     }
 }

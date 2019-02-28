@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 public class NetUtils {
     private static Logger logger = Logger.getLogger("io.github.jgame.net.NetUtils");
     public static String extractString(DatagramPacket packet) {
@@ -27,6 +30,7 @@ public class NetUtils {
      * @return serialized data in the form of a byte array
      */
     public static byte[] serialize(HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
+        logger.finest(JGameStr.getString("net.NetUtils.serial") + data);
         try {
             String action = (String) data.get("action");
 
@@ -47,11 +51,11 @@ public class NetUtils {
                 ret[1] = (byte) (actionID % 256);
                 ret[0] = (byte) ((actionID / 256) % 256);
             } else {
-                logger.info(String.format("Error serializing action: null or invalid action '%s'", action));
+                logger.info(fmt(JGameStr.getString("net.NetUtils.invalidAction"), action));
             }
             return ret;
         } catch (Exception e) {
-            logger.info(String.format("Serialization failed: %s\n%s ", data.toString(),
+            logger.info(fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString(),
                     GenericLogger.getStackTrace(e)));
         }
         return new byte[0];
@@ -70,7 +74,7 @@ public class NetUtils {
             }
             return finalOut;
         } else {
-            logger.info("Deserialization didn't return HashMap: " + o.toString());
+            logger.info(fmt(JGameStr.getString("net.NetUtils.deserialNotMap"), o.toString()));
         }
         return null;
     }
@@ -90,11 +94,11 @@ public class NetUtils {
             HashMap<String, Object> ret = datFromObject(o);
             if (ret != null) {
                 ret.put("action", actionTable.get(actionID));
-                logger.finest("Got action=" + ret.get("action"));
+                logger.finest(fmt(JGameStr.getString("net.NetUtils.deserialAction"), ret.get("action")));
             }
             return ret;
         } catch (Exception e) {
-            logger.info(String.format("Deserialization failed: %s\n%s ",
+            logger.info(fmt(JGameStr.getString("net.NetUtils.deserialFail"),
                     Arrays.toString(bytes), GenericLogger.getStackTrace(e)));
         }
         return null;

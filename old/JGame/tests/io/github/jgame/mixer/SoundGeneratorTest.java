@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -35,7 +37,8 @@ public class SoundGeneratorTest {
                 new Note("D4", 0.25, 0, 128)
         });
         long expectedLen = (long) (gen.rate * 1.25);
-        System.out.println(String.format("Expected %s and got %s for mono", expectedLen, raw.length));
+        System.out.println(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedMono"),
+                expectedLen, raw.length));
         assertTrue(expectedLen - monoLengthMargin <= raw.length &&
                 expectedLen + monoLengthMargin >= raw.length);
 
@@ -62,7 +65,8 @@ public class SoundGeneratorTest {
                 }
         });
         long expectedLen = (long) (gen.rate * 2.5);
-        System.out.println(String.format("Expected %s and got %s for stereo", expectedLen, raw.length));
+        System.out.println(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedStereo"),
+                expectedLen, raw.length));
         assertTrue(expectedLen - stereoLengthMargin <= raw.length &&
                 expectedLen + stereoLengthMargin >= raw.length);
 

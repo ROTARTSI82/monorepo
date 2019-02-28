@@ -5,7 +5,8 @@ import io.github.jgame.sprite.Sprite;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+
+import static io.github.jgame.util.UniversalResources.rand;
 
 /**
  * Projectiles. Support for despawning, blitting, updates, blume, etc
@@ -14,7 +15,6 @@ public class Projectile extends Sprite {
     public Vector2 wobble;
     private Vector2 myTarget;
     private double mySpeed;
-    private Random rand;
 
     private int projectileLife;
     private long born;
@@ -36,7 +36,6 @@ public class Projectile extends Sprite {
 
         projectileLife = life;
         born = System.currentTimeMillis();
-        rand = new Random();
         myBlume = blume;
 
         rot = pos.angleTo(target);

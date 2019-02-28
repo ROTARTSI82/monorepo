@@ -4,6 +4,8 @@ import io.github.jgame.sprite.Sprite;
 
 import java.awt.image.BufferedImage;
 
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 /*
 import pygame
 import math
@@ -190,6 +192,6 @@ public class PlatformerPlayer extends Sprite {
      */
     public PlatformerPlayer(BufferedImage img) {
         super(img);
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
     }
 }

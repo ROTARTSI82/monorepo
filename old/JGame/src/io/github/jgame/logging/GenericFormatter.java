@@ -6,19 +6,21 @@ import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.settings;
+
 /**
  * Generic format for .log
  */
 public class GenericFormatter extends Formatter {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat(settings.getString("logging.GenericFormatter.dateFormat"));
     private String format;
     private String headFormat;
     private Date date = new Date();
 
     public GenericFormatter() {
-        format = "[%s] [%s|%s] [%s]: %s\n";
-        String equalSigns = "================================================";
-        headFormat = equalSigns + "[%s]" + equalSigns + "\n";
+        format = settings.getString("logging.GenericFormatter.logFormat");
+        headFormat = settings.getString("logging.GenericFormatter.logHead");
     }
 
     /**
@@ -32,7 +34,7 @@ public class GenericFormatter extends Formatter {
      */
     @Override
     public String getHead(Handler handler) {
-        return String.format(headFormat, new Date().toString());
+        return fmt(headFormat, new Date().toString());
     }
 
     /**
@@ -57,7 +59,7 @@ public class GenericFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {
         date.setTime(record.getMillis());
-        return String.format(format,
+        return fmt(format,
                 dateFormat.format(date),
                 record.getSourceClassName(),
                 record.getSourceMethodName(),

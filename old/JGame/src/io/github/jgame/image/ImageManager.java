@@ -12,6 +12,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 /**
  * Utility class for loading and managing BufferedImage assets
  */
@@ -132,7 +135,8 @@ public class ImageManager {
         try {
             images.put(id, ImageIO.read(url));
         } catch (IOException e) {
-            logger.warning(String.format("Failed to load %s:\n%s", file, GenericLogger.getStackTrace(e)));
+            logger.warning(fmt(JGameStr.getString("loadFail"),
+                    file, GenericLogger.getStackTrace(e)));
         }
     }
 
@@ -146,7 +150,8 @@ public class ImageManager {
         try {
             images.put(id, ImageIO.read(url));
         } catch (IOException e) {
-            logger.warning(String.format("Failed to load %s:\n%s", url, GenericLogger.getStackTrace(e)));
+            logger.warning(fmt(JGameStr.getString("loadFail"),
+                    url, GenericLogger.getStackTrace(e)));
         }
     }
 

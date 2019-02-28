@@ -14,8 +14,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.logging.Logger;
+
+import static io.github.jgame.util.UniversalResources.rand;
 
 /**
  * @deprecated Use SpriteTest. Only useful for testing blitting.
@@ -29,7 +30,6 @@ public class MainState extends State {
     private Group enemies;
     private Group bullets;
 
-    private Random rand = new Random();
     private SoundManager soundManager = new SoundManager();
     private ImageManager imageLoader = new ImageManager();
 

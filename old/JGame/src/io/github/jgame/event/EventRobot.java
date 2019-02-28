@@ -3,6 +3,9 @@ package io.github.jgame.event;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+
 /**
  * Extension of {@link java.awt.Robot}
  * <p>
@@ -62,7 +65,8 @@ public class EventRobot extends Robot {
      */
     public void clickMouse(int holdTime, int button) {
         if (button < 1 || button > 3) {
-            throw new IllegalArgumentException("Button needs to be between 1 and 3, not " + button);
+            throw new IllegalArgumentException(fmt(JGameStr.getString("event.EventRobot.invalidButton"),
+                    button));
         }
         this.mousePress(1 << (9 + button));
         this.delay(holdTime);

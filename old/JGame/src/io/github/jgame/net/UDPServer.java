@@ -3,11 +3,13 @@ package io.github.jgame.net;
 import io.github.jgame.Constants;
 import io.github.jgame.logging.GenericLogger;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.IOException;
+import java.net.*;
 import java.util.*;
 import java.util.logging.Logger;
+
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class UDPServer {
     private DatagramSocket socket;
@@ -23,7 +25,17 @@ public class UDPServer {
 
     private int clientLimit;
 
-    public UDPServer(String host, int listenPort, int maxClients) throws Exception {
+    /**
+     * Create a new UDP server at the specified address
+     *
+     * @param host       Host to bind to
+     * @param listenPort port to bind to
+     * @param maxClients Maximum number of clients
+     * @throws UnknownHostException     Invalid {@code hostname}
+     * @throws SocketException          Error opening DatagramSocket
+     * @throws IllegalArgumentException Invalid actionID
+     */
+    public UDPServer(String host, int listenPort, int maxClients) throws UnknownHostException, SocketException {
         address = InetAddress.getByName(host);
         port = listenPort;
         clientLimit = maxClients;
@@ -47,8 +59,9 @@ public class UDPServer {
         return Constants.BUILTIN_ACTIONS;
     }
 
-    public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws Exception {
-        logger.finest(String.format("[%s:%s] Sending %s to %s:%s", address, port, datagram, datAddress, datPort));
+    public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws IOException {
+        logger.finest(fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), port,
+                datAddress, datPort, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
         socket.send(packet);
@@ -58,7 +71,7 @@ public class UDPServer {
         for (UDPClientHandler client : clients.values()) {
             try {
                 send(datagram, client.address, client.port);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
             }
         }
@@ -68,7 +81,7 @@ public class UDPServer {
 
     }
 
-    public void update() throws Exception {
+    public void update() throws IOException {
         byte[] bytes = new byte[Constants.NET_PACKET_SIZE];
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
         socket.receive(packet);
@@ -78,20 +91,22 @@ public class UDPServer {
             if (clients.size() >= clientLimit) {
                 HashMap<String, Object> kickMsg = new HashMap<>();
                 kickMsg.put("action", "kick");
-                kickMsg.put("reason", "Server already full");
+                kickMsg.put("reason", JGameStr.getString("net.alreadyFullMsg"));
 
                 send(kickMsg, packet.getAddress(), packet.getPort());
                 return;
             }
             clients.put(packAddr, new UDPClientHandler(packet.getAddress(), packet.getPort(), this));
-            logger.info(String.format("[%s:%s] New client at %s", address, port, packAddr));
+            logger.info(fmt(JGameStr.getString("net.newClient"), address, port, packAddr));
         }
 
         HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData(), deserialTable);
         if (packetDict == null) {
             return;
         }
-        logger.finest(String.format("[%s:%s] Got packet %s from %s", address, port, packetDict, packAddr));
+        logger.finest(fmt(JGameStr.getString("net.recvMSG"), socket.getInetAddress(), port,
+                packet.getAddress(), packet.getPort(), packetDict));
+
         String action = (String) packetDict.get("action");
         if (action != null) {
             switch (action) {
@@ -102,12 +117,12 @@ public class UDPServer {
                 case "verifySend": {
                     String id = (String) packetDict.get("id");
                     if (!verifiedByMe.contains(id)) {
-                        logger.finest(String.format("[%s:%s] Packet<id=%s> from client was verified.",
+                        logger.finest(fmt(JGameStr.getString("net.UDPServer.confirmServer"),
                                 address, port, id));
                         parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                         verifiedByMe.add(id);
                     } else {
-                        logger.fine(String.format("[%s:%s] Got duplicate Packet<id=%s>", address, port, id));
+                        logger.fine(fmt(JGameStr.getString("net.UDP.duplicatePacket"), address, port, id));
                     }
                     HashMap<String, Object> rawSend = new HashMap<>();
                     rawSend.put("action", "confirmPacket");
@@ -120,10 +135,8 @@ public class UDPServer {
                     if (pendingPackets.containsKey(id)) {
                         pendingPackets.get(id).onConfirm();
                         pendingPackets.remove(id);
-                        logger.finest(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
-                    } else {
-                        logger.fine(String.format("[%s:%s] Packet<id=%s> was confirmed.", address, port, id));
                     }
+                    logger.finest(fmt(JGameStr.getString("net.UDP.confirmedPacket"), address, port, id));
                     return;
                 }
             }
@@ -140,8 +153,8 @@ public class UDPServer {
         for (UDPClientHandler client : clients.values()) {
             try {
                 client.shutdown();
-            } catch (Exception e) {
-                logger.info("Failed to shutdown client: " + GenericLogger.getStackTrace(e));
+            } catch (IOException e) {
+                logger.info(JGameStr.getString("net.shutdownFail") + GenericLogger.getStackTrace(e));
             }
         }
     }
@@ -190,8 +203,8 @@ public class UDPServer {
                             try {
                                 send(rawSend, myHost, myPort);
                                 hasSent = true;
-                            } catch (Exception err) {
-                                logger.info(String.format("Failed to resend %s:\n%s", rawSend,
+                            } catch (IOException err) {
+                                logger.info(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend,
                                         GenericLogger.getStackTrace(err)));
                             }
                         }

@@ -2,10 +2,12 @@ package io.github.jgame.mixer;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 
 /**
@@ -114,7 +116,7 @@ public class SoundGenerator {
         return ret;
     }
 
-    public void play(byte[] buf, boolean isStereo) throws Exception {
+    public void play(byte[] buf, boolean isStereo) throws LineUnavailableException {
         AudioFormat af = new AudioFormat(rate, Math.abs(size),
                 isStereo ? 2 : 1, size < 0, false);
         SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
@@ -130,12 +132,12 @@ public class SoundGenerator {
             DataOutputStream outStream = new DataOutputStream(new FileOutputStream(file));
             outStream.write(data);
             outStream.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Tone load(File file, boolean stereo) throws Exception {
+    public Tone load(File file, boolean stereo) throws IOException {
         byte[] buf = Files.readAllBytes(file.toPath());
         return new Tone(this, buf, stereo);
     }
