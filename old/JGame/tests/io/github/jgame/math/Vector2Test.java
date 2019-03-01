@@ -36,8 +36,8 @@ public class Vector2Test {
 
     @Test
     public void testAngleTo() {
-        assertEquals(origin.angleTo(hundred), -135);
-        assertEquals(hundred.angleTo(origin), 45);
+        assertEquals(origin.angleTo(hundred), 45);
+        assertEquals(hundred.angleTo(origin), 225);
     }
 
     @Test

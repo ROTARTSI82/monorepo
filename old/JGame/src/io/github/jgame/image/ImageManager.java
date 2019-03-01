@@ -1,7 +1,6 @@
 package io.github.jgame.image;
 
 import io.github.jgame.Constants;
-import io.github.jgame.logging.GenericLogger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -135,8 +135,7 @@ public class ImageManager {
         try {
             images.put(id, ImageIO.read(url));
         } catch (IOException e) {
-            logger.warning(fmt(JGameStr.getString("loadFail"),
-                    file, GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
         }
     }
 
@@ -150,8 +149,7 @@ public class ImageManager {
         try {
             images.put(id, ImageIO.read(url));
         } catch (IOException e) {
-            logger.warning(fmt(JGameStr.getString("loadFail"),
-                    url, GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), url), e);
         }
     }
 

@@ -6,6 +6,7 @@ import io.github.jgame.logging.GenericLogger;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -154,7 +155,7 @@ public class UDPServer {
             try {
                 client.shutdown();
             } catch (IOException e) {
-                logger.info(JGameStr.getString("net.shutdownFail") + GenericLogger.getStackTrace(e));
+                logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
             }
         }
     }
@@ -204,8 +205,7 @@ public class UDPServer {
                                 send(rawSend, myHost, myPort);
                                 hasSent = true;
                             } catch (IOException err) {
-                                logger.info(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend,
-                                        GenericLogger.getStackTrace(err)));
+                                logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
                             }
                         }
                     }

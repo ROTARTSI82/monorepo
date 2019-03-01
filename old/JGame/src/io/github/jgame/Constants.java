@@ -7,8 +7,18 @@ import static io.github.jgame.util.UniversalResources.JGameStr;
 import static io.github.jgame.util.UniversalResources.settings;
 
 public class Constants {
-    public final static int NET_PACKET_SIZE = 65535;
-    public final static boolean SILENCE_AWT_LOGS = true;
+    public final static int NET_PACKET_SIZE;
+    public final static boolean SILENCE_AWT_LOGS = Boolean.valueOf(settings.getString("silenceAWT"));
+
+    static {
+        int packetSize;
+        try {
+            packetSize = Integer.valueOf(settings.getString("net.packetSize"));
+        } catch (NumberFormatException e) {
+            packetSize = 65535;  // Default packet size
+        }
+        NET_PACKET_SIZE = packetSize;
+    }
 
     public final static Version JGAME_VERSION = new Version(JGameStr.getString("versionFormat"),
             (byte) 0, (byte) 19, (byte) 2, (byte) 24);

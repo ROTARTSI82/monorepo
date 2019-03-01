@@ -1,11 +1,11 @@
 package io.github.jgame.net;
 
 import io.github.jgame.Constants;
-import io.github.jgame.logging.GenericLogger;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -173,8 +173,7 @@ public class UDPClient {
                                 send(rawSend);
                                 hasSent = true;
                             } catch (IOException err) {
-                                logger.info(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend,
-                                        GenericLogger.getStackTrace(err)));
+                                logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
                             }
                         }
                     }

@@ -1,11 +1,9 @@
 package io.github.jgame.mixer;
 
-import io.github.jgame.logging.GenericLogger;
-
 import javax.sound.sampled.LineUnavailableException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static io.github.jgame.util.StringManager.fmt;
 import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
@@ -33,8 +31,7 @@ public class TonePlayer extends Thread {
             try {
                 soundPlayer.play(tone, isStereo);
             } catch (LineUnavailableException e) {
-                logger.warning(fmt(JGameStr.getString("mixer.TonePlayer.playFail"),
-                        GenericLogger.getStackTrace(e)));
+                logger.log(Level.WARNING, JGameStr.getString("mixer.TonePlayer.playFail"), e);
             }
         }
     }

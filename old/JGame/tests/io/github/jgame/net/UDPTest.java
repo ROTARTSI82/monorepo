@@ -6,9 +6,10 @@ import java.net.DatagramPacket;
 import java.util.HashMap;
 
 import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class UDPTest {
-    @Test()
+    @Test(timeOut = 2000)
     public void testUDP() throws Exception {
         Server testServ = new Server("127.0.0.1", 3000);
         Client testCli = new Client("127.0.0.1", 3000, System.nanoTime());
@@ -28,7 +29,7 @@ public class UDPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
-            System.out.println(fmt("Server got %s", datagram));
+            System.out.println(fmt(JGameStr.getString("net.Test.serverGot"), datagram));
             HashMap<String, Object> dat = new HashMap<>();
             dat.put("ack", datagram.get("id"));
             try {
@@ -56,7 +57,7 @@ public class UDPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
-            System.out.println(fmt("Client got %s", datagram));
+            System.out.println(fmt(JGameStr.getString("net.Test.clientGot"), datagram));
             done = ((long) datagram.get("ack")) == id;
         }
     }

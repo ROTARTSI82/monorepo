@@ -1,7 +1,6 @@
 package io.github.jgame.net;
 
 import io.github.jgame.Constants;
-import io.github.jgame.logging.GenericLogger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -98,7 +98,7 @@ public class TCPServer {
             try {
                 client.update();
             } catch (IOException e) {
-                logger.warning(JGameStr.getString("net.TCPServer.updateFail") + GenericLogger.getStackTrace(e));
+                logger.log(Level.WARNING, JGameStr.getString("net.TCPServer.updateFail"), e);
             }
         }
     }
@@ -117,7 +117,7 @@ public class TCPServer {
             try {
                 client.shutdown();
             } catch (IOException e) {
-                logger.warning(JGameStr.getString("net.shutdownFail") + GenericLogger.getStackTrace(e));
+                logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
             }
         }
         serverSocket.close();

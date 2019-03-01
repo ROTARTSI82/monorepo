@@ -1,10 +1,9 @@
 package io.github.jgame.mixer;
 
-import io.github.jgame.logging.GenericLogger;
-
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -36,7 +35,7 @@ public class Sound {
             sound = AudioSystem.getClip();
             sound.open(audioIn);
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-            logger.warning(fmt(JGameStr.getString("loadFail"), name, GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), name), e);
         }
     }
 
@@ -56,7 +55,7 @@ public class Sound {
             sound = AudioSystem.getClip();
             sound.open(audioIn);
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            logger.warning(fmt(JGameStr.getString("loadFail"), name, GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), name), e);
         }
     }
 
@@ -69,8 +68,7 @@ public class Sound {
             sound = AudioSystem.getClip();
             sound.open(audioIn);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            logger.warning(fmt(JGameStr.getString("mixer.Sound.resetFail"),
-                    name, GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("mixer.Sound.resetFail"), name), e);
         }
     }
 

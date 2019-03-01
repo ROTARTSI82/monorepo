@@ -16,7 +16,7 @@ public class Main extends GameRunner {
     }
 
     public static void main(String[] args) {
-        GenericLogger.setup(Level.FINE, Level.FINE, Level.OFF);
+        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF);
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

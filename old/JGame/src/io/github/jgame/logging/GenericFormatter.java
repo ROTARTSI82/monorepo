@@ -17,10 +17,17 @@ public class GenericFormatter extends Formatter {
     private String format;
     private String headFormat;
     private Date date = new Date();
+    private boolean html;
 
-    public GenericFormatter() {
-        format = settings.getString("logging.GenericFormatter.logFormat");
-        headFormat = settings.getString("logging.GenericFormatter.logHead");
+    public GenericFormatter(boolean useHTML) {
+        html = useHTML;
+        if (useHTML) {
+            format = settings.getString("logging.GenericFormatter.htmlLogFormat");
+            headFormat = settings.getString("logging.GenericFormatter.htmlLogHead");
+        } else {
+            format = settings.getString("logging.GenericFormatter.logFormat");
+            headFormat = settings.getString("logging.GenericFormatter.logHead");
+        }
     }
 
     /**
@@ -50,8 +57,8 @@ public class GenericFormatter extends Formatter {
 
     /**
      * Formats logs in the following format:
-     * {@code "[yyyy-MM-dd HH:mm:ss] [sourceClass|sourceMethod] [LOG LEVEL]: MESSAGE\n"}
-     * e.g. "[2020-01-01 12:05:30] [io.github.jgame.logging.GenericFormatter|testLogMessage] [INFO]: Test message\n"
+     * {@code "[yyyy-MM-dd HH:mm:ss] [threadID] [sourceClass|sourceMethod] [LOG LEVEL]: MESSAGE\n"}
+     * e.g. "[2020-01-01 12:05:30] [Thread-16] [io.github.jgame.logging.GenericFormatter|testLogMessage] [INFO]: Test message\n"
      *
      * @param record {@link LogRecord}
      * @return String
@@ -59,11 +66,31 @@ public class GenericFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {
         date.setTime(record.getMillis());
-        return fmt(format,
+        Throwable exc = record.getThrown();
+        String stdMsg = fmt(format,
                 dateFormat.format(date),
+                record.getThreadID(),
+                record.getLoggerName(),
                 record.getSourceClassName(),
                 record.getSourceMethodName(),
                 record.getLevel(),
                 record.getMessage());
+
+        if (exc == null) {
+            return stdMsg;
+        } else {
+            if (html) {
+                return stdMsg + formatHTML(exc);
+            } else {
+                return stdMsg + "\n" + GenericLogger.getStackTrace(exc);
+            }
+        }
+    }
+
+    private String formatHTML(Throwable e) {
+        return fmt(settings.getString("logging.GenericFormatter.htmlException"),
+                GenericLogger.getStackTrace(e).replace(" ", "&nbsp;")
+                        .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
+                        .replace("\n", "<br/>\n"));
     }
 }

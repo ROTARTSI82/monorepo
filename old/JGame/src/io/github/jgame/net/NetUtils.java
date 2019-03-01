@@ -8,8 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -57,6 +57,7 @@ public class NetUtils {
         } catch (Exception e) {
             logger.info(fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString(),
                     GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString()), e);
         }
         return new byte[0];
     }
@@ -98,8 +99,7 @@ public class NetUtils {
             }
             return ret;
         } catch (Exception e) {
-            logger.info(fmt(JGameStr.getString("net.NetUtils.deserialFail"),
-                    Arrays.toString(bytes), GenericLogger.getStackTrace(e)));
+            logger.log(Level.WARNING, JGameStr.getString("net.NetUtils.deserialFail"), e);
         }
         return null;
     }

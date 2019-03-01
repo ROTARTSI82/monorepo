@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 
 import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class TCPTest {
     @Test(timeOut = 2000)
@@ -27,7 +28,7 @@ public class TCPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram, TCPClientHandler client) {
-            System.out.println(fmt("Server got %s", datagram));
+            System.out.println(fmt(JGameStr.getString("net.Test.serverGot"), datagram));
             HashMap<String, Object> ack = new HashMap<>();
             ack.put("ack", datagram.get("id"));
             client.send(ack);
@@ -48,7 +49,7 @@ public class TCPTest {
 
         @Override
         public void parse(HashMap<String, Object> datagram) {
-            System.out.println(fmt("Client got %s", datagram));
+            System.out.println(fmt(JGameStr.getString("net.Test.clientGot"), datagram));
             if (((long) datagram.get("ack")) == id) {
                 done = true;
             }
