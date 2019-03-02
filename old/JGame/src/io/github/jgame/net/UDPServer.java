@@ -24,6 +24,8 @@ public class UDPServer {
     private HashMap<String, Integer> serialTable;
     private HashMap<Integer, String> deserialTable;
 
+    private HashMap<String, Object> filler = new HashMap<>();
+
     private int clientLimit;
 
     /**
@@ -42,6 +44,8 @@ public class UDPServer {
         clientLimit = maxClients;
         socket = new DatagramSocket(listenPort, address);
         logger = Logger.getLogger(this.getClass().getName());
+
+        filler.put("action", "filler");
 
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
@@ -158,10 +162,15 @@ public class UDPServer {
                 logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
             }
         }
+
+        for (VerifyPacket p : pendingPackets.values()) {
+            p.stop();
+        }
     }
 
-    public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {
-        VerifyPacket packet = new VerifyPacket(datagram, frequency, host, port);
+    public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, double backoff,
+                                InetAddress host, int port) {
+        VerifyPacket packet = new VerifyPacket(datagram, frequency, backoff, host, port);
         pendingPackets.put(packet.id, packet);
     }
 
@@ -170,14 +179,16 @@ public class UDPServer {
         HashMap<String, Object> rawSend;
         InetAddress myHost;
         int myPort;
+        int backoff;
 
         final Timer timer;
-        final TimerTask trySend;
 
         volatile boolean verified = false;
         volatile boolean hasSent = false;
+        volatile boolean terminate = false;
 
-        public VerifyPacket(HashMap<String, Object> datagram, int frequency, InetAddress host, int port) {
+        public VerifyPacket(HashMap<String, Object> datagram, int frequency, double multiplier,
+                            InetAddress host, int port) {
             if (!datagram.containsKey("action")) {
                 datagram.put("action", null);
             }
@@ -191,15 +202,20 @@ public class UDPServer {
             myHost = host;
             myPort = port;
 
+            backoff = frequency;
             timer = new Timer();
-            trySend = new TimerTask() {
+            timer.schedule(getTask(multiplier), backoff);
+        }
+
+        public TimerTask getTask(double multiplier) {
+            return new TimerTask() {
                 @Override
                 public void run() {
                     synchronized (VerifyPacket.class) {
-                        if (verified && hasSent) {
-                            trySend.cancel();
-                            timer.cancel();
-                            timer.purge();
+                        if ((verified && hasSent) || terminate) {
+                            stop();
+                            this.cancel();
+                            return;
                         } else {
                             try {
                                 send(rawSend, myHost, myPort);
@@ -208,14 +224,34 @@ public class UDPServer {
                                 logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
                             }
                         }
+
+                        try {
+                            send(filler, myHost, myPort);
+                        } catch (IOException e) {
+                            logger.log(Level.WARNING, "Failed to send filler", e);
+                        }
+
+                        backoff *= multiplier;
+                        try {
+                            timer.schedule(getTask(multiplier), backoff);
+                        } catch (IllegalStateException e) {
+                            logger.log(Level.WARNING, fmt("VerifyPacket(%s)'s timer is in an illegal state", rawSend), e);
+                        }
+                        this.cancel();
                     }
                 }
             };
-            timer.schedule(trySend, 0, frequency);
         }
 
         public void onConfirm() {
             verified = true;
+        }
+
+        public synchronized void stop() {
+            logger.info(JGameStr.getString("net.UDP.threadStop"));
+            timer.cancel();
+            timer.purge();
+            terminate = true;
         }
     }
 }

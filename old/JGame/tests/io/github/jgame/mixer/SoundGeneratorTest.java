@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
 import static io.github.jgame.util.UniversalResources.JGameStr;
@@ -19,10 +20,12 @@ public class SoundGeneratorTest {
     private final int stereoPlaylenMargin = 125;
     private Tone stereo;
     private SoundGenerator gen;
+    private Logger logger;
 
     @BeforeSuite
     public void setUp() {
         gen = new SoundGenerator();
+        logger = Logger.getLogger(this.getClass().getName());
     }
 
     @Test
@@ -37,7 +40,7 @@ public class SoundGeneratorTest {
                 new Note("D4", 0.25, 0, 128)
         });
         long expectedLen = (long) (gen.rate * 1.25);
-        System.out.println(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedMono"),
+        logger.info(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedMono"),
                 expectedLen, raw.length));
         assertTrue(expectedLen - monoLengthMargin <= raw.length &&
                 expectedLen + monoLengthMargin >= raw.length);
@@ -65,7 +68,7 @@ public class SoundGeneratorTest {
                 }
         });
         long expectedLen = (long) (gen.rate * 2.5);
-        System.out.println(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedStereo"),
+        logger.info(fmt(JGameStr.getString("mixer.SoundGeneratorTest.expectedStereo"),
                 expectedLen, raw.length));
         assertTrue(expectedLen - stereoLengthMargin <= raw.length &&
                 expectedLen + stereoLengthMargin >= raw.length);

@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import static io.github.jgame.util.StringManager.fmt;
 import static io.github.jgame.util.UniversalResources.JGameStr;
@@ -41,7 +38,6 @@ public class GenericLogger {
         if (setupDone) {
             return;
         }
-        System.out.println("Setup!");
         String handlerFail = JGameStr.getString("logging.GenericLogger.handlerFail");
         String dir = settings.getString("logging.GenericLogger.logDir");
 
@@ -50,9 +46,9 @@ public class GenericLogger {
             logDir.mkdirs();
         }
         Logger root = Logger.getLogger("");
-        //for (Handler h : root.getHandlers()) {
-        //    root.removeHandler(h);
-        //}
+        for (Handler h : root.getHandlers()) {
+            root.removeHandler(h);
+        }
         root.setLevel(Level.ALL);
         GenericFormatter htmlFormat = new GenericFormatter(true);
         GenericFormatter txtFormat = new GenericFormatter(false);

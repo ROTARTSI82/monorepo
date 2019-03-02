@@ -29,13 +29,18 @@ public class NetUtils {
      *                    into 2 bytes appended at the front of the returned byte array)
      * @return serialized data in the form of a byte array
      */
-    public static byte[] serialize(HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
+    public static byte[] serialize(final HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
         logger.finest(JGameStr.getString("net.NetUtils.serial") + data);
         try {
             String action = (String) data.get("action");
 
-            HashMap<String, Object> sendDat = new HashMap<>(data);
-            sendDat.remove("action");  // Create a copy so we don't modify original HashMap
+            HashMap<String, Object> sendDat = new HashMap<>(); // Create a copy so we don't modify original HashMap
+            for (String key : data.keySet()) {
+                if (!key.equals("action")) {
+                    sendDat.put(key, data.get(key));
+                }
+            }
+            //sendDat.remove("action");
 
             ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
             ObjectOutputStream serializer = new ObjectOutputStream(bytesOut);
@@ -95,8 +100,8 @@ public class NetUtils {
             HashMap<String, Object> ret = datFromObject(o);
             if (ret != null) {
                 ret.put("action", actionTable.get(actionID));
-                logger.finest(fmt(JGameStr.getString("net.NetUtils.deserialAction"), ret.get("action")));
             }
+            logger.finest(fmt(JGameStr.getString("net.NetUtils.deserialRet"), ret));
             return ret;
         } catch (Exception e) {
             logger.log(Level.WARNING, JGameStr.getString("net.NetUtils.deserialFail"), e);

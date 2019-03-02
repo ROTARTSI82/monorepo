@@ -77,5 +77,6 @@ public class Constants {
         put("verifySend", 0x52_20);
         put("confirmPacket", 0x52_21);
         put("kick", 0x52_00);
+        put("filler", 0x52_01);
     }};
 }
