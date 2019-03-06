@@ -42,7 +42,7 @@ public class UDPTest {
         try {
             testCli.shutdown();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Client shutdown failed", e);
+            logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
         }
     }
 
@@ -55,12 +55,16 @@ public class UDPTest {
         public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
             logger.info(fmt(JGameStr.getString("net.Test.serverGot"), datagram));
             HashMap<String, Object> dat = new HashMap<>();
-            dat.put("ack", datagram.get("id"));
+            if (datagram.containsKey("id")) {
+                dat.put("ack", datagram.get("id"));
+            } else {
+                return;
+            }
             try {
                 this.addVerifyPacket(dat, 100, 1.5, packet.getAddress(), packet.getPort());
                 //this.send(dat, packet.getAddress(), packet.getPort());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, JGameStr.getString("net.UDPTest.addFail"), e);
             }
         }
     }

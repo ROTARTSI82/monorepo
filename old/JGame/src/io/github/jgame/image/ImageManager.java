@@ -131,10 +131,10 @@ public class ImageManager {
      */
     public void fromFile(String file, String id) {
         URL url = this.getClass().getClassLoader().getResource(file);
-        assert url != null;
         try {
+            assert url != null;
             images.put(id, ImageIO.read(url));
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
         }
     }

@@ -19,7 +19,7 @@ import static io.github.jgame.util.UniversalResources.settings;
  */
 public class DesktopUtils {
     private static Desktop desktop = Desktop.getDesktop();
-    private static Logger logger = Logger.getLogger("io.github.jgame.event.DesktopUtils");
+    private static Logger logger = Logger.getLogger(DesktopUtils.class.getName());
     private static boolean supported = Desktop.isDesktopSupported();
 
     /**

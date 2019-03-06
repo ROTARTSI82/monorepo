@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class ScrapUtils {
-    private static Logger logger = Logger.getLogger("io.github.jgame.ScrapUtils");
+    private static Logger logger = Logger.getLogger(ScrapUtils.class.getName());
     private static Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
     public static void reload() {

@@ -20,6 +20,6 @@ public class UniversalResources {
         Locale locale = Locale.getDefault();
         settings = new StringManager("settings", locale);
         locale = new Locale(settings.getString("lang"), settings.getString("country"));
-        JGameStr = new StringManager("lang.JGame", locale);  // Remember lang.
+        JGameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
     }
 }

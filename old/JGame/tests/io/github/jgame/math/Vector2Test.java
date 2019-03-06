@@ -1,8 +1,10 @@
 package io.github.jgame.math;
 
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
 import static org.testng.Assert.assertEquals;
 
 public class Vector2Test {
@@ -10,7 +12,7 @@ public class Vector2Test {
     private Vector2 origin;
     private Vector2 hundred;
 
-    @BeforeMethod
+    @BeforeSuite
     public void setUp() {
         origin = new Vector2(0, 0);
         hundred = new Vector2(100, -100);
@@ -43,9 +45,9 @@ public class Vector2Test {
     @Test
     public void testVelocityTo() {
         assertEquals(origin.velocityTo(hundred, 1).toString(),
-                "Vector2[0.7071067811865475, -0.7071067811865475]");
+                fmt(JGameStr.getString("math.Vector2.toStringFormat"), 0.7071067811865475d, -0.7071067811865475d));
         assertEquals(hundred.velocityTo(origin, 1).toString(),
-                "Vector2[-0.7071067811865475, 0.7071067811865475]");
+                fmt(JGameStr.getString("math.Vector2.toStringFormat"), -0.7071067811865475d, 0.7071067811865475d));
     }
 
     @Test
@@ -56,7 +58,7 @@ public class Vector2Test {
 
     @Test
     public void testToString() {
-        assertEquals(hundred.toString(), "Vector2[100.0, -100.0]");
-        assertEquals(origin.toString(), "Vector2[0.0, 0.0]");
+        assertEquals(hundred.toString(), fmt(JGameStr.getString("math.Vector2.toStringFormat"), 100d, -100d));
+        assertEquals(origin.toString(), fmt(JGameStr.getString("math.Vector2.toStringFormat"), 0d, 0d));
     }
 }

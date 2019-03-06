@@ -16,7 +16,7 @@ import static io.github.jgame.util.StringManager.fmt;
 import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class NetUtils {
-    private static Logger logger = Logger.getLogger("io.github.jgame.net.NetUtils");
+    private static Logger logger = Logger.getLogger(NetUtils.class.getName());
     public static String extractString(DatagramPacket packet) {
         return new String(packet.getData()).replace("\0", "");
     }

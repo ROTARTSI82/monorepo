@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
+import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.util.UniversalResources.settings;
 
 public class AllTests implements ISuiteListener {
     private Logger logger;
@@ -26,7 +28,7 @@ public class AllTests implements ISuiteListener {
     }
 
     public static void main(String[] args) {
-        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF);
+        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF, settings.getString("tests.logOut"));
         TestNG testSuite = new TestNG();
         testSuite.setTestClasses(new Class[]{
                 RSATest.class,
@@ -43,24 +45,30 @@ public class AllTests implements ISuiteListener {
         });
         testSuite.addListener(new AllTests());
         testSuite.setDefaultSuiteName("JGame All Tests");
-        testSuite.setDefaultTestName("All Tests");
-        //testSuite.setOutputDirectory("/Users/pankaj/temp/testng-output");
+        testSuite.setDefaultTestName("Unkown JGame Test");
+        testSuite.setOutputDirectory(settings.getString("tests.testOut"));
+        testSuite.setRandomizeSuites(true);
+        testSuite.setPreserveOrder(false);
         testSuite.run();
     }
 
     @Override
     public void onStart(ISuite suite) {
-        logger.info(fmt("Suite %s outputing to %s", suite.getName(), suite.getOutputDirectory()));
+        logger.info(fmt(JGameStr.getString("AllTests.startSuite"), suite.getName(), suite.getOutputDirectory()));
+        Map<String, String> env = System.getenv();
+        for (String x : env.keySet()) {
+            logger.config(fmt("%s=%s", x, env.get(x)));
+        }
     }
 
     @Override
     public void onFinish(ISuite suite) {
         for (IInvokedMethod x : suite.getAllInvokedMethods()) {
-            logger.info(fmt("Invoked Method %s", x));
+            logger.fine(fmt(JGameStr.getString("AllTests.invokedMethod"), x));
         }
         Map<String, ISuiteResult> results = suite.getResults();
         for (String key : results.keySet()) {
-            logger.info(fmt("Result %s: %s", key, results.get(key)));
+            logger.info(fmt(JGameStr.getString("AllTests.result"), key, results.get(key)));
         }
     }
 }

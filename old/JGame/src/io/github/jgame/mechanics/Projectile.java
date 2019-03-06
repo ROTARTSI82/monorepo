@@ -13,7 +13,6 @@ import static io.github.jgame.util.UniversalResources.rand;
  */
 public class Projectile extends Sprite {
     public Vector2 wobble;
-    private Vector2 myTarget;
     private double mySpeed;
 
     private int projectileLife;
@@ -42,7 +41,6 @@ public class Projectile extends Sprite {
         vel = pos.velocityTo(target, speed).add(
                 new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.x),
                         (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.y)));
-        myTarget = target;
         mySpeed = speed;
         setWobble(0, 0);
     }
@@ -58,7 +56,7 @@ public class Projectile extends Sprite {
     }
 
     /**
-     * Set the blume (which is added to the velocity every time {@link #recalculate(boolean, boolean) is called}
+     * Set the blume (which is added to the velocity every time {@link #recalculate(boolean, boolean, Vector2) is called}
      *
      * @param x Max x offset
      * @param y Max y offset
@@ -83,15 +81,29 @@ public class Projectile extends Sprite {
      * @param rotation Should recalculate rot
      * @param velocity Should recalculate vel
      */
-    public void recalculate(boolean rotation, boolean velocity) {
+    public void recalculate(boolean rotation, boolean velocity, Vector2 target) {
         if (rotation) {
-            rot = pos.angleTo(myTarget);
+            rot = pos.angleTo(target);
         }
         if (velocity) {
-            vel = pos.velocityTo(myTarget, mySpeed).add(
+            vel = pos.velocityTo(target, mySpeed).add(
                     new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * myBlume.x),
                             (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * myBlume.y)));
         }
+    }
+
+    /**
+     * Accelerate towards the specified point. Negative speed will force it to accelerate in the opposite direction.
+     *
+     * @param target Target pos
+     * @param speed  speed (can be negative)
+     * @param blume  How accurately to accelerate towards the target. {@code Vector2(0, 0)} means 100% accuracy,
+     *               while {@code Vector2(1, 1)} means the velocity is accurate up to 1 unit.
+     */
+    public void accelerateTowards(Vector2 target, double speed, Vector2 blume) {
+        Vector2 accel = pos.velocityTo(target, speed).add(new Vector2((rand.nextBoolean() ? 1 : -1) *
+                (rand.nextDouble() * blume.x), (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.y)));
+        vel = vel.add(accel);
     }
 
     /**

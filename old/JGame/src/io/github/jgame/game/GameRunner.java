@@ -34,8 +34,12 @@ public class GameRunner extends JFrame {
      * @param args Ignored. Doesn't matter.
      */
     public static void main(String[] args) {
+        run(new Game());
+    }
+
+    protected static void run(Game game) {
         EventQueue.invokeLater(() -> {
-            GameRunner app = new GameRunner(new Game());
+            GameRunner app = new GameRunner(game);
             app.game.run();
             app.setVisible(true);
         });

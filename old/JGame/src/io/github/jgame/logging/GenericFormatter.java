@@ -2,8 +2,10 @@ package io.github.jgame.logging;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -18,6 +20,18 @@ public class GenericFormatter extends Formatter {
     private String headFormat;
     private Date date = new Date();
     private boolean html;
+    private HashMap<Level, String> colors = new HashMap<>() {{
+        put(Level.FINEST, "#eee9e0");
+        put(Level.FINER, "#eee9e0");
+        put(Level.FINE, "#eee9e0");
+        put(Level.CONFIG, "#eee9e0");
+
+        put(Level.INFO, "#ffffff");
+
+        put(Level.WARNING, "#ffeecc");
+
+        put(Level.SEVERE, "#f7a699");
+    }};
 
     public GenericFormatter(boolean useHTML) {
         html = useHTML;
@@ -67,22 +81,47 @@ public class GenericFormatter extends Formatter {
     public String format(LogRecord record) {
         date.setTime(record.getMillis());
         Throwable exc = record.getThrown();
-        String stdMsg = fmt(format,
-                dateFormat.format(date),
-                record.getThreadID(),
-                record.getLoggerName(),
-                record.getSourceClassName(),
-                record.getSourceMethodName(),
-                record.getLevel(),
-                record.getMessage());
 
         if (exc == null) {
-            return stdMsg;
+            if (html) {
+                return fmt(format, colors.get(record.getLevel()),
+                        dateFormat.format(date),
+                        record.getThreadID(),
+                        record.getLoggerName(),
+                        record.getSourceClassName(),
+                        record.getSourceMethodName(),
+                        record.getLevel(),
+                        record.getMessage());
+            } else {
+                return fmt(format,
+                        dateFormat.format(date),
+                        record.getThreadID(),
+                        record.getLoggerName(),
+                        record.getSourceClassName(),
+                        record.getSourceMethodName(),
+                        record.getLevel(),
+                        record.getMessage());
+            }
         } else {
             if (html) {
-                return stdMsg + formatHTML(exc);
+
+                return fmt(format, colors.get(record.getLevel()),
+                        dateFormat.format(date),
+                        record.getThreadID(),
+                        record.getLoggerName(),
+                        record.getSourceClassName(),
+                        record.getSourceMethodName(),
+                        record.getLevel(),
+                        record.getMessage()) + formatHTML(exc);
             } else {
-                return stdMsg + "\n" + GenericLogger.getStackTrace(exc);
+                return fmt(format,
+                        dateFormat.format(date),
+                        record.getThreadID(),
+                        record.getLoggerName(),
+                        record.getSourceClassName(),
+                        record.getSourceMethodName(),
+                        record.getLevel(),
+                        record.getMessage()) + "\n" + GenericLogger.getStackTrace(exc);
             }
         }
     }

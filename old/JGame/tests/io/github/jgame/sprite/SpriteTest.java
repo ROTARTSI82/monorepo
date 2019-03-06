@@ -38,7 +38,11 @@ public class SpriteTest {
         assertEquals(other.collidesWith(group).size(), 1);
     }
 
+    /**
+     * @deprecated ShapeSprite() is depreciated. Use {@code Sprite(ImageManager.fromShape(myShape))} instead
+     */
     @Test
+    @Deprecated
     public void testShapeSprite() {
         Polygon testShape = new Polygon(new int[]{16, 0, 32}, new int[]{0, 32, 32}, 3);
         ShapeSprite test = new ShapeSprite(testShape, 1);

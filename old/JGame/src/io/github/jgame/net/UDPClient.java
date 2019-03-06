@@ -195,14 +195,15 @@ public class UDPClient {
                         try {
                             send(filler);
                         } catch (IOException e) {
-                            logger.log(Level.WARNING, fmt("Failed to send filler"), e);
+                            logger.log(Level.WARNING, JGameStr.getString("net.UDP.fillerFail"), e);
                         }
 
                         backoff *= multiplier;
                         try {
                             timer.schedule(getTask(multiplier), backoff);
+                            logger.finest(fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
                         } catch (IllegalStateException e) {
-                            logger.log(Level.WARNING, fmt("VerifyPacket(%s)'s timer is in an illegal state", rawSend), e);
+                            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
                         }
                         this.cancel();
                     }
@@ -215,7 +216,7 @@ public class UDPClient {
         }
 
         public synchronized void stop() {
-            logger.info(JGameStr.getString("net.UDP.threadStop"));
+            logger.fine(fmt(JGameStr.getString("net.UDP.threadStop"), rawSend));
             timer.cancel();
             timer.purge();
             terminate = true;

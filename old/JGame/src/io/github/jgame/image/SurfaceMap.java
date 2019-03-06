@@ -40,6 +40,12 @@ public class SurfaceMap extends BufferedImage {
                 (pos.y - scroll.y) * this.getHeight() / resized.getHeight());
     }
 
+    public void fill(Color color) {
+        Graphics graphics = getGraphics();
+        graphics.setColor(color);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
+    }
+
     /**
      * Convert a position the {@code SurfaceMap} to a position on a screen
      * based on what was calculated in {@link #getScroll}

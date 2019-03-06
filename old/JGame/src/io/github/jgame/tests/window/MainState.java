@@ -38,7 +38,7 @@ public class MainState extends State {
         logger = Logger.getLogger(this.getClass().getName());
         logger.info("env: " + System.getenv());
 
-        imageLoader.fromFile("assets/p1.jpg", "sprite");
+        imageLoader.fromFile("assets/sprite.png", "sprite");
         imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
         // Here for testing purposes

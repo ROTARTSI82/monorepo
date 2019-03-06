@@ -117,9 +117,8 @@ public class State {
             JMenu submenu = new JMenu(JGameStr.getString("game.State.exampleSubmenu"));
 
             JMenuItem item = new JMenuItem(JGameStr.getString("game.State.exampleMenuItem"));
-            setHotkey(item, 'N', false);
+            setHotkey(item, 'N', 0);
             item.addActionListener(e -> {
-
             });
 
             submenu.add(item);
@@ -137,8 +136,11 @@ public class State {
          * @param item  JMenuItem to update
          * @param key   The hotkey in the form of a character
          * @param shift Require a the shift key to be held
+         *
+         * @deprecated getMenuShortcutKeyMask() is deprecated. Specify modifiers using {@link #setHotkey(JMenuItem, Character, int)}
          */
-        private void setHotkey(JMenuItem item, Character key, boolean shift) {
+        @Deprecated
+        protected void setHotkey(JMenuItem item, Character key, boolean shift) {
             item.setAccelerator(KeyStroke.getKeyStroke(key,
                     Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
                             (shift ? InputEvent.SHIFT_DOWN_MASK : 0)));
@@ -146,13 +148,12 @@ public class State {
 
         /**
          * Set the hotkey for a {@link JMenuItem}
-         * See {@link #setHotkey(JMenuItem, Character, boolean)}
          *
          * @param item JMenuItem to update
          * @param key Key as a character
          * @param modifiers Mask of key modifiers that are required as an integer
          */
-        private void setHotkey(JMenuItem item, Character key, int modifiers) {
+        protected void setHotkey(JMenuItem item, Character key, int modifiers) {
             item.setAccelerator(KeyStroke.getKeyStroke(key, modifiers));
         }
     }

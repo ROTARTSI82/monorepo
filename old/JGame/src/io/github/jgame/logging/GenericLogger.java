@@ -1,10 +1,13 @@
 package io.github.jgame.logging;
 
+import io.github.jgame.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.*;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -12,8 +15,8 @@ import static io.github.jgame.util.UniversalResources.JGameStr;
 import static io.github.jgame.util.UniversalResources.settings;
 
 public class GenericLogger {
-    private static final Logger logger = Logger.getLogger("io.github.jgame.logging.GenericLogger");
-    private static boolean setupDone = false;
+    private static final Logger logger = Logger.getLogger(GenericLogger.class.getName());
+    private static LinkedList<String> loggingPaths = new LinkedList<>();
 
     /**
      * Set the specified logger to the logging level.
@@ -34,14 +37,17 @@ public class GenericLogger {
      * @param LATEST_LEVEL Logging level for output to latest.log
      * @param LOG_LEVEL Logging level for output to "${DATE}.log"
      */
-    public static void setup(Level CONSOLE_LEVEL, Level LATEST_LEVEL, Level LOG_LEVEL) {
-        if (setupDone) {
+    public static void setup(Level CONSOLE_LEVEL, Level LATEST_LEVEL, Level LOG_LEVEL, String logPath) {
+        if (loggingPaths.contains(logPath)) {
+            logger.info(fmt(
+                    "Ignoring GenericLogger.setup(%s, %s, %s, %s). Logger to specified path already setup",
+                    CONSOLE_LEVEL, LATEST_LEVEL, LOG_LEVEL, logPath));
             return;
         }
+        loggingPaths.add(logPath);
         String handlerFail = JGameStr.getString("logging.GenericLogger.handlerFail");
-        String dir = settings.getString("logging.GenericLogger.logDir");
 
-        File logDir = new File(dir);
+        File logDir = new File(logPath);
         if (!logDir.exists()) {
             logDir.mkdirs();
         }
@@ -58,7 +64,7 @@ public class GenericLogger {
         consoleHandler.setLevel(CONSOLE_LEVEL);
         root.addHandler(consoleHandler);
         try {
-            FileHandler fileHandler = new FileHandler(dir + settings.getString("logging.GenericLogger.latestLog"));
+            FileHandler fileHandler = new FileHandler(logPath + settings.getString("logging.GenericLogger.latestLog"));
             fileHandler.setFormatter(htmlFormat);
             fileHandler.setLevel(LATEST_LEVEL);
             root.addHandler(fileHandler);
@@ -67,7 +73,7 @@ public class GenericLogger {
         }
         try {
             if (LOG_LEVEL != Level.OFF) {
-                FileHandler logFileHandler = new FileHandler(fmt(dir + "/%s.html", new Date().toString()));
+                FileHandler logFileHandler = new FileHandler(fmt(logPath + "/%s.html", new Date().toString()));
                 logFileHandler.setFormatter(htmlFormat);
                 logFileHandler.setLevel(LOG_LEVEL);
                 root.addHandler(logFileHandler);
@@ -76,18 +82,17 @@ public class GenericLogger {
             logger.log(Level.SEVERE, handlerFail, e);
         }
 
-        /*
-        if (Constants.SILENCE_AWT_LOGS) {
+
+        if (Constants.BLOCK_LOGS) {
             for (String awtLogger : settings.getString("logging.GenericLogger.blockedLoggers").split(",")) {
                 setLogger(awtLogger, Level.CONFIG);
             }
         }
-         */
+
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             logger.log(Level.WARNING, fmt(JGameStr.getString("logging.GenericLogger.uncaughtException"), t), e);
         });
-        setupDone = true;
     }
 
     /**

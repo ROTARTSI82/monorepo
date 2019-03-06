@@ -23,6 +23,14 @@ public class Vector2 {
         y = y1;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     /**
      * Create a copy of another {@code Vector2} object.
      *
