@@ -82,6 +82,29 @@ public class Vector2 {
     }
 
     /**
+     * Get the position of {@code length} units forward at an angle {@code angle} degrees from this point.
+     *
+     * @param angle  Angle
+     * @param length length
+     * @return position
+     */
+    public Vector2 positionFromDegrees(double angle, double length) {
+        angle = Math.toRadians(-(angle - 90));
+        return new Vector2(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+    }
+
+    /**
+     * Get the velocity if we want to travel at {@code angle} degrees at {@code speed}
+     *
+     * @param angle Angle
+     * @param speed Speed
+     * @return Velocity
+     */
+    public Vector2 velocityFromDegrees(double angle, double speed) {
+        return velocityTo(positionFromDegrees(angle, 1), speed);
+    }
+
+    /**
      * Get the velocity of an object at this point traveling directly at {@code target} at {@code speed}
      *
      * @param target Vector2 to travel towards
@@ -91,14 +114,11 @@ public class Vector2 {
     public Vector2 velocityTo(Vector2 target, double speed) {
         Vector2 delta = target.subtract(this);
         double travelTime = this.distanceTo(target) / speed;
-        Vector2 velocity;
         if (travelTime != 0) {
-            velocity = new Vector2((delta.x / travelTime), (delta.y / travelTime));
+            return new Vector2((delta.x / travelTime), (delta.y / travelTime));
         } else {
-            velocity = new Vector2(0, 0);
+            return new Vector2(0, 0);
         }
-        //System.out.println(velocity);
-        return velocity;
     }
 
     /**

@@ -28,7 +28,7 @@ public class UDPTest {
         testServ = new Server("127.0.0.1", 3000);
         testCli = new Client("127.0.0.1", 3000, System.nanoTime());
         while (!testCli.done) {
-            Thread.sleep(25);
+            //Thread.sleep(25);
             testServ.update();
             testCli.update();
         }
@@ -61,7 +61,7 @@ public class UDPTest {
                 return;
             }
             try {
-                this.addVerifyPacket(dat, 100, 1.5, packet.getAddress(), packet.getPort());
+                this.addVerifyPacket(dat, 1, 2, packet.getAddress(), packet.getPort());
                 //this.send(dat, packet.getAddress(), packet.getPort());
             } catch (Exception e) {
                 logger.log(Level.WARNING, JGameStr.getString("net.UDPTest.addFail"), e);
@@ -79,7 +79,7 @@ public class UDPTest {
 
             HashMap<String, Object> dat = new HashMap<>();
             dat.put("id", id);
-            this.addVerifyPacket(dat, 100, 1.5);
+            this.addVerifyPacket(dat, 1, 2);
             //this.send(dat);
         }
 

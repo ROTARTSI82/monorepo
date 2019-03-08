@@ -3,72 +3,93 @@ package io.github.jgame;
 import io.github.jgame.crypto.RSATest;
 import io.github.jgame.crypto.UserDatabaseTest;
 import io.github.jgame.image.SurfaceMapTest;
-import io.github.jgame.logging.GenericLogger;
 import io.github.jgame.math.Vector2Test;
 import io.github.jgame.mixer.SoundGeneratorTest;
 import io.github.jgame.net.NetUtilsTest;
 import io.github.jgame.net.TCPTest;
 import io.github.jgame.net.UDPTest;
 import io.github.jgame.sprite.SpriteTest;
-import org.testng.*;
+import io.github.jgame.testListeners.InvokedMethodListener;
+import io.github.jgame.testListeners.SuiteListener;
+import io.github.jgame.testListeners.TestListener;
+import org.testng.TestNG;
+import org.testng.xml.XmlClass;
+import org.testng.xml.XmlSuite;
+import org.testng.xml.XmlTest;
 
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.LinkedList;
 
-import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 import static io.github.jgame.util.UniversalResources.settings;
 
-public class AllTests implements ISuiteListener {
-    private Logger logger;
-
-    public AllTests() {
-        logger = Logger.getLogger(this.getClass().getName());
-    }
+public class AllTests {
 
     public static void main(String[] args) {
-        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF, settings.getString("tests.logOut"));
         TestNG testSuite = new TestNG();
-        testSuite.setTestClasses(new Class[]{
-                RSATest.class,
-                UserDatabaseTest.class,
-                SurfaceMapTest.class,
-                Vector2Test.class,
-                SoundGeneratorTest.class,
-                NetUtilsTest.class,
-                TCPTest.class,
-                UDPTest.class,
-                SpriteTest.class,
-                ScrapUtilsTest.class,
-                VersionTest.class,
-        });
-        testSuite.addListener(new AllTests());
+        testSuite.addListener(new InvokedMethodListener());
+        testSuite.addListener(new TestListener());
+        testSuite.addListener(new SuiteListener());
+
+        testSuite.setThreadCount(Runtime.getRuntime().availableProcessors());
+        testSuite.setVerbose(2);
+
         testSuite.setDefaultSuiteName("JGame All Tests");
         testSuite.setDefaultTestName("Unkown JGame Test");
         testSuite.setOutputDirectory(settings.getString("tests.testOut"));
         testSuite.setRandomizeSuites(true);
         testSuite.setPreserveOrder(false);
+
+        XmlSuite suite = new XmlSuite();
+        suite.setName("JGame All Tests");
+
+        getTest("Crypto Tests", suite, new Class[]{
+                RSATest.class,
+                UserDatabaseTest.class
+        });
+        getTest("Image Tests", suite, new Class[]{
+                SurfaceMapTest.class
+        });
+        getTest("Math Tests", suite, new Class[]{
+                Vector2Test.class
+        });
+        getTest("Mixer Tests", suite, new Class[]{
+                SoundGeneratorTest.class
+        });
+        getTest("Net Tests", suite, new Class[]{
+                NetUtilsTest.class,
+                TCPTest.class,
+                UDPTest.class
+        });
+        getTest("Sprite Tests", suite, new Class[]{
+                SpriteTest.class
+        });
+        getTest("Generic JGame Tests", suite, new Class[]{
+                ScrapUtilsTest.class,
+                VersionTest.class
+        });
+
+        testSuite.setXmlSuites(new LinkedList<>() {{
+            add(suite);
+        }});
+
         testSuite.run();
     }
 
-    @Override
-    public void onStart(ISuite suite) {
-        logger.info(fmt(JGameStr.getString("AllTests.startSuite"), suite.getName(), suite.getOutputDirectory()));
-        Map<String, String> env = System.getenv();
-        for (String x : env.keySet()) {
-            logger.config(fmt("%s=%s", x, env.get(x)));
-        }
-    }
+    public static XmlTest getTest(String name, XmlSuite suite, Class[] classes) {
+        XmlTest test = new XmlTest(suite);
+        test.setName(name);
+        test.setParallel(XmlSuite.ParallelMode.TESTS);
+        test.setPreserveOrder(false);
+        test.setThreadCount(Runtime.getRuntime().availableProcessors());
+        test.setVerbose(2);
 
-    @Override
-    public void onFinish(ISuite suite) {
-        for (IInvokedMethod x : suite.getAllInvokedMethods()) {
-            logger.fine(fmt(JGameStr.getString("AllTests.invokedMethod"), x));
+        LinkedList<XmlClass> testClasses = new LinkedList<>();
+        for (Class ks : classes) {
+            XmlClass klass = new XmlClass();
+            klass.setClass(ks);
+            testClasses.add(klass);
         }
-        Map<String, ISuiteResult> results = suite.getResults();
-        for (String key : results.keySet()) {
-            logger.info(fmt(JGameStr.getString("AllTests.result"), key, results.get(key)));
-        }
+
+        test.setXmlClasses(testClasses);
+        return test;
     }
 }

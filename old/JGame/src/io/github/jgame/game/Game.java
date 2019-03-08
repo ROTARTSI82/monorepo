@@ -36,15 +36,24 @@ public class Game extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        Timer update = new Timer(0, e -> {
-            synchronized (this) {
-                updateLogic();
-                repaint();
-            }
-        });
-        update.start();
+        for (Timer timer : getTimers()) {
+            timer.start();
+        }
 
         states.get(state).enter("INIT");
+    }
+
+    public Timer[] getTimers() {
+        return new Timer[]{new Timer(0, e -> {
+            synchronized (this) {
+                updateLogic();
+                handleRepaint();
+            }
+        })};
+    }
+
+    public void handleRepaint() {
+        states.get(state).handleRepaint();
     }
 
     /**
@@ -81,7 +90,7 @@ public class Game extends JPanel {
     /**
      * Call current state's {@code updateLogic()}
      */
-    private void updateLogic() {
+    public void updateLogic() {
         states.get(state).updateLogic();
     }
 

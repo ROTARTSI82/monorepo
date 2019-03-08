@@ -11,9 +11,11 @@ import java.awt.image.BufferedImage;
  * <p>
  * For scaling coordinates between two panes and blitting it to the screen.
  */
-public class SurfaceMap extends BufferedImage {
+public class SurfaceMap {
     private BufferedImage resized;
     private Vector2 scroll;
+    public Graphics2D g2d;
+    public BufferedImage img;
 
     /**
      * @param x    Width of {@code SurfaceMap}
@@ -21,9 +23,10 @@ public class SurfaceMap extends BufferedImage {
      * @param type Type of {@code BufferedImage} (default BufferedImage.TYPE_INT_ARGB)
      */
     public SurfaceMap(int x, int y, int type) {
-        super(x, y, type);
+        img = new BufferedImage(x, y, type);
         scroll = new Vector2(0, 0);
         resized = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        g2d = (Graphics2D) img.getGraphics();
     }
 
     /**
@@ -36,14 +39,29 @@ public class SurfaceMap extends BufferedImage {
      * @return Position on the SurfaceMap
      */
     public Vector2 getPos(Vector2 pos) {
-        return new Vector2((pos.x - scroll.x) * this.getWidth() / resized.getWidth(),
-                (pos.y - scroll.y) * this.getHeight() / resized.getHeight());
+        return new Vector2((pos.x - scroll.x) * img.getWidth() / resized.getWidth(),
+                (pos.y - scroll.y) * img.getHeight() / resized.getHeight());
     }
 
     public void fill(Color color) {
-        Graphics graphics = getGraphics();
-        graphics.setColor(color);
-        graphics.fillRect(0, 0, getWidth(), getHeight());
+        g2d.setColor(color);
+        g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+    }
+
+    public void clear() {
+        img = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+        reloadGraphics();
+    }
+
+    public Graphics2D getGraphics() {
+        if (g2d == null) {
+            return (Graphics2D) img.getGraphics();
+        }
+        return g2d;
+    }
+
+    public void reloadGraphics() {
+        g2d = (Graphics2D) img.getGraphics();
     }
 
     /**
@@ -56,8 +74,8 @@ public class SurfaceMap extends BufferedImage {
      * @return Position on the screen
      */
     public Vector2 fromPos(Vector2 pos) {
-        return new Vector2(pos.x * resized.getWidth() / this.getWidth() + scroll.x,
-                pos.y * resized.getHeight() / this.getHeight() + scroll.y);
+        return new Vector2(pos.x * resized.getWidth() / img.getWidth() + scroll.x,
+                pos.y * resized.getHeight() / img.getHeight() + scroll.y);
     }
 
     /**
@@ -71,11 +89,11 @@ public class SurfaceMap extends BufferedImage {
         int newWidth = Double.valueOf(dim.width * multipliers[0]).intValue();
         int newHeight = Double.valueOf(dim.height * multipliers[1]).intValue();
 
-        resized = new BufferedImage(newWidth, newHeight, this.getType());
+        resized = new BufferedImage(newWidth, newHeight, img.getType());
         Graphics2D g = resized.createGraphics();
         g.setRenderingHints(Constants.RENDER_HINTS);
-        g.drawImage(this, 0, 0, newWidth, newHeight, 0, 0, this.getWidth(),
-                this.getHeight(), null);
+        g.drawImage(img, 0, 0, newWidth, newHeight, 0, 0, img.getWidth(),
+                img.getHeight(), null);
         g.dispose();
         return resized;
     }
@@ -106,8 +124,8 @@ public class SurfaceMap extends BufferedImage {
      * @return Position to blit the {@code SurfaceMap} at.
      */
     public Vector2 getScroll(Vector2 target, Dimension screen, Vector2 center, boolean lockX, boolean lockY) {
-        scroll = new Vector2(-(target.x * resized.getWidth() / this.getWidth()) + center.x,
-                -(target.y * resized.getHeight() / this.getHeight()) + center.y);
+        scroll = new Vector2(-(target.x * resized.getWidth() / img.getWidth()) + center.x,
+                -(target.y * resized.getHeight() / img.getHeight()) + center.y);
         scroll.x = Math.max(-(resized.getWidth() - screen.getWidth()), Math.min(0, scroll.x));
         scroll.y = Math.max(-(resized.getHeight() - screen.getHeight()), Math.min(0, scroll.y));
 

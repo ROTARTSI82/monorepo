@@ -31,6 +31,10 @@ public class State {
         menuHandler = getMenuHandler();
     }
 
+    public void handleRepaint() {
+        game.repaint();
+    }
+
     /**
      * Get the handler instance that should be invoked for key events.
      *
