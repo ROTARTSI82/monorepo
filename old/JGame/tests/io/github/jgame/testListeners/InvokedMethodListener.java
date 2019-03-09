@@ -15,20 +15,54 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         logger = Logger.getLogger(this.getClass().getName());
     }
 
-    private void log(String msg, Level lvl) {
-        logger.log(lvl, msg);
-        Reporter.log(msg, lvl.intValue());
-    }
-
     @Override
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
         // logger.finer(fmt("Invoking method %s: %s", method, testResult.getName()));
     }
 
+    private void log(Level lvl, String msg) {
+        logger.log(lvl, msg);
+        Reporter.log(msg + "\n");
+    }
+
     @Override
     public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-        log(fmt("Invoked method %s in %sms", method,
-                testResult.getEndMillis() - testResult.getStartMillis()), Level.FINER);
+        /*
+        int CREATED = -1;
+        int SUCCESS = 1;
+        int FAILURE = 2;
+        int SKIP = 3;
+        int SUCCESS_PERCENTAGE_FAILURE = 4;
+        int STARTED = 16;
+         **/
+        switch (testResult.getStatus()) {
+            case ITestResult.CREATED: {
+                break;
+            }
+            case ITestResult.SUCCESS: {
+                log(Level.INFO, fmt("SUCCESS: %s in %sms", method,
+                        testResult.getEndMillis() - testResult.getStartMillis()));
+                break;
+            }
+            case ITestResult.FAILURE: {
+                log(Level.SEVERE, fmt("FAILURE: %s in %sms", method,
+                        testResult.getEndMillis() - testResult.getStartMillis()));
+                break;
+            }
+            case ITestResult.SKIP: {
+                log(Level.SEVERE, fmt("SKIP: %s in %sms", method,
+                        testResult.getEndMillis() - testResult.getStartMillis()));
+                break;
+            }
+            case ITestResult.SUCCESS_PERCENTAGE_FAILURE: {
+                log(Level.SEVERE, fmt("SUCCESS PERCENT FAIL: %s in %sms", method,
+                        testResult.getEndMillis() - testResult.getStartMillis()));
+                break;
+            }
+            case ITestResult.STARTED: {
+                break;
+            }
+        }
     }
 
     @Override

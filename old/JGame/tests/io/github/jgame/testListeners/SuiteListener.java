@@ -23,7 +23,7 @@ public class SuiteListener implements ISuiteListener {
 
     private void log(String msg, Level lvl) {
         logger.log(lvl, msg);
-        Reporter.log(msg, lvl.intValue());
+        Reporter.log(msg + "\n");
     }
 
     @Override

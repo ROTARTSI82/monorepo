@@ -39,30 +39,36 @@ public class AllTests {
         testSuite.setPreserveOrder(false);
 
         XmlSuite suite = new XmlSuite();
+
+        suite.setParallel(XmlSuite.ParallelMode.TESTS);
+        suite.setThreadCount(Runtime.getRuntime().availableProcessors());
+        suite.setPreserveOrder(false);
+        suite.setVerbose(2);
+
         suite.setName("JGame All Tests");
 
-        getTest("Crypto Tests", suite, new Class[]{
+        addTest("Crypto Tests", suite, new Class[]{
                 RSATest.class,
                 UserDatabaseTest.class
         });
-        getTest("Image Tests", suite, new Class[]{
+        addTest("Image Tests", suite, new Class[]{
                 SurfaceMapTest.class
         });
-        getTest("Math Tests", suite, new Class[]{
+        addTest("Math Tests", suite, new Class[]{
                 Vector2Test.class
         });
-        getTest("Mixer Tests", suite, new Class[]{
+        addTest("Mixer Tests", suite, new Class[]{
                 SoundGeneratorTest.class
         });
-        getTest("Net Tests", suite, new Class[]{
+        addTest("Net Tests", suite, new Class[]{
                 NetUtilsTest.class,
                 TCPTest.class,
                 UDPTest.class
         });
-        getTest("Sprite Tests", suite, new Class[]{
+        addTest("Sprite Tests", suite, new Class[]{
                 SpriteTest.class
         });
-        getTest("Generic JGame Tests", suite, new Class[]{
+        addTest("Generic JGame Tests", suite, new Class[]{
                 ScrapUtilsTest.class,
                 VersionTest.class
         });
@@ -74,7 +80,7 @@ public class AllTests {
         testSuite.run();
     }
 
-    public static XmlTest getTest(String name, XmlSuite suite, Class[] classes) {
+    private static void addTest(String name, XmlSuite suite, Class[] classes) {
         XmlTest test = new XmlTest(suite);
         test.setName(name);
         test.setParallel(XmlSuite.ParallelMode.TESTS);
@@ -90,6 +96,5 @@ public class AllTests {
         }
 
         test.setXmlClasses(testClasses);
-        return test;
     }
 }

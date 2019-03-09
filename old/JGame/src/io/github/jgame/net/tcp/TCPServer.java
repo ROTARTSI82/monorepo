@@ -1,4 +1,4 @@
-package io.github.jgame.net;
+package io.github.jgame.net.tcp;
 
 import io.github.jgame.Constants;
 

@@ -12,7 +12,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class SoundGeneratorTest {
-    private final int monoPlaylenMargin = 500;
+    private final int monoPlaylenMargin = 750;
     private Tone mono;
 
     private final int monoLengthMargin = 2;

@@ -12,12 +12,12 @@ import static io.github.jgame.util.UniversalResources.rand;
  * Projectiles. Support for despawning, blitting, updates, blume, etc
  */
 public class Projectile extends Sprite {
-    public Vector2 wobble;
-    private double mySpeed;
-
-    private int projectileLife;
-    private long born;
-    private Vector2 myBlume;
+    public long projectileLife;
+    public long born;
+    private Vector2 wobble;
+    private Vector2 target;
+    private double speed;
+    private Vector2 blume;
 
     /**
      * Projectiles!
@@ -29,40 +29,37 @@ public class Projectile extends Sprite {
      * @param life     Life in milliseconds until projectile despawns
      * @param blume    Max offset of initial velocity
      */
-    public Projectile(BufferedImage img, Vector2 target, Vector2 position, double speed, int life, Vector2 blume) {
+    public Projectile(BufferedImage img, Vector2 target, Vector2 position, double speed, long life, Vector2 blume) {
         super(img);
         pos = position;
 
         projectileLife = life;
         born = System.currentTimeMillis();
-        myBlume = blume;
+        this.blume = blume;
 
         rot = pos.angleTo(target);
         vel = pos.velocityTo(target, speed).add(
                 new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.x),
                         (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.y)));
-        mySpeed = speed;
-        setWobble(0, 0);
+        this.speed = speed;
+        this.target = target;
+        wobble = new Vector2(0, 0);
     }
 
     /**
-     * Set the wobble (which is added directly to velocity every frame)
+     * Set the attributes of the projectile. Call {@link #recalculate(boolean, boolean)} to update the
+     * Velocity and rotation.
      *
-     * @param x Max x offset
-     * @param y Max y offset
+     * @param target Target pos
+     * @param wobble Wobble (added every frame)
+     * @param speed speed
+     * @param blume Blume (added on {@link #recalculate(boolean, boolean)}
      */
-    public void setWobble(double x, double y) {
-        wobble = new Vector2(x, y);
-    }
-
-    /**
-     * Set the blume (which is added to the velocity every time {@link #recalculate(boolean, boolean, Vector2) is called}
-     *
-     * @param x Max x offset
-     * @param y Max y offset
-     */
-    public void setBlume(double x, double y) {
-        myBlume = new Vector2(x, y);
+    public void setAttributes(Vector2 target, Vector2 wobble, double speed, Vector2 blume) {
+        this.target = target;
+        this.wobble = wobble;
+        this.speed = speed;
+        this.blume = blume;
     }
 
     /**
@@ -76,19 +73,20 @@ public class Projectile extends Sprite {
 
     /**
      * Recalculate position and/or velocity.
-     * (NOTE: Blume would be added to the velocity. To disable this, {@link #setBlume(double, double)} to zero.)
+     * (NOTE: Blume would be added to the velocity. Use {@link #setAttributes(Vector2, Vector2, double, Vector2)})
+     * And set blume to Vector2[0, 0])
      *
      * @param rotation Should recalculate rot
      * @param velocity Should recalculate vel
      */
-    public void recalculate(boolean rotation, boolean velocity, Vector2 target) {
+    public void recalculate(boolean rotation, boolean velocity) {
         if (rotation) {
-            rot = pos.angleTo(target);
+            rot = pos.angleTo(this.target);
         }
         if (velocity) {
-            vel = pos.velocityTo(target, mySpeed).add(
-                    new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * myBlume.x),
-                            (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * myBlume.y)));
+            vel = pos.velocityTo(this.target, this.speed).add(
+                    new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * this.blume.x),
+                            (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * this.blume.y)));
         }
     }
 

@@ -1,5 +1,7 @@
 package io.github.jgame.net;
 
+import io.github.jgame.net.udp.UDPClient;
+import io.github.jgame.net.udp.UDPServer;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;

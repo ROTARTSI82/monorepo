@@ -1,11 +1,12 @@
-package io.github.jgame.net;
+package io.github.jgame.net.udp;
 
 import io.github.jgame.Constants;
+import io.github.jgame.net.NetUtils;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import static io.github.jgame.util.StringManager.fmt;
@@ -23,7 +24,6 @@ public class UDPClient {
     private HashMap<String, Integer> serialTable;
     private HashMap<Integer, String> deserialTable;
 
-    private HashMap<String, Object> filler = new HashMap<>();
 
     /**
      * Create a new UDP client at a random available address and listen to the specified port and host.
@@ -39,8 +39,6 @@ public class UDPClient {
         port = listenPort;
         socket = new DatagramSocket();
         logger = Logger.getLogger(this.getClass().getName());
-
-        filler.put("action", "filler");
 
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
@@ -134,7 +132,7 @@ public class UDPClient {
     }
 
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, double backoff) {
-        VerifyPacket packet = new VerifyPacket(datagram, frequency, backoff);
+        VerifyPacket packet = new VerifyPacket(datagram, frequency, backoff, this);
         pendingPackets.put(packet.id, packet);
     }
 
@@ -143,83 +141,5 @@ public class UDPClient {
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
         socket.send(packet);
-    }
-
-    public class VerifyPacket {
-        String id;
-        HashMap<String, Object> rawSend;
-
-        final Timer timer;
-
-        int backoff;
-
-        volatile boolean verified = false;
-        volatile boolean terminate = false;
-        volatile boolean hasSent = false;
-
-        public VerifyPacket(HashMap<String, Object> datagram, int frequency, double multiplier) {
-            if (!datagram.containsKey("action")) {
-                datagram.put("action", null);
-            }
-
-            rawSend = new HashMap<>();
-            rawSend.put("action", "verifySend");
-            rawSend.put("data", datagram);
-
-            id = UUID.randomUUID().toString();
-            rawSend.put("id", id);
-
-            backoff = frequency;
-            timer = new Timer();
-            timer.schedule(getTask(multiplier), frequency);
-        }
-
-        public TimerTask getTask(double multiplier) {
-            return new TimerTask() {
-                @Override
-                public void run() {
-                    synchronized (VerifyPacket.class) {
-                        if ((verified && hasSent) || terminate) {
-                            stop();
-                            this.cancel();
-                            return;
-                        } else {
-                            try {
-                                send(rawSend);
-                                hasSent = true;
-                            } catch (IOException err) {
-                                logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
-                            }
-                        }
-
-                        try {
-                            send(filler);
-                        } catch (IOException e) {
-                            logger.log(Level.WARNING, JGameStr.getString("net.UDP.fillerFail"), e);
-                        }
-
-                        backoff *= multiplier;
-                        try {
-                            timer.schedule(getTask(multiplier), backoff);
-                            logger.finest(fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
-                        } catch (IllegalStateException e) {
-                            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
-                        }
-                        this.cancel();
-                    }
-                }
-            };
-        }
-
-        public void onConfirm() {
-            verified = true;
-        }
-
-        public synchronized void stop() {
-            logger.fine(fmt(JGameStr.getString("net.UDP.threadStop"), rawSend));
-            timer.cancel();
-            timer.purge();
-            terminate = true;
-        }
     }
 }

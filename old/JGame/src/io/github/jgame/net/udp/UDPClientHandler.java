@@ -1,4 +1,4 @@
-package io.github.jgame.net;
+package io.github.jgame.net.udp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

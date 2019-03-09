@@ -23,48 +23,48 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        log(fmt("Finished test '%s' in %sms (SUCCESS)", result.getName(),
-                result.getEndMillis() - result.getStartMillis()), Level.WARNING);
+        /*log(fmt("Finished test '%s' in %sms (SUCCESS)", result.getName(),
+                result.getEndMillis() - result.getStartMillis()), Level.WARNING);*/
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        log(fmt("TEST FAILED: '%s' in %sms", result.getName(),
-                result.getEndMillis() - result.getStartMillis()), Level.WARNING);
+        /*log(fmt("TEST FAILED: '%s' in %sms", result.getName(),
+                result.getEndMillis() - result.getStartMillis()), Level.SEVERE);*/
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        log(fmt("TEST SKIPPED: '%s' in %sms", result.getName(),
-                result.getEndMillis() - result.getStartMillis()), Level.WARNING);
+        /*log(fmt("TEST SKIPPED: '%s' in %sms", result.getName(),
+                result.getEndMillis() - result.getStartMillis()), Level.SEVERE);*/
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        log(fmt("TEST FAILED (in % range): '%s' in %sms", result.getName(),
-                result.getEndMillis() - result.getStartMillis()), Level.WARNING);
+        /*log(fmt("TEST FAILED (in % range): '%s' in %sms", result.getName(),
+                result.getEndMillis() - result.getStartMillis()), Level.SEVERE);*/
     }
 
     @Override
     public void onTestFailedWithTimeout(ITestResult result) {
-        log(fmt("TEST TIMED OUT: %s' in %sms", result.getName(),
-                result.getEndMillis() - result.getStartMillis()), Level.WARNING);
+        /*log(fmt("TEST TIMED OUT: %s' in %sms", result.getName(),
+                result.getEndMillis() - result.getStartMillis()), Level.SEVERE);*/
     }
 
     @Override
     public void onStart(ITestContext context) {
-        log(fmt("Running %s", context.getName()), Level.INFO);
+        log(fmt("Running %s", context.getName()));
         TestRunner runner = (TestRunner) context;
         runner.setOutputDirectory(settings.getString("tests.testOut"));
     }
 
-    private void log(String msg, Level lvl) {
-        logger.log(lvl, msg);
-        Reporter.log(msg, lvl.intValue());
+    private void log(String msg) {
+        logger.log(Level.INFO, msg);
+        Reporter.log(msg + "\n");
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        log(fmt("Finished %s", context.getName()), Level.INFO);
+        log(fmt("Finished %s", context.getName()));
     }
 }

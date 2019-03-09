@@ -1,5 +1,8 @@
 package io.github.jgame.net;
 
+import io.github.jgame.net.tcp.TCPClient;
+import io.github.jgame.net.tcp.TCPClientHandler;
+import io.github.jgame.net.tcp.TCPServer;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
