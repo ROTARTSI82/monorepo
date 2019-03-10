@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.*;
 
+import static io.github.jgame.Constants.JGameStr;
+import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
-import static io.github.jgame.util.UniversalResources.settings;
 
 public class GenericLogger {
     private static final Logger logger = Logger.getLogger(GenericLogger.class.getName());

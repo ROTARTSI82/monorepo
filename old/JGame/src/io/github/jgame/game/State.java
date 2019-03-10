@@ -9,7 +9,7 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 
-import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.Constants.JGameStr;
 
 /**
  * Support for different "states" of a game.

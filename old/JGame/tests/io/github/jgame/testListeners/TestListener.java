@@ -5,8 +5,8 @@ import org.testng.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.settings;
 
 public class TestListener implements ITestListener {
     private Logger logger;

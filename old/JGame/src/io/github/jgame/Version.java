@@ -2,8 +2,8 @@ package io.github.jgame;
 
 import java.io.Serializable;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class Version implements Serializable {
     public transient String releaseMode;

@@ -8,8 +8,8 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.settings;
 
 /**
  * Generic format for .log

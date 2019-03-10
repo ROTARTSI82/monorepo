@@ -9,8 +9,8 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class TCPTest {
     private static Logger logger;

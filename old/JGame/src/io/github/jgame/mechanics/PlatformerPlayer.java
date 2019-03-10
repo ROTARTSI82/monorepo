@@ -4,7 +4,7 @@ import io.github.jgame.sprite.Sprite;
 
 import java.awt.image.BufferedImage;
 
-import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.Constants.JGameStr;
 
 /*
 import pygame

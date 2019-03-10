@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.Constants.JGameStr;
 
 public class ScrapUtils {
     private static Logger logger = Logger.getLogger(ScrapUtils.class.getName());

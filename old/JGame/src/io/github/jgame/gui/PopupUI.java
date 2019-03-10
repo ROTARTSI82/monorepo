@@ -1,6 +1,6 @@
 package io.github.jgame.gui;
 
-import static io.github.jgame.util.UniversalResources.JGameStr;
+import static io.github.jgame.Constants.JGameStr;
 
 /**
  * Not yet implemented...

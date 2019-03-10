@@ -1,6 +1,6 @@
 package io.github.jgame.crypto;
 
-import io.github.jgame.util.UniversalResources;
+import io.github.jgame.Constants;
 import org.testng.annotations.Test;
 
 import java.math.BigInteger;
@@ -29,7 +29,7 @@ public class RSATest {
 
     @Test(dependsOnMethods = {"testRSA"})
     public void testStringEncrypt() {
-        String dummy = UniversalResources.JGameStr.getString("dummyText");
+        String dummy = Constants.JGameStr.getString("dummyText");
         LinkedList<Integer> alph = RSA.getAlphabet(dummy);
 
         BigInteger[] enc = testRSA.encryptString(dummy, 8, alph);

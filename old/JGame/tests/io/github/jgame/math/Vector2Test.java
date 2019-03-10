@@ -3,8 +3,8 @@ package io.github.jgame.math;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 import static org.testng.Assert.assertEquals;
 
 public class Vector2Test {

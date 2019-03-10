@@ -23,7 +23,6 @@ public class StringManager {
         try {
             return String.format(format, args);
         } catch (MissingFormatArgumentException e) {
-            System.out.println(format + Arrays.toString(args));
             e.printStackTrace();
             String fmtArgs = Arrays.toString(args);
             return String.format("fmt(\"%s\", %s)", format, fmtArgs.substring(1, fmtArgs.length() - 1));

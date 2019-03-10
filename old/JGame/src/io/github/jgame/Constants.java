@@ -1,12 +1,32 @@
 package io.github.jgame;
 
-import java.awt.*;
-import java.util.HashMap;
+import io.github.jgame.util.StringManager;
 
-import static io.github.jgame.util.UniversalResources.JGameStr;
-import static io.github.jgame.util.UniversalResources.settings;
+import java.awt.*;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
 
 public class Constants {
+    public final static Random rand = new Random();
+    public final static SecureRandom secureRand = new SecureRandom();
+
+    public final static BigInteger one = new BigInteger("1");
+    public final static BigInteger zero = new BigInteger("0");
+    public final static BigInteger universalPublic = new BigInteger("65537");
+
+    public final static StringManager JGameStr;
+    public final static StringManager settings;
+
+    static {
+        Locale locale = Locale.getDefault();
+        settings = new StringManager("settings", locale);
+        locale = new Locale(settings.getString("lang"), settings.getString("country"));
+        JGameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
+    }
+
     public final static int NET_PACKET_SIZE;
     public final static boolean BLOCK_LOGS = Boolean.valueOf(settings.getString("logging.GenericLogger.blockLoggers"));
 

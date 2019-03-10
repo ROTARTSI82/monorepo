@@ -19,7 +19,7 @@ import org.testng.xml.XmlTest;
 
 import java.util.LinkedList;
 
-import static io.github.jgame.util.UniversalResources.settings;
+import static io.github.jgame.Constants.settings;
 
 public class AllTests {
 

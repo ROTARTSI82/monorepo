@@ -17,7 +17,7 @@ public class Sprite {
     Rectangle rect;
     BufferedImage image;
     LinkedList<Group> groups = new LinkedList<>();
-    public double[] zoom = {1, 1};
+    double[] zoom = {1, 1};
     Vector2 size;
 
     public Sprite(BufferedImage spriteImage) {

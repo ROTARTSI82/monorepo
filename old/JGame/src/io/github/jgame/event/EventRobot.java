@@ -3,8 +3,8 @@ package io.github.jgame.event;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
  * Extension of {@link java.awt.Robot}

@@ -10,9 +10,9 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
+import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
-import static io.github.jgame.util.UniversalResources.settings;
 
 /**
  * Easy way to perform actions such as opening the webbrowser and printing files to the local printer.

@@ -1,7 +1,7 @@
 package io.github.jgame.math;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
  * Vector2 useful for adding two sets of coordinates such as applying velocities.

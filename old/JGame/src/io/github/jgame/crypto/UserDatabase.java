@@ -1,6 +1,6 @@
 package io.github.jgame.crypto;
 
-import io.github.jgame.util.UniversalResources;
+import io.github.jgame.Constants;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -17,7 +17,7 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static io.github.jgame.util.UniversalResources.settings;
+import static io.github.jgame.Constants.settings;
 
 /**
  * Handles logins and encrypts user data using their passcode.
@@ -62,7 +62,7 @@ public class UserDatabase implements Serializable {
      */
     private static byte[] getRandomSalt(int len) {
         byte[] ret = new byte[len];
-        UniversalResources.secureRand.nextBytes(ret);
+        Constants.secureRand.nextBytes(ret);
         return ret;
     }
 

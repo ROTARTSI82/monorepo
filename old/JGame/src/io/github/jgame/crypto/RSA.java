@@ -1,13 +1,13 @@
 package io.github.jgame.crypto;
 
-import io.github.jgame.util.UniversalResources;
+import io.github.jgame.Constants;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.LinkedList;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 /**
  * Modified version of code <a href="https://introcs.cs.princeton.edu/java/99crypto/RSA.java.html">this code</a>
@@ -38,19 +38,19 @@ public class RSA implements Serializable {
         nBits = N;
         recalculateKey();
         // Calculates keys until the gcd is 1 and the bitLength is exactly N
-        while (phi.gcd(UniversalResources.universalPublic).compareTo(UniversalResources.one) != 0 ||
+        while (phi.gcd(Constants.universalPublic).compareTo(Constants.one) != 0 ||
                 modulus.bitLength() != nBits) {
             recalculateKey();
         }
     }
 
     private void recalculateKey() {
-        p = BigInteger.probablePrime(nBits / 2, UniversalResources.secureRand);
-        q = BigInteger.probablePrime(nBits / 2, UniversalResources.secureRand);
-        phi = (p.subtract(UniversalResources.one)).multiply(q.subtract(UniversalResources.one));
+        p = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
+        q = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
+        phi = (p.subtract(Constants.one)).multiply(q.subtract(Constants.one));
 
         modulus = p.multiply(q);
-        privateKey = UniversalResources.universalPublic.modInverse(phi);
+        privateKey = Constants.universalPublic.modInverse(phi);
     }
 
     /**
@@ -80,7 +80,7 @@ public class RSA implements Serializable {
         if (message.compareTo(modulus) >= 0) {
             throw new IllegalArgumentException(JGameStr.getString("crypto.RSA.messageTooBig"));
         }
-        return message.modPow(UniversalResources.universalPublic, modulus);
+        return message.modPow(Constants.universalPublic, modulus);
     }
 
     /**
@@ -190,7 +190,7 @@ public class RSA implements Serializable {
         StringBuilder builder = new StringBuilder();
         for (BigInteger i : encrypted) {
             i = rawDecrypt(i);
-            while (i.compareTo(UniversalResources.zero) != 0) {
+            while (i.compareTo(Constants.zero) != 0) {
                 builder.append((char) (int) alphabet.get(i.mod(base).intValue() - 1));
                 i = i.divide(base);
             }

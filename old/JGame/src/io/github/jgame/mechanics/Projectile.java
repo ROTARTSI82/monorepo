@@ -6,7 +6,7 @@ import io.github.jgame.sprite.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static io.github.jgame.util.UniversalResources.rand;
+import static io.github.jgame.Constants.rand;
 
 /**
  * Projectiles. Support for despawning, blitting, updates, blume, etc

@@ -6,8 +6,8 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 

@@ -9,11 +9,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
-import static io.github.jgame.util.UniversalResources.JGameStr;
 
 public class VerifyPacket {
-    private static HashMap<String, Object> filler = new HashMap<>();
+    private static final HashMap<String, Object> filler = new HashMap<>();
 
     static {
         filler.put("action", "filler");
@@ -21,7 +21,7 @@ public class VerifyPacket {
 
     private final Timer timer;
     String id;
-    private HashMap<String, Object> rawSend;
+    private HashMap<String, Object> rawSend = new HashMap<>();
     private InetAddress myHost;
     private int myPort;
     private int backoff;
@@ -38,7 +38,6 @@ public class VerifyPacket {
             datagram.put("action", null);
         }
 
-        rawSend = new HashMap<>();
         rawSend.put("action", "verifySend");
         rawSend.put("data", datagram);
 
@@ -53,11 +52,11 @@ public class VerifyPacket {
     }
 
     public VerifyPacket(HashMap<String, Object> datagram, int frequency, double multiplier, UDPClient parent) {
+        logger = Logger.getLogger(this.getClass().getName());
         if (!datagram.containsKey("action")) {
             datagram.put("action", null);
         }
 
-        rawSend = new HashMap<>();
         rawSend.put("action", "verifySend");
         rawSend.put("data", datagram);
 

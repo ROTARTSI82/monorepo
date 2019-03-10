@@ -5,7 +5,7 @@ import io.github.jgame.sprite.Sprite;
 
 import java.awt.image.BufferedImage;
 
-import static io.github.jgame.util.UniversalResources.rand;
+import static io.github.jgame.Constants.rand;
 
 /**
  * @deprecated Only use for blitting tests.

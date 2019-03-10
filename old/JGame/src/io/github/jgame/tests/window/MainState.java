@@ -4,10 +4,11 @@ import io.github.jgame.Constants;
 import io.github.jgame.game.Game;
 import io.github.jgame.game.State;
 import io.github.jgame.image.ImageManager;
+import io.github.jgame.math.PolygonCollide;
 import io.github.jgame.math.Vector2;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
-import io.github.jgame.sprite.ShapeSprite;
+import io.github.jgame.sprite.MaskedSprite;
 import io.github.jgame.sprite.Sprite;
 
 import java.awt.*;
@@ -16,7 +17,7 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
-import static io.github.jgame.util.UniversalResources.rand;
+import static io.github.jgame.Constants.rand;
 
 /**
  * @deprecated Use SpriteTest. Only useful for testing blitting.
@@ -26,7 +27,7 @@ public class MainState extends State {
     private final Logger logger;
     private final boolean displayRects = true;
 
-    private Sprite player;
+    private MaskedSprite player;
     private Group enemies;
     private Group bullets;
 
@@ -42,13 +43,13 @@ public class MainState extends State {
         imageLoader.fromFile("assets/bullet.png", "bullet");
         int size = 32;
         // Here for testing purposes
-        Shape testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
+        Polygon testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
         //player = new TextSprite("HelloWorld!",
         //        new Font("Arial", Font.PLAIN, 50), Color.BLACK);
         //player = new Sprite(ImageManager.fromShape(testShape, Color.BLACK));
         //player = new Sprite(imageLoader.get("sprite"));
         //player.zoomTo(new double[]{64, 64});
-        player = new ShapeSprite(testShape, 1);
+        player = new MaskedSprite(ImageManager.fromShape(testShape, Color.BLACK), new PolygonCollide(testShape));
         player.zoomTo(new double[]{64, 64});
         enemies = new Group();
         bullets = new Group();
@@ -74,6 +75,9 @@ public class MainState extends State {
         g.fillRect(0, 0, 1440, 900);
         g.setColor(Color.BLACK);
         Graphics2D g2d = (Graphics2D) g;
+        if (player.collidesWith(enemies).size() >= 1) {
+            System.out.println("h");
+        }
         g2d.setRenderingHints(Constants.RENDER_HINTS);
         if (displayRects) {
             player.blitRect(g2d);
