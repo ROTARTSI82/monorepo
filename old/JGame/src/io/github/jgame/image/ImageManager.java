@@ -1,14 +1,18 @@
 package io.github.jgame.image;
 
 import io.github.jgame.Constants;
+import io.github.jgame.util.ResourceManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,12 +22,44 @@ import static io.github.jgame.util.StringManager.fmt;
 /**
  * Utility class for loading and managing BufferedImage assets
  */
-public class ImageManager {
+public class ImageManager extends ResourceManager {
     private final Logger logger;
     private HashMap<String, BufferedImage> images = new HashMap<>();
 
     public ImageManager() {
+        super();
         logger = Logger.getLogger(this.getClass().getName());
+    }
+
+    /**
+     * Get the extension/type of a specified file
+     *
+     * @param file Filename as string
+     * @return extension name
+     */
+    public static String getExtension(String file) {
+        int index = file.lastIndexOf(".");
+        if (index != -1) {
+            return file.substring(index);
+        } else {
+            return "";
+        }
+    }
+
+    public static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    @Override
+    public LinkedList<String> getExtensions() {
+        return new LinkedList<>() {{
+            add(".png");
+            add(".jpeg");
+            add(".jpg");
+        }};
     }
 
     /**
@@ -100,14 +136,23 @@ public class ImageManager {
         return img;
     }
 
-    /**
-     * Get the extension/type of a specified file
-     *
-     * @param file Filename as string
-     * @return extension name
-     */
-    public static String getExtension(String file) {
-        return file.substring(file.lastIndexOf("."));
+    public void addImage(String id, BufferedImage img) {
+        images.put(id, img);
+    }
+
+    @Override
+    public void addFile(File file, int baseLen) {
+        String id = getId(file, baseLen);
+        try {
+            BufferedImage bi = ImageIO.read(file.toURI().toURL());
+            if (bi != null) {
+                addImage(id, bi);
+            } else {
+                logger.warning("Failed to load image: ImageIO.read() returned null (malformed data?)");
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
+        }
     }
 
     /**
@@ -133,7 +178,7 @@ public class ImageManager {
         URL url = this.getClass().getClassLoader().getResource(file);
         try {
             assert url != null;
-            images.put(id, ImageIO.read(url));
+            addImage(id, ImageIO.read(url));
         } catch (IOException | IllegalArgumentException e) {
             logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
         }
@@ -147,7 +192,7 @@ public class ImageManager {
      */
     public void fromUrl(URL url, String id) {
         try {
-            images.put(id, ImageIO.read(url));
+            addImage(id, ImageIO.read(url));
         } catch (IOException e) {
             logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), url), e);
         }

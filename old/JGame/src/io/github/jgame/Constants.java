@@ -27,6 +27,8 @@ public class Constants {
         JGameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
     }
 
+    public final static Font defaultFont = new Font("Arial", Font.PLAIN, 50);
+
     public final static int NET_PACKET_SIZE;
     public final static boolean BLOCK_LOGS = Boolean.valueOf(settings.getString("logging.GenericLogger.blockLoggers"));
 

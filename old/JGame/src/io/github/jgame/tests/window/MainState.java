@@ -40,7 +40,7 @@ public class MainState extends State {
         logger.info("env: " + System.getenv());
 
         imageLoader.fromFile("assets/sprite.png", "sprite");
-        imageLoader.fromFile("assets/bullet.png", "bullet");
+        imageLoader.fromFile("assets/bullxet.png", "bullet");
         int size = 32;
         // Here for testing purposes
         Polygon testShape = new Polygon(new int[]{0, size, 2 * size}, new int[]{0, 2 * size, 0}, 3);
@@ -56,7 +56,7 @@ public class MainState extends State {
         Enemy enemy = new Enemy(640, 480, imageLoader.get("sprite"));
         enemy.zoomTo(new double[]{64, 64});
         enemies.add(enemy);
-        soundManager.fromFile("assets/fireball.wav", "fireball");
+        soundManager.fromFile("assets/fireball.wavv", "fireball");
     }
 
     @Override

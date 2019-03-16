@@ -29,8 +29,12 @@ public class Sound {
         logger = Logger.getLogger(this.getClass().getName());
         url = this.getClass().getClassLoader().getResource(filename);
 
+        if (url == null) {
+            logger.warning("Null file/url supplied to sound. Dummy sound created.");
+            sound = null;
+            return;
+        }
         try {
-            assert url != null;
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);
@@ -49,8 +53,13 @@ public class Sound {
         name = soundURL.toString();
 
         logger = Logger.getLogger(this.getClass().getName());
+
+        if (url == null) {
+            logger.warning("Null file/url supplied to sound. Dummy sound created.");
+            sound = null;
+            return;
+        }
         try {
-            assert url != null;
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
             sound.open(audioIn);
@@ -63,6 +72,9 @@ public class Sound {
      * Reset sound and prep it for playing over itself. See {@link #play}
      */
     public void reset() {
+        if (url == null) {
+            return;
+        }
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             sound = AudioSystem.getClip();
@@ -90,6 +102,9 @@ public class Sound {
      * @return true if clip is active
      */
     public boolean isPlaying() {
+        if (sound == null) {
+            return false;
+        }
         return sound.isActive();
     }
 
@@ -99,6 +114,9 @@ public class Sound {
      * @return Normalized value (See {@link #getControlVal(FloatControl)}
      */
     public float getVolume() {
+        if (sound == null) {
+            return 0f;
+        }
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         return getControlVal(volume);
     }
@@ -109,8 +127,10 @@ public class Sound {
      * @param newVolume normalized value
      */
     public void setVolume(float newVolume) {
-        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        volume.setValue(scaleToRange(newVolume, volume));
+        if (sound != null) {
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            volume.setValue(scaleToRange(newVolume, volume));
+        }
     }
 
     /**
@@ -138,19 +158,23 @@ public class Sound {
      * @param reset Resetting enabled (calls {@link #reset})
      */
     public void play(boolean reset) {
-        if (reset) {
-            reset();
+        if (sound != null) {
+            if (reset) {
+                reset();
+            }
+            stop();
+            skipTo(0);
+            sound.start();
         }
-        stop();
-        skipTo(0);
-        sound.start();
     }
 
     /**
      * Stop the sound. see {@code Clip.stop}
      */
     public void stop() {
-        sound.stop();
+        if (sound != null) {
+            sound.stop();
+        }
     }
 
     /**
@@ -159,7 +183,9 @@ public class Sound {
      * @param micros Microsecond position
      */
     public void skipTo(long micros) {
-        sound.setMicrosecondPosition(micros);
+        if (sound != null) {
+            sound.setMicrosecondPosition(micros);
+        }
     }
 
     /**
@@ -168,6 +194,8 @@ public class Sound {
      * @param num number of loops
      */
     public void loopFor(int num) {
-        sound.loop(num);
+        if (sound != null) {
+            sound.loop(num);
+        }
     }
 }

@@ -60,6 +60,7 @@ public class PolygonCollide {
     }
 
     public void moveTo(Vector2 newCenter) {
+        getCenter();
         double[] delta = new double[]{newCenter.x - center.x, newCenter.y - center.y};
         for (int i = 0; i < verts.length; i++) {
             verts[i][0] = verts[i][0] + delta[0];

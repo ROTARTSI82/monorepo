@@ -1,5 +1,7 @@
 package io.github.jgame.sprite;
 
+import io.github.jgame.Constants;
+import io.github.jgame.image.ImageManager;
 import io.github.jgame.math.Vector2;
 
 import java.awt.*;
@@ -7,8 +9,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 public class Sprite {
+
+    private static BufferedImage defaultImage = ImageManager.fromText("MissIMG", Constants.defaultFont, Color.black);
+    private Logger logger;
+
     public boolean visible, active;
     public boolean flipVertical, flipHorizontal;
     public Vector2 pos, vel;
@@ -21,9 +28,16 @@ public class Sprite {
     Vector2 size;
 
     public Sprite(BufferedImage spriteImage) {
+        logger = Logger.getLogger(this.getClass().getName());
+        if (spriteImage == null) {
+            logger.warning("Null spriteImage supplied to sprite! Using default image...");
+            image = ImageManager.deepCopy(defaultImage);
+        } else {
+            image = spriteImage;
+        }
+
         visible = true;
         active = true;
-        image = spriteImage;
         size = new Vector2(image.getWidth(null), image.getHeight(null));
         rect = new Rectangle(0, 0, (int) size.x, (int) size.y);
         pos = new Vector2(0, 0);
