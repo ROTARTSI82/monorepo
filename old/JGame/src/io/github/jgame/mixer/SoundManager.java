@@ -3,6 +3,7 @@ package io.github.jgame.mixer;
 import io.github.jgame.Constants;
 import io.github.jgame.util.ResourceManager;
 
+import javax.sound.sampled.FloatControl;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,7 +77,7 @@ public class SoundManager extends ResourceManager {
 
     public void play(String id, boolean reset, float volume) {
         Sound playSound = get(id);
-        playSound.setVolume(volume);
+        playSound.setVal(volume, FloatControl.Type.MASTER_GAIN);
         playSound.play(reset);
     }
 }

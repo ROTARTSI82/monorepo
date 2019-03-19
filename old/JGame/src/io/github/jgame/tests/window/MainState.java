@@ -11,6 +11,7 @@ import io.github.jgame.sprite.Group;
 import io.github.jgame.sprite.MaskedSprite;
 import io.github.jgame.sprite.Sprite;
 
+import javax.sound.sampled.FloatControl;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -56,7 +57,7 @@ public class MainState extends State {
         Enemy enemy = new Enemy(640, 480, imageLoader.get("sprite"));
         enemy.zoomTo(new double[]{64, 64});
         enemies.add(enemy);
-        soundManager.fromFile("assets/fireball.wavv", "fireball");
+        soundManager.fromFile("assets/fireball.wav", "fireball");
     }
 
     @Override
@@ -173,8 +174,8 @@ public class MainState extends State {
         @Override
         public void mousePressed(MouseEvent e) {
             bullets.add(new BulletSprite(mouseHandler.pos, player.pos, imageLoader.get("bullet")));
-            soundManager.play("fireball", true, 0.2f);
-            // System.out.println(soundManager.get("fireball").getVolume());
+            soundManager.play("fireball", true, 0.5f);
+            System.out.println(soundManager.get("fireball").getVal(FloatControl.Type.MASTER_GAIN));
         }
     }
 }

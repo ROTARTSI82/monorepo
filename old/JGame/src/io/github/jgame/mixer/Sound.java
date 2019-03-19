@@ -3,6 +3,7 @@ package io.github.jgame.mixer;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +20,8 @@ public class Sound {
     private URL url;
     private Logger logger;
 
+    private HashMap<FloatControl.Type, Float> state;
+
     /**
      * Load sound from file
      *
@@ -29,18 +32,7 @@ public class Sound {
         logger = Logger.getLogger(this.getClass().getName());
         url = this.getClass().getClassLoader().getResource(filename);
 
-        if (url == null) {
-            logger.warning("Null file/url supplied to sound. Dummy sound created.");
-            sound = null;
-            return;
-        }
-        try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            sound = AudioSystem.getClip();
-            sound.open(audioIn);
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), name), e);
-        }
+        init();
     }
 
     /**
@@ -51,17 +43,38 @@ public class Sound {
     public Sound(URL soundURL) {
         url = soundURL;
         name = soundURL.toString();
-
         logger = Logger.getLogger(this.getClass().getName());
 
+        init();
+    }
+
+    private void init() {
         if (url == null) {
             logger.warning("Null file/url supplied to sound. Dummy sound created.");
             sound = null;
+            state = new HashMap<>();
             return;
         }
+        tryLoadFromURL();
+        state = new HashMap<>() {{
+            put(FloatControl.Type.AUX_RETURN, getVal(FloatControl.Type.AUX_RETURN));
+            put(FloatControl.Type.AUX_SEND, getVal(FloatControl.Type.AUX_SEND));
+            put(FloatControl.Type.BALANCE, getVal(FloatControl.Type.BALANCE));
+            put(FloatControl.Type.MASTER_GAIN, getVal(FloatControl.Type.MASTER_GAIN));
+            put(FloatControl.Type.PAN, getVal(FloatControl.Type.PAN));
+            put(FloatControl.Type.REVERB_RETURN, getVal(FloatControl.Type.REVERB_RETURN));
+            put(FloatControl.Type.REVERB_SEND, getVal(FloatControl.Type.REVERB_SEND));
+            put(FloatControl.Type.SAMPLE_RATE, getVal(FloatControl.Type.SAMPLE_RATE));
+            put(FloatControl.Type.VOLUME, getVal(FloatControl.Type.VOLUME));
+        }};
+    }
+
+    private void tryLoadFromURL() {
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            sound = AudioSystem.getClip();
+            AudioFormat format = audioIn.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            sound = (Clip) AudioSystem.getLine(info);
             sound.open(audioIn);
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), name), e);
@@ -75,22 +88,24 @@ public class Sound {
         if (url == null) {
             return;
         }
-        try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            sound = AudioSystem.getClip();
-            sound.open(audioIn);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("mixer.Sound.resetFail"), name), e);
+        tryLoadFromURL();
+
+        for (FloatControl.Type type : state.keySet()) {
+            setVal(state.get(type), type);
         }
     }
 
-    /**
-     * Normalize the value of a FloatControl
-     *
-     * @param control FloatControl
-     * @return Normalized value (between [0.0, 1.0])
-     */
-    private float getControlVal(FloatControl control) {
+    public float getVal(FloatControl.Type type) {
+        if (sound == null) {
+            return 0f;
+        }
+        FloatControl control;
+        try {
+            control = (FloatControl) sound.getControl(type);
+        } catch (IllegalArgumentException e) {
+            logger.log(Level.WARNING, "Unsupported control type: ", e);
+            return 0f;
+        }
         float min = control.getMinimum();
         float max = control.getMaximum();
         return (control.getValue() - min) / (max - min);
@@ -108,42 +123,21 @@ public class Sound {
         return sound.isActive();
     }
 
-    /**
-     * Get normalized value of sound FloatControl
-     *
-     * @return Normalized value (See {@link #getControlVal(FloatControl)}
-     */
-    public float getVolume() {
+    public void setVal(float x, FloatControl.Type type) {
+        state.put(type, x);
         if (sound == null) {
-            return 0f;
+            return;
         }
-        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        return getControlVal(volume);
-    }
-
-    /**
-     * Set volume float control to normalized value. See {@link #scaleToRange(float, FloatControl)}
-     *
-     * @param newVolume normalized value
-     */
-    public void setVolume(float newVolume) {
-        if (sound != null) {
-            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-            volume.setValue(scaleToRange(newVolume, volume));
+        FloatControl control;
+        try {
+            control = (FloatControl) sound.getControl(type);
+        } catch (IllegalArgumentException e) {
+            logger.log(Level.WARNING, "Unsupported control type: ", e);
+            return;
         }
-    }
-
-    /**
-     * Scale a normalized value (0 - 1) to the range of a FloatControl
-     *
-     * @param x       normalized value
-     * @param control FloatControl
-     * @return scaled value to control.getMinimum() and control.getMaximum()
-     */
-    private float scaleToRange(float x, FloatControl control) {
         float min = control.getMinimum();
         float max = control.getMaximum();
-        return x * (max - min) + min;
+        control.setValue(x * (max - min) + min);
     }
 
     /**
