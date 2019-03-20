@@ -36,6 +36,7 @@ public class GenericLogger {
      * @param CONSOLE_LEVEL Logging level for ConsoleHandler
      * @param LATEST_LEVEL Logging level for output to latest.log
      * @param LOG_LEVEL Logging level for output to "${DATE}.log"
+     * @param logPath Path to output logs to.
      */
     public static void setup(Level CONSOLE_LEVEL, Level LATEST_LEVEL, Level LOG_LEVEL, String logPath) {
         if (loggingPaths.contains(logPath)) {

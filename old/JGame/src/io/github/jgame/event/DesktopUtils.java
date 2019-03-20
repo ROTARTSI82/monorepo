@@ -103,6 +103,12 @@ public class DesktopUtils {
         return false;
     }
 
+    /**
+     * Open the file with the default application.
+     *
+     * @param file File to open
+     * @return True if successful, false if exception is thrown or operation is not supported.
+     */
     public static boolean openFile(File file) {
         try {
             if (supported && desktop.isSupported(Desktop.Action.OPEN)) {
@@ -115,6 +121,12 @@ public class DesktopUtils {
         return false;
     }
 
+    /**
+     * Move the specified file to trash
+     *
+     * @param file File to delete
+     * @return True if successful
+     */
     public static boolean moveToTrash(File file) {
         if (supported && desktop.isSupported(Desktop.Action.MOVE_TO_TRASH)) {
             desktop.moveToTrash(file);
@@ -124,6 +136,12 @@ public class DesktopUtils {
         }
     }
 
+    /**
+     * Open the specified directory in the default file explorer.
+     *
+     * @param file File to open
+     * @return True if successful.
+     */
     public static boolean browseDir(File file) {
         if (supported && desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR)) {
             desktop.browseFileDirectory(file);

@@ -20,6 +20,11 @@ public class GenericFormatter extends Formatter {
     private String headFormat;
     private Date date = new Date();
     private boolean html;
+
+    /**
+     * Colors of the table entries corresponding to the logging levels. In the format of css color styling
+     * e.g. #ffffff is white. #ff0000 is red. etc
+     */
     private HashMap<Level, String> colors = new HashMap<>() {{
         put(Level.FINEST, "#eee9e0");
         put(Level.FINER, "#eee9e0");
@@ -33,6 +38,11 @@ public class GenericFormatter extends Formatter {
         put(Level.SEVERE, "#f7a699");
     }};
 
+    /**
+     * Create a new formatter
+     *
+     * @param useHTML Does this formatter output HTML or plain text?
+     */
     public GenericFormatter(boolean useHTML) {
         html = useHTML;
         if (useHTML) {
@@ -49,6 +59,8 @@ public class GenericFormatter extends Formatter {
      * <p>
      * e.g.
      * "================================================[Mon Jan 01 12:05:30 PST 2020]================================================"
+     *
+     * Similar format used for HTML
      *
      * @param handler {@link Handler}
      * @return Date and time
@@ -73,6 +85,8 @@ public class GenericFormatter extends Formatter {
      * Formats logs in the following format:
      * {@code "[yyyy-MM-dd HH:mm:ss] [threadID] [sourceClass|sourceMethod] [LOG LEVEL]: MESSAGE\n"}
      * e.g. "[2020-01-01 12:05:30] [Thread-16] [io.github.jgame.logging.GenericFormatter|testLogMessage] [INFO]: Test message\n"
+     *
+     * Similar format used for HTML
      *
      * @param record {@link LogRecord}
      * @return String
@@ -126,6 +140,13 @@ public class GenericFormatter extends Formatter {
         }
     }
 
+    /**
+     * Get the HTML for the exception. Just a red table entry with white text containing the
+     * {@code {@link GenericLogger}.getStackTrace()} of the throwable
+     *
+     * @param e Throwable
+     * @return formatted string (in HTML)
+     */
     private String formatHTML(Throwable e) {
         return fmt(settings.getString("logging.GenericFormatter.htmlException"),
                 GenericLogger.getStackTrace(e).replace(" ", "&nbsp;")

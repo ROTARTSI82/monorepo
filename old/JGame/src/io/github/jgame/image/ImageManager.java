@@ -26,6 +26,9 @@ public class ImageManager extends ResourceManager {
     private final Logger logger;
     private HashMap<String, BufferedImage> images = new HashMap<>();
 
+    /**
+     * Create new ImageManager.
+     */
     public ImageManager() {
         super();
         logger = Logger.getLogger(this.getClass().getName());

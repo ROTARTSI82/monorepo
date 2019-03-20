@@ -6,14 +6,25 @@ import java.util.HashMap;
 
 /**
  * Get the state of certain keys without the use of a {@code JPanel}
+ *
+ * JPanel's key managers are preferred.
  */
 public class IndependentKeyTracker implements KeyEventDispatcher {
     private volatile HashMap<Integer, Boolean> keyStates = new HashMap<>();
 
+    /**
+     * Create new key tracker. Adds this to KeyboardFocusManager
+     */
     public IndependentKeyTracker() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
     }
 
+    /**
+     * Event handler for when a key is pressed.
+     *
+     * @param e Event
+     * @return always false.
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (IndependentKeyTracker.class) {

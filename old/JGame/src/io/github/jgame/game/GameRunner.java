@@ -30,6 +30,7 @@ public class GameRunner extends JFrame {
 
     /**
      * Add our game's main loop to the AWT event loop.
+     * Just call {@link #run}
      *
      * @param args Ignored. Doesn't matter.
      */
@@ -37,6 +38,11 @@ public class GameRunner extends JFrame {
         run(new Game());
     }
 
+    /**
+     * Add the main loop to the AWT event loop.
+     *
+     * @param game Game to run
+     */
     protected static void run(Game game) {
         EventQueue.invokeLater(() -> {
             GameRunner app = new GameRunner(game);

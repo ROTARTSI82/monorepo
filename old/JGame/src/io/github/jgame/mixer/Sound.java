@@ -48,6 +48,9 @@ public class Sound {
         init();
     }
 
+    /**
+     * Initiate the sound by setting the {@link #state} HashMap and returning when {@code url == null}
+     */
     private void init() {
         if (url == null) {
             logger.warning("Null file/url supplied to sound. Dummy sound created.");
@@ -69,6 +72,9 @@ public class Sound {
         }};
     }
 
+    /**
+     * Try loading a {@link Clip} from a {@link URL}
+     */
     private void tryLoadFromURL() {
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
@@ -95,6 +101,12 @@ public class Sound {
         }
     }
 
+    /**
+     * Get the value of a certain FloatControl
+     *
+     * @param type FloatControl to fetch
+     * @return value
+     */
     public float getVal(FloatControl.Type type) {
         if (sound == null) {
             return 0f;
@@ -123,6 +135,12 @@ public class Sound {
         return sound.isActive();
     }
 
+    /**
+     * Set the value of a FloatControl
+     *
+     * @param x    New value
+     * @param type FloatControl to set
+     */
     public void setVal(float x, FloatControl.Type type) {
         state.put(type, x);
         if (sound == null) {

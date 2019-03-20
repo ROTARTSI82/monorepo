@@ -1,0 +1,17 @@
+io.github.jgame
+io.github.jgame.crypto
+io.github.jgame.event
+io.github.jgame.game
+io.github.jgame.gui
+io.github.jgame.image
+io.github.jgame.logging
+io.github.jgame.math
+io.github.jgame.mechanics
+io.github.jgame.mixer
+io.github.jgame.net
+io.github.jgame.net.tcp
+io.github.jgame.net.udp
+io.github.jgame.sprite
+io.github.jgame.testListeners
+io.github.jgame.tests.window
+io.github.jgame.util

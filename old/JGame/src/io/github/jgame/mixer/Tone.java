@@ -3,7 +3,7 @@ package io.github.jgame.mixer;
 import java.util.LinkedList;
 
 /**
- * TODO: add javadoc
+ * Playable synthetic tone
  */
 public class Tone {
     private boolean isStereo;
@@ -12,12 +12,24 @@ public class Tone {
 
     private LinkedList<TonePlayer> threads = new LinkedList<>();
 
+    /**
+     * Procedural generation!
+     *
+     * @param player SoundGenerator to use to play this tone (should be the one that generated the tone)
+     * @param tone   byte array of the sound
+     * @param stereo is stereo?
+     */
     public Tone(SoundGenerator player, byte[] tone, boolean stereo) {
         isStereo = stereo;
         data = tone;
         parent = player;
     }
 
+    /**
+     * Is the sound active?
+     *
+     * @return True if sound is playing (duh)
+     */
     public boolean isPlaying() {
         boolean ret = false;
         LinkedList<TonePlayer> newThreads = new LinkedList<>();
@@ -31,6 +43,9 @@ public class Tone {
         return ret;
     }
 
+    /**
+     * Play the sound asynchronously via {@link TonePlayer}
+     */
     public void play() {
         threads.add(new TonePlayer(parent, data, isStereo));
     }

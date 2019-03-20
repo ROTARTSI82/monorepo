@@ -15,7 +15,6 @@ import static io.github.jgame.util.StringManager.fmt;
  * Generate an N-bit public and private RSA key and use to encrypt
  * and decrypt a random message.
  */
-
 public class RSA implements Serializable {
     // TODO: Make these values transient?
 
@@ -25,8 +24,6 @@ public class RSA implements Serializable {
     private BigInteger modulus;
 
     private BigInteger phi;
-    private BigInteger p;
-    private BigInteger q;
 
     /**
      * Keep generating public and private keys until the modulus is exactly N bits
@@ -44,9 +41,14 @@ public class RSA implements Serializable {
         }
     }
 
+    /**
+     * Calculate a key. This key is not necessarily valid, and should be used in a loop.
+     * <p>
+     * Is called by constructor in a loop to eventually generate a valid key.
+     */
     private void recalculateKey() {
-        p = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
-        q = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
+        BigInteger p = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
+        BigInteger q = BigInteger.probablePrime(nBits / 2, Constants.secureRand);
         phi = (p.subtract(Constants.one)).multiply(q.subtract(Constants.one));
 
         modulus = p.multiply(q);

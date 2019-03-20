@@ -43,16 +43,29 @@ public class SurfaceMap {
                 (pos.y - scroll.y) * img.getHeight() / resized.getHeight());
     }
 
+    /**
+     * Fill the entire buffered image with the color.
+     *
+     * @param color Color to fill
+     */
     public void fill(Color color) {
         g2d.setColor(color);
         g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
     }
 
+    /**
+     * Clear the image. Simply creates a new BufferedImage with the same dimensions and type.
+     */
     public void clear() {
         img = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
         reloadGraphics();
     }
 
+    /**
+     * Return the image's graphics if {@link #g2d} is null, otherwise {@link #g2d}
+     *
+     * @return Graphics2D
+     */
     public Graphics2D getGraphics() {
         if (g2d == null) {
             return (Graphics2D) img.getGraphics();
@@ -60,6 +73,9 @@ public class SurfaceMap {
         return g2d;
     }
 
+    /**
+     * Reload the graphics. Set the {@link #g2d} to {@code {@link #img}.getGraphics()}
+     */
     public void reloadGraphics() {
         g2d = (Graphics2D) img.getGraphics();
     }

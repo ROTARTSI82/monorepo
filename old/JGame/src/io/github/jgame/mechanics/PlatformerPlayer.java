@@ -189,6 +189,7 @@ class PlatformerPlayer(pygame.sprite.Sprite):
 public class PlatformerPlayer extends Sprite {
     /**
      * Not yet implemented...
+     * @param img NOT IMPLEMENTED
      */
     public PlatformerPlayer(BufferedImage img) {
         super(img);

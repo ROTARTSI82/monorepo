@@ -5,12 +5,21 @@ import java.util.LinkedList;
 
 import static io.github.jgame.Constants.JGameStr;
 
+/**
+ * Implementation of seperate axis theorem:
+ * <a href="https://www.youtube.com/watch?v=Ap5eBYKlGDo">Good video resource</a>
+ */
 public class PolygonCollide {
     private static final Vector2 origin = new Vector2(0, 0);
     public Vector2 center;
     private double[][] untransformed;
     private double[][] verts;
 
+    /**
+     * Create a collision mask with the following vertices.
+     *
+     * @param points Vertices of the polygon.
+     */
     public PolygonCollide(double[][] points) {
         verts = points;
         getCenter();
@@ -28,6 +37,11 @@ public class PolygonCollide {
         */
     }
 
+    /**
+     * Create a polygon collision mask from the rectangle.
+     *
+     * @param rect Rectangle.
+     */
     public PolygonCollide(Rectangle rect) {
         verts = new double[][]{{rect.x, rect.y}, {rect.x + rect.width, rect.y},
                 {rect.x + rect.width, rect.y + rect.height}, {rect.x, rect.y + rect.height}};
@@ -35,6 +49,11 @@ public class PolygonCollide {
         saveVerts();
     }
 
+    /**
+     * Use a polygon to create a collision mask.
+     *
+     * @param poly Polygon
+     */
     public PolygonCollide(Polygon poly) {
         // polygon = poly;
         verts = new double[poly.npoints][2];
@@ -59,6 +78,11 @@ public class PolygonCollide {
         saveVerts();
     }
 
+    /**
+     * Move the midpoint of the collision mask to a new position.
+     *
+     * @param newCenter New position
+     */
     public void moveTo(Vector2 newCenter) {
         getCenter();
         double[] delta = new double[]{newCenter.x - center.x, newCenter.y - center.y};
@@ -69,6 +93,12 @@ public class PolygonCollide {
         center = new Vector2(newCenter);
     }
 
+    /**
+     * Scaling. Doesn't work. DO NOT CALL!
+     * (attempted implementation of AffineTransformations)
+     *
+     * @param scale new scale
+     */
     public void scaleTo(double scale) {
         throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
         /*
@@ -87,6 +117,12 @@ public class PolygonCollide {
         */
     }
 
+    /**
+     * Rotations. DOES NOT WORK! DO NOT CALL!
+     * (Attempted implementation of AffineTransformations)
+     *
+     * @param degrees rotation
+     */
     public void rotate(double degrees) {
         throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
         /*
@@ -115,6 +151,9 @@ public class PolygonCollide {
         }
     }
 
+    /**
+     * Get the midpoint of the polygon by averaging all the vertices.
+     */
     public void getCenter() {
         if (verts.length == 0) {
             return;
@@ -127,6 +166,11 @@ public class PolygonCollide {
         center = new Vector2(ret[0], ret[1]);
     }
 
+    /**
+     * Get the polygon from all of the vertices.
+     *
+     * @return Polygon
+     */
     public Polygon getPolygon() {
         int[] xpoints = new int[verts.length];
         int[] ypoints = new int[verts.length];
@@ -139,6 +183,11 @@ public class PolygonCollide {
         return new Polygon(xpoints, ypoints, verts.length);
     }
 
+    /**
+     * Checkpoint the vertices into the untransformed array.
+     * Call this before applying AffineTransformations such as rotation and scaling
+     * so that the polygon can be reset.
+     */
     private void saveVerts() {
         untransformed = new double[verts.length][2];
         for (int i = 0; i < verts.length; i++) {
@@ -146,7 +195,14 @@ public class PolygonCollide {
         }
     }
 
-    public LinkedList<Double> getAxes() {
+    /**
+     * Get the axis of the polygon in the form of slopes.
+     * <p>
+     * Returns the all slopes in the polygon.
+     *
+     * @return List of slopes.
+     */
+    private LinkedList<Double> getAxes() {
         double[] prevPoint = verts[verts.length - 1];
         LinkedList<Double> slopes = new LinkedList<>();
 
@@ -181,7 +237,7 @@ public class PolygonCollide {
      * @param axisSlope double (slope of axis to project onto)
      * @return double[x, y] of projected point
      */
-    public double projectPoint(double[] point, double axisSlope) {
+    private double projectPoint(double[] point, double axisSlope) {
         if (axisSlope == 0) {
             return Math.abs(point[0]);
         }
@@ -198,6 +254,12 @@ public class PolygonCollide {
         return origin.distanceTo(ret);
     }
 
+    /**
+     * Checks for intersections on the own axis of the polygon
+     *
+     * @param other Other polygon collision mask
+     * @return true if anything intersects
+     */
     private boolean intersectsOnOwnAxis(PolygonCollide other) {
         LinkedList<Double> axes = getAxes();
         for (double slope : axes) {
@@ -245,10 +307,22 @@ public class PolygonCollide {
         return true;
     }
 
+    /**
+     * Check if two masks are colliding
+     *
+     * @param other other mask
+     * @return true if colliding
+     */
     public boolean intersects(PolygonCollide other) {
         return other.intersectsOnOwnAxis(this) && this.intersectsOnOwnAxis(other);
     }
 
+    /**
+     * Check if this mask is colliding witha rectangle.
+     *
+     * @param rect other rectangle
+     * @return true if colliding
+     */
     public boolean intersects(Rectangle rect) {
         return intersects(new PolygonCollide(rect));
     }

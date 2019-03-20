@@ -12,6 +12,11 @@ import static io.github.jgame.util.StringManager.fmt;
  * Adds easy way for Robot to type out String literals and click and release mouse.
  */
 public class EventRobot extends Robot {
+    /**
+     * Create a new robot!
+     *
+     * @throws AWTException Robots might not be supported!
+     */
     public EventRobot() throws AWTException {
         super();
         this.setAutoDelay(1);  // Make sure that all events get registered before moving on.

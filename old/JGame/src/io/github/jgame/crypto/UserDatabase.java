@@ -30,9 +30,12 @@ public class UserDatabase implements Serializable {
     private int saltLen;
 
     /**
-     * Create a new UserDatabase
+     * New UserDatabase!
+     *
+     * @throws NoSuchAlgorithmException Bad encryption algorithm
+     * @throws NoSuchPaddingException Bad padding (incompatible or unrecognized)
      */
-    public UserDatabase() throws Exception {
+    public UserDatabase() throws NoSuchAlgorithmException, NoSuchPaddingException {
         cipher = Cipher.getInstance(settings.getString("crypto.UserDatabase.cipher"));
         saltLen = 16;
     }
@@ -45,6 +48,8 @@ public class UserDatabase implements Serializable {
      * @return Hashed message
      *
      * @throws IllegalStateException HMAC may fail
+     * @throws NoSuchAlgorithmException Bad HMAC algorithm
+     * @throws InvalidKeyException Bad key supplied.
      */
     private static byte[] hmac(char[] message, byte[] salt) throws NoSuchAlgorithmException, InvalidKeyException {
         String hmacAlgorithm = settings.getString("crypto.UserDatabase.hmac");
@@ -99,6 +104,7 @@ public class UserDatabase implements Serializable {
     }
 
     /**
+     *
      * Initialize an account with random Initialization Vector and salt.
      * <p>
      * (Will abort if account already exists.)
@@ -106,6 +112,9 @@ public class UserDatabase implements Serializable {
      * @param username Username to create account for
      * @param password Corresponding passcode
      * @return Returns true if account creation succeeds.
+     *
+     * @throws NoSuchAlgorithmException No such encryption algorithm
+     * @throws InvalidKeyException Invalid encryption key
      */
     public boolean createAccount(String username, char[] password) throws NoSuchAlgorithmException,
             InvalidKeyException {
@@ -128,6 +137,9 @@ public class UserDatabase implements Serializable {
      * @param username Account to check
      * @param password passcode
      * @return true if the passcode matches the account.
+     *
+     * @throws NoSuchAlgorithmException No such encryption algorithm
+     * @throws InvalidKeyException Invalid key supplied
      */
     public boolean verifyPassword(String username, char[] password) throws NoSuchAlgorithmException, InvalidKeyException {
         if (!accountExists(username)) {
@@ -138,6 +150,15 @@ public class UserDatabase implements Serializable {
         return Arrays.equals(expected, actual);
     }
 
+    /**
+     * Generate a key for encryption from the user's passcode.
+     *
+     * @param password Passcode
+     * @param salt     salt
+     * @return SecretKeySpec for encryption
+     * @throws NoSuchAlgorithmException bad encryption algorithm
+     * @throws InvalidKeySpecException  Bad key!
+     */
     private SecretKeySpec getKey(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256); // AES-256
         SecretKeyFactory f = SecretKeyFactory.getInstance(
@@ -156,6 +177,14 @@ public class UserDatabase implements Serializable {
      * @param password passcode
      * @param data     data to store
      * @return true if successful
+     *
+     * @throws IOException Cannot deserialize
+     * @throws InvalidKeyException Cannot decrypt (bad key)
+     * @throws InvalidAlgorithmParameterException Invalid params for decryption
+     * @throws NoSuchAlgorithmException Bad decrypt algorithm
+     * @throws InvalidKeySpecException Invalid key!
+     * @throws IllegalBlockSizeException Bad block size for block-chaining
+     * @throws BadPaddingException Bad padding for decryption!
      */
     public boolean setUserData(String username, char[] password, Object data) throws IOException, InvalidKeyException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeySpecException,
@@ -193,6 +222,9 @@ public class UserDatabase implements Serializable {
      * @param username Account
      * @param password passcode
      * @return true if account is successfully deleted.
+     *
+     * @throws NoSuchAlgorithmException Bad algorithm
+     * @throws InvalidKeyException Bad key supplied
      */
     public boolean deleteAccount(String username, char[] password) throws NoSuchAlgorithmException,
             InvalidKeyException {
@@ -209,6 +241,15 @@ public class UserDatabase implements Serializable {
      * @param username Account
      * @param password passcode
      * @return Retrieved object. null if passcode verification failed or account doesn't exist.
+     *
+     * @throws ClassNotFoundException The serialized data is corrupt. (unrecognized class in serial)
+     * @throws BadPaddingException Unrecognized padding supplied
+     * @throws InvalidKeyException Invalid key!
+     * @throws InvalidAlgorithmParameterException Bad params for encrypt!
+     * @throws NoSuchAlgorithmException Bad algorithm!
+     * @throws InvalidKeySpecException Invalid encrypt key!
+     * @throws IOException Cannot serialize!
+     * @throws IllegalBlockSizeException Bad block size for block-chaining
      */
     public Object getUserData(String username, char[] password) throws InvalidKeyException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeySpecException, IOException,

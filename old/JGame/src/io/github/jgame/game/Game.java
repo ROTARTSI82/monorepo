@@ -13,13 +13,15 @@ import java.util.HashMap;
 public class Game extends JPanel {
 
     public GameRunner runner;
+
     protected HashMap<String, State> states = new HashMap<>();
     protected String state = "main";
 
-    public Game() {
-        states.put("main", new State(this));
-    }
-
+    /**
+     * Should be called by the GameRunner (JPanel) to set the {@link #runner}.
+     *
+     * @param parent GameRunner parent
+     */
     public void setParent(GameRunner parent) {
         runner = parent;
     }
@@ -43,6 +45,11 @@ public class Game extends JPanel {
         states.get(state).enter("INIT");
     }
 
+    /**
+     * Defaults to a single timer called as fast as possible, calling updateLogic() and handleRepaint()
+     *
+     * @return List of timers this game uses.
+     */
     public Timer[] getTimers() {
         return new Timer[]{new Timer(0, e -> {
             synchronized (this) {
@@ -52,6 +59,9 @@ public class Game extends JPanel {
         })};
     }
 
+    /**
+     * Repaint the surface. Defaults to calling the current state's handleRepaint()
+     */
     public void handleRepaint() {
         states.get(state).handleRepaint();
     }
