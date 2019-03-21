@@ -1,6 +1,7 @@
 package io.github.jgame;
 
 import io.github.jgame.util.StringManager;
+import io.github.jgame.util.Version;
 
 import java.awt.*;
 import java.math.BigInteger;
@@ -9,15 +10,43 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
+/**
+ * Global Constant variables.
+ */
 public class Constants {
+    /**
+     * RNG for general purpose use.
+     */
     public final static Random rand = new Random();
+
+    /**
+     * Secure RNG for the crypto module.
+     */
     public final static SecureRandom secureRand = new SecureRandom();
 
+    /**
+     * Constant value of 1 in BigInteger
+     */
     public final static BigInteger one = new BigInteger("1");
+
+    /**
+     * Constant value of 0 in BigInteger
+     */
     public final static BigInteger zero = new BigInteger("0");
+
+    /**
+     * Constant value of 65537 (2^16+1) in BigInteger
+     */
     public final static BigInteger universalPublic = new BigInteger("65537");
 
+    /**
+     * Default StringManager
+     */
     public final static StringManager JGameStr;
+
+    /**
+     * Settings StringManager.
+     */
     public final static StringManager settings;
 
     static {
@@ -27,9 +56,19 @@ public class Constants {
         JGameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
     }
 
+    /**
+     * The default font for displaying text.
+     */
     public final static Font defaultFont = new Font("Arial", Font.PLAIN, 50);
 
+    /**
+     * The size of UDP packets.
+     */
     public final static int NET_PACKET_SIZE;
+
+    /**
+     * Boolean value of whether to block certain loggers defined in settings.properties.
+     */
     public final static boolean BLOCK_LOGS = Boolean.valueOf(settings.getString("logging.GenericLogger.blockLoggers"));
 
     static {
@@ -42,9 +81,15 @@ public class Constants {
         NET_PACKET_SIZE = packetSize;
     }
 
+    /**
+     * The current version of JGame.
+     */
     public final static Version JGAME_VERSION = new Version(JGameStr.getString("versionFormat"),
-            (byte) 0, (byte) 19, (byte) 2, (byte) 24);
+            (byte) 0, (byte) 19, (byte) 3, (byte) 21);
 
+    /**
+     * Preset for quality render hints.
+     */
     public final static RenderingHints QUALITY_RENDER_HINTS = new RenderingHints(
             new HashMap<>() {{
                 put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -68,6 +113,9 @@ public class Constants {
                 put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             }});
 
+    /**
+     * Preset for speedy render hints
+     */
     public final static RenderingHints SPEED_RENDER_HINTS = new RenderingHints(
             new HashMap<>() {{
                 put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
@@ -91,6 +139,9 @@ public class Constants {
                 put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             }});
 
+    /**
+     * Preset for custom render hints loaded from settings.properties
+     */
     public final static RenderingHints CUSTOM_RENDER_HINTS = new RenderingHints(
             new HashMap<>() {{
                 put(RenderingHints.KEY_ALPHA_INTERPOLATION, settings.getString("rh.alphaInterpolation").equals("quality") ?
@@ -122,6 +173,9 @@ public class Constants {
             }});
 
 
+    /**
+     * The current render hints being used.
+     */
     public final static RenderingHints RENDER_HINTS;
 
     static {
@@ -132,6 +186,9 @@ public class Constants {
                 (rh.equals("custom") ? CUSTOM_RENDER_HINTS : SPEED_RENDER_HINTS);
     }
 
+    /**
+     * The builtin actions. All user defined actions should never be in the range of 0x5200-0x52FF.
+     */
     public final static HashMap<String, Integer> BUILTIN_ACTIONS = new HashMap<>() {{
         put("clientShutdown", 0x52_10);
         put("serverShutdown", 0x52_11);

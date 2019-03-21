@@ -13,8 +13,19 @@ import java.awt.image.BufferedImage;
  * Extends {@link Sprite}
  */
 public class ProgressBar extends Sprite {
+    /**
+     * The maximum value of {@link #value}. The value is clamped.
+     */
     public double maxVal;
+
+    /**
+     * The minimum value of {@link #value}. The value is clamped.
+     */
     public double minVal;
+
+    /**
+     * The actual value of the progress bar.
+     */
     public double value;
 
     /**

@@ -5,13 +5,11 @@ import io.github.jgame.game.State;
 import io.github.jgame.gui.ButtonManager;
 import io.github.jgame.gui.ProgressBar;
 import io.github.jgame.math.Vector2;
-import io.github.jgame.sprite.Sprite;
 import io.github.jgame.sprite.TextSprite;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * @deprecated only for blitting
@@ -19,7 +17,6 @@ import java.awt.image.BufferedImage;
 @Deprecated
 public class ButtonTestState extends State {
     private TextSprite testBt;
-    private Sprite mouseSprite = new Sprite(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
     private ProgressBar testBar;
 
     ButtonTestState(Game p) {
@@ -42,7 +39,7 @@ public class ButtonTestState extends State {
 
     @Override
     public void updateLogic() {
-        ButtonManager.update(mouseSprite);
+        ButtonManager.update(mouseHandler.mouseSprite);
     }
 
     @Override
@@ -55,7 +52,6 @@ public class ButtonTestState extends State {
         Graphics2D g2d = (Graphics2D) g;
         testBt.blitTo(g2d);
         testBt.blitRect(g2d);
-        mouseSprite.blitRect(g2d);
         testBar.blit(g2d);
         testBar.blitRect(g2d);
     }

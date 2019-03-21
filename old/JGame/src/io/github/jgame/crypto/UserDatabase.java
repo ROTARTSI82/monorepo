@@ -40,6 +40,10 @@ public class UserDatabase implements Serializable {
      * (Advanced Encryption Standard with Cipher Block Chaining with PKC5 Padding.)
      */
     private Cipher cipher;
+
+    /**
+     * The length of salts used for HMAC512 to hash the passcodes. 16 characters should be enough.
+     */
     private int saltLen;
 
     /**

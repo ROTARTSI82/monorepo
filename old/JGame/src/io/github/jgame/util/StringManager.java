@@ -3,11 +3,32 @@ package io.github.jgame.util;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * Safe access to resource bundles.
+ */
 public class StringManager {
+    /**
+     * The internal resource bundle
+     */
     private ResourceBundle bundle;
+
+    /**
+     * The internal logger object used for logging.
+     */
     private Logger logger;
+
+    /**
+     * The strings to load in place of a missing resource.
+     */
     private String[] missingResource = {"!![Missing Resource] %s_%s: %s!!", "!!%s_%s: %s!!"};
 
+    /**
+     * Load strings from a resource bundle.
+     *
+     * @param baseName Bundle to load
+     * @param locale   Language to load.
+     * @throws ExceptionInInitializerError The bundle may fail to load.
+     */
     public StringManager(String baseName, Locale locale) throws ExceptionInInitializerError {
         logger = Logger.getLogger(this.getClass().getName());
         bundle = ResourceBundle.getBundle(baseName, locale);
@@ -19,6 +40,13 @@ public class StringManager {
         }
     }
 
+    /**
+     * Safe string formatting.
+     *
+     * @param format String format
+     * @param args The format args.
+     * @return Formatted string
+     */
     public static String fmt(String format, Object... args) {
         try {
             return String.format(format, args);
@@ -29,6 +57,13 @@ public class StringManager {
         }
     }
 
+    /**
+     * retrieve string from the resource bundle.
+     * Return placeholder if the resource is missing.
+     *
+     * @param key Key to retrieve.
+     * @return String
+     */
     public String getString(String key) {
         try {
             return bundle.getString(key);

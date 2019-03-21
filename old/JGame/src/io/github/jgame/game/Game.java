@@ -11,7 +11,9 @@ import java.util.HashMap;
  * Manages multiple states and inputs from keyboard and mouse.
  */
 public class Game extends JPanel {
-
+    /**
+     * The "parent" runner that is running this game. See {@link GameRunner}
+     */
     public GameRunner runner;
 
     /**
@@ -26,7 +28,7 @@ public class Game extends JPanel {
     protected String state = "main";
 
     /**
-     * Should be called by the GameRunner (JPanel) to set the {@link #runner}.
+     * Should be called by the GameRunner (JFrame) to set the {@link #runner}.
      *
      * @param parent GameRunner parent
      */
@@ -118,16 +120,35 @@ public class Game extends JPanel {
      * Forward all Keyboard events to the current state's event handler.
      */
     private class GameKeyHandler extends KeyAdapter {
+
+        /**
+         * Handler for KEYDOWN events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyPressed(KeyEvent e) {
             states.get(state).keyHandler.keyPressed(e);
         }
 
+        /**
+         * Handler for KEYUP events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyReleased(KeyEvent e) {
             states.get(state).keyHandler.keyReleased(e);
         }
 
+        /**
+         * Handler for generic key events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyTyped(KeyEvent e) {
             states.get(state).keyHandler.keyTyped(e);
@@ -138,6 +159,13 @@ public class Game extends JPanel {
      * Forward all mouse motion events to the current state's event handler.
      */
     private class GameMouseMotionHandler extends MouseMotionAdapter {
+
+        /**
+         * Handler for MOUSEMOVE events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseMoved(MouseEvent e) {
             states.get(state).mouseHandler.mouseMoved(e);
@@ -148,6 +176,13 @@ public class Game extends JPanel {
      * Forward all mouse wheel events to the current state's event handler.
      */
     private class GameMouseWheelHandler implements MouseWheelListener {
+
+        /**
+         * Handler for scrolling events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             states.get(state).mouseHandler.mouseWheelMoved(e);
@@ -159,31 +194,68 @@ public class Game extends JPanel {
      * and {@link GameMouseWheelHandler}) to the current state's event handler.
      */
     private class GameMouseHandler extends MouseAdapter {
+
+        /**
+         * Handler for MOUSEBUTTONDOWN events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseClicked(MouseEvent e) {
             states.get(state).mouseHandler.mouseClicked(e);
         }
 
+        /**
+         * Handler for mouse drag events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseDragged(MouseEvent e) {
             states.get(state).mouseHandler.mouseDragged(e);
         }
 
+        /**
+         * Handler for mouse enter events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseEntered(MouseEvent e) {
             states.get(state).mouseHandler.mouseEntered(e);
         }
 
+        /**
+         * Handler for mouse exit events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseExited(MouseEvent e) {
             states.get(state).mouseHandler.mouseExited(e);
         }
 
+        /**
+         * Handler for MOUSEBUTTONDOWN events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mousePressed(MouseEvent e) {
             states.get(state).mouseHandler.mousePressed(e);
         }
 
+        /**
+         * Handler for MOUSEBUTTONUP events.
+         * Forwards all events to the current state's event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseReleased(MouseEvent e) {
             states.get(state).mouseHandler.mouseReleased(e);

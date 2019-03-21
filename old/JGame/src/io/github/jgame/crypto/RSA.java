@@ -34,6 +34,9 @@ public class RSA implements Serializable {
      */
     private BigInteger modulus;
 
+    /**
+     * TODO: Add javadoc
+     */
     private BigInteger phi;
 
     /**

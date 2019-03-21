@@ -22,6 +22,10 @@ public class DesktopUtils {
      * Internal desktop object. Gotten using {@code Desktop.getDesktop()}. Use {@link #reload} to refresh this.
      */
     private static Desktop desktop = Desktop.getDesktop();
+
+    /**
+     * Internal logger object used for event logging.
+     */
     private static Logger logger = Logger.getLogger(DesktopUtils.class.getName());
 
     /**

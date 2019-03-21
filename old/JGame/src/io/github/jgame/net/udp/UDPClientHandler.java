@@ -9,8 +9,19 @@ import java.util.HashMap;
  * Representation of the client for the {@link UDPServer}
  */
 public class UDPClientHandler {
+    /**
+     * The host the client is at.
+     */
     InetAddress address;
+
+    /**
+     * The port the client is at.
+     */
     int port;
+
+    /**
+     * The UDPServer that the client is connected to.
+     */
     UDPServer factory;
 
     /**

@@ -14,11 +14,19 @@ import java.util.logging.Logger;
 import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * Server implementation of UDP.
+ */
 public class UDPServer {
+    /**
+     * The socket that the server is binded to.
+     */
     private DatagramSocket socket;
-    private InetAddress address;
+
+    /**
+     * Logger object used to log events.
+     */
     private Logger logger;
-    private int port;
 
     /**
      * List of UUIDs of verified packets that have already been handled.
@@ -68,10 +76,8 @@ public class UDPServer {
      * @throws IllegalArgumentException Invalid actionID
      */
     public UDPServer(String host, int listenPort, int maxClients) throws UnknownHostException, SocketException {
-        address = InetAddress.getByName(host);
-        port = listenPort;
         clientLimit = maxClients;
-        socket = new DatagramSocket(listenPort, address);
+        socket = new DatagramSocket(listenPort, InetAddress.getByName(host));
         logger = Logger.getLogger(this.getClass().getName());
 
         serialTable = getActionTable();
@@ -106,7 +112,7 @@ public class UDPServer {
      * @throws IOException Sending message over connection may fail.
      */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws IOException {
-        logger.finest(fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), port,
+        logger.finest(fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), socket.getPort(),
                 datAddress, datPort, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
@@ -162,14 +168,15 @@ public class UDPServer {
                 return;
             }
             clients.put(packAddr, new UDPClientHandler(packet.getAddress(), packet.getPort(), this));
-            logger.info(fmt(JGameStr.getString("net.newClient"), address, port, packAddr));
+            logger.info(fmt(JGameStr.getString("net.newClient"), socket.getInetAddress(),
+                    socket.getPort(), packAddr));
         }
 
         HashMap<String, Object> packetDict = NetUtils.deserialize(packet.getData(), deserialTable);
         if (packetDict == null) {
             return;
         }
-        logger.finest(fmt(JGameStr.getString("net.recvMSG"), socket.getInetAddress(), port,
+        logger.finest(fmt(JGameStr.getString("net.recvMSG"), socket.getInetAddress(), socket.getPort(),
                 packet.getAddress(), packet.getPort(), packetDict));
 
         String action = (String) packetDict.get("action");
@@ -183,11 +190,12 @@ public class UDPServer {
                     String id = (String) packetDict.get("id");
                     if (!verifiedByMe.contains(id)) {
                         logger.finest(fmt(JGameStr.getString("net.UDPServer.confirmServer"),
-                                address, port, id));
+                                socket.getInetAddress(), socket.getPort(), id));
                         parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                         verifiedByMe.add(id);
                     } else {
-                        logger.fine(fmt(JGameStr.getString("net.UDP.duplicatePacket"), address, port, id));
+                        logger.fine(fmt(JGameStr.getString("net.UDP.duplicatePacket"), socket.getInetAddress(),
+                                socket.getPort(), id));
                     }
                     HashMap<String, Object> rawSend = new HashMap<>();
                     rawSend.put("action", "confirmPacket");
@@ -201,7 +209,8 @@ public class UDPServer {
                         pendingPackets.get(id).onConfirm();
                         pendingPackets.remove(id);
                     }
-                    logger.finest(fmt(JGameStr.getString("net.UDP.confirmedPacket"), address, port, id));
+                    logger.finest(fmt(JGameStr.getString("net.UDP.confirmedPacket"), socket.getInetAddress(),
+                            socket.getPort(), id));
                     return;
                 }
             }

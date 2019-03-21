@@ -30,11 +30,20 @@ public class VerifyPacket {
      * Async timer used to execute resends/checks
      */
     private final Timer timer;
+
     /**
      * The UUID used by this packet. It is accessed by the UDPServer. DO NOT DELETE.
      */
     String id;
+
+    /**
+     * The host that we are sending to.
+     */
     private InetAddress myHost;
+
+    /**
+     * The port we are sending to.
+     */
     private int myPort;
     /**
      * Raw HashMap we are attempting to send.
@@ -44,6 +53,10 @@ public class VerifyPacket {
      * The current delay between resends and checks.
      */
     private int backoff;
+
+    /**
+     * The internal logger object used for logging.
+     */
     private Logger logger;
 
     /**

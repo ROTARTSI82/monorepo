@@ -12,6 +12,10 @@ import java.util.LinkedList;
  * Also see {@link Group}
  */
 public class ButtonManager {
+
+    /**
+     * The group of all registered buttons to check for clicks and hovers.
+     */
     private static Group buttons = new Group();
 
     /**

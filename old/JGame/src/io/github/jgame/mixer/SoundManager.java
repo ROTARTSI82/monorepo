@@ -16,11 +16,22 @@ import java.util.logging.Logger;
  */
 public class SoundManager extends ResourceManager {
 
+    /**
+     * Internal logger object used to log events.
+     */
     private Logger logger;
+
+    /**
+     * The internal list of sounds that are loaded.
+     */
     private HashMap<String, LinkedList<Sound>> sounds = new HashMap<>();
 
+    /**
+     * Create new sound manager.
+     */
     public SoundManager() {
         super();
+        logger = Logger.getLogger(this.getClass().getName());
     }
 
     /**

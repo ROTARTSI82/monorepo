@@ -1,15 +1,12 @@
 package io.github.jgame.game;
 
 import io.github.jgame.Constants;
-import io.github.jgame.math.Vector2;
+import io.github.jgame.sprite.Sprite;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
-
-import static io.github.jgame.Constants.JGameStr;
+import java.awt.image.BufferedImage;
 
 /**
  * Support for different "states" of a game.
@@ -18,7 +15,15 @@ import static io.github.jgame.Constants.JGameStr;
  * handle events differently in different states.
  */
 public class State {
+
+    /**
+     * Event handler for all keyboard events
+     */
     public KeyHandler keyHandler;
+
+    /**
+     * Event handler for all mouse events
+     */
     public MouseHandler mouseHandler;
 
     /**
@@ -26,6 +31,10 @@ public class State {
      */
     public MenuHandler menuHandler;
 
+    /**
+     * The current game that this state is running on. Effectively the state's "parent"
+     * See {@link Game}
+     */
     protected Game game;
 
     /**
@@ -78,9 +87,13 @@ public class State {
         return new MenuHandler();
     }
 
-    public double[] getScreenSize() {
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        return new double[]{size.getWidth(), size.getHeight()};
+    /**
+     * Get the available space for blitting. (This is the size of the JFrame)
+     *
+     * @return Dimensions of the JFrame
+     */
+    public Dimension getScreenSize() {
+        return game.runner.getSize();
     }
 
     /**
@@ -122,8 +135,14 @@ public class State {
      * Extension of {@link javax.swing.JMenuBar}
      */
     public class MenuHandler extends JMenuBar {
+
+        /**
+         * Create a new menu! Everything should be initialized in here. Override this constructor
+         * to create a custom menu.
+         */
         public MenuHandler() {
             super();
+            /*
             JMenu test = new JMenu(JGameStr.getString("game.State.exampleMenu"));
             test.addMenuListener(new MenuListener() {
                 @Override
@@ -153,6 +172,7 @@ public class State {
 
             test.addSeparator();
             test.add(submenu);
+            */
         }
 
         /**
@@ -190,22 +210,48 @@ public class State {
      * Handles all key events.
      */
     public class KeyHandler extends KeyAdapter {
+
+        /**
+         * Handler for KEYDOWN events.
+         * Override this for custom event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyPressed(KeyEvent e) {
 
         }
 
+        /**
+         * Handler for KEYUP events.
+         * Override this for custom event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyReleased(KeyEvent e) {
 
         }
 
+        /**
+         * Handler for generic key events.
+         * Override this for custom event handler.
+         *
+         * @param e Key event
+         */
         @Override
         public void keyTyped(KeyEvent e) {
 
         }
 
-        private boolean hasMod(KeyEvent e, int mask) {
+        /**
+         * Check if a KeyEvent has the specified modifiers.
+         *
+         * @param e    The key event
+         * @param mask The modifier mask to check for
+         * @return true if the mask is successful.
+         */
+        protected boolean hasMod(KeyEvent e, int mask) {
             return (e.getModifiersEx() & mask) != 0;
         }
     }
@@ -214,43 +260,100 @@ public class State {
      * Handles all mouse events
      */
     public class MouseHandler extends MouseAdapter {
-        public Vector2 pos = new Vector2(0, 0);
+        /**
+         * Sprite for tracking mouse. See {@link io.github.jgame.gui.ButtonManager}.
+         */
+        public Sprite mouseSprite = new Sprite(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
 
+        /**
+         * Handler for MOUSEMOVE events.
+         * Override this for custom event handler.
+         *
+         * <b>
+         * Be sure to call super for this handler! Otherwise the {@link #mouseSprite} won't be updated!
+         * </b>
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseMoved(MouseEvent e) {
-
+            mouseSprite.pos.x = e.getX();
+            mouseSprite.pos.y = e.getY();
+            mouseSprite.updateRect();
         }
 
+        /**
+         * Handler for mouse wheel events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
 
         }
 
+        /**
+         * Handler for MOUSEBUTTONDOWN events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseClicked(MouseEvent e) {
 
         }
 
+        /**
+         * Handler for mouse drag events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseDragged(MouseEvent e) {
 
         }
 
+        /**
+         * Handler for mouse entering events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseEntered(MouseEvent e) {
 
         }
 
+        /**
+         * Handler for mouse exiting events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseExited(MouseEvent e) {
 
         }
 
+        /**
+         * Handler for MOUSEBUTTONDOWN events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mousePressed(MouseEvent e) {
 
         }
 
+        /**
+         * Handler for MOUSEBUTTONUP events.
+         * Override this for custom event handler.
+         *
+         * @param e Mouse event
+         */
         @Override
         public void mouseReleased(MouseEvent e) {
 

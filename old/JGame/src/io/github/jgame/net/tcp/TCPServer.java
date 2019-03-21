@@ -19,17 +19,27 @@ import static io.github.jgame.util.StringManager.fmt;
  * TCP Server implementation (handles clients)
  */
 public class TCPServer {
-    private ServerSocket serverSocket;
-    private HashMap<String, TCPClientHandler> clients = new HashMap<>();
 
-    InetAddress host;
-    int port;
+    /**
+     * The socket that the server is binded to. See {@link Socket}
+     */
+    private ServerSocket serverSocket;
+
+    /**
+     * The list of active clients that are connected.
+     */
+    private HashMap<String, TCPClientHandler> clients = new HashMap<>();
 
     /**
      * Table used to serialize actions. See {@link NetUtils}.serialize()
      */
     public HashMap<String, Integer> serialTable;
+
+    /**
+     * Internal logger object used to log events.
+     */
     private Logger logger;
+
     /**
      * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
      * <p>
@@ -56,9 +66,7 @@ public class TCPServer {
     public TCPServer(String hostname, int portNum, int maxClients) throws UnknownHostException, IOException {
         clientLimit = maxClients;
         logger = Logger.getLogger(this.getClass().getName());
-        host = InetAddress.getByName(hostname);
-        port = portNum;
-        serverSocket = new ServerSocket(port, 50, host);
+        serverSocket = new ServerSocket(portNum, 50, InetAddress.getByName(hostname));
 
         serialTable = getActionTable();
 
@@ -124,7 +132,8 @@ public class TCPServer {
         }
         if (!clients.containsKey(key)) {
             clients.put(key, handler);
-            logger.info(fmt(JGameStr.getString("net.newClient"), host, port, key));
+            logger.info(fmt(JGameStr.getString("net.newClient"), serverSocket.getInetAddress(),
+                    serverSocket.getLocalPort(), key));
         } else {
             logger.warning(JGameStr.getString("net.TCPServer.alreadyExists"));
         }
@@ -157,7 +166,8 @@ public class TCPServer {
      * @param datPort Port to send to (which program on that computer?)
      */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) {
-        logger.finest(fmt(JGameStr.getString("net.sendMSG"), host, port, datAddress, datPort, datagram));
+        logger.finest(fmt(JGameStr.getString("net.sendMSG"), serverSocket.getInetAddress(),
+                serverSocket.getLocalPort(), datAddress, datPort, datagram));
         clients.get(datAddress + ":" + datPort).send(datagram);
     }
 

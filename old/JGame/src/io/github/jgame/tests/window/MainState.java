@@ -6,6 +6,7 @@ import io.github.jgame.game.State;
 import io.github.jgame.image.ImageManager;
 import io.github.jgame.math.PolygonCollide;
 import io.github.jgame.math.Vector2;
+import io.github.jgame.mixer.Sound;
 import io.github.jgame.mixer.SoundManager;
 import io.github.jgame.sprite.Group;
 import io.github.jgame.sprite.MaskedSprite;
@@ -57,7 +58,7 @@ public class MainState extends State {
         Enemy enemy = new Enemy(640, 480, imageLoader.get("sprite"));
         enemy.zoomTo(new double[]{64, 64});
         enemies.add(enemy);
-        soundManager.fromFile("assets/fireball.wav", "fireball");
+        soundManager.addSound("fireball", new Sound("assets/fireball.wav"));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class MainState extends State {
         if (displayRects) {
             player.blitRect(g2d);
         }
-        player.rot = player.pos.angleTo(mouseHandler.pos);
+        player.rot = player.pos.angleTo(mouseHandler.mouseSprite.pos);
         player.blitTo(g2d);
         for (Sprite enemy : enemies.sprites) {
             enemy.update();
@@ -167,13 +168,13 @@ public class MainState extends State {
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            mouseHandler.pos.x = e.getX();
-            mouseHandler.pos.y = e.getY();
+            mouseHandler.mouseSprite.pos.x = e.getX();
+            mouseHandler.mouseSprite.pos.y = e.getY();
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            bullets.add(new BulletSprite(mouseHandler.pos, player.pos, imageLoader.get("bullet")));
+            bullets.add(new BulletSprite(mouseHandler.mouseSprite.pos, player.pos, imageLoader.get("bullet")));
             soundManager.play("fireball", true, 0.5f);
             System.out.println(soundManager.get("fireball").getVal(FloatControl.Type.MASTER_GAIN));
         }

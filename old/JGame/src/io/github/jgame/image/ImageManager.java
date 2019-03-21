@@ -23,7 +23,14 @@ import static io.github.jgame.util.StringManager.fmt;
  * Utility class for loading and managing BufferedImage assets
  */
 public class ImageManager extends ResourceManager {
+    /**
+     * The logger object used to log events.
+     */
     private final Logger logger;
+
+    /**
+     * The internal table of images that are loaded.
+     */
     private HashMap<String, BufferedImage> images = new HashMap<>();
 
     /**

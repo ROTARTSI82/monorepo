@@ -30,8 +30,15 @@ public class Sound {
      * The URL the sound was loaded from.
      */
     private URL url;
+
+    /**
+     * Internal logger object used to log events.
+     */
     private Logger logger;
 
+    /**
+     * Stores the settings of all {@link FloatControl}s. Used to restore settings after calling {@link #reset}
+     */
     private HashMap<FloatControl.Type, Float> state;
 
     /**

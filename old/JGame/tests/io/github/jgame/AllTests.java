@@ -12,6 +12,8 @@ import io.github.jgame.sprite.SpriteTest;
 import io.github.jgame.testListeners.InvokedMethodListener;
 import io.github.jgame.testListeners.SuiteListener;
 import io.github.jgame.testListeners.TestListener;
+import io.github.jgame.util.ScrapUtilsTest;
+import io.github.jgame.util.VersionTest;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;

@@ -14,12 +14,18 @@ import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * Utils for logging with the native java library.
+ */
 public class GenericLogger {
+    /**
+     * Internal logger used for logging events.
+     */
     private static final Logger logger = Logger.getLogger(GenericLogger.class.getName());
 
     /**
      * List of active logging paths. Will ignore calls to {@link #setup(Level, Level, Level, String)}
-     * if the supplited {@code logPath} is already in {@code loggingPaths}
+     * if the supplied {@code logPath} is already in {@code loggingPaths}
      */
     private static LinkedList<String> loggingPaths = new LinkedList<>();
 
@@ -36,7 +42,7 @@ public class GenericLogger {
 
     /**
      * Setup the handlers and formatters. Safe to call more than once,
-     * as it aborts if it has already been called before.
+     * as it aborts if the {@code logPath} is already in {@link #loggingPaths}
      *
      * @param CONSOLE_LEVEL Logging level for ConsoleHandler
      * @param LATEST_LEVEL Logging level for output to latest.log

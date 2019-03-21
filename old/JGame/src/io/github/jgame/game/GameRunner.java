@@ -9,6 +9,10 @@ import java.awt.*;
  * Extension of {@link javax.swing.JFrame}
  */
 public class GameRunner extends JFrame {
+
+    /**
+     * The game that is running (See {@link Game})
+     */
     public Game game;
 
     /**

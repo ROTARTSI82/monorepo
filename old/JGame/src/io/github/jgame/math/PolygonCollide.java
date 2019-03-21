@@ -110,6 +110,7 @@ public class PolygonCollide {
      * (attempted implementation of AffineTransformations)
      *
      * @param scale new scale
+     * @throws UnsupportedOperationException Implementation not working yet.
      */
     public void scaleTo(double scale) {
         throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
@@ -134,6 +135,7 @@ public class PolygonCollide {
      * (Attempted implementation of AffineTransformations)
      *
      * @param degrees rotation
+     * @throws UnsupportedOperationException Implementation not working yet.
      */
     public void rotate(double degrees) {
         throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));

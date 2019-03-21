@@ -1,29 +1,48 @@
-package io.github.jgame.util;
+package io.github.jgame.gameLogic;
 
+/**
+ * ActionManager. Used to run and manage {@link GameAction}s.
+ */
 public class ActionManager {
+    /**
+     * The current action that is active.
+     */
     public GameAction currentAction;
-
-    private long progress;
+    /**
+     *
+     */
+    public long progress;
+    /**
+     * The millisecond time stamp that the action started.
+     */
     private long startTime;
-    private long duration;
 
+    /**
+     * Create a new manager!
+     */
     public ActionManager() {
         reset();
     }
 
+    /**
+     * Reset all fields. Close the {@link #currentAction} properly by setting progress and latestUse
+     */
     private void reset() {
         if (currentAction != null) {
             currentAction.latestUse = System.currentTimeMillis();
             currentAction.progress = currentAction.cooldown;
+            currentAction.parent = null;
         }
 
         currentAction = null;
 
         progress = 0;
         startTime = 0;
-        duration = 0;
     }
 
+    /**
+     * Tick the action manager. See if the action has finished and call {@link GameAction}.tick()
+     */
     public void tick() {
         if (currentAction != null) {
             long now = System.currentTimeMillis();
@@ -39,6 +58,9 @@ public class ActionManager {
         }
     }
 
+    /**
+     * Stop the current action.
+     */
     public void stop() {
         if (currentAction != null) {
             currentAction.onInterrupt();
@@ -46,34 +68,43 @@ public class ActionManager {
         }
     }
 
-    public void doAction(GameAction action, boolean interrupt, boolean rejectDuplicates) {
+    /**
+     * Try to do a new action.
+     * Checks for cooldowns and duplicates.
+     *
+     * @param action           Action to do
+     * @param interrupt        If the action should interrupt the current one.
+     * @param rejectDuplicates If the action should be rejected if ids match.
+     * @return true if successful
+     */
+    public boolean doAction(GameAction action, boolean interrupt, boolean rejectDuplicates) {
         long now = System.currentTimeMillis();
         if (now - action.latestUse < action.cooldown) {  // The action is still on cooldown!
             action.onReject("cooldown");
-            return;
+            return false;
         }
         if (currentAction == null) {  // No active action. Do the action.
             action.parent = this;
             currentAction = action;
             startTime = now;
             action.onStart();
-            duration = action.duration;
-            return;
+            return true;
         }
 
         if (action.id == currentAction.id && rejectDuplicates) {  // Duplicate of current action. Reject.
             action.onReject("duplicate");
-            return;
+            return false;
         }
         if (interrupt) {  // This action takes priority over the current action
+            action.parent = this;
             currentAction.onInterrupt();
             reset();
             currentAction = action;
             startTime = now;
             currentAction.onStart();
-            duration = currentAction.duration;
-            return;
+            return true;
         }
         action.onReject("busy");  // Current action takes priority over this action!
+        return false;
     }
 }

@@ -9,7 +9,15 @@ import static io.github.jgame.util.StringManager.fmt;
  * Implements {@code distanceTo()}, {@code velocityTo()}, and {@code angleTo()}
  */
 public class Vector2 {
+
+    /**
+     * The first double in the the set.
+     */
     public double x;
+
+    /**
+     * The second double in the set.
+     */
     public double y;
 
     /**
@@ -129,6 +137,11 @@ public class Vector2 {
         return Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
     }
 
+    /**
+     * toString() for pretty printing.
+     *
+     * @return "Vector2[x, y]"
+     */
     @Override
     public String toString() {
         return fmt(JGameStr.getString("math.Vector2.toStringFormat"), x, y);

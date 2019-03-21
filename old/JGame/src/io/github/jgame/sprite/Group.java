@@ -6,6 +6,10 @@ import java.util.LinkedList;
  * A list of sprites that can be used for collision detection
  */
 public class Group {
+
+    /**
+     * The internal list of sprites.
+     */
     public LinkedList<Sprite> sprites = new LinkedList<>();
 
     /**

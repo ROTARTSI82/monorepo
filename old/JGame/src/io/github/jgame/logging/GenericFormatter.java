@@ -12,7 +12,7 @@ import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
 
 /**
- * Generic format for .log
+ * Generic formatter for logging.
  */
 public class GenericFormatter extends Formatter {
     /**

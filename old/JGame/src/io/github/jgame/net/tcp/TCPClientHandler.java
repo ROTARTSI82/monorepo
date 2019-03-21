@@ -18,10 +18,29 @@ import static io.github.jgame.util.StringManager.fmt;
  * Representation of clients used by the {@link TCPServer}
  */
 public class TCPClientHandler {
-    private BufferedReader in;
+    /**
+     * Output stream. Write to this stream to send data to the client.
+     */
     private PrintWriter out;
+
+    /**
+     * Input stream. Read this stream to read messages from the client.
+     */
+    private BufferedReader in;
+
+    /**
+     * Socket. Contains host and port of the client. See {@link Socket}
+     */
     private Socket socket;
+
+    /**
+     * The server this client is connected to.
+     */
     private TCPServer factory;
+
+    /**
+     * Internal logger object used for logging.
+     */
     private Logger logger;
 
     /**

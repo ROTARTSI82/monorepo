@@ -1,4 +1,4 @@
-package io.github.jgame;
+package io.github.jgame.util;
 
 import org.testng.annotations.Test;
 

@@ -12,10 +12,28 @@ import java.util.logging.Logger;
 import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * Client implementation of UDP.
+ */
 public class UDPClient {
+    /**
+     * Internal logger object used to log events.
+     */
     private Logger logger;
+
+    /**
+     * The socket that the client is binded to.
+     */
     private DatagramSocket socket;
+
+    /**
+     * The port that the client is connected to.
+     */
     private InetAddress host;
+
+    /**
+     * The port that the client is connected to.
+     */
     private int port;
 
     /**

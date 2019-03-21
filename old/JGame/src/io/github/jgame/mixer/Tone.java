@@ -10,6 +10,7 @@ public class Tone {
      * The raw data to play
      */
     public byte[] data;
+
     /**
      * Should the raw data be interpreted as
      * stereo: [L1, L1, R1, R1, L2, L2, R1, R1, ...]

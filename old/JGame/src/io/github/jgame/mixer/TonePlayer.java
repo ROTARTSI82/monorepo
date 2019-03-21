@@ -11,9 +11,27 @@ import static io.github.jgame.Constants.JGameStr;
  */
 public class TonePlayer extends Thread {
 
+    /**
+     * Internal logger object used for logging events.
+     */
     private Logger logger;
+
+    /**
+     * Should the {@link #tone} be interpreted as stereo or mono sound?
+     * <p>
+     * Stereo sound is in the format of: [L1, L1, R1, R1, L2, L2, R2, R2, ...]
+     * Mono sound is: [T1, T1, T2, T2, T3, T3, ...]
+     */
     private boolean isStereo;
+
+    /**
+     * Sound generator to use for playing the tone.
+     */
     private SoundGenerator soundPlayer;
+
+    /**
+     * The raw sound data.
+     */
     private byte[] tone;
 
     /**

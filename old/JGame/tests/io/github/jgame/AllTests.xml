@@ -49,8 +49,8 @@
 
     <test name="Generic JGame Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
         <classes>
-            <class name="io.github.jgame.ScrapUtilsTest"/>
-            <class name="io.github.jgame.VersionTest"/>
+            <class name="io.github.jgame.util.ScrapUtilsTest"/>
+            <class name="io.github.jgame.util.VersionTest"/>
         </classes>
     </test>
 </suite>

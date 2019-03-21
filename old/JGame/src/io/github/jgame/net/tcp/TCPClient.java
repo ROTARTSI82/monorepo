@@ -20,9 +20,24 @@ import static io.github.jgame.util.StringManager.fmt;
  * Client for TCP protocol.
  */
 public class TCPClient {
+    /**
+     * The socket. Contains the host and the port. See {@link Socket}
+     */
     private Socket socket;
+
+    /**
+     * Output stream. Write to this stream to send data to the server.
+     */
     private PrintWriter out;
+
+    /**
+     * Input stream. Read this stream to read messages from the server.
+     */
     private BufferedReader in;
+
+    /**
+     * Internal logger object used for logging events.
+     */
     private Logger logger;
 
     /**

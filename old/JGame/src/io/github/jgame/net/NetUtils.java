@@ -1,7 +1,7 @@
 package io.github.jgame.net;
 
-import io.github.jgame.Version;
 import io.github.jgame.logging.GenericLogger;
+import io.github.jgame.util.Version;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +19,10 @@ import static io.github.jgame.util.StringManager.fmt;
  * Data serialization and deserialization for networking.
  */
 public class NetUtils {
+
+    /**
+     * The logger object used for logging.
+     */
     private static Logger logger = Logger.getLogger(NetUtils.class.getName());
 
     /**

@@ -21,27 +21,53 @@ public class Sprite {
      */
     private static BufferedImage defaultImage = ImageManager.fromText("MissIMG", Constants.defaultFont, Color.black);
 
-    private Logger logger;
-
+    /**
+     * Determines if {@code ButtonManager.blit(Graphics2D g2d)} also draws
+     * this sprite. See {@link io.github.jgame.gui.ButtonManager}
+     */
+    public boolean visible;
     /**
      * {@code active} determines whether this sprite is acting as a button ({@code ButtonManager.update()} would call
      * this sprite's {@link #updateHover(boolean, Vector2)} and {@link #onClick(Vector2)}
-     * <p>
-     * {@code visible} determines if
-     * {@code ButtonManager.blit(Graphics2D g2d)} also draws this sprite. See {@link io.github.jgame.gui.ButtonManager}
      */
-    public boolean visible, active;
-
-    public boolean flipVertical, flipHorizontal;
-    public Vector2 pos, vel;
+    public boolean active;
+    /**
+     * Vertical mirroring/reflection
+     */
+    public boolean flipVertical;
+    /**
+     * Horizontal mirroring/reflection
+     */
+    public boolean flipHorizontal;
+    /**
+     * The position of the sprite.
+     */
+    public Vector2 pos;
+    /**
+     * The velocity of the sprite.
+     */
+    public Vector2 vel;
+    /**
+     * The rotation of the sprite.
+     */
     public double rot = 0;
+    /**
+     * The rectangle used for collision detection by the sprite.
+     */
+    Rectangle rect;
 
     /**
      * The absolute position to blit this image to. (the topleft of the image.)
      */
     protected Vector2 absPos;
-    Rectangle rect;
+    /**
+     * The sprite's image.
+     */
     BufferedImage image;
+    /**
+     * Logger object used for logging.
+     */
+    private Logger logger;
 
     /**
      * A list of groups this sprite is in.

@@ -9,8 +9,19 @@ import java.awt.*;
  * TextSprite. Very resource intensive. Avoid if possible. Further optimization is needed.
  */
 public class TextSprite extends Sprite {
+    /**
+     * The message displayed. Updatable directly, but call {@link #updateImageFromProperties()} to update image.
+     */
     private String text;
+
+    /**
+     * The font used. Updatable directly, but call {@link #updateImageFromProperties()} to update image.
+     */
     private Font font;
+
+    /**
+     * The color of the text. Updatable directly, but call {@link #updateImageFromProperties()} to update image.
+     */
     private Color textColor;
 
     /**

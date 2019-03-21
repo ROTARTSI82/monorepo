@@ -11,7 +11,15 @@ import java.util.LinkedList;
  * {@link Rectangle}
  */
 public class MaskedSprite extends Sprite {
+
+    /**
+     * The {@link PolygonCollide} hitbox used for collision detection.
+     */
     private PolygonCollide hitbox;
+
+    /**
+     * The polygon version of the {@link #hitbox}. Assigned during {@link #updateRect()}
+     */
     private Polygon poly;
 
     /**
