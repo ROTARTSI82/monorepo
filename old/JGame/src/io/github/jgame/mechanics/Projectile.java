@@ -12,11 +12,32 @@ import static io.github.jgame.Constants.rand;
  * Projectiles. Support for despawning, blitting, updates, blume, etc
  */
 public class Projectile extends Sprite {
+    /**
+     * For how many milliseconds would the projectile last before it despawns?
+     */
     public long projectileLife;
+
+    /**
+     * When was the projectile "born"? The difference between this and the current time would be used
+     * to determine if the projectile should be despawned.
+     */
     public long born;
+
+    /**
+     * The degree of random noise that should be added to the velocity every call to {@link #update()}
+     */
     private Vector2 wobble;
+
     private Vector2 target;
+
+    /**
+     * Speed of the projectile.
+     */
     private double speed;
+
+    /**
+     * The degree of random noice that would be added to the velocity every call to {@link #recalculate(boolean, boolean)}
+     */
     private Vector2 blume;
 
     /**

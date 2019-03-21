@@ -5,11 +5,21 @@ import io.github.jgame.math.Vector2;
 
 import java.awt.*;
 
+/**
+ * TextSprite. Very resource intensive. Avoid if possible. Further optimization is needed.
+ */
 public class TextSprite extends Sprite {
     private String text;
     private Font font;
     private Color textColor;
 
+    /**
+     * Create text!
+     *
+     * @param string     The string to display
+     * @param spriteFont The font to use
+     * @param color      The color to blit it in.
+     */
     public TextSprite(String string, Font spriteFont, Color color) {
         super(ImageManager.fromText(string, spriteFont, color));
 
@@ -18,6 +28,13 @@ public class TextSprite extends Sprite {
         text = string;
     }
 
+    /**
+     * Update the properties of the text.
+     *
+     * @param string New string.
+     * @param spriteFont New font.
+     * @param color New color.
+     */
     public void updateText(String string, Font spriteFont, Color color) {
         font = spriteFont;
         textColor = color;
@@ -25,15 +42,22 @@ public class TextSprite extends Sprite {
         updateImageFromProperties();
     }
 
+    /**
+     * Simply update the message.
+     *
+     * @param string New string.
+     */
     public void updateText(String string) {
         text = string;
         updateImageFromProperties();
     }
 
+    /**
+     * Get a new image from the current properties of the {@code TextSprite}
+     */
     private void updateImageFromProperties() {
         image = ImageManager.fromText(text, font, textColor);
         size = new Vector2(image.getWidth(null), image.getHeight(null));
-        absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
-        rect = new Rectangle((int) absPos.x, (int) absPos.y, (int) size.x, (int) size.y);
+        super.updateRect();
     }
 }

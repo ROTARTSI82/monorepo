@@ -12,6 +12,5 @@ io.github.jgame.net
 io.github.jgame.net.tcp
 io.github.jgame.net.udp
 io.github.jgame.sprite
-io.github.jgame.testListeners
 io.github.jgame.tests.window
 io.github.jgame.util

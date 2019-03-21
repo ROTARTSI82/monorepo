@@ -10,9 +10,21 @@ import static io.github.jgame.Constants.JGameStr;
  * <a href="https://www.youtube.com/watch?v=Ap5eBYKlGDo">Good video resource</a>
  */
 public class PolygonCollide {
+    /**
+     * Origin. Where all the axes start!
+     */
     private static final Vector2 origin = new Vector2(0, 0);
+
+    /**
+     * The midpoint of the collision mask.
+     */
     public Vector2 center;
+
+    /**
+     * Checkpointed data before any AffineTransformations (rotations or scaling)
+     */
     private double[][] untransformed;
+
     private double[][] verts;
 
     /**

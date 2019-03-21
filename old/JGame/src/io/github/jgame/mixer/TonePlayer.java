@@ -34,7 +34,7 @@ public class TonePlayer extends Thread {
     }
 
     /**
-     * Play the sound!
+     * Play the sound! (Async, of course)
      */
     @Override
     public void run() {

@@ -1,6 +1,7 @@
 package io.github.jgame.net.tcp;
 
 import io.github.jgame.Constants;
+import io.github.jgame.net.NetUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,6 +15,9 @@ import java.util.logging.Logger;
 import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * TCP Server implementation (handles clients)
+ */
 public class TCPServer {
     private ServerSocket serverSocket;
     private HashMap<String, TCPClientHandler> clients = new HashMap<>();
@@ -21,11 +25,23 @@ public class TCPServer {
     InetAddress host;
     int port;
 
-    private int clientLimit;
-    private Logger logger;
-
+    /**
+     * Table used to serialize actions. See {@link NetUtils}.serialize()
+     */
     public HashMap<String, Integer> serialTable;
+    private Logger logger;
+    /**
+     * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
+     * <p>
+     * Therefore, the serial table must not contain any duplicate values for this to work properly.
+     * <p>
+     * Used for deserialization of actions.
+     */
     public HashMap<Integer, String> deserialTable;
+    /**
+     * The number of clients we accept before we start kicking them.
+     */
+    private int clientLimit;
 
     /**
      * Host a TCP server at a specific address
@@ -58,13 +74,42 @@ public class TCPServer {
         }
     }
 
+    /**
+     * Send a message to all clients globally.
+     *
+     * @param datagram Message
+     */
     public void sendToAll(HashMap<String, Object> datagram) {
         for (TCPClientHandler handler : clients.values()) {
             handler.send(datagram);
         }
     }
 
-    public void acceptNewClients() throws IOException {
+    /**
+     * Used in constructor to determine action table. Action tables are used to serialize actions. See
+     * {@link NetUtils}.serialize()
+     *
+     * @return Table
+     */
+    public HashMap<String, Integer> getActionTable() {
+        return Constants.BUILTIN_ACTIONS;
+    }
+
+    /**
+     * Remove client. Client may have disconnected or something.
+     *
+     * @param client Client to remove
+     */
+    public void removeClient(TCPClientHandler client) {
+        clients.remove(client.toString());
+    }
+
+    /**
+     * Accept new clients and call the update() functions of all {@link TCPClientHandler}s.
+     *
+     * @throws IOException Accepting the client may cause errors.
+     */
+    public void update() throws IOException {
         Socket client = serverSocket.accept();
         String key = fmt("%s:%s", client.getInetAddress().toString(), client.getPort());
         TCPClientHandler handler = new TCPClientHandler(client, this);
@@ -83,35 +128,44 @@ public class TCPServer {
         } else {
             logger.warning(JGameStr.getString("net.TCPServer.alreadyExists"));
         }
-    }
 
-    public HashMap<String, Integer> getActionTable() {
-        return Constants.BUILTIN_ACTIONS;
-    }
 
-    public void removeClient(TCPClientHandler client) {
-        clients.remove(client.toString());
-    }
-
-    public void update() {
-        for (TCPClientHandler client : clients.values()) {
+        for (TCPClientHandler cli : clients.values()) {
             try {
-                client.update();
+                cli.update();
             } catch (IOException e) {
                 logger.log(Level.WARNING, JGameStr.getString("net.TCPServer.updateFail"), e);
             }
         }
     }
 
+    /**
+     * Handler for all messages we receive.
+     *
+     * @param datagram Message
+     * @param client From what client?
+     */
     public void parse(HashMap<String, Object> datagram, TCPClientHandler client) {
 
     }
 
+    /**
+     * Send a message!
+     *
+     * @param datagram Message to send
+     * @param datAddress Host to send to (which computer?)
+     * @param datPort Port to send to (which program on that computer?)
+     */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) {
         logger.finest(fmt(JGameStr.getString("net.sendMSG"), host, port, datAddress, datPort, datagram));
         clients.get(datAddress + ":" + datPort).send(datagram);
     }
 
+    /**
+     * Close all connections. Calls {@link TCPClientHandler}.shutdown() for every client.
+     *
+     * @throws IOException Closing connections may fail.
+     */
     public void shutdown() throws IOException {
         for (TCPClientHandler client : clients.values()) {
             try {

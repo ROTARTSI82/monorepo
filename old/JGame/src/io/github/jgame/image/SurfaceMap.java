@@ -12,10 +12,25 @@ import java.awt.image.BufferedImage;
  * For scaling coordinates between two panes and blitting it to the screen.
  */
 public class SurfaceMap {
-    private BufferedImage resized;
-    private Vector2 scroll;
+
+    /**
+     * Graphics2D to blit to. (Blit to this to blit to the entire SurfaceMap)
+     */
     public Graphics2D g2d;
+    /**
+     * The raw image.
+     */
     public BufferedImage img;
+    /**
+     * Resized image ready for blitting!
+     */
+    private BufferedImage resized;
+    /**
+     * Where to blit the topleft of the {@link #img} for the map to be scrolled properly
+     * <p>
+     * (For the correct position on the map to be centered onscreen propery)
+     */
+    private Vector2 scroll;
 
     /**
      * @param x    Width of {@code SurfaceMap}

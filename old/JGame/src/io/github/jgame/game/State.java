@@ -20,10 +20,19 @@ import static io.github.jgame.Constants.JGameStr;
 public class State {
     public KeyHandler keyHandler;
     public MouseHandler mouseHandler;
+
+    /**
+     * Menu. Extension of {@link JMenuBar}
+     */
     public MenuHandler menuHandler;
 
     protected Game game;
 
+    /**
+     * New state!
+     *
+     * @param parent The Game object.
+     */
     public State(Game parent) {
         game = parent;
         keyHandler = getKeyHandler();
@@ -31,6 +40,13 @@ public class State {
         menuHandler = getMenuHandler();
     }
 
+    /**
+     * Draw the game to the screen. Call's the {@link #game}.repaint() function which in turn
+     * calls the {@link #updateGraphics(Graphics)} function.
+     * <p>
+     * This is rather resource intensive and should be ticked
+     * less than {@link #updateLogic()}.
+     */
     public void handleRepaint() {
         game.repaint();
     }
@@ -67,6 +83,9 @@ public class State {
         return new double[]{size.getWidth(), size.getHeight()};
     }
 
+    /**
+     * Update game logic. No graphical updates.
+     */
     public void updateLogic() {
 
     }
@@ -89,6 +108,11 @@ public class State {
 
     }
 
+    /**
+     * Draw things to the screen! Graphical updates here!
+     *
+     * @param g Graphics to draw to.
+     */
     public void updateGraphics(Graphics g) {
         ((Graphics2D) g).setRenderingHints(Constants.RENDER_HINTS);
     }

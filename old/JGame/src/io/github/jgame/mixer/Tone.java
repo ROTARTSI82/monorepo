@@ -6,10 +6,24 @@ import java.util.LinkedList;
  * Playable synthetic tone
  */
 public class Tone {
-    private boolean isStereo;
+    /**
+     * The raw data to play
+     */
     public byte[] data;
+    /**
+     * Should the raw data be interpreted as
+     * stereo: [L1, L1, R1, R1, L2, L2, R1, R1, ...]
+     * or mono: [T1, T1, T2, T2, T3, T3, ...]
+     */
+    private boolean isStereo;
+    /**
+     * SoundGenerator to use to play the tone.
+     */
     private SoundGenerator parent;
 
+    /**
+     * List of active threads playing the sound. A new thread is created every time {@link #play} is called.
+     */
     private LinkedList<TonePlayer> threads = new LinkedList<>();
 
     /**

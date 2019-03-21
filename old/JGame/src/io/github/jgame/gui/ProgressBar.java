@@ -16,12 +16,40 @@ public class ProgressBar extends Sprite {
     public double maxVal;
     public double minVal;
     public double value;
+
+    /**
+     * Color of the bar when empty (the background of the bar)
+     */
     private Color emptyColor;
+
+    /**
+     * The dimensions of the big rectangle outlining the entire progress bar
+     */
     private Rectangle outline;
+
+    /**
+     * The dimensions of the actual bar.
+     */
     private Rectangle bar;
+
+    /**
+     * The size of a full bar.
+     */
     private Dimension innerSize;
+
+    /**
+     * The width of the outline around the bar.
+     */
     private int width;
+
+    /**
+     * The color of the bar.
+     */
     private Color barColor;
+
+    /**
+     * The color of the area outlining the bar
+     */
     private Color outlineColor;
 
     /**

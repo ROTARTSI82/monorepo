@@ -10,6 +10,9 @@ import java.util.HashMap;
  * JPanel's key managers are preferred.
  */
 public class IndependentKeyTracker implements KeyEventDispatcher {
+    /**
+     * The state of the keys. Queried using {@link #isPressed(int)} and updated using {@link #dispatchKeyEvent(KeyEvent)}
+     */
     private volatile HashMap<Integer, Boolean> keyStates = new HashMap<>();
 
     /**

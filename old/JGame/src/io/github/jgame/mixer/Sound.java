@@ -15,8 +15,20 @@ import static io.github.jgame.util.StringManager.fmt;
  * See {@link Clip}
  */
 public class Sound {
+
+    /**
+     * String name for the sound. Either the filename or raw url depending on how the sound was loaded.
+     */
     public String name;
+
+    /**
+     * The raw clip to play!
+     */
     private Clip sound;
+
+    /**
+     * The URL the sound was loaded from.
+     */
     private URL url;
     private Logger logger;
 

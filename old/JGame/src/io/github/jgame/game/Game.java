@@ -14,7 +14,15 @@ public class Game extends JPanel {
 
     public GameRunner runner;
 
+    /**
+     * A HashMap containing all of the states for this game.
+     */
     protected HashMap<String, State> states = new HashMap<>();
+
+    /**
+     * The current state of the game. This dictates what event handlers are active and what
+     * code is being executed for the mainloop (both blitting and logic updates)
+     */
     protected String state = "main";
 
     /**
@@ -60,7 +68,9 @@ public class Game extends JPanel {
     }
 
     /**
-     * Repaint the surface. Defaults to calling the current state's handleRepaint()
+     * Repaint the surface. Calls the current state's handleRepaint()
+     *
+     * This in turn causes {@link #paintComponent(Graphics)} to be called.
      */
     public void handleRepaint() {
         states.get(state).handleRepaint();

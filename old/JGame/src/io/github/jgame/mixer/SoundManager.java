@@ -50,10 +50,13 @@ public class SoundManager extends ResourceManager {
      */
 
     /**
-     * Adding a file from the {@link #fromDir(File)}. Can be called to simply add a file and dirive an identifier.
+     * Adding a file from the {@link #fromDir(File)}. The identifier is derived from removing {@code baseLen}
+     * characters from the front of the string.
+     *
+     * <b>THE USER SHOULD NEVER CALL THIS FUNCTION!</b>
      *
      * @param file    File
-     * @param baseLen length of base path (to be removed for the identifier.
+     * @param baseLen length of base path (to be removed to get the identifier.)
      */
     @Override
     public void addFile(File file, int baseLen) {

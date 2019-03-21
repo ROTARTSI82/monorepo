@@ -18,9 +18,20 @@ import static io.github.jgame.util.StringManager.fmt;
 public class RSA implements Serializable {
     // TODO: Make these values transient?
 
+    /**
+     * The bit-length of the privateKey.
+     */
     private int nBits;
 
+    /**
+     * Messages are raised to the power of the privateKey mod {@link #modulus} to decrypt them.
+     * <p>
+     * To encrypt, the are raised to the power of 65537 mod {@link #modulus}.
+     */
     private BigInteger privateKey;
+    /**
+     * Messages are moded by this value to both encrypt and decrypt.
+     */
     private BigInteger modulus;
 
     private BigInteger phi;
@@ -200,6 +211,12 @@ public class RSA implements Serializable {
         return builder.toString();
     }
 
+    /**
+     * toString() for pretty printing.
+     *
+     * @return String
+     */
+    @Override
     public String toString() {
         return fmt(JGameStr.getString("crypto.RSA.toStringFormat"),
                 privateKey, modulus, nBits);

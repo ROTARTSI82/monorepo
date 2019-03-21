@@ -24,8 +24,21 @@ import static io.github.jgame.Constants.settings;
  */
 public class UserDatabase implements Serializable {
 
+    /**
+     * Contains the following:
+     * <ol>
+     * <li>Initialization Vectors (used for key generation to encrypt user data)</li>
+     * <li>Salts (Used to hash passwords)</li>
+     * <li>Password Hash Digests</li>
+     * <li>User Data (Encrypted using the user's passcode, salt, and init vector)</li>
+     * </ol>
+     */
     private HashMap<String, HashMap<String, Byte[]>> userData = new HashMap<>();
 
+    /**
+     * Cipher used to encrypt user data. By default it is AES/CBC/PKCS5Padding
+     * (Advanced Encryption Standard with Cipher Block Chaining with PKC5 Padding.)
+     */
     private Cipher cipher;
     private int saltLen;
 

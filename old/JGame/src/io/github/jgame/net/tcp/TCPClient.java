@@ -16,13 +16,27 @@ import java.util.logging.Logger;
 import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * Client for TCP protocol.
+ */
 public class TCPClient {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private Logger logger;
 
+    /**
+     * Table used to serialize actions. See {@link NetUtils}.serialize()
+     */
     private HashMap<String, Integer> serialTable;
+
+    /**
+     * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
+     * <p>
+     * Therefore, the serial table must not contain any duplicate values for this to work properly.
+     * <p>
+     * Used for deserialization of actions.
+     */
     private HashMap<Integer, String> deserialTable;
 
     /**
@@ -53,6 +67,11 @@ public class TCPClient {
         }
     }
 
+    /**
+     * Send a message to the server
+     *
+     * @param datagram Message to send
+     */
     public void send(HashMap<String, Object> datagram) {
         logger.finest(fmt(JGameStr.getString("net.sendMSG"), "?", "?",
                 socket.getInetAddress(), socket.getPort(), datagram));
@@ -60,10 +79,21 @@ public class TCPClient {
         out.println(send);
     }
 
+    /**
+     * Used in constructor to determine action table. Action tables are used to serialize actions. See
+     * {@link NetUtils}.serialize()
+     *
+     * @return Table
+     */
     public HashMap<String, Integer> getActionTable() {
         return Constants.BUILTIN_ACTIONS;
     }
 
+    /**
+     * Handle serverShutdown and kick events.
+     *
+     * @throws IOException Closing the connection may fail.
+     */
     public void update() throws IOException {
         HashMap<String, Object> dat = NetUtils.deserialize(Base64.getDecoder().decode(in.readLine()),
                 deserialTable);
@@ -88,18 +118,35 @@ public class TCPClient {
         parse(dat);
     }
 
-    public void onKick(String reason) throws IOException {
-        shutdown();
+    /**
+     * Handler for kick events.
+     *
+     * @param reason String reason
+     */
+    public void onKick(String reason) {
+
     }
 
+    /**
+     * Handler for serverShutdown events.
+     */
     public void onServerShutdown() {
 
     }
 
+    /**
+     * Handler for all messages sent here.
+     *
+     * @param datagram Message
+     */
     public void parse(HashMap<String, Object> datagram) {
 
     }
 
+    /**
+     * Close all connections and send the clientShutdown message.
+     * @throws IOException Closing connection may fail.
+     */
     public void shutdown() throws IOException {
         HashMap<String, Object> leaveMsg = new HashMap<>();
         leaveMsg.put("action", "clientShutdown");

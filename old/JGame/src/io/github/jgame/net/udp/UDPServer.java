@@ -20,12 +20,41 @@ public class UDPServer {
     private Logger logger;
     private int port;
 
+    /**
+     * List of UUIDs of verified packets that have already been handled.
+     * <p>
+     * When we get a packet with a UUID in this list, we do not call the {@link #parse} handler
+     * and simply send the confirm message.
+     */
     private LinkedList<String> verifiedByMe = new LinkedList<>();
+
+    /**
+     * Active {@link VerifyPacket}s that need to be updated.
+     */
     private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
+
+    /**
+     * List of active clients.
+     */
     private HashMap<String, UDPClientHandler> clients = new HashMap<>();
+
+    /**
+     * Table used to serialize actions. See {@link NetUtils}.serialize()
+     */
     private HashMap<String, Integer> serialTable;
+
+    /**
+     * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
+     *
+     * Therefore, the serial table must not contain any duplicate values for this to work properly.
+     *
+     * Used for deserialization of actions.
+     */
     private HashMap<Integer, String> deserialTable;
 
+    /**
+     * How many clients can connect to the server at one time before we start kicking them.
+     */
     private int clientLimit;
 
     /**
@@ -58,10 +87,24 @@ public class UDPServer {
         }
     }
 
+    /**
+     * Used in constructor to determine action table. Action tables are used to serialize actions. See
+     * {@link NetUtils}.serialize()
+     *
+     * @return Table
+     */
     public HashMap<String, Integer> getActionTable() {
         return Constants.BUILTIN_ACTIONS;
     }
 
+    /**
+     * Send message
+     *
+     * @param datagram Message to send
+     * @param datAddress Host to send to
+     * @param datPort Port to send to
+     * @throws IOException Sending message over connection may fail.
+     */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws IOException {
         logger.finest(fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), port,
                 datAddress, datPort, datagram));
@@ -70,6 +113,11 @@ public class UDPServer {
         socket.send(packet);
     }
 
+    /**
+     * Send the packet to all clients in client list.
+     *
+     * @param datagram Packet to send
+     */
     public void sendToAll(HashMap<String, Object> datagram) {
         for (UDPClientHandler client : clients.values()) {
             try {
@@ -80,10 +128,24 @@ public class UDPServer {
         }
     }
 
+    /**
+     * Event handler for all messages sent here.
+     *
+     * @param datagram Message
+     * @param packet raw packet
+     */
     public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
 
     }
 
+    /**
+     * Accept new messages and add the address to our client list if the address is unkown and we have
+     * not exceeded the {@link #clientLimit}.
+     *
+     * Also handle verifySends and shutdown events. Forward others to the {@link #parse} handler.
+     *
+     * @throws IOException Connection may fail
+     */
     public void update() throws IOException {
         byte[] bytes = new byte[Constants.NET_PACKET_SIZE];
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
@@ -148,10 +210,18 @@ public class UDPServer {
         parse(packetDict, packet);
     }
 
+    /**
+     * Event Handler for clientShutdown. Removes the address from our list of clients.
+     *
+     * @param packet Shutdown packet (the packet the client sent declaring the shutdown event)
+     */
     public void onClientShutdown(DatagramPacket packet) {
         clients.remove(packet.getAddress().toString() + ":" + packet.getPort());
     }
 
+    /**
+     * Calls all clients' {@link UDPClientHandler}.shutdown(). Stops all {@link #pendingPackets}
+     */
     public void shutdown() {
         for (UDPClientHandler client : clients.values()) {
             try {
@@ -166,6 +236,16 @@ public class UDPServer {
         }
     }
 
+    /**
+     * Add a VerifyPacket to {@link #pendingPackets}. (In other words, send the packet, and make sure it arrives!)
+     * See {@link VerifyPacket}
+     *
+     * @param datagram Packet
+     * @param frequency Initial delay
+     * @param backoff exponential backoff
+     * @param host host to send to
+     * @param port port to send to
+     */
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, double backoff,
                                 InetAddress host, int port) {
         VerifyPacket packet = new VerifyPacket(datagram, frequency, backoff, host, port, this);

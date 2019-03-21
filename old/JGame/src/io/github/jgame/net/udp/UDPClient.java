@@ -18,10 +18,31 @@ public class UDPClient {
     private InetAddress host;
     private int port;
 
+    /**
+     * List of UUIDs of verified packets that have already been handled.
+     * <p>
+     * When we get a packet with a UUID in this list, we do not call the {@link #parse} handler
+     * and simply send the confirm message.
+     */
     private HashMap<String, VerifyPacket> pendingPackets = new HashMap<>();
+
+    /**
+     * Active {@link VerifyPacket}s that need to be updated.
+     */
     private LinkedList<String> verifiedByMe = new LinkedList<>();
 
+    /**
+     * Table used to serialize actions. See {@link NetUtils}.serialize()
+     */
     private HashMap<String, Integer> serialTable;
+
+    /**
+     * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
+     *
+     * Therefore, the serial table must not contain any duplicate values for this to work properly.
+     *
+     * Used for deserialization of actions.
+     */
     private HashMap<Integer, String> deserialTable;
 
 
@@ -53,10 +74,21 @@ public class UDPClient {
         }
     }
 
+    /**
+     * Event handler for all packets sent to this address.
+     *
+     * @param datagram HashMap that was sent
+     * @param packet Raw {@link DatagramPacket}
+     */
     public void parse(HashMap<String, Object> datagram, DatagramPacket packet) {
 
     }
 
+    /**
+     * Send the clientShutdown event and stop all {@link #pendingPackets}
+     *
+     * @throws IOException Sending packets may fail.
+     */
     public void shutdown() throws IOException {
         HashMap<String, Object> shutdownMsg = new HashMap<>();
         shutdownMsg.put("action", "clientShutdown");
@@ -67,10 +99,21 @@ public class UDPClient {
         }
     }
 
+    /**
+     * Used in constructor to determine action table. Action tables are used to serialize actions. See
+     * {@link NetUtils}.serialize()
+     *
+     * @return Table
+     */
     public HashMap<String, Integer> getActionTable() {
         return Constants.BUILTIN_ACTIONS;
     }
 
+    /**
+     * Handle serverShutdown and kick events. Forward others to the {@link #parse} handler.
+     *
+     * @throws IOException Reading the input and sending messages may fail.
+     */
     public void update() throws IOException {
         byte[] recv = new byte[Constants.NET_PACKET_SIZE];
         DatagramPacket packet = new DatagramPacket(recv, recv.length);
@@ -123,19 +166,42 @@ public class UDPClient {
         parse(packetDict, packet);
     }
 
+    /**
+     * Handler for serverShutdown events
+     */
     public void onServerShutdown() {
 
     }
 
+    /**
+     * Handler for kick events.
+     *
+     * @param reason Kicked for reason.
+     */
     public void onKick(String reason) {
 
     }
 
+    /**
+     * Add a VerifyPacket to {@link #pendingPackets}. (In other words, send the packet, and make sure it arrives!)
+     * See {@link VerifyPacket}
+     *
+     * @param datagram Packet to send
+     * @param frequency Initial delay
+     * @param backoff Exponential backoff
+     */
     public void addVerifyPacket(HashMap<String, Object> datagram, int frequency, double backoff) {
         VerifyPacket packet = new VerifyPacket(datagram, frequency, backoff, this);
         pendingPackets.put(packet.id, packet);
     }
 
+    /**
+     * Send a message to the server
+     *
+     * @param datagram Packet to send
+     *
+     * @throws IOException Sending packets may fail.
+     */
     public void send(HashMap<String, Object> datagram) throws IOException {
         logger.finest(fmt(JGameStr.getString("net.sendMSG"), "?", "?", host, port, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);

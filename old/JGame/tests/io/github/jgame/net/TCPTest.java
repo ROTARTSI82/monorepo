@@ -25,7 +25,6 @@ public class TCPTest {
         TestServer server = new TestServer();
         TestClient client = new TestClient();
         while (!client.done) {
-            server.acceptNewClients();
             server.update();
             client.update();
         }

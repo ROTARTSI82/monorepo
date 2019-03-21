@@ -15,10 +15,30 @@ import static io.github.jgame.util.StringManager.fmt;
  * Generic format for .log
  */
 public class GenericFormatter extends Formatter {
-    SimpleDateFormat dateFormat = new SimpleDateFormat(settings.getString("logging.GenericFormatter.dateFormat"));
+    /**
+     * How the date would be formatted in log messages.
+     */
+    private SimpleDateFormat dateFormat =
+            new SimpleDateFormat(settings.getString("logging.GenericFormatter.dateFormat"));
+
+    /**
+     * Format for the log messages.
+     */
     private String format;
+
+    /**
+     * Format for the head of the log file.
+     */
     private String headFormat;
+
+    /**
+     * Current date. (Will be updated every call to {@link #format(LogRecord)})
+     */
     private Date date = new Date();
+
+    /**
+     * Does this output HTML?
+     */
     private boolean html;
 
     /**

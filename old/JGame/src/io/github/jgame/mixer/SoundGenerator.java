@@ -14,7 +14,14 @@ import java.nio.file.Files;
  * Procedurally generate, play, and save sounds.
  */
 public class SoundGenerator {
+    /**
+     * The sample rate (in Hz, usually 44100)
+     */
     public float rate;
+
+    /**
+     * The sample size (usually a signed 16 bit integer, so -16)
+     */
     private int size;
 
     /**

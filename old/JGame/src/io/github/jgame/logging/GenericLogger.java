@@ -16,6 +16,11 @@ import static io.github.jgame.util.StringManager.fmt;
 
 public class GenericLogger {
     private static final Logger logger = Logger.getLogger(GenericLogger.class.getName());
+
+    /**
+     * List of active logging paths. Will ignore calls to {@link #setup(Level, Level, Level, String)}
+     * if the supplited {@code logPath} is already in {@code loggingPaths}
+     */
     private static LinkedList<String> loggingPaths = new LinkedList<>();
 
     /**

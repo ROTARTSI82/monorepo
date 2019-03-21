@@ -18,8 +18,15 @@ import static io.github.jgame.util.StringManager.fmt;
  * Easy way to perform actions such as opening the webbrowser and printing files to the local printer.
  */
 public class DesktopUtils {
+    /**
+     * Internal desktop object. Gotten using {@code Desktop.getDesktop()}. Use {@link #reload} to refresh this.
+     */
     private static Desktop desktop = Desktop.getDesktop();
     private static Logger logger = Logger.getLogger(DesktopUtils.class.getName());
+
+    /**
+     * Boolean value of whether desktops as a whole are even allowed on the machine.
+     */
     private static boolean supported = Desktop.isDesktopSupported();
 
     /**
@@ -104,7 +111,7 @@ public class DesktopUtils {
     }
 
     /**
-     * Open the file with the default application.
+     * Open the file with the default application. (if supported)
      *
      * @param file File to open
      * @return True if successful, false if exception is thrown or operation is not supported.
@@ -122,7 +129,7 @@ public class DesktopUtils {
     }
 
     /**
-     * Move the specified file to trash
+     * Move the specified file to trash (if supported)
      *
      * @param file File to delete
      * @return True if successful
@@ -137,7 +144,7 @@ public class DesktopUtils {
     }
 
     /**
-     * Open the specified directory in the default file explorer.
+     * Open the specified directory in the default file explorer. (if supported)
      *
      * @param file File to open
      * @return True if successful.

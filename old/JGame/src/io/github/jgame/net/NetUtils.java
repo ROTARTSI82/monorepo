@@ -15,18 +15,30 @@ import java.util.logging.Logger;
 import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
+/**
+ * Data serialization and deserialization for networking.
+ */
 public class NetUtils {
     private static Logger logger = Logger.getLogger(NetUtils.class.getName());
+
+    /**
+     * Get a string from a byte array.
+     * <p>
+     * NOTE: All trailing null bytes will be stripped!
+     *
+     * @param packet DatagramPacket
+     * @return String extracted from the byte array.
+     */
     public static String extractString(DatagramPacket packet) {
-        return new String(packet.getData()).replace("\0", "");
+        return new String(packet.getData()).replaceAll("\\x00+$", "");
     }
 
     /**
-     * Serialize data for use in TCP or UDP
+     * Serialize data for use in TCP or UDP. The data could now be sent over the network in the form of a byte array.
      *
      * @param data        A HashMap containing data (key 'action' would be serialized using {@code actionTable})
-     * @param actionTable A HashMap of actions (integer actionIDs should be 4 digits of hex to be encoded
-     *                    into 2 bytes appended at the front of the returned byte array)
+     * @param actionTable A HashMap of actions (integer actionIDs should be 4 digits of hex. The actionID would
+     *                    be split into 2 bytes and appended to the front of the returned byte array)
      * @return serialized data in the form of a byte array
      */
     public static byte[] serialize(final HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
@@ -67,6 +79,13 @@ public class NetUtils {
         return new byte[0];
     }
 
+    /**
+     * Get the the HashMap&lt;String, Object&gt; from an Object.
+     * (Basically casts everything to the proper type)
+     *
+     * @param o The object
+     * @return The HashMap
+     */
     public static HashMap<String, Object> datFromObject(Object o) {
         if (o instanceof HashMap) {
             HashMap<String, Object> finalOut = new HashMap<>();
@@ -85,6 +104,14 @@ public class NetUtils {
         return null;
     }
 
+    /**
+     * Get the original HashMap from the byte array.
+     *
+     * @param bytes Serialized data
+     * @param actionTable Table used to deserialize data. The actionID would be retrieved from the first 2 bytes
+     *                    of the array. Then, we would get the original string using the actionID and the actionTable.
+     * @return Original HashMap
+     */
     public static HashMap<String, Object> deserialize(byte[] bytes,
                                                       HashMap<Integer, String> actionTable) {
         try {

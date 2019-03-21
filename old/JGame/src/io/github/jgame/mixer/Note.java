@@ -165,9 +165,25 @@ public class Note {
         put("Gb7", 2959.96);
         put("Gb8", 5919.9);
     }};
+
+    /**
+     * Frequency (Hz) to play
+     */
     double frequency;
+
+    /**
+     * How long to keep playing the specified frequency (holding the note)
+     */
     double holdTime;
+
+    /**
+     * How long to rest after playing the note
+     */
     double restTime;
+
+    /**
+     * Volume (multiplier)
+     */
     float noteVolume;
 
     /**

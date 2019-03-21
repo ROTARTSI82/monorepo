@@ -49,6 +49,12 @@ public class ImageManager extends ResourceManager {
         }
     }
 
+    /**
+     * Copy a BufferedImage.
+     *
+     * @param bi BufferedImage to copy
+     * @return cloned image
+     */
     public static BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -56,13 +62,36 @@ public class ImageManager extends ResourceManager {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
-    @Override
-    public LinkedList<String> getExtensions() {
-        return new LinkedList<>() {{
-            add(".png");
-            add(".jpeg");
-            add(".jpg");
-        }};
+    /**
+     * Get a {@code BufferedImage} from text by blitting it to a blank {@code BufferedImage}.
+     *
+     * @param string Text to convert
+     * @param font   Font to render the text in
+     * @param color  Color to render the text in
+     * @return {@code BufferedImage}
+     */
+    public static BufferedImage fromText(String string, Font font, Color color) {
+        // Create a temporary image to get the size of the text.
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = img.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
+        g2d.setFont(font);
+
+        FontMetrics fm = g2d.getFontMetrics();
+        int width = fm.stringWidth(string);
+        int height = fm.getHeight();
+        g2d.dispose();
+
+        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        g2d = img.createGraphics();
+        g2d.setRenderingHints(Constants.RENDER_HINTS);
+        g2d.setFont(font);
+        fm = g2d.getFontMetrics();
+        g2d.setColor(color);
+        g2d.drawString(string, 0, fm.getAscent());
+        g2d.dispose();
+        return img;
     }
 
     /**
@@ -108,41 +137,38 @@ public class ImageManager extends ResourceManager {
     }
 
     /**
-     * Get a {@code BufferedImage} from text by blitting it.
+     * The extensions of files that are added with {@link #fromDir(File)}
      *
-     * @param string Text to convert
-     * @param font   Font to render the text in
-     * @param color  Color to render the text in
-     * @return {@code BufferedImage}
+     * @return List of valid extensions.
      */
-    public static BufferedImage fromText(String string, Font font, Color color) {
-        // Create a temporary image to get the size of the text.
-        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = img.createGraphics();
-        g2d.setRenderingHints(Constants.RENDER_HINTS);
-        g2d.setFont(font);
-
-        FontMetrics fm = g2d.getFontMetrics();
-        int width = fm.stringWidth(string);
-        int height = fm.getHeight();
-        g2d.dispose();
-
-        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        g2d = img.createGraphics();
-        g2d.setRenderingHints(Constants.RENDER_HINTS);
-        g2d.setFont(font);
-        fm = g2d.getFontMetrics();
-        g2d.setColor(color);
-        g2d.drawString(string, 0, fm.getAscent());
-        g2d.dispose();
-        return img;
+    @Override
+    public LinkedList<String> getExtensions() {
+        return new LinkedList<>() {{
+            add(".png");
+            add(".jpeg");
+            add(".jpg");
+        }};
     }
 
+    /**
+     * Add a BufferedImage to the list.
+     *
+     * @param id  String identifier.
+     * @param img Image
+     */
     public void addImage(String id, BufferedImage img) {
         images.put(id, img);
     }
 
+    /**
+     * Adding a file for {@link #fromDir(File)}. The identifier is derived from removing {@code baseLen}
+     * characters from the front of the string.
+     *
+     * <b>THE USER SHOULD NEVER CALL THIS FUNCTION!</b>
+     *
+     * @param file File to add
+     * @param baseLen Length of root. (To be removed to get the identifier)
+     */
     @Override
     public void addFile(File file, int baseLen) {
         String id = getId(file, baseLen);
