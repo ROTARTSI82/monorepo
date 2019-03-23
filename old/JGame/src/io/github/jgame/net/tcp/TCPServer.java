@@ -23,7 +23,7 @@ public class TCPServer {
     /**
      * The socket that the server is binded to. See {@link Socket}
      */
-    private ServerSocket serverSocket;
+    public ServerSocket serverSocket;
 
     /**
      * The list of active clients that are connected.

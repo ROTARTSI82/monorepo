@@ -19,7 +19,7 @@ public class VersionTest {
 
     @Test
     public void testToString() {
-        Version str = new Version("xxx%syyy", 127, 255, 64, 32);
+        Version str = new Version("xxx%s.%s.%syyy", 127, 255, 64, 32);
         assertEquals(str.toString(), "xxx255.64.32yyy");
     }
 

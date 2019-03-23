@@ -79,8 +79,8 @@ public class TCPClientHandler {
         if (dat == null) {
             return;
         }
-        logger.finest(fmt(JGameStr.getString("net.recvMSG"), factory.host, factory.port,
-                socket.getInetAddress(), socket.getPort(), dat));
+        logger.finest(fmt(JGameStr.getString("net.recvMSG"), factory.serverSocket.getInetAddress(),
+                factory.serverSocket.getLocalPort(), socket.getInetAddress(), socket.getPort(), dat));
         String action = (String) dat.get("action");
         if (action != null) {
             if (action.equals("clientShutdown")) {
