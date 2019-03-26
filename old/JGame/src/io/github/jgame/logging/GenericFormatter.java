@@ -19,7 +19,7 @@ public class GenericFormatter extends Formatter {
      * How the date would be formatted in log messages.
      */
     private SimpleDateFormat dateFormat =
-            new SimpleDateFormat(settings.getString("logging.GenericFormatter.dateFormat"));
+            new SimpleDateFormat(settings.get("logging.GenericFormatter.dateFormat"));
 
     /**
      * Format for the log messages.
@@ -66,11 +66,11 @@ public class GenericFormatter extends Formatter {
     public GenericFormatter(boolean useHTML) {
         html = useHTML;
         if (useHTML) {
-            format = settings.getString("logging.GenericFormatter.htmlLogFormat");
-            headFormat = settings.getString("logging.GenericFormatter.htmlLogHead");
+            format = settings.get("logging.GenericFormatter.htmlLogFormat");
+            headFormat = settings.get("logging.GenericFormatter.htmlLogHead");
         } else {
-            format = settings.getString("logging.GenericFormatter.logFormat");
-            headFormat = settings.getString("logging.GenericFormatter.logHead");
+            format = settings.get("logging.GenericFormatter.logFormat");
+            headFormat = settings.get("logging.GenericFormatter.logHead");
         }
     }
 
@@ -168,7 +168,7 @@ public class GenericFormatter extends Formatter {
      * @return formatted string (in HTML)
      */
     private String formatHTML(Throwable e) {
-        return fmt(settings.getString("logging.GenericFormatter.htmlException"),
+        return fmt(settings.get("logging.GenericFormatter.htmlException"),
                 GenericLogger.getStackTrace(e).replace(" ", "&nbsp;")
                         .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
                         .replace("\n", "<br/>\n"));

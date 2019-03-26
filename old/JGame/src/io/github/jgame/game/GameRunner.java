@@ -28,7 +28,6 @@ public class GameRunner extends JFrame {
         setLocationRelativeTo(null);
 
         setResizable(true);
-        setIconImage(new ImageIcon("dat/sprite.png").getImage());
         setSize(640, 480);
     }
 

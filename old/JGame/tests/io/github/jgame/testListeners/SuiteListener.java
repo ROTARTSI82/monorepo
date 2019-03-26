@@ -28,7 +28,7 @@ public class SuiteListener implements ISuiteListener {
 
     @Override
     public void onStart(ISuite suite) {
-        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF, settings.getString("tests.logOut"));
+        GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF, settings.get("tests.logOut"));
 
         log(fmt(JGameStr.getString("AllTests.startSuite"), suite.getName(),
                 suite.getOutputDirectory()), Level.INFO);

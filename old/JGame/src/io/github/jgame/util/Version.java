@@ -2,6 +2,7 @@ package io.github.jgame.util;
 
 import java.io.Serializable;
 
+import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
 
 /**
@@ -85,7 +86,7 @@ public class Version implements Serializable {
      * Create a version with uninitialized values.
      */
     public Version() {
-        format = "%s.%s.%s";
+        format = settings.get("Version.toStringFormat");
         modeValue = -1;
         major = -1;
         minor = -1;

@@ -55,7 +55,7 @@ public class TestListener implements ITestListener {
     public void onStart(ITestContext context) {
         log(fmt("Running %s", context.getName()));
         TestRunner runner = (TestRunner) context;
-        runner.setOutputDirectory(settings.getString("tests.testOut"));
+        runner.setOutputDirectory(settings.get("tests.testOut"));
     }
 
     private void log(String msg) {

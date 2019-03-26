@@ -96,7 +96,7 @@ public class ProgressBar extends Sprite {
      */
     public void updateBar() {
         value = Math.max(minVal, Math.min(value, maxVal));  // Clamp value.
-        bar = new Rectangle(width, width,
+        bar = new Rectangle(width, width,  // The bar is offset by [width, width] from the outline rect.
                 (int) ((value - minVal) * (innerSize.width / (maxVal - minVal))), innerSize.height);
         outline = new Rectangle(0, 0, innerSize.width + width * 2, innerSize.height + width * 2);
     }

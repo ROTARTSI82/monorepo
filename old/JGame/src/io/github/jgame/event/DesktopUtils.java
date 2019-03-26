@@ -174,7 +174,7 @@ public class DesktopUtils {
      * @return true if successful
      */
     public static boolean mailTo(String sendTo, String subject, String cc, String body, String bcc) {
-        String uriStr = fmt(settings.getString("event.DesktopUtils.uriFormat"),
+        String uriStr = fmt(settings.get("event.DesktopUtils.uriFormat"),
                 sendTo, subject, cc, body, bcc);
         try {
             return mailTo(new URI(uriStr));

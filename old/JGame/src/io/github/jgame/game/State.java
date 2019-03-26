@@ -97,6 +97,25 @@ public class State {
     }
 
     /**
+     * Get the size of the physical display as opposed to the window.
+     *
+     * @return Dimensions of physical display
+     */
+    public Dimension getDisplaySize() {
+        return Toolkit.getDefaultToolkit().getScreenSize();
+    }
+
+    /**
+     * Set the cursor. Passed into {@code Cursor.getPredefinedCursor(cursor)}
+     * See {@link Cursor}
+     *
+     * @param cursor predefined cursor id
+     */
+    public void setCursor(int cursor) {
+        game.setCursor(Cursor.getPredefinedCursor(cursor));
+    }
+
+    /**
      * Update game logic. No graphical updates.
      */
     public void updateLogic() {

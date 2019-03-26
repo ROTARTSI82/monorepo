@@ -4,6 +4,7 @@ import io.github.jgame.image.ImageManager;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * The framework for resource manager. Implements recursively adding files from a directory.
@@ -38,7 +39,7 @@ public abstract class ResourceManager {
     public void fromDir(File dir) {
         int dlen = dir.getAbsolutePath().length();
         assert dir.isDirectory();
-        for (File fp : dir.listFiles()) {
+        for (File fp : Objects.requireNonNull(dir.listFiles())) {
             if (fp.isDirectory()) {
                 internalFromDir(fp, dlen);
             } else if (extensions.contains(ImageManager.getExtension(fp.getAbsolutePath()))) {
@@ -77,7 +78,7 @@ public abstract class ResourceManager {
      * @param baseLen Length of prefix.
      */
     public void internalFromDir(File dir, int baseLen) {
-        for (File fp : dir.listFiles()) {
+        for (File fp : Objects.requireNonNull(dir.listFiles())) {
             if (fp.isDirectory()) {
                 internalFromDir(fp, baseLen);
             } else if (extensions.contains(ImageManager.getExtension(fp.getAbsolutePath()))) {

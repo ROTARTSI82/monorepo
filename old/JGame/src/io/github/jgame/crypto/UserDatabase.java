@@ -53,7 +53,7 @@ public class UserDatabase implements Serializable {
      * @throws NoSuchPaddingException Bad padding (incompatible or unrecognized)
      */
     public UserDatabase() throws NoSuchAlgorithmException, NoSuchPaddingException {
-        cipher = Cipher.getInstance(settings.getString("crypto.UserDatabase.cipher"));
+        cipher = Cipher.getInstance(settings.get("crypto.UserDatabase.cipher"));
         saltLen = 16;
     }
 
@@ -69,7 +69,7 @@ public class UserDatabase implements Serializable {
      * @throws InvalidKeyException Bad key supplied.
      */
     private static byte[] hmac(char[] message, byte[] salt) throws NoSuchAlgorithmException, InvalidKeyException {
-        String hmacAlgorithm = settings.getString("crypto.UserDatabase.hmac");
+        String hmacAlgorithm = settings.get("crypto.UserDatabase.hmac");
         Mac sha512_HMAC = Mac.getInstance(hmacAlgorithm);
         SecretKeySpec keySpec = new SecretKeySpec(salt, hmacAlgorithm);
         sha512_HMAC.init(keySpec);
@@ -179,10 +179,10 @@ public class UserDatabase implements Serializable {
     private SecretKeySpec getKey(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256); // AES-256
         SecretKeyFactory f = SecretKeyFactory.getInstance(
-                settings.getString("crypto.UserDatabase.keyFactory"));
+                settings.get("crypto.UserDatabase.keyFactory"));
         byte[] key = f.generateSecret(spec).getEncoded();
 
-        return new SecretKeySpec(key, settings.getString("crypto.UserDatabase.cipherAlgorithm"));
+        return new SecretKeySpec(key, settings.get("crypto.UserDatabase.cipherAlgorithm"));
     }
 
     /**

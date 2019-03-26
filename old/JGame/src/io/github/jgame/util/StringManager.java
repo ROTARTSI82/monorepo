@@ -40,6 +40,10 @@ public class StringManager {
         }
     }
 
+    public StringManager() {
+        bundle = null;
+    }
+
     /**
      * Safe string formatting.
      *
@@ -65,12 +69,15 @@ public class StringManager {
      * @return String
      */
     public String getString(String key) {
-        try {
-            return bundle.getString(key);
-        } catch (MissingResourceException e) {
-            Object[] fmtArgs = {bundle.getBaseBundleName(), bundle.getLocale().toString(), key};
-            logger.warning(fmt(missingResource[0], fmtArgs));
-            return fmt(missingResource[1], fmtArgs);
+        if (bundle != null) {
+            try {
+                return bundle.getString(key);
+            } catch (MissingResourceException e) {
+                // Ignore. Let it fall through
+            }
         }
+        Object[] fmtArgs = {Objects.requireNonNull(bundle).getBaseBundleName(), bundle.getLocale().toString(), key};
+        logger.warning(fmt(missingResource[0], fmtArgs));
+        return fmt(missingResource[1], fmtArgs);
     }
 }

@@ -134,7 +134,7 @@ public class Vector2 {
      */
     public double distanceTo(Vector2 target) {
         Vector2 delta = target.subtract(this);
-        return Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2));
+        return Math.hypot(delta.x, delta.y);
     }
 
     /**

@@ -76,7 +76,7 @@ public class GenericLogger {
         consoleHandler.setLevel(CONSOLE_LEVEL);
         root.addHandler(consoleHandler);
         try {
-            FileHandler fileHandler = new FileHandler(logPath + settings.getString("logging.GenericLogger.latestLog"));
+            FileHandler fileHandler = new FileHandler(logPath + settings.get("logging.GenericLogger.latestLog"));
             fileHandler.setFormatter(htmlFormat);
             fileHandler.setLevel(LATEST_LEVEL);
             root.addHandler(fileHandler);
@@ -96,7 +96,7 @@ public class GenericLogger {
 
 
         if (Constants.BLOCK_LOGS) {
-            for (String awtLogger : settings.getString("logging.GenericLogger.blockedLoggers").split(",")) {
+            for (String awtLogger : settings.get("logging.GenericLogger.blockedLoggers").split(",")) {
                 setLogger(awtLogger, Level.CONFIG);
             }
         }

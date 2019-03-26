@@ -1,14 +1,18 @@
 package io.github.jgame;
 
+import io.github.jgame.util.SettingsBundle;
 import io.github.jgame.util.StringManager;
 import io.github.jgame.util.Version;
 
 import java.awt.*;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Global Constant variables.
@@ -45,16 +49,67 @@ public class Constants {
     public final static StringManager JGameStr;
 
     /**
-     * Settings StringManager.
+     * Settings. Capable of reading and writing.
      */
-    public final static StringManager settings;
+    public final static SettingsBundle settings;
+
+    /**
+     * Internal logger object used for logging.
+     */
+    public final static Logger logger = Logger.getLogger(Constants.class.getName());
 
     static {
-        Locale locale = Locale.getDefault();
-        settings = new StringManager("settings", locale);
-        locale = new Locale(settings.getString("lang"), settings.getString("country"));
-        JGameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
+        SettingsBundle tmp_settings;
+        StringManager tmp_jgameStr;
+        try {
+            tmp_settings = new SettingsBundle("settings.properties");
+            Locale locale = new Locale(tmp_settings.get("lang"), tmp_settings.get("country"));
+            tmp_jgameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load settings", e);
+            tmp_settings = new SettingsBundle();
+            tmp_jgameStr = new StringManager();
+        }
+        settings = tmp_settings;
+        JGameStr = tmp_jgameStr;
     }
+
+    /**
+     * Boolean value of whether to block certain loggers defined in settings.properties.
+     */
+    public final static boolean BLOCK_LOGS = Boolean.valueOf(settings.get("logging.GenericLogger.blockLoggers"));
+    /**
+     * Preset for custom render hints loaded from settings.properties
+     */
+    public final static RenderingHints CUSTOM_RENDER_HINTS = new RenderingHints(
+            new HashMap<>() {{
+                put(RenderingHints.KEY_ALPHA_INTERPOLATION, settings.get("rh.alphaInterpolation").equals("quality") ?
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY : RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+
+                put(RenderingHints.KEY_INTERPOLATION, settings.get("rh.interpolation").equals("bilinear") ?
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR : RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+                put(RenderingHints.KEY_RENDERING, settings.get("rh.rendering").equals("quality") ?
+                        RenderingHints.VALUE_RENDER_QUALITY : RenderingHints.VALUE_RENDER_SPEED);
+
+                put(RenderingHints.KEY_COLOR_RENDERING, settings.get("rh.colorRender").equals("quality") ?
+                        RenderingHints.VALUE_COLOR_RENDER_QUALITY : RenderingHints.VALUE_COLOR_RENDER_SPEED);
+
+                put(RenderingHints.KEY_DITHERING, settings.get("rh.dither").equals("enable") ?
+                        RenderingHints.VALUE_DITHER_ENABLE : RenderingHints.VALUE_DITHER_DISABLE);
+
+                put(RenderingHints.KEY_FRACTIONALMETRICS, settings.get("rh.fractionalmetrics").equals("on") ?
+                        RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+
+                put(RenderingHints.KEY_STROKE_CONTROL, settings.get("rh.strokeControl").equals("pure") ?
+                        RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE);
+
+                put(RenderingHints.KEY_TEXT_ANTIALIASING, settings.get("rh.textAntialias").equals("on") ?
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+
+                put(RenderingHints.KEY_ANTIALIASING, settings.get("rh.antialias").equals("on") ?
+                        RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+            }});
 
     /**
      * The default font for displaying text.
@@ -65,27 +120,11 @@ public class Constants {
      * The size of UDP packets.
      */
     public final static int NET_PACKET_SIZE;
-
-    /**
-     * Boolean value of whether to block certain loggers defined in settings.properties.
-     */
-    public final static boolean BLOCK_LOGS = Boolean.valueOf(settings.getString("logging.GenericLogger.blockLoggers"));
-
-    static {
-        int packetSize;
-        try {
-            packetSize = Integer.valueOf(settings.getString("net.packetSize"));
-        } catch (NumberFormatException e) {
-            packetSize = 65535;  // Default packet size
-        }
-        NET_PACKET_SIZE = packetSize;
-    }
-
     /**
      * The current version of JGame.
      */
     public final static Version JGAME_VERSION = new Version(JGameStr.getString("versionFormat"),
-            (byte) 0, (byte) 19, (byte) 3, (byte) 21);
+            (byte) 0, (byte) 19, (byte) 3, (byte) 31);
 
     /**
      * Preset for quality render hints.
@@ -139,38 +178,15 @@ public class Constants {
                 put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             }});
 
-    /**
-     * Preset for custom render hints loaded from settings.properties
-     */
-    public final static RenderingHints CUSTOM_RENDER_HINTS = new RenderingHints(
-            new HashMap<>() {{
-                put(RenderingHints.KEY_ALPHA_INTERPOLATION, settings.getString("rh.alphaInterpolation").equals("quality") ?
-                        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY : RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-
-                put(RenderingHints.KEY_INTERPOLATION, settings.getString("rh.interpolation").equals("bilinear") ?
-                        RenderingHints.VALUE_INTERPOLATION_BILINEAR : RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-                put(RenderingHints.KEY_RENDERING, settings.getString("rh.rendering").equals("quality") ?
-                        RenderingHints.VALUE_RENDER_QUALITY : RenderingHints.VALUE_RENDER_SPEED);
-
-                put(RenderingHints.KEY_COLOR_RENDERING, settings.getString("rh.colorRender").equals("quality") ?
-                        RenderingHints.VALUE_COLOR_RENDER_QUALITY : RenderingHints.VALUE_COLOR_RENDER_SPEED);
-
-                put(RenderingHints.KEY_DITHERING, settings.getString("rh.dither").equals("enable") ?
-                        RenderingHints.VALUE_DITHER_ENABLE : RenderingHints.VALUE_DITHER_DISABLE);
-
-                put(RenderingHints.KEY_FRACTIONALMETRICS, settings.getString("rh.fractionalmetrics").equals("on") ?
-                        RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-
-                put(RenderingHints.KEY_STROKE_CONTROL, settings.getString("rh.strokeControl").equals("pure") ?
-                        RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE);
-
-                put(RenderingHints.KEY_TEXT_ANTIALIASING, settings.getString("rh.textAntialias").equals("on") ?
-                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-
-                put(RenderingHints.KEY_ANTIALIASING, settings.getString("rh.antialias").equals("on") ?
-                        RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
-            }});
+    static {
+        int packetSize;
+        try {
+            packetSize = Integer.valueOf(settings.get("net.packetSize"));
+        } catch (NumberFormatException e) {
+            packetSize = 65535;  // Default packet size
+        }
+        NET_PACKET_SIZE = packetSize;
+    }
 
 
     /**
@@ -179,7 +195,7 @@ public class Constants {
     public final static RenderingHints RENDER_HINTS;
 
     static {
-        String rh = settings.getString("renderHints");
+        String rh = settings.get("renderHints");
 
         // Default to speed render hints.
         RENDER_HINTS = rh.equals("quality") ? QUALITY_RENDER_HINTS :

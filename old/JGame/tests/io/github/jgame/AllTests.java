@@ -13,6 +13,7 @@ import io.github.jgame.testListeners.InvokedMethodListener;
 import io.github.jgame.testListeners.SuiteListener;
 import io.github.jgame.testListeners.TestListener;
 import io.github.jgame.util.ScrapUtilsTest;
+import io.github.jgame.util.SettingsBundleTest;
 import io.github.jgame.util.VersionTest;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
@@ -36,7 +37,7 @@ public class AllTests {
 
         testSuite.setDefaultSuiteName("JGame All Tests");
         testSuite.setDefaultTestName("Unkown JGame Test");
-        testSuite.setOutputDirectory(settings.getString("tests.testOut"));
+        testSuite.setOutputDirectory(settings.get("tests.testOut"));
         testSuite.setRandomizeSuites(true);
         testSuite.setPreserveOrder(false);
 
@@ -70,9 +71,10 @@ public class AllTests {
         addTest("Sprite Tests", suite, new Class[]{
                 SpriteTest.class
         });
-        addTest("Generic JGame Tests", suite, new Class[]{
+        addTest("Utility Tests", suite, new Class[]{
                 ScrapUtilsTest.class,
-                VersionTest.class
+                VersionTest.class,
+                SettingsBundleTest.class,
         });
 
         testSuite.setXmlSuites(new LinkedList<>() {{
