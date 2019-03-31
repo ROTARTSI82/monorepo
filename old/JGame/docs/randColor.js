@@ -1,3 +1,7 @@
+let random_bg_color = function () {
+    return "rgb(" + Math.random() * 255 + ", " + Math.random() * 255 + ", " + Math.random() * 255 + ")";
+};
+
 let doRandColor = function () {
     setInterval(function () {
         let all = document.getElementsByTagName("*");
