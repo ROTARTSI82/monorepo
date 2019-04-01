@@ -1,0 +1,168 @@
+.nav-list {
+    /* Remove the bullets, margins, and paddings from the list */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    position: fixed;
+    width: 25%;
+    overflow: auto;
+}
+
+.nav-list li a:not(.category) {
+    display: block;
+    padding: 0 16px 8px 0;
+
+    color: white;
+    background-color: indigo;
+    text-decoration: none; /* Remove the link styling */
+}
+
+.nav-list li.category {
+    color: white;
+    background-color: navy;
+    padding: 0 0 0 0;
+    font-size: 25px;
+}
+
+.nav-list li.category a {
+    display: block;
+    padding: 0 0 0 0;
+
+    color: white;
+    background-color: navy;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+
+.nav-list li {
+    text-align: center;
+}
+
+.nav-list.border li {
+    border-bottom: black 2px solid;
+    border-right: black 2px solid;
+}
+
+.nav-list.border {
+    border: black 2px solid;
+    border-right: none;
+}
+
+.nav-list li:last-child {
+    border-bottom: none; /* The last bottom would conflict with the list's border, so remove it */
+}
+
+.nav-list li:not(.category) a:hover:not(.active) {
+    background-color: purple;
+    color: lightblue;
+}
+
+
+.horizontal-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: indigo;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.horizontal-nav.border {
+    border: black 2px solid;
+}
+
+.horizontal-nav.border li {
+    border-right: black 2px solid;
+    border-bottom: black 2px solid;
+}
+
+.horizontal-nav.border li.no-border {
+    border: none;
+}
+
+.horizontal-nav li.category a {
+    display: block;
+    padding: 8px 12px;
+
+    color: white;
+    background-color: navy;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+.horizontal-nav li.category img {
+    display: block;
+    padding: 2px 2px;
+
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.horizontal-nav li {
+    float: left;
+}
+
+.horizontal-nav li.right-align {
+    float: right;
+}
+
+.horizontal-nav.border li.right-align {
+    float: right;
+    border-left: black 2px solid;
+}
+
+.horizontal-nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.horizontal-nav li:not(.category) a:hover:not(.active) {
+    background-color: purple;
+    color: lightblue;
+}
+
+.horizontal-nav li a.active {
+    background-color: darkmagenta;
+}
+
+.nav-list li a.active {
+    background-color: darkmagenta;
+}
+
+.container {
+    align-content: center;
+}
+
+.pad-vert-nav {
+    padding: 3% 3% 3% 28%;
+}
+
+.pad-horiz-nav {
+    padding: 10% 3% 3% 3%;
+}
+
+body {
+    margin: 0;
+}
+
+.intDiv {
+    text-align: center;
+    padding: 1rem 1rem;
+    background-color: lightcyan;
+    margin-bottom: 1rem;
+}
+
+body {
+    background-color: white;
+}
+
+.round {
+    border-radius: 10rem;
+}
