@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import static io.github.jgame.Constants.JGameStr;
+import static io.github.jgame.Constants.settings;
 import static org.testng.Assert.assertEquals;
 
 public class SettingsBundleTest {
@@ -20,5 +22,11 @@ public class SettingsBundleTest {
         bundle = new SettingsBundle(file);
         assertEquals(bundle.get("testVal"), "Lorem Ipsum dolor sit amet");
         file.delete();
+    }
+
+    @Test
+    public void testJGameSettings() {
+        assertEquals(settings.get("testing.verifyStr"), "Hello World!");
+        assertEquals(JGameStr.getString("testing.verifyStr"), "Hello World!");
     }
 }

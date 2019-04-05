@@ -5,6 +5,7 @@ import org.testng.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.util.StringManager.fmt;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
@@ -36,30 +37,28 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         int STARTED = 16;
          **/
         switch (testResult.getStatus()) {
-            case ITestResult.CREATED: {
+            case ITestResult.CREATED:
+            case ITestResult.STARTED: {
                 break;
             }
             case ITestResult.SUCCESS: {
-                log(Level.INFO, fmt("SUCCESS: %s in %sms", method,
+                log(Level.INFO, fmt(JGameStr.getString("testing.pass"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }
             case ITestResult.FAILURE: {
-                log(Level.SEVERE, fmt("FAILURE: %s in %sms", method,
+                log(Level.SEVERE, fmt(JGameStr.getString("testing.fail"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }
             case ITestResult.SKIP: {
-                log(Level.SEVERE, fmt("SKIP: %s in %sms", method,
+                log(Level.SEVERE, fmt(JGameStr.getString("testing.skip"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }
             case ITestResult.SUCCESS_PERCENTAGE_FAILURE: {
-                log(Level.SEVERE, fmt("SUCCESS PERCENT FAIL: %s in %sms", method,
+                log(Level.SEVERE, fmt(JGameStr.getString("testing.passPercentFail"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
-                break;
-            }
-            case ITestResult.STARTED: {
                 break;
             }
         }

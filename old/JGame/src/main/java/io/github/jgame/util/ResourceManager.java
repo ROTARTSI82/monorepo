@@ -6,7 +6,10 @@ import io.github.jgame.mixer.SoundManager;
 import java.io.File;
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.Objects;
+import java.util.logging.Logger;
+
+import static io.github.jgame.Constants.JGameStr;
+import static io.github.jgame.util.StringManager.fmt;
 
 /**
  * The framework for resource manager. Implements recursively adding files from a directory.
@@ -16,13 +19,19 @@ public abstract class ResourceManager {
      * A list of accepted extensions to add in the directory.
      */
     public LinkedList<String> extensions;
+    /**
+     * Object used to load resources (from {@code obj.getClass().getClassLoader().getResource()})
+     */
     private static Object loader;
+
+    private Logger logger;
 
     /**
      * Create a new ResourceManager.
      */
     public ResourceManager() {
         extensions = getExtensions();
+        logger = Logger.getLogger(this.getClass().getName());
     }
 
     /**
@@ -41,14 +50,7 @@ public abstract class ResourceManager {
      */
     public void fromDir(File dir) {
         int dlen = dir.getAbsolutePath().length();
-        assert dir.isDirectory();
-        for (File fp : Objects.requireNonNull(dir.listFiles())) {
-            if (fp.isDirectory()) {
-                internalFromDir(fp, dlen);
-            } else if (extensions.contains(ImageManager.getExtension(fp.getAbsolutePath()))) {
-                addFile(fp, dlen);
-            }
-        }
+        internalFromDir(dir, dlen);
     }
 
     /**
@@ -97,7 +99,13 @@ public abstract class ResourceManager {
      * @param baseLen Length of prefix.
      */
     public void internalFromDir(File dir, int baseLen) {
-        for (File fp : Objects.requireNonNull(dir.listFiles())) {
+        File[] files = dir.listFiles();
+        if (files == null || !dir.isDirectory()) {
+            logger.info(fmt(JGameStr.getString("util.ResourceManager.fromDir_nothingToDo"), dir));
+            return;
+        }
+
+        for (File fp : files) {
             if (fp.isDirectory()) {
                 internalFromDir(fp, baseLen);
             } else if (extensions.contains(ImageManager.getExtension(fp.getAbsolutePath()))) {

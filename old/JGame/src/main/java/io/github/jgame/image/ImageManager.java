@@ -185,7 +185,10 @@ public class ImageManager extends ResourceManager {
             if (bi != null) {
                 addImage(id, bi);
             } else {
-                logger.warning("Failed to load image: ImageIO.read() returned null (malformed data?)");
+                logger.warning(JGameStr.getString("image.ImageManager.readNull"));
+                if (!images.containsKey(id)) {
+                    images.put(id, null);
+                }
             }
         } catch (IOException | IllegalArgumentException e) {
             logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
@@ -210,8 +213,8 @@ public class ImageManager extends ResourceManager {
      */
     public static void saveToFile(Image img, String filename) throws IOException {
         File outFile = new File(filename);
-        outFile.mkdirs();
-        // outFile.createNewFile();
+        outFile.getParentFile().mkdirs();
+        outFile.createNewFile();
         ImageIO.write(toBuffered(img), getExtension(filename), outFile);
     }
 
@@ -224,11 +227,14 @@ public class ImageManager extends ResourceManager {
      */
     public void fromFile(String file, String id) {
         URL url = this.getClass().getClassLoader().getResource(file);
-        try {
-            assert url != null;
-            addImage(id, ImageIO.read(url));
-        } catch (IOException | IllegalArgumentException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
+        if (url != null) {
+            try {
+                addImage(id, ImageIO.read(url));
+            } catch (IOException | IllegalArgumentException e) {
+                logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
+            }
+        } else {
+            logger.warning(fmt(JGameStr.getString("image.ImageManager.nullURL"), file));
         }
     }
 

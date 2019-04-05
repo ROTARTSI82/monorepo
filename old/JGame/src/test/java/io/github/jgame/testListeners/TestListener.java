@@ -5,6 +5,7 @@ import org.testng.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.Constants.settings;
 import static io.github.jgame.util.StringManager.fmt;
 
@@ -53,7 +54,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onStart(ITestContext context) {
-        log(fmt("Running %s", context.getName()));
+        log(fmt(JGameStr.getString("testing.startingTest"), context.getName()));
         TestRunner runner = (TestRunner) context;
         runner.setOutputDirectory(settings.get("tests.testOut"));
     }
@@ -65,6 +66,6 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
-        log(fmt("Finished %s", context.getName()));
+        log(fmt(JGameStr.getString("testing.finishedTest"), context.getName()));
     }
 }

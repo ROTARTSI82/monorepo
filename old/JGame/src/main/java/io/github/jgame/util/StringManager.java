@@ -75,9 +75,10 @@ public class StringManager {
             } catch (MissingResourceException e) {
                 // Ignore. Let it fall through
             }
+            Object[] fmtArgs = {bundle.getBaseBundleName(), bundle.getLocale().toString(), key};
+            logger.warning(fmt(missingResource[0], fmtArgs));
+            return fmt(missingResource[1], fmtArgs);
         }
-        Object[] fmtArgs = {Objects.requireNonNull(bundle).getBaseBundleName(), bundle.getLocale().toString(), key};
-        logger.warning(fmt(missingResource[0], fmtArgs));
-        return fmt(missingResource[1], fmtArgs);
+        return "";
     }
 }

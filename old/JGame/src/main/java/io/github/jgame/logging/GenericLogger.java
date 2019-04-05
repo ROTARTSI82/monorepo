@@ -81,7 +81,7 @@ public class GenericLogger {
             fileHandler.setLevel(LATEST_LEVEL);
             root.addHandler(fileHandler);
         } catch (IOException e) {
-            logger.severe(handlerFail + getStackTrace(e));
+            logger.log(Level.SEVERE, handlerFail, e);
         }
         try {
             if (LOG_LEVEL != Level.OFF) {

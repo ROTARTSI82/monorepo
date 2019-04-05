@@ -52,6 +52,7 @@
             <class name="io.github.jgame.util.ScrapUtilsTest"/>
             <class name="io.github.jgame.util.VersionTest"/>
             <class name="io.github.jgame.util.SettingsBundleTest"/>
+            <class name="io.github.jgame.util.ResourceManagerTest"/>
         </classes>
     </test>
 </suite>

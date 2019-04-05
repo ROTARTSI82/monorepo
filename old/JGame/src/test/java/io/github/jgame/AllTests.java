@@ -12,6 +12,7 @@ import io.github.jgame.sprite.SpriteTest;
 import io.github.jgame.testListeners.InvokedMethodListener;
 import io.github.jgame.testListeners.SuiteListener;
 import io.github.jgame.testListeners.TestListener;
+import io.github.jgame.util.ResourceManagerTest;
 import io.github.jgame.util.ScrapUtilsTest;
 import io.github.jgame.util.SettingsBundleTest;
 import io.github.jgame.util.VersionTest;
@@ -22,6 +23,7 @@ import org.testng.xml.XmlTest;
 
 import java.util.LinkedList;
 
+import static io.github.jgame.Constants.JGameStr;
 import static io.github.jgame.Constants.settings;
 
 public class AllTests {
@@ -35,8 +37,8 @@ public class AllTests {
         testSuite.setThreadCount(Runtime.getRuntime().availableProcessors());
         testSuite.setVerbose(2);
 
-        testSuite.setDefaultSuiteName("JGame All Tests");
-        testSuite.setDefaultTestName("Unkown JGame Test");
+        testSuite.setDefaultSuiteName(JGameStr.getString("testing.suiteName"));
+        testSuite.setDefaultTestName(JGameStr.getString("testing.category.default"));
         testSuite.setOutputDirectory(settings.get("tests.testOut"));
         testSuite.setRandomizeSuites(true);
         testSuite.setPreserveOrder(false);
@@ -48,31 +50,32 @@ public class AllTests {
         suite.setPreserveOrder(false);
         suite.setVerbose(2);
 
-        suite.setName("JGame All Tests");
+        suite.setName(JGameStr.getString("testing.suiteName"));
 
-        addTest("Crypto Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.crypto"), suite, new Class[]{
                 RSATest.class,
                 UserDatabaseTest.class
         });
-        addTest("Image Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.image"), suite, new Class[]{
                 SurfaceMapTest.class
         });
-        addTest("Math Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.math"), suite, new Class[]{
                 Vector2Test.class
         });
-        addTest("Mixer Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.mixer"), suite, new Class[]{
                 SoundGeneratorTest.class
         });
-        addTest("Net Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.net"), suite, new Class[]{
                 NetUtilsTest.class,
                 TCPTest.class,
                 UDPTest.class
         });
-        addTest("Sprite Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.sprite"), suite, new Class[]{
                 SpriteTest.class
         });
-        addTest("Utility Tests", suite, new Class[]{
+        addTest(JGameStr.getString("testing.category.util"), suite, new Class[]{
                 ScrapUtilsTest.class,
+                ResourceManagerTest.class,
                 VersionTest.class,
                 SettingsBundleTest.class,
         });

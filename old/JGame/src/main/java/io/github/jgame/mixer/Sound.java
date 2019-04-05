@@ -72,7 +72,7 @@ public class Sound {
      */
     private void init() {
         if (url == null) {
-            logger.warning("Null file/url supplied to sound. Dummy sound created.");
+            logger.warning(fmt(JGameStr.getString("mixer.Sound.nullURL"), name));
             sound = null;
             state = new HashMap<>();
             return;
@@ -134,7 +134,7 @@ public class Sound {
         try {
             control = (FloatControl) sound.getControl(type);
         } catch (IllegalArgumentException e) {
-            logger.log(Level.WARNING, "Unsupported control type: ", e);
+            logger.log(Level.WARNING, JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
             return 0f;
         }
         float min = control.getMinimum();
@@ -169,7 +169,7 @@ public class Sound {
         try {
             control = (FloatControl) sound.getControl(type);
         } catch (IllegalArgumentException e) {
-            logger.log(Level.WARNING, "Unsupported control type: ", e);
+            logger.log(Level.WARNING, JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
             return;
         }
         float min = control.getMinimum();

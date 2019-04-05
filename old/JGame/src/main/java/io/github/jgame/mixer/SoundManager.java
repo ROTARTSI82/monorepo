@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
+
 /**
  * Manage and play sounds
  */
@@ -86,7 +88,7 @@ public class SoundManager extends ResourceManager {
         try {
             addSound(id, new Sound(file.toURI().toURL()));
         } catch (MalformedURLException e) {
-            logger.log(Level.WARNING, "Failed to load file: ", e);
+            logger.log(Level.WARNING, JGameStr.getString("loadFail"), e);
         }
     }
 

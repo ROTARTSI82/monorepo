@@ -1,7 +1,6 @@
 package io.github.jgame.net.udp;
 
 import io.github.jgame.Constants;
-import io.github.jgame.logging.GenericLogger;
 import io.github.jgame.net.NetUtils;
 
 import java.io.IOException;
@@ -129,7 +128,7 @@ public class UDPServer {
             try {
                 send(datagram, client.address, client.port);
             } catch (IOException e) {
-                logger.warning("Failed to send packet:\n" + GenericLogger.getStackTrace(e));
+                logger.log(Level.WARNING, JGameStr.getString("net.UDPServer.sendPacketFail"), e);
             }
         }
     }

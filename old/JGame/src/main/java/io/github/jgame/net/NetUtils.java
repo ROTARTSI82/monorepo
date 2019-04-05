@@ -98,7 +98,7 @@ public class NetUtils {
                 if (key instanceof String) {
                     finalOut.put((String) key, objMap.get(key));
                 } else {
-                    logger.info("Failed to deserialize key: " + key.toString());
+                    logger.info(fmt(JGameStr.getString("net.NetUtils.hashMapKeyCorrupt"), key.toString()));
                 }
             }
             return finalOut;

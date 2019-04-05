@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import static io.github.jgame.Constants.JGameStr;
+
 /**
  * Sprites! Support for translating, collision detection, rotating, scaling, and reflection!
  */
@@ -88,7 +90,7 @@ public class Sprite {
     public Sprite(BufferedImage spriteImage) {
         logger = Logger.getLogger(this.getClass().getName());
         if (spriteImage == null) {
-            logger.warning("Null spriteImage supplied to sprite! Using default image...");
+            logger.warning(JGameStr.getString("sprite.Sprite.nullImage"));
             image = ImageManager.deepCopy(defaultImage);
         } else {
             image = spriteImage;

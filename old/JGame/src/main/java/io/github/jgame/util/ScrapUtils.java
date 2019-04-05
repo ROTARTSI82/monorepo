@@ -41,7 +41,7 @@ public class ScrapUtils {
         try {
             return (String) clipboard.getData(DataFlavor.stringFlavor);
         } catch (IOException | UnsupportedFlavorException e) {
-            logger.log(Level.WARNING, JGameStr.getString("ScrapUtils.contentFail"), e);
+            logger.log(Level.WARNING, JGameStr.getString("util.ScrapUtils.contentFail"), e);
             return "";
         }
     }
