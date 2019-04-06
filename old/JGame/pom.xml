@@ -24,7 +24,7 @@
         </license>
     </licenses>
 
-    <groupId>io.github.jgame</groupId>
+    <groupId>com.rotartsi.jgame</groupId>
     <artifactId>JGame</artifactId>
     <version>dev19.04.02</version>
 
