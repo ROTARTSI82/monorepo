@@ -144,7 +144,7 @@ public class UDPServer {
     }
 
     /**
-     * Accept new messages and add the address to our client list if the address is unkown and we have
+     * Accept new messages and add the address to our client list if the address is unknown and we have
      * not exceeded the {@link #clientLimit}.
      *
      * Also handle verifySends and shutdown events. Forward others to the {@link #parse} handler.

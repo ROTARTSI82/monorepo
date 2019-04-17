@@ -11,6 +11,7 @@ public class Bullet {
      * Not yet implemented...
      */
     public Bullet() {
+
         throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
     }
 }

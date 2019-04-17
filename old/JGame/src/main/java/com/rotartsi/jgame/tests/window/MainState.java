@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.tests.window;
 
 import com.rotartsi.jgame.Constants;
+import com.rotartsi.jgame.event.AnyEvent;
 import com.rotartsi.jgame.game.Game;
 import com.rotartsi.jgame.game.State;
 import com.rotartsi.jgame.image.ImageManager;
@@ -16,6 +17,7 @@ import javax.sound.sampled.FloatControl;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -125,6 +127,7 @@ public class MainState extends State {
     public class KeyHandler extends State.KeyHandler {
         @Override
         public void keyPressed(KeyEvent e) {
+            //System.out.println(e.paramString());
             switch (e.getKeyCode()) {
                 case (KeyEvent.VK_UP): {
                     player.vel.y = -1;
@@ -147,6 +150,7 @@ public class MainState extends State {
 
         @Override
         public void keyReleased(KeyEvent e) {
+            //System.out.println(e.paramString());
             switch (e.getKeyCode()) {
                 case (KeyEvent.VK_UP):
                 case (KeyEvent.VK_DOWN): {
@@ -162,17 +166,33 @@ public class MainState extends State {
         }
     }
 
+    @Override
+    public void onEvent(AnyEvent event) {
+        System.out.println(event);/*
+        if (event.matchesString("id:key.pressed,mods:64,keyCode:16")) {
+            System.out.println("YAYA!");
+        }*/
+    }
+
     public class MouseHandler extends State.MouseHandler {
         volatile Vector2 pos = new Vector2(0, 0);
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            //System.out.println(e.paramString());
             mouseHandlers[0].mouseSprite.pos.x = e.getX();
             mouseHandlers[0].mouseSprite.pos.y = e.getY();
         }
 
         @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            //System.out.println(e.paramString());
+            //System.out.println(e.getUnitsToScroll());
+        }
+
+        @Override
         public void mousePressed(MouseEvent e) {
+            //System.out.println(e.paramString());
             bullets.add(new BulletSprite(mouseHandlers[0].mouseSprite.pos, player.pos, imageLoader.get("bullet")));
             soundManager.play("fireball", true, 0.5f);
             System.out.println(soundManager.get("fireball").getVal(FloatControl.Type.MASTER_GAIN));

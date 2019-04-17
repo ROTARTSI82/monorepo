@@ -1,5 +1,7 @@
 package com.rotartsi.jgame.game;
 
+import com.rotartsi.jgame.event.AnyEvent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -129,7 +131,9 @@ public class Game extends JPanel {
          */
         @Override
         public void keyPressed(KeyEvent e) {
-            for (State.KeyHandler h : states.get(state).keyHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.KeyHandler h : current.keyHandlers) {
                 h.keyPressed(e);
             }
         }
@@ -142,7 +146,9 @@ public class Game extends JPanel {
          */
         @Override
         public void keyReleased(KeyEvent e) {
-            for (State.KeyHandler h : states.get(state).keyHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.KeyHandler h : current.keyHandlers) {
                 h.keyReleased(e);
             }
         }
@@ -155,7 +161,9 @@ public class Game extends JPanel {
          */
         @Override
         public void keyTyped(KeyEvent e) {
-            for (State.KeyHandler h : states.get(state).keyHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.KeyHandler h : current.keyHandlers) {
                 h.keyTyped(e);
             }
         }
@@ -174,7 +182,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseMoved(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseMoved(e);
             }
         }
@@ -193,7 +203,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseWheelMoved(e);
             }
         }
@@ -213,7 +225,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseClicked(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseClicked(e);
             }
         }
@@ -226,7 +240,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseDragged(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseDragged(e);
             }
         }
@@ -239,7 +255,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseEntered(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseEntered(e);
             }
         }
@@ -252,7 +270,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseExited(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseExited(e);
             }
         }
@@ -265,7 +285,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mousePressed(e);
             }
         }
@@ -278,7 +300,9 @@ public class Game extends JPanel {
          */
         @Override
         public void mouseReleased(MouseEvent e) {
-            for (State.MouseHandler h : states.get(state).mouseHandlers) {
+            State current = states.get(state);
+            current.onEvent(new AnyEvent(e));
+            for (State.MouseHandler h : current.mouseHandlers) {
                 h.mouseReleased(e);
             }
         }

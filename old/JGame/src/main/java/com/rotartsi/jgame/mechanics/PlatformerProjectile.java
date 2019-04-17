@@ -1,7 +1,7 @@
 package com.rotartsi.jgame.mechanics;
 
+import com.rotartsi.jgame.game.Game;
 import com.rotartsi.jgame.math.Vector2;
-import com.rotartsi.jgame.sprite.Sprite;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +11,7 @@ import static com.rotartsi.jgame.Constants.rand;
 /**
  * Projectiles. Support for despawning, blitting, updates, blume, etc
  */
-public class Projectile extends Sprite {
+public class PlatformerProjectile extends PlatformerEntity {
     /**
      * For how many milliseconds would the projectile last before it despawns?
      */
@@ -50,8 +50,8 @@ public class Projectile extends Sprite {
      * @param life     Life in milliseconds until projectile despawns
      * @param blume    Max offset of initial velocity
      */
-    public Projectile(BufferedImage img, Vector2 target, Vector2 position, double speed, long life, Vector2 blume) {
-        super(img);
+    public PlatformerProjectile(BufferedImage img, Vector2 target, Vector2 position, double speed, long life, Vector2 blume, Game game) {
+        super(img, game.runner.getBounds());
         pos = position;
 
         projectileLife = life;
@@ -84,7 +84,7 @@ public class Projectile extends Sprite {
     }
 
     /**
-     * Called when the Projectile needs to be killed, such as when it hits a wall.
+     * Called when the PlatformerProjectile needs to be killed, such as when it hits a wall.
      *
      * Override this function if the projectile could only be killed in certain conditions.
      */
@@ -133,6 +133,8 @@ public class Projectile extends Sprite {
      */
     @Override
     public void update() {
+        super.update();
+
         vel = vel.add(new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.x),
                 (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.y)));
         pos = pos.add(vel);

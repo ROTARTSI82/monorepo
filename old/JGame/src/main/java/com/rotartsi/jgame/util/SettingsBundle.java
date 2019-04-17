@@ -77,11 +77,24 @@ public class SettingsBundle {
      */
     public String get(String key) {
         if (prop != null) {
-            return prop.getProperty(key);
-        } else {
-            logger.warning(fmt(JGameStr.getString("util.SettingsBundle.missingProperty"), key));
-            return fmt("!MISSING RESOURCE: %s!", key);
+            String ret = prop.getProperty(key);
+            if (ret != null) {
+                return ret;
+            }
         }
+        logger.warning(fmt(JGameStr.getString("util.SettingsBundle.missingProperty"), key));
+        return fmt("!MISSING RESOURCE: %s!", key);
+    }
+
+    public String get(String key, String def) {
+        if (prop != null) {
+            String ret = prop.getProperty(key);
+            if (ret != null) {
+                return ret;
+            }
+        }
+        logger.warning(fmt("Missing resource: %s. Returning default of %s", key, def));
+        return def;
     }
 
     /**

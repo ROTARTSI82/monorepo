@@ -19,10 +19,6 @@ public abstract class ResourceManager {
      * A list of accepted extensions to add in the directory.
      */
     public LinkedList<String> extensions;
-    /**
-     * Object used to load resources (from {@code obj.getClass().getClassLoader().getResource()})
-     */
-    private static Object loader;
 
     private Logger logger;
 
@@ -89,7 +85,7 @@ public abstract class ResourceManager {
      * @return URL of the file
      */
     public static URL loadFile(String filename) {
-        return loader.getClass().getClassLoader().getResource(filename);
+        return ResourceManager.class.getClassLoader().getResource(filename);
     }
 
     /**

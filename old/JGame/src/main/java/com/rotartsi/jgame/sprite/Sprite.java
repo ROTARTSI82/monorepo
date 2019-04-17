@@ -22,7 +22,7 @@ public class Sprite {
     /**
      * The placeholder image to use in case the image passed to the constructor is null.
      */
-    private static BufferedImage defaultImage = ImageManager.fromText("MissIMG", Constants.defaultFont, Color.black);
+    public static BufferedImage defaultImage = ImageManager.fromText("MissIMG", Constants.defaultFont, Color.black);
 
     /**
      * Determines if {@code ButtonManager.blit(Graphics2D g2d)} also draws
@@ -62,7 +62,7 @@ public class Sprite {
     /**
      * The absolute position to blit this image to. (the topleft of the image.)
      */
-    protected Vector2 absPos;
+    public Vector2 absPos;
     /**
      * The sprite's image.
      */
@@ -81,7 +81,7 @@ public class Sprite {
     /**
      * The dimensions of the image.
      */
-    Vector2 size;
+    public Vector2 size;
 
     /**
      * Create a new sprite!

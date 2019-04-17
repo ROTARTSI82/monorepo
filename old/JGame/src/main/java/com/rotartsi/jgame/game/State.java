@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.game;
 
 import com.rotartsi.jgame.Constants;
+import com.rotartsi.jgame.event.AnyEvent;
 import com.rotartsi.jgame.gui.ButtonManager;
 import com.rotartsi.jgame.sprite.Sprite;
 
@@ -120,6 +121,10 @@ public class State {
      * Update game logic. No graphical updates.
      */
     public void updateLogic() {
+
+    }
+
+    public void onEvent(AnyEvent event) {
 
     }
 

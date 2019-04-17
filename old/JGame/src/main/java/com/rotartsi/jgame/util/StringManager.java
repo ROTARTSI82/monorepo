@@ -81,4 +81,16 @@ public class StringManager {
         }
         return "";
     }
+
+    public String getString(String key, String def) {
+        if (bundle != null) {
+            try {
+                return bundle.getString(key);
+            } catch (MissingResourceException e) {
+                // Ignore. Let it fall through
+            }
+        }
+        logger.warning(fmt("Missing resource: %s. Returning default of %s", key, def));
+        return def;
+    }
 }
