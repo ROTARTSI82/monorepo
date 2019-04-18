@@ -13,7 +13,10 @@ import static com.rotartsi.jgame.util.StringManager.fmt;
 
 /**
  * Generic formatter for logging.
+ *
+ * @deprecated Use log4j instead. Everything will be configured...
  */
+@Deprecated
 public class GenericFormatter extends Formatter {
     /**
      * How the date would be formatted in log messages.

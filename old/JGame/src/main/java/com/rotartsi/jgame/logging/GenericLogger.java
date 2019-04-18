@@ -16,7 +16,10 @@ import static com.rotartsi.jgame.util.StringManager.fmt;
 
 /**
  * Utils for logging with the native java library.
+ *
+ * @deprecated Use log4j instead. Everything is configured.
  */
+@Deprecated
 public class GenericLogger {
     /**
      * Internal logger used for logging events.

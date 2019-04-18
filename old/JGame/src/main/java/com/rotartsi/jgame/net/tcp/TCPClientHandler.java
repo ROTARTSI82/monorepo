@@ -2,6 +2,7 @@ package com.rotartsi.jgame.net.tcp;
 
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -41,7 +41,7 @@ public class TCPClientHandler {
     /**
      * Internal logger object used for logging.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(TCPClientHandler.class);
 
     /**
      * New client!
@@ -51,7 +51,6 @@ public class TCPClientHandler {
      * @throws IOException Opening the connection may fail
      */
     public TCPClientHandler(Socket clientSocket, TCPServer parent) throws IOException {
-        logger = Logger.getLogger(this.getClass().getName());
         socket = clientSocket;
         factory = parent;
         out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -79,7 +78,7 @@ public class TCPClientHandler {
         if (dat == null) {
             return;
         }
-        logger.finest(StringManager.fmt(JGameStr.getString("net.recvMSG"), factory.serverSocket.getInetAddress(),
+        logger.trace(StringManager.fmt(JGameStr.getString("net.recvMSG"), factory.serverSocket.getInetAddress(),
                 factory.serverSocket.getLocalPort(), socket.getInetAddress(), socket.getPort(), dat));
         String action = (String) dat.get("action");
         if (action != null) {

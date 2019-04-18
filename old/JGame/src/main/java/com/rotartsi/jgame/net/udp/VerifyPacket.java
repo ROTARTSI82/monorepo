@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.net.udp;
 
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,8 +9,6 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -59,7 +58,7 @@ public class VerifyPacket {
     /**
      * The internal logger object used for logging.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(VerifyPacket.class);
 
     /**
      * Set this flag if the packet has been verified. This flag and {@link #hasSent} must be set for
@@ -91,7 +90,6 @@ public class VerifyPacket {
      */
     public VerifyPacket(HashMap<String, Object> datagram, int frequency, double multiplier,
                         InetAddress host, int port, UDPServer parent) {
-        logger = Logger.getLogger(this.getClass().getName());
 
         if (!datagram.containsKey("action")) {
             datagram.put("action", null);
@@ -109,7 +107,7 @@ public class VerifyPacket {
             parent.send(rawSend, myHost, myPort);
             hasSent = true;
         } catch (IOException err) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
+            logger.warn(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
         }
 
         backoff = frequency;
@@ -126,7 +124,6 @@ public class VerifyPacket {
      * @param parent UDPClient to send with
      */
     public VerifyPacket(HashMap<String, Object> datagram, int frequency, double multiplier, UDPClient parent) {
-        logger = Logger.getLogger(this.getClass().getName());
         if (!datagram.containsKey("action")) {
             datagram.put("action", null);
         }
@@ -141,7 +138,7 @@ public class VerifyPacket {
             parent.send(rawSend);
             hasSent = true;
         } catch (IOException err) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
+            logger.warn(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
         }
 
         backoff = frequency;
@@ -170,22 +167,22 @@ public class VerifyPacket {
                             parent.send(rawSend, myHost, myPort);
                             hasSent = true;
                         } catch (IOException err) {
-                            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
+                            logger.warn(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
                         }
                     }
 
                     try {
                         parent.send(filler, myHost, myPort); // Send the filler to flush the stream so the other end gets our msg.
                     } catch (IOException e) {
-                        logger.log(Level.WARNING, JGameStr.getString("net.UDP.fillerFail"), e);
+                        logger.warn(JGameStr.getString("net.UDP.fillerFail"), e);
                     }
 
                     backoff *= multiplier;
                     try {
                         timer.schedule(getServerTask(multiplier, parent), backoff);
-                        logger.finest(StringManager.fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
                     } catch (IllegalStateException e) {
-                        logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
+                        logger.warn(fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
                     }
                     this.cancel();
                 }
@@ -214,22 +211,22 @@ public class VerifyPacket {
                             parent.send(rawSend);
                             hasSent = true;
                         } catch (IOException err) {
-                            logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
+                            logger.warn(fmt(JGameStr.getString("net.UDP.resendFail"), rawSend), err);
                         }
                     }
 
                     try {
                         parent.send(filler);  // Send the filler to flush the stream so the other end gets our msg.
                     } catch (IOException e) {
-                        logger.log(Level.WARNING, JGameStr.getString("net.UDP.fillerFail"), e);
+                        logger.warn(JGameStr.getString("net.UDP.fillerFail"), e);
                     }
 
                     backoff *= multiplier;
                     try {
                         timer.schedule(getClientTask(multiplier, parent), backoff);
-                        logger.finest(StringManager.fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.reschedule"), rawSend, backoff));
                     } catch (IllegalStateException e) {
-                        logger.log(Level.WARNING, fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
+                        logger.warn(fmt(JGameStr.getString("net.UDP.illegalTimer"), rawSend), e);
                     }
                     this.cancel();
                 }
@@ -248,7 +245,7 @@ public class VerifyPacket {
      * Stop all TimerTasks and Timers.
      */
     synchronized void stop() {
-        logger.fine(fmt(JGameStr.getString("net.UDP.threadStop"), rawSend));
+        logger.trace(fmt(JGameStr.getString("net.UDP.threadStop"), rawSend));
         timer.cancel();
         timer.purge();
         terminate = true;

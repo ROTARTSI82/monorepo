@@ -1,7 +1,8 @@
 package com.rotartsi.jgame.util;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Safe access to resource bundles.
@@ -15,7 +16,7 @@ public class StringManager {
     /**
      * The internal logger object used for logging.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(StringManager.class);
 
     /**
      * The strings to load in place of a missing resource.
@@ -30,7 +31,6 @@ public class StringManager {
      * @throws ExceptionInInitializerError The bundle may fail to load.
      */
     public StringManager(String baseName, Locale locale) throws ExceptionInInitializerError {
-        logger = Logger.getLogger(this.getClass().getName());
         bundle = ResourceBundle.getBundle(baseName, locale);
         try {
             missingResource = new String[]{bundle.getString("missingResource.log"),
@@ -76,7 +76,7 @@ public class StringManager {
                 // Ignore. Let it fall through
             }
             Object[] fmtArgs = {bundle.getBaseBundleName(), bundle.getLocale().toString(), key};
-            logger.warning(fmt(missingResource[0], fmtArgs));
+            logger.warn(fmt(missingResource[0], fmtArgs));
             return fmt(missingResource[1], fmtArgs);
         }
         return "";
@@ -90,7 +90,7 @@ public class StringManager {
                 // Ignore. Let it fall through
             }
         }
-        logger.warning(fmt("Missing resource: %s. Returning default of %s", key, def));
+        logger.warn(fmt("Missing resource: %s. Returning default of %s", key, def));
         return def;
     }
 }

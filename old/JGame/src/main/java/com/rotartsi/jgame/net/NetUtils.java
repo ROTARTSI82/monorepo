@@ -1,8 +1,8 @@
 package com.rotartsi.jgame.net;
 
-import com.rotartsi.jgame.logging.GenericLogger;
 import com.rotartsi.jgame.util.StringManager;
 import com.rotartsi.jgame.util.Version;
+import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,8 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -24,7 +22,7 @@ public class NetUtils {
     /**
      * The logger object used for logging.
      */
-    private static Logger logger = Logger.getLogger(NetUtils.class.getName());
+    private static Logger logger = Logger.getLogger(NetUtils.class);
 
     /**
      * Get a string from a byte array.
@@ -47,7 +45,7 @@ public class NetUtils {
      * @return serialized data in the form of a byte array
      */
     public static byte[] serialize(final HashMap<String, Object> data, HashMap<String, Integer> actionTable) {
-        logger.finest(JGameStr.getString("net.NetUtils.serial") + data);
+        logger.trace(JGameStr.getString("net.NetUtils.serial") + data);
         try {
             String action = (String) data.get("action");
 
@@ -77,9 +75,8 @@ public class NetUtils {
             }
             return ret;
         } catch (Exception e) {
-            logger.info(StringManager.fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString(),
-                    GenericLogger.getStackTrace(e)));
-            logger.log(Level.WARNING, fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString()), e);
+            logger.info(StringManager.fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString()), e);
+            logger.warn(fmt(JGameStr.getString("net.NetUtils.serialFail"), data.toString()), e);
         }
         return new byte[0];
     }
@@ -133,10 +130,10 @@ public class NetUtils {
             if (ret != null) {
                 ret.put("action", actionTable.get(actionID));
             }
-            logger.finest(fmt(JGameStr.getString("net.NetUtils.deserialRet"), ret));
+            logger.trace(fmt(JGameStr.getString("net.NetUtils.deserialRet"), ret));
             return ret;
         } catch (Exception e) {
-            logger.log(Level.WARNING, JGameStr.getString("net.NetUtils.deserialFail"), e);
+            logger.warn(JGameStr.getString("net.NetUtils.deserialFail"), e);
         }
         return null;
     }

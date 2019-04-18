@@ -3,6 +3,7 @@ package com.rotartsi.jgame;
 import com.rotartsi.jgame.util.SettingsBundle;
 import com.rotartsi.jgame.util.StringManager;
 import com.rotartsi.jgame.util.Version;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
@@ -11,8 +12,6 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Global Constant variables.
@@ -56,7 +55,7 @@ public class Constants {
     /**
      * Internal logger object used for logging.
      */
-    public final static Logger logger = Logger.getLogger(Constants.class.getName());
+    public final static Logger logger = Logger.getLogger(Constants.class);
 
     static {
         SettingsBundle tmp_settings;
@@ -66,7 +65,7 @@ public class Constants {
             Locale locale = new Locale(tmp_settings.get("lang"), tmp_settings.get("country"));
             tmp_jgameStr = new StringManager("assets.lang.JGame", locale);  // Remember lang.
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to load settings", e);
+            logger.fatal("Failed to load settings", e);
             tmp_settings = new SettingsBundle();
             tmp_jgameStr = new StringManager();
         }

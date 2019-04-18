@@ -1,10 +1,10 @@
 package com.rotartsi.jgame.mixer;
 
+import org.apache.log4j.Logger;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -20,12 +20,11 @@ public class SoundGeneratorTest {
     private final int stereoPlaylenMargin = 125;
     private Tone stereo;
     private SoundGenerator gen;
-    private Logger logger;
+    private Logger logger = Logger.getLogger(SoundGeneratorTest.class);
 
     @BeforeSuite
     public void setUp() {
         gen = new SoundGenerator();
-        logger = Logger.getLogger(this.getClass().getName());
     }
 
     @Test

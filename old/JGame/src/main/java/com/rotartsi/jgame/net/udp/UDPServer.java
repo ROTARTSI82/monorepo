@@ -3,13 +3,12 @@ package com.rotartsi.jgame.net.udp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -25,7 +24,7 @@ public class UDPServer {
     /**
      * Logger object used to log events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(UDPServer.class);
 
     /**
      * List of UUIDs of verified packets that have already been handled.
@@ -77,7 +76,6 @@ public class UDPServer {
     public UDPServer(String host, int listenPort, int maxClients) throws UnknownHostException, SocketException {
         clientLimit = maxClients;
         socket = new DatagramSocket(listenPort, InetAddress.getByName(host));
-        logger = Logger.getLogger(this.getClass().getName());
 
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
@@ -111,7 +109,7 @@ public class UDPServer {
      * @throws IOException Sending message over connection may fail.
      */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) throws IOException {
-        logger.finest(StringManager.fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), socket.getPort(),
+        logger.trace(StringManager.fmt(JGameStr.getString("net.sendMSG"), socket.getInetAddress(), socket.getPort(),
                 datAddress, datPort, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, datAddress, datPort);
@@ -128,7 +126,7 @@ public class UDPServer {
             try {
                 send(datagram, client.address, client.port);
             } catch (IOException e) {
-                logger.log(Level.WARNING, JGameStr.getString("net.UDPServer.sendPacketFail"), e);
+                logger.warn(JGameStr.getString("net.UDPServer.sendPacketFail"), e);
             }
         }
     }
@@ -175,7 +173,7 @@ public class UDPServer {
         if (packetDict == null) {
             return;
         }
-        logger.finest(StringManager.fmt(JGameStr.getString("net.recvMSG"), socket.getInetAddress(), socket.getPort(),
+        logger.trace(StringManager.fmt(JGameStr.getString("net.recvMSG"), socket.getInetAddress(), socket.getPort(),
                 packet.getAddress(), packet.getPort(), packetDict));
 
         String action = (String) packetDict.get("action");
@@ -188,12 +186,12 @@ public class UDPServer {
                 case "verifySend": {
                     String id = (String) packetDict.get("id");
                     if (!verifiedByMe.contains(id)) {
-                        logger.finest(StringManager.fmt(JGameStr.getString("net.UDPServer.confirmServer"),
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDPServer.confirmServer"),
                                 socket.getInetAddress(), socket.getPort(), id));
                         parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                         verifiedByMe.add(id);
                     } else {
-                        logger.fine(StringManager.fmt(JGameStr.getString("net.UDP.duplicatePacket"), socket.getInetAddress(),
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.duplicatePacket"), socket.getInetAddress(),
                                 socket.getPort(), id));
                     }
                     HashMap<String, Object> rawSend = new HashMap<>();
@@ -208,7 +206,7 @@ public class UDPServer {
                         pendingPackets.get(id).onConfirm();
                         pendingPackets.remove(id);
                     }
-                    logger.finest(StringManager.fmt(JGameStr.getString("net.UDP.confirmedPacket"), socket.getInetAddress(),
+                    logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.confirmedPacket"), socket.getInetAddress(),
                             socket.getPort(), id));
                     return;
                 }
@@ -235,7 +233,7 @@ public class UDPServer {
             try {
                 client.shutdown();
             } catch (IOException e) {
-                logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
+                logger.warn(JGameStr.getString("net.shutdownFail"), e);
             }
         }
 

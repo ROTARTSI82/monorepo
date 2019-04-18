@@ -1,14 +1,12 @@
 package com.rotartsi.jgame.event;
 
-import com.rotartsi.jgame.logging.GenericLogger;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.Constants.settings;
@@ -26,7 +24,7 @@ public class DesktopUtils {
     /**
      * Internal logger object used for event logging.
      */
-    private static Logger logger = Logger.getLogger(DesktopUtils.class.getName());
+    private static Logger logger = Logger.getLogger(DesktopUtils.class);
 
     /**
      * Boolean value of whether desktops as a whole are even allowed on the machine.
@@ -54,7 +52,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("event.DesktopUtils.browserFail"), e);
+            logger.warn(JGameStr.getString("event.DesktopUtils.browserFail"), e);
         }
         return false;
     }
@@ -72,7 +70,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("event.DesktopUtils.printFail"), e);
+            logger.warn(JGameStr.getString("event.DesktopUtils.printFail"), e);
         }
         return false;
     }
@@ -90,7 +88,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("event.DesktopUtils.openFail"), e);
+            logger.warn(JGameStr.getString("event.DesktopUtils.openFail"), e);
         }
         return false;
     }
@@ -108,8 +106,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.warning(JGameStr.getString("event.DesktopUtils.mailFail3") +
-                    GenericLogger.getStackTrace(e));
+            logger.warn(JGameStr.getString("event.DesktopUtils.mailFail3"), e);
         }
         return false;
     }
@@ -127,7 +124,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("event.DesktopUtils.viewFail"), e);
+            logger.warn(JGameStr.getString("event.DesktopUtils.viewFail"), e);
         }
         return false;
     }
@@ -179,7 +176,7 @@ public class DesktopUtils {
         try {
             return mailTo(new URI(uriStr));
         } catch (URISyntaxException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("event.DesktopUtils.mailFail"), uriStr), e);
+            logger.warn(fmt(JGameStr.getString("event.DesktopUtils.mailFail"), uriStr), e);
         }
         return false;
     }
@@ -196,7 +193,7 @@ public class DesktopUtils {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("event.DesktopUtils.mailFail2"), e);
+            logger.warn(JGameStr.getString("event.DesktopUtils.mailFail2"), e);
         }
         return false;
     }

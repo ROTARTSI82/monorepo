@@ -2,14 +2,13 @@ package com.rotartsi.jgame.mixer;
 
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.util.ResourceManager;
+import org.apache.log4j.Logger;
 
 import javax.sound.sampled.FloatControl;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -21,7 +20,7 @@ public class SoundManager extends ResourceManager {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(SoundManager.class);
 
     /**
      * The internal list of sounds that are loaded.
@@ -33,7 +32,6 @@ public class SoundManager extends ResourceManager {
      */
     public SoundManager() {
         super();
-        logger = Logger.getLogger(this.getClass().getName());
     }
 
     /**
@@ -88,7 +86,7 @@ public class SoundManager extends ResourceManager {
         try {
             addSound(id, new Sound(file.toURI().toURL()));
         } catch (MalformedURLException e) {
-            logger.log(Level.WARNING, JGameStr.getString("loadFail"), e);
+            logger.warn(JGameStr.getString("loadFail"), e);
         }
     }
 

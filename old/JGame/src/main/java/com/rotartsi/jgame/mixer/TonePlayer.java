@@ -1,8 +1,8 @@
 package com.rotartsi.jgame.mixer;
 
+import org.apache.log4j.Logger;
+
 import javax.sound.sampled.LineUnavailableException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -14,7 +14,7 @@ public class TonePlayer extends Thread {
     /**
      * Internal logger object used for logging events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(TonePlayer.class);
 
     /**
      * Should the {@link #tone} be interpreted as stereo or mono sound?
@@ -43,7 +43,6 @@ public class TonePlayer extends Thread {
      * @param stereo is stereo?
      */
     TonePlayer(SoundGenerator player, byte[] data, boolean stereo) {
-        logger = Logger.getLogger(this.getClass().getName());
         isStereo = stereo;
         soundPlayer = player;
         tone = data;
@@ -60,7 +59,7 @@ public class TonePlayer extends Thread {
             try {
                 soundPlayer.play(tone, isStereo);
             } catch (LineUnavailableException e) {
-                logger.log(Level.WARNING, JGameStr.getString("mixer.TonePlayer.playFail"), e);
+                logger.warn(JGameStr.getString("mixer.TonePlayer.playFail"), e);
             }
         }
     }

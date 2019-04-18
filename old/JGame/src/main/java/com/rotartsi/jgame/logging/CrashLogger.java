@@ -13,7 +13,7 @@ public class CrashLogger {
     public static void logCrash(Priority level, Object msg, Throwable err) {
         JGameFileAppender fileAppender = new JGameFileAppender();
         fileAppender.setName("CrashReporter");
-        fileAppender.setFile("%dir/crash-report %timestamp.log");
+        fileAppender.setFile("%dir/crashReports/crash-report %timestamp.log");
         fileAppender.setLayout(new PatternLayout(settings.get("logging.crashFormat",
                 "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n")));
         fileAppender.setThreshold(Level.ALL);

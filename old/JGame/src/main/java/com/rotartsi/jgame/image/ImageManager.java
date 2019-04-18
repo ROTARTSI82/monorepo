@@ -2,6 +2,7 @@ package com.rotartsi.jgame.image;
 
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.util.ResourceManager;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -26,7 +25,7 @@ public class ImageManager extends ResourceManager {
     /**
      * The logger object used to log events.
      */
-    private final Logger logger;
+    private final Logger logger = Logger.getLogger(ImageManager.class);
 
     /**
      * The internal table of images that are loaded.
@@ -38,7 +37,6 @@ public class ImageManager extends ResourceManager {
      */
     public ImageManager() {
         super();
-        logger = Logger.getLogger(this.getClass().getName());
     }
 
     /**
@@ -185,13 +183,13 @@ public class ImageManager extends ResourceManager {
             if (bi != null) {
                 addImage(id, bi);
             } else {
-                logger.warning(JGameStr.getString("image.ImageManager.readNull"));
+                logger.warn(JGameStr.getString("image.ImageManager.readNull"));
                 if (!images.containsKey(id)) {
                     images.put(id, null);
                 }
             }
         } catch (IOException | IllegalArgumentException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
+            logger.warn(fmt(JGameStr.getString("loadFail"), file), e);
         }
     }
 
@@ -231,10 +229,10 @@ public class ImageManager extends ResourceManager {
             try {
                 addImage(id, ImageIO.read(url));
             } catch (IOException | IllegalArgumentException e) {
-                logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), file), e);
+                logger.warn(fmt(JGameStr.getString("loadFail"), file), e);
             }
         } else {
-            logger.warning(fmt(JGameStr.getString("image.ImageManager.nullURL"), file));
+            logger.warn(fmt(JGameStr.getString("image.ImageManager.nullURL"), file));
         }
     }
 
@@ -248,7 +246,7 @@ public class ImageManager extends ResourceManager {
         try {
             addImage(id, ImageIO.read(url));
         } catch (IOException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), url), e);
+            logger.warn(fmt(JGameStr.getString("loadFail"), url), e);
         }
     }
 

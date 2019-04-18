@@ -1,19 +1,17 @@
 package com.rotartsi.jgame.testListeners;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.testng.*;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
-    private Logger logger;
+    private Logger logger = Logger.getLogger(InvokedMethodListener.class);
 
     public InvokedMethodListener() {
         super();
-        logger = Logger.getLogger(this.getClass().getName());
     }
 
     @Override
@@ -47,17 +45,17 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 break;
             }
             case ITestResult.FAILURE: {
-                log(Level.SEVERE, fmt(JGameStr.getString("testing.fail"), method,
+                log(Level.FATAL, fmt(JGameStr.getString("testing.fail"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }
             case ITestResult.SKIP: {
-                log(Level.SEVERE, fmt(JGameStr.getString("testing.skip"), method,
+                log(Level.FATAL, fmt(JGameStr.getString("testing.skip"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }
             case ITestResult.SUCCESS_PERCENTAGE_FAILURE: {
-                log(Level.SEVERE, fmt(JGameStr.getString("testing.passPercentFail"), method,
+                log(Level.FATAL, fmt(JGameStr.getString("testing.passPercentFail"), method,
                         testResult.getEndMillis() - testResult.getStartMillis()));
                 break;
             }

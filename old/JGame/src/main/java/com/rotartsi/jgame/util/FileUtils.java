@@ -1,10 +1,10 @@
 package com.rotartsi.jgame.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -13,7 +13,7 @@ import static com.rotartsi.jgame.Constants.JGameStr;
  */
 public class FileUtils {
 
-    private static Logger logger = Logger.getLogger(FileUtils.class.getName());
+    private static Logger logger = Logger.getLogger(FileUtils.class);
 
     /**
      * Create an empty file (parent directories will be created if they dont exist.)
@@ -27,7 +27,7 @@ public class FileUtils {
         try {
             return file.createNewFile();
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("util.FileUtils.touchFileFail"), e);
+            logger.warn(JGameStr.getString("util.FileUtils.touchFileFail"), e);
         }
         return false;
     }

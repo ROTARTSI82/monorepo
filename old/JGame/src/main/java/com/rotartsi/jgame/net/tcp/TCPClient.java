@@ -3,6 +3,7 @@ package com.rotartsi.jgame.net.tcp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -38,7 +38,7 @@ public class TCPClient {
     /**
      * Internal logger object used for logging events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(TCPClient.class);
 
     /**
      * Table used to serialize actions. See {@link NetUtils}.serialize()
@@ -64,7 +64,6 @@ public class TCPClient {
      * @throws IllegalArgumentException Invalid actionID
      */
     public TCPClient(String hostname, int portNum) throws UnknownHostException, IOException {
-        logger = Logger.getLogger(this.getClass().getName());
         socket = new Socket(hostname, portNum);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -88,7 +87,7 @@ public class TCPClient {
      * @param datagram Message to send
      */
     public void send(HashMap<String, Object> datagram) {
-        logger.finest(StringManager.fmt(JGameStr.getString("net.sendMSG"), "?", "?",
+        logger.trace(StringManager.fmt(JGameStr.getString("net.sendMSG"), "?", "?",
                 socket.getInetAddress(), socket.getPort(), datagram));
         String send = Base64.getEncoder().encodeToString(NetUtils.serialize(datagram, serialTable));
         out.println(send);
@@ -115,7 +114,7 @@ public class TCPClient {
         if (dat == null) {
             return;
         }
-        logger.finest(StringManager.fmt(JGameStr.getString("net.recvMSG"), "?", "?", socket.getInetAddress(),
+        logger.trace(StringManager.fmt(JGameStr.getString("net.recvMSG"), "?", "?", socket.getInetAddress(),
                 socket.getPort(), dat));
         String action = (String) dat.get("action");
         if (action != null) {

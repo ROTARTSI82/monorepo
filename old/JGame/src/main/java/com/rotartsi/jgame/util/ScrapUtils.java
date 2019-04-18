@@ -1,13 +1,13 @@
 package com.rotartsi.jgame.util;
 
+import org.apache.log4j.Logger;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -18,7 +18,7 @@ public class ScrapUtils {
     /**
      * Logger object ofr event logs
      */
-    private static Logger logger = Logger.getLogger(ScrapUtils.class.getName());
+    private static Logger logger = Logger.getLogger(ScrapUtils.class);
 
     /**
      * The system clipboard. See {@link Clipboard}
@@ -41,7 +41,7 @@ public class ScrapUtils {
         try {
             return (String) clipboard.getData(DataFlavor.stringFlavor);
         } catch (IOException | UnsupportedFlavorException e) {
-            logger.log(Level.WARNING, JGameStr.getString("util.ScrapUtils.contentFail"), e);
+            logger.warn(JGameStr.getString("util.ScrapUtils.contentFail"), e);
             return "";
         }
     }

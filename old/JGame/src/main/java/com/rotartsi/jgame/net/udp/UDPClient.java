@@ -3,12 +3,12 @@ package com.rotartsi.jgame.net.udp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 
@@ -19,7 +19,7 @@ public class UDPClient {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(UDPClient.class);
 
     /**
      * The socket that the client is binded to.
@@ -77,7 +77,6 @@ public class UDPClient {
         host = InetAddress.getByName(listenHost);
         port = listenPort;
         socket = new DatagramSocket();
-        logger = Logger.getLogger(this.getClass().getName());
 
         serialTable = getActionTable();
         deserialTable = new HashMap<>();
@@ -140,7 +139,7 @@ public class UDPClient {
         if (packetDict == null) {
             return;
         }
-        logger.finest(StringManager.fmt(JGameStr.getString("net.recvMSG"), "?", "?", host, port, packetDict));
+        logger.trace(StringManager.fmt(JGameStr.getString("net.recvMSG"), "?", "?", host, port, packetDict));
         String action = (String) packetDict.get("action");
         if (action != null) {
             switch (action) {
@@ -151,12 +150,12 @@ public class UDPClient {
                 case "verifySend": {
                     String id = (String) packetDict.get("id");
                     if (!verifiedByMe.contains(id)) {
-                        logger.finest(StringManager.fmt(JGameStr.getString("net.UDPClient.confirmServer"),
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDPClient.confirmServer"),
                                 host, port, id));
                         parse(NetUtils.datFromObject(packetDict.get("data")), packet);
                         verifiedByMe.add(id);
                     } else {
-                        logger.fine(StringManager.fmt(JGameStr.getString("net.UDP.duplicatePacket"), host, port, id));
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.duplicatePacket"), host, port, id));
                     }
                     HashMap<String, Object> rawSend = new HashMap<>();
                     rawSend.put("action", "confirmPacket");
@@ -171,11 +170,11 @@ public class UDPClient {
                 case "confirmPacket": {
                     String id = (String) packetDict.get("id");
                     if (pendingPackets.containsKey(id)) {
-                        logger.finest(StringManager.fmt(JGameStr.getString("net.UDP.confirmedPacket"), host, port, id));
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.confirmedPacket"), host, port, id));
                         pendingPackets.get(id).onConfirm();
                         pendingPackets.remove(id);
                     } else {
-                        logger.fine(StringManager.fmt(JGameStr.getString("net.UDP.outdatedPacket"), host, port, id));
+                        logger.trace(StringManager.fmt(JGameStr.getString("net.UDP.outdatedPacket"), host, port, id));
                     }
                     return;
                 }
@@ -221,7 +220,7 @@ public class UDPClient {
      * @throws IOException Sending packets may fail.
      */
     public void send(HashMap<String, Object> datagram) throws IOException {
-        logger.finest(StringManager.fmt(JGameStr.getString("net.sendMSG"), "?", "?", host, port, datagram));
+        logger.trace(StringManager.fmt(JGameStr.getString("net.sendMSG"), "?", "?", host, port, datagram));
         byte[] bytes = NetUtils.serialize(datagram, serialTable);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, host, port);
         socket.send(packet);

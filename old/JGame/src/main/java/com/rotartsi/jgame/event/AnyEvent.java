@@ -1,17 +1,17 @@
 package com.rotartsi.jgame.event;
 
+import org.apache.log4j.Logger;
+
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class AnyEvent {
     public InputEvent event;
-    private Logger logger = Logger.getLogger(AnyEvent.class.getName());
+    private Logger logger = Logger.getLogger(AnyEvent.class);
 
     public MouseEvent mouseEvent;
     public KeyEvent keyEvent;
@@ -249,7 +249,7 @@ public class AnyEvent {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            logger.log(Level.WARNING, fmt("Skipping bad event string: %s", str), e);
+            logger.warn(fmt("Skipping bad event string: %s", str), e);
             return false;
         }
         return true;

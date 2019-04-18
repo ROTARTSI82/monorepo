@@ -2,15 +2,13 @@ package com.rotartsi.jgame.net;
 
 import com.rotartsi.jgame.net.udp.UDPClient;
 import com.rotartsi.jgame.net.udp.UDPServer;
+import org.apache.log4j.Logger;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -18,17 +16,12 @@ import static com.rotartsi.jgame.util.StringManager.fmt;
 public class UDPTest {
     private Server testServ;
     private Client testCli;
-    private Logger logger;
-
-    @BeforeSuite
-    public void setUp() {
-        logger = Logger.getLogger(this.getClass().getName());
-    }
+    private Logger logger = Logger.getLogger(UDPTest.class);
 
     @Test(timeOut = 2000)
     public void testUDP() throws Exception {
-        testServ = new Server("127.0.0.1", 3000);
-        testCli = new Client("127.0.0.1", 3000, System.nanoTime());
+        testServ = new Server("", 3000);
+        testCli = new Client("", 3000, System.nanoTime());
         while (!testCli.done) {
             //Thread.sleep(25);
             testServ.update();
@@ -44,7 +37,7 @@ public class UDPTest {
         try {
             testCli.shutdown();
         } catch (IOException e) {
-            logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
+            logger.warn(JGameStr.getString("net.shutdownFail"), e);
         }
     }
 
@@ -66,7 +59,7 @@ public class UDPTest {
                 this.addVerifyPacket(dat, 1, 2, packet.getAddress(), packet.getPort());
                 //this.send(dat, packet.getAddress(), packet.getPort());
             } catch (Exception e) {
-                logger.log(Level.WARNING, JGameStr.getString("net.UDPTest.addFail"), e);
+                logger.warn(JGameStr.getString("net.UDPTest.addFail"), e);
             }
         }
     }

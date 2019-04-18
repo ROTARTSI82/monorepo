@@ -3,22 +3,16 @@ package com.rotartsi.jgame.net;
 import com.rotartsi.jgame.net.tcp.TCPClient;
 import com.rotartsi.jgame.net.tcp.TCPClientHandler;
 import com.rotartsi.jgame.net.tcp.TCPServer;
-import org.testng.annotations.BeforeSuite;
+import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class TCPTest {
-    private static Logger logger;
-
-    @BeforeSuite
-    public void setUp() {
-        logger = Logger.getLogger(this.getClass().getName());
-    }
+    private static Logger logger = Logger.getLogger(TCPTest.class);
 
     @Test(timeOut = 2000)
     public void testTCP() throws Exception {
@@ -34,7 +28,7 @@ public class TCPTest {
 
     static class TestServer extends TCPServer {
         public TestServer() throws Exception {
-            super("127.0.0.1", 3000, 1);
+            super("", 3000, 1);
         }
 
         @Override
@@ -51,7 +45,7 @@ public class TCPTest {
         private boolean done = false;
 
         public TestClient() throws Exception {
-            super("127.0.0.1", 3000);
+            super("", 3000);
             id = System.nanoTime();
             HashMap<String, Object> dat = new HashMap<>();
             dat.put("id", id);

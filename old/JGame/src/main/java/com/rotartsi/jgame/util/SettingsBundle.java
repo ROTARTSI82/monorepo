@@ -1,5 +1,7 @@
 package com.rotartsi.jgame.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,7 +9,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -21,7 +22,7 @@ public class SettingsBundle {
      */
     private Properties prop;
 
-    private Logger logger;
+    private Logger logger = Logger.getLogger(SettingsBundle.class);
 
     /**
      * URL to read/write to.
@@ -37,13 +38,12 @@ public class SettingsBundle {
     public SettingsBundle(String file) throws IOException {
         url = this.getClass().getClassLoader().getResource(file);
         prop = new Properties();
-        logger = Logger.getLogger(this.getClass().getName());
 
         if (url != null) {
             InputStream in = url.openStream();
             prop.load(in);
         } else {
-            logger.warning(fmt(JGameStr.getString("util.SettingsBundle.nullURL"), file));
+            logger.warn(fmt(JGameStr.getString("util.SettingsBundle.nullURL"), file));
         }
     }
 
@@ -82,7 +82,7 @@ public class SettingsBundle {
                 return ret;
             }
         }
-        logger.warning(fmt(JGameStr.getString("util.SettingsBundle.missingProperty"), key));
+        logger.warn(fmt(JGameStr.getString("util.SettingsBundle.missingProperty"), key));
         return fmt("!MISSING RESOURCE: %s!", key);
     }
 
@@ -93,7 +93,7 @@ public class SettingsBundle {
                 return ret;
             }
         }
-        logger.warning(fmt("Missing resource: %s. Returning default of %s", key, def));
+        logger.warn(fmt("Missing resource: %s. Returning default of %s", key, def));
         return def;
     }
 

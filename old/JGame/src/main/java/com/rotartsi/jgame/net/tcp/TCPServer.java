@@ -3,6 +3,7 @@ package com.rotartsi.jgame.net.tcp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,8 +11,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -39,7 +38,7 @@ public class TCPServer {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(TCPServer.class);
 
     /**
      * A reversed copy of the {@link #serialTable} (values are keys and keys are values).
@@ -66,7 +65,6 @@ public class TCPServer {
      */
     public TCPServer(String hostname, int portNum, int maxClients) throws UnknownHostException, IOException {
         clientLimit = maxClients;
-        logger = Logger.getLogger(this.getClass().getName());
         serverSocket = new ServerSocket(portNum, 50, InetAddress.getByName(hostname));
 
         serialTable = getActionTable();
@@ -136,7 +134,7 @@ public class TCPServer {
             logger.info(StringManager.fmt(JGameStr.getString("net.newClient"), serverSocket.getInetAddress(),
                     serverSocket.getLocalPort(), key));
         } else {
-            logger.warning(JGameStr.getString("net.TCPServer.alreadyExists"));
+            logger.trace(JGameStr.getString("net.TCPServer.alreadyExists"));
         }
 
 
@@ -144,7 +142,7 @@ public class TCPServer {
             try {
                 cli.update();
             } catch (IOException e) {
-                logger.log(Level.WARNING, JGameStr.getString("net.TCPServer.updateFail"), e);
+                logger.warn(JGameStr.getString("net.TCPServer.updateFail"), e);
             }
         }
     }
@@ -167,7 +165,7 @@ public class TCPServer {
      * @param datPort Port to send to (which program on that computer?)
      */
     public void send(HashMap<String, Object> datagram, InetAddress datAddress, int datPort) {
-        logger.finest(StringManager.fmt(JGameStr.getString("net.sendMSG"), serverSocket.getInetAddress(),
+        logger.trace(StringManager.fmt(JGameStr.getString("net.sendMSG"), serverSocket.getInetAddress(),
                 serverSocket.getLocalPort(), datAddress, datPort, datagram));
         clients.get(datAddress + ":" + datPort).send(datagram);
     }
@@ -182,7 +180,7 @@ public class TCPServer {
             try {
                 client.shutdown();
             } catch (IOException e) {
-                logger.log(Level.WARNING, JGameStr.getString("net.shutdownFail"), e);
+                logger.warn(JGameStr.getString("net.shutdownFail"), e);
             }
         }
         serverSocket.close();

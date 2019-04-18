@@ -1,11 +1,11 @@
 package com.rotartsi.jgame.mixer;
 
+import org.apache.log4j.Logger;
+
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
@@ -34,7 +34,7 @@ public class Sound {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger;
+    private Logger logger = Logger.getLogger(Sound.class);
 
     /**
      * Stores the settings of all {@link FloatControl}s. Used to restore settings after calling {@link #reset}
@@ -48,7 +48,6 @@ public class Sound {
      */
     public Sound(String filename) {
         name = filename;
-        logger = Logger.getLogger(this.getClass().getName());
         url = this.getClass().getClassLoader().getResource(filename);
 
         init();
@@ -62,7 +61,6 @@ public class Sound {
     public Sound(URL soundURL) {
         url = soundURL;
         name = soundURL.toString();
-        logger = Logger.getLogger(this.getClass().getName());
 
         init();
     }
@@ -72,7 +70,7 @@ public class Sound {
      */
     private void init() {
         if (url == null) {
-            logger.warning(fmt(JGameStr.getString("mixer.Sound.nullURL"), name));
+            logger.warn(fmt(JGameStr.getString("mixer.Sound.nullURL"), name));
             sound = null;
             state = new HashMap<>();
             return;
@@ -102,7 +100,7 @@ public class Sound {
             sound = (Clip) AudioSystem.getLine(info);
             sound.open(audioIn);
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            logger.log(Level.WARNING, fmt(JGameStr.getString("loadFail"), name), e);
+            logger.warn(fmt(JGameStr.getString("loadFail"), name), e);
         }
     }
 
@@ -134,7 +132,7 @@ public class Sound {
         try {
             control = (FloatControl) sound.getControl(type);
         } catch (IllegalArgumentException e) {
-            logger.log(Level.WARNING, JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
+            logger.warn(JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
             return 0f;
         }
         float min = control.getMinimum();
@@ -169,7 +167,7 @@ public class Sound {
         try {
             control = (FloatControl) sound.getControl(type);
         } catch (IllegalArgumentException e) {
-            logger.log(Level.WARNING, JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
+            logger.warn(JGameStr.getString("mixer.Sound.unsupportedFloatControl"), e);
             return;
         }
         float min = control.getMinimum();
