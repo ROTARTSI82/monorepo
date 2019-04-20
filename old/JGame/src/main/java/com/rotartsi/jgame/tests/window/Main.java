@@ -1,7 +1,6 @@
 package com.rotartsi.jgame.tests.window;
 
 import com.rotartsi.jgame.game.GameRunner;
-import com.rotartsi.jgame.logging.Log4jLogger;
 
 import java.awt.*;
 
@@ -15,7 +14,7 @@ public class Main extends GameRunner {
     }
 
     public static void main(String[] args) {
-        Log4jLogger.setup("mainDemo");
+        //Log4jLogger.setup("mainDemo");
         //GenericLogger.setup(Level.ALL, Level.ALL, Level.OFF, "logs/mainDemo");
         EventQueue.invokeLater(new Runnable() {
             @Override

@@ -1,14 +1,15 @@
 package com.rotartsi.jgame.testListeners;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.*;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
-    private Logger logger = Logger.getLogger(InvokedMethodListener.class);
+    private Logger logger = LogManager.getLogger(InvokedMethodListener.class);
 
     public InvokedMethodListener() {
         super();

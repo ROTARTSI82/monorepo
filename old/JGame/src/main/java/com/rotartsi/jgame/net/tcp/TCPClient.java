@@ -3,7 +3,8 @@ package com.rotartsi.jgame.net.tcp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class TCPClient {
     /**
      * Internal logger object used for logging events.
      */
-    private Logger logger = Logger.getLogger(TCPClient.class);
+    private Logger logger = LogManager.getLogger(TCPClient.class);
 
     /**
      * Table used to serialize actions. See {@link NetUtils}.serialize()

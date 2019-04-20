@@ -2,7 +2,8 @@ package com.rotartsi.jgame.mixer;
 
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.util.ResourceManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.FloatControl;
 import java.io.File;
@@ -20,7 +21,7 @@ public class SoundManager extends ResourceManager {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger = Logger.getLogger(SoundManager.class);
+    private Logger logger = LogManager.getLogger(SoundManager.class);
 
     /**
      * The internal list of sounds that are loaded.

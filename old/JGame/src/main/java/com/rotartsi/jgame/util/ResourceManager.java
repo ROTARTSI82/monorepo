@@ -2,7 +2,8 @@ package com.rotartsi.jgame.util;
 
 import com.rotartsi.jgame.image.ImageManager;
 import com.rotartsi.jgame.mixer.SoundManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.net.URL;
@@ -20,7 +21,7 @@ public abstract class ResourceManager {
      */
     public LinkedList<String> extensions;
 
-    private Logger logger = Logger.getLogger(ResourceManager.class);
+    private Logger logger = LogManager.getLogger(ResourceManager.class);
 
     /**
      * Create a new ResourceManager.

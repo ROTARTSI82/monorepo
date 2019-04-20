@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.mixer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 
@@ -14,7 +15,7 @@ public class TonePlayer extends Thread {
     /**
      * Internal logger object used for logging events.
      */
-    private Logger logger = Logger.getLogger(TonePlayer.class);
+    private Logger logger = LogManager.getLogger(TonePlayer.class);
 
     /**
      * Should the {@link #tone} be interpreted as stereo or mono sound?

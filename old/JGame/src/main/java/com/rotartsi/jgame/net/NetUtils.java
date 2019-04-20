@@ -2,7 +2,8 @@ package com.rotartsi.jgame.net;
 
 import com.rotartsi.jgame.util.StringManager;
 import com.rotartsi.jgame.util.Version;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +23,7 @@ public class NetUtils {
     /**
      * The logger object used for logging.
      */
-    private static Logger logger = Logger.getLogger(NetUtils.class);
+    private static Logger logger = LogManager.getLogger(NetUtils.class);
 
     /**
      * Get a string from a byte array.

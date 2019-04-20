@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.mixer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -20,7 +21,7 @@ public class SoundGeneratorTest {
     private final int stereoPlaylenMargin = 125;
     private Tone stereo;
     private SoundGenerator gen;
-    private Logger logger = Logger.getLogger(SoundGeneratorTest.class);
+    private Logger logger = LogManager.getLogger(SoundGeneratorTest.class);
 
     @BeforeSuite
     public void setUp() {

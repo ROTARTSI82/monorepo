@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -18,7 +19,7 @@ public class ScrapUtils {
     /**
      * Logger object ofr event logs
      */
-    private static Logger logger = Logger.getLogger(ScrapUtils.class);
+    private static Logger logger = LogManager.getLogger(ScrapUtils.class);
 
     /**
      * The system clipboard. See {@link Clipboard}

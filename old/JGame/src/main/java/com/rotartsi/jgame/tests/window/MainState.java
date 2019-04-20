@@ -12,7 +12,8 @@ import com.rotartsi.jgame.mixer.SoundManager;
 import com.rotartsi.jgame.sprite.Group;
 import com.rotartsi.jgame.sprite.MaskedSprite;
 import com.rotartsi.jgame.sprite.Sprite;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.FloatControl;
 import java.awt.*;
@@ -28,7 +29,7 @@ import static com.rotartsi.jgame.Constants.rand;
  */
 @Deprecated
 public class MainState extends State {
-    private final Logger logger = Logger.getLogger(MainState.class);
+    private final Logger logger = LogManager.getLogger(MainState.class);
     private final boolean displayRects = true;
 
     private MaskedSprite player;

@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.event;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -11,7 +12,7 @@ import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class AnyEvent {
     public InputEvent event;
-    private Logger logger = Logger.getLogger(AnyEvent.class);
+    private Logger logger = LogManager.getLogger(AnyEvent.class);
 
     public MouseEvent mouseEvent;
     public KeyEvent keyEvent;

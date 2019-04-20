@@ -3,7 +3,8 @@ package com.rotartsi.jgame.net;
 import com.rotartsi.jgame.net.tcp.TCPClient;
 import com.rotartsi.jgame.net.tcp.TCPClientHandler;
 import com.rotartsi.jgame.net.tcp.TCPServer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import static com.rotartsi.jgame.Constants.JGameStr;
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class TCPTest {
-    private static Logger logger = Logger.getLogger(TCPTest.class);
+    private static Logger logger = LogManager.getLogger(TCPTest.class);
 
     @Test(timeOut = 2000)
     public void testTCP() throws Exception {

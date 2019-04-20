@@ -2,7 +2,8 @@ package com.rotartsi.jgame.net;
 
 import com.rotartsi.jgame.net.udp.UDPClient;
 import com.rotartsi.jgame.net.udp.UDPServer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
@@ -16,7 +17,7 @@ import static com.rotartsi.jgame.util.StringManager.fmt;
 public class UDPTest {
     private Server testServ;
     private Client testCli;
-    private Logger logger = Logger.getLogger(UDPTest.class);
+    private Logger logger = LogManager.getLogger(UDPTest.class);
 
     @Test(timeOut = 2000)
     public void testUDP() throws Exception {

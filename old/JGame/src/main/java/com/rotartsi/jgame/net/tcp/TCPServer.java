@@ -3,7 +3,8 @@ package com.rotartsi.jgame.net.tcp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -38,7 +39,7 @@ public class TCPServer {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger = Logger.getLogger(TCPServer.class);
+    private Logger logger = LogManager.getLogger(TCPServer.class);
 
     /**
      * A reversed copy of the {@link #serialTable} (values are keys and keys are values).

@@ -2,7 +2,8 @@ package com.rotartsi.jgame.net.tcp;
 
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class TCPClientHandler {
     /**
      * Internal logger object used for logging.
      */
-    private Logger logger = Logger.getLogger(TCPClientHandler.class);
+    private Logger logger = LogManager.getLogger(TCPClientHandler.class);
 
     /**
      * New client!

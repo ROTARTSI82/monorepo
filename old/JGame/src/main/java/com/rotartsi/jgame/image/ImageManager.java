@@ -2,7 +2,8 @@ package com.rotartsi.jgame.image;
 
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.util.ResourceManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class ImageManager extends ResourceManager {
     /**
      * The logger object used to log events.
      */
-    private final Logger logger = Logger.getLogger(ImageManager.class);
+    private final Logger logger = LogManager.getLogger(ImageManager.class);
 
     /**
      * The internal table of images that are loaded.

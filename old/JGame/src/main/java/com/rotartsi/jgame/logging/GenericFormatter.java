@@ -158,7 +158,7 @@ public class GenericFormatter extends Formatter {
                         record.getSourceClassName(),
                         record.getSourceMethodName(),
                         record.getLevel(),
-                        record.getMessage()) + "\n" + GenericLogger.getStackTrace(exc);
+                        record.getMessage()) + "\n" + CrashLogger.getStackTrace(exc);
             }
         }
     }
@@ -172,7 +172,7 @@ public class GenericFormatter extends Formatter {
      */
     private String formatHTML(Throwable e) {
         return fmt(settings.get("logging.GenericFormatter.htmlException"),
-                GenericLogger.getStackTrace(e).replace(" ", "&nbsp;")
+                CrashLogger.getStackTrace(e).replace(" ", "&nbsp;")
                         .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
                         .replace("\n", "<br/>\n"));
     }

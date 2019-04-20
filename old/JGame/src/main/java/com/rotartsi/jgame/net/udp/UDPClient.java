@@ -3,7 +3,8 @@ package com.rotartsi.jgame.net.udp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.*;
@@ -19,7 +20,7 @@ public class UDPClient {
     /**
      * Internal logger object used to log events.
      */
-    private Logger logger = Logger.getLogger(UDPClient.class);
+    private Logger logger = LogManager.getLogger(UDPClient.class);
 
     /**
      * The socket that the client is binded to.

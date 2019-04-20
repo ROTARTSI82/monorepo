@@ -3,7 +3,8 @@ package com.rotartsi.jgame.net.udp;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.net.NetUtils;
 import com.rotartsi.jgame.util.StringManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.*;
@@ -24,7 +25,7 @@ public class UDPServer {
     /**
      * Logger object used to log events.
      */
-    private Logger logger = Logger.getLogger(UDPServer.class);
+    private Logger logger = LogManager.getLogger(UDPServer.class);
 
     /**
      * List of UUIDs of verified packets that have already been handled.

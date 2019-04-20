@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.testListeners;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.*;
 
 import static com.rotartsi.jgame.Constants.JGameStr;
@@ -8,7 +9,7 @@ import static com.rotartsi.jgame.Constants.settings;
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
 public class TestListener implements ITestListener {
-    private Logger logger = Logger.getLogger(TestListener.class);
+    private Logger logger = LogManager.getLogger(TestListener.class);
 
     public TestListener() {
         super();

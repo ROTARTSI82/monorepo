@@ -3,7 +3,8 @@ package com.rotartsi.jgame;
 import com.rotartsi.jgame.util.SettingsBundle;
 import com.rotartsi.jgame.util.StringManager;
 import com.rotartsi.jgame.util.Version;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class Constants {
     /**
      * Internal logger object used for logging.
      */
-    public final static Logger logger = Logger.getLogger(Constants.class);
+    public final static Logger logger = LogManager.getLogger(Constants.class);
 
     static {
         SettingsBundle tmp_settings;

@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.event;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.File;
@@ -24,7 +25,7 @@ public class DesktopUtils {
     /**
      * Internal logger object used for event logging.
      */
-    private static Logger logger = Logger.getLogger(DesktopUtils.class);
+    private static Logger logger = LogManager.getLogger(DesktopUtils.class);
 
     /**
      * Boolean value of whether desktops as a whole are even allowed on the machine.

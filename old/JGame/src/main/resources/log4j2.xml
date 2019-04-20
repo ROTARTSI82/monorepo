@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="ALL">
+    <!-- Don't forget to set system property
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+    <Properties>
+        <Property name="log-path">logs</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%l] [%t] [%-5level]: %msg%n"/>
+            <!--Note: %l is pretty slow so replace with %logger or %c.
+             (Doesn't matter anyways because of log4j2's async logging)-->
+        </Console>
+
+        <RollingRandomAccessFile name="file" fileName="logs/latest.html"
+                                 filePattern="logs/htmlLogs/%d{yyyy-MM-dd HH:mm}-%i.html.gz">
+            <HTMLLayout charset="UTF-8" title="Logging Session" locationInfo="true"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="textLog" fileName="logs/latest.log"
+                                 filePattern="logs/textLogs/%d{yyyy-MM-dd HH:mm}-%i.log.gz">
+            <PatternLayout pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%l] [%t] [%-5level]: %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="textLog"/>
+        </Root>
+    </Loggers>
+</Configuration>

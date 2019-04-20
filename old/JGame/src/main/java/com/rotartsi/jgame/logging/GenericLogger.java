@@ -4,8 +4,6 @@ import com.rotartsi.jgame.Constants;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.*;
@@ -108,18 +106,5 @@ public class GenericLogger {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             logger.log(Level.WARNING, fmt(JGameStr.getString("logging.GenericLogger.uncaughtException"), t), e);
         });
-    }
-
-    /**
-     * Get the stack trace of a Throwable in the form of a string.
-     *
-     * @param e Throwable
-     * @return Stack trace as string.
-     */
-    public static String getStackTrace(Throwable e) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw, true);
-        e.printStackTrace(pw);
-        return sw.getBuffer().toString();
     }
 }

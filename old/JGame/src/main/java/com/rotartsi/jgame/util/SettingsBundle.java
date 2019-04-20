@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,7 +23,7 @@ public class SettingsBundle {
      */
     private Properties prop;
 
-    private Logger logger = Logger.getLogger(SettingsBundle.class);
+    private Logger logger = LogManager.getLogger(SettingsBundle.class);
 
     /**
      * URL to read/write to.

@@ -4,7 +4,8 @@ import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.gui.ButtonManager;
 import com.rotartsi.jgame.image.ImageManager;
 import com.rotartsi.jgame.math.Vector2;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -70,7 +71,7 @@ public class Sprite {
     /**
      * Logger object used for logging.
      */
-    private Logger logger = Logger.getLogger(Sprite.class);
+    private Logger logger = LogManager.getLogger(Sprite.class);
 
     /**
      * A list of groups this sprite is in.

@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import static com.rotartsi.jgame.Constants.JGameStr;
  */
 public class FileUtils {
 
-    private static Logger logger = Logger.getLogger(FileUtils.class);
+    private static Logger logger = LogManager.getLogger(FileUtils.class);
 
     /**
      * Create an empty file (parent directories will be created if they dont exist.)
