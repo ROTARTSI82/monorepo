@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+}
+
+.navbar {
+    /* Remove the bullets, margins, and paddings from the list */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    position: fixed;
+    width: 100%;
+    overflow: auto;
+    border: black 5px solid;
+    background:darkblue;
+}
+
+.container {
+    padding: 5rem 1rem 1rem 1rem;
+}
+
+.inner {
+    background-color: lightblue;
+    border-radius: 10rem;
+    border: 5px black solid;
+    text-align: center;
+    margin: 1rem 2rem 1rem 2rem;
+}
+
+.navbar li.category a {
+    background-color: indigo;
+}
+
+.navbar li {
+    float: left;
+    text-align: center;
+    border-right: black 5px solid;
+}
+
+.navbar li:not(.category) a:hover {
+    background-color: blue;
+}
+
+.navbar li a {
+    padding: 1rem 1rem 1rem 1rem;
+    display: block;
+    color: white;
+    background-color: darkblue;
+    text-align: center;
+    text-decoration: none;
+}
