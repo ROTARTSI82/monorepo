@@ -19,9 +19,59 @@ body {
     padding: 5rem 1rem 1rem 1rem;
 }
 
+.question {
+    background-color: lightskyblue;
+    border-radius: 5rem;
+    border: 3px solid black;
+    margin: 1rem 1rem 1rem 1rem;
+}
+
+.center {
+    text-align: center;
+}
+
+.big {
+    color: red;
+    font-size: 50px;
+}
+
+.pro {
+    background-color: lightgreen;
+    border: darkgreen 1px solid;
+    border-radius: 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.con {
+    background-color: red;
+    border: darkred 1px solid;
+    border-radius: 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.noncenter {
+    text-align: left !important;
+    padding: 1rem 1rem 1rem 1rem;
+}
+
+.noround {
+    border-radius: 1rem !important;
+    border: 3px solid black !important;
+    padding-bottom: 1rem;
+}
+
+.highlight {
+    background-color: red;
+    border: darkred 1px solid;
+    border-radius: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
 .inner {
     background-color: lightblue;
-    border-radius: 10rem;
+    border-radius: 5rem;
     border: 5px black solid;
     text-align: center;
     margin: 1rem 2rem 1rem 2rem;
@@ -39,6 +89,14 @@ body {
 
 .navbar li:not(.category) a:hover {
     background-color: blue;
+}
+
+.left {
+    margin-right: 60%;
+}
+
+.right {
+    margin-left: 60%;
 }
 
 .navbar li a {

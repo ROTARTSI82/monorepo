@@ -8,65 +8,36 @@
 <body>
 <ul class="navbar">
     <li class="category">
-        <a>Global Warming</a>
+        <a href="index.html">Global Warming</a>
     </li>
     <li>
-        <a>Test</a>
+        <a href="legal.html">Legal Actions</a>
+    </li>
+    <li>
+        <a href="innovations.html">Innovations</a>
+    </li>
+    <li>
+        <a href="energy.html">Alternate Energy Sources</a>
     </li>
 </ul>
 
 <div class="container">
     <div class="inner">
-        Lorem ip<br/>sum dolor<br/> sit amet
-        <br/><br/><br/>
-        gladios<br/>
-        caecilius est in hort<br/>o
-        hell<br/>o world
-        adjfka<br/>hgkajhkldfjalkdjfa<br/>;lkdjf;lakjdsfl;akg;adsgasdg<br/>
-        akjs<br/>dga<br/>
-        <br/>
-    </div>
-    <div class="inner">
-        Lorem ip<br/>sum dolor<br/> sit amet
-        <br/><br/><br/>
-        gladios<br/>
-        caecilius est in hort<br/>o
-        hell<br/>o world
-        adjfka<br/>hgkajhkldfjalkdjfa<br/>;lkdjf;lakjdsfl;akg;adsgasdg<br/>
-        akjs<br/>dga<br/>
-        <br/>
-    </div>
-    <div class="inner">
-        Lorem ip<br/>sum dolor<br/> sit amet
-        <br/><br/><br/>
-        gladios<br/>
-        caecilius est in hort<br/>o
-        hell<br/>o world
-        adjfka<br/>hgkajhkldfjalkdjfa<br/>;lkdjf;lakjdsfl;akg;adsgasdg<br/>
-        akjs<br/>dga<br/>
-        <br/>
-    </div>
-    <div class="inner">
-        Lorem ip<br/>sum dolor<br/> sit amet
-        <br/><br/><br/>
-        gladios<br/>
-        caecilius est in hort<br/>o
-        hell<br/>o world
-        adjfka<br/>hgkajhkldfjalkdjfa<br/>;lkdjf;lakjdsfl;akg;adsgasdg<br/>
-        akjs<br/>dga<br/>
-        <br/>
-    </div>
-    <div class="inner">
-        Lorem ip<br/>sum dolor<br/> sit amet
-        <br/><br/><br/>
-        gladios<br/>
-        caecilius est in hort<br/>o
-        hell<br/>o world
-        adjfka<br/>hgkajhkldfjalkdjfa<br/>;lkdjf;lakjdsfl;akg;adsgasdg<br/>
-        akjs<br/>dga<br/>
-        <br/>
+        <h1>The <span class="big">BIGGEST</span> question of all:</h1>
+        <div class="question">
+            <h2>What actions can we take to <span style="font-size: 40px;">STOP</span> <span class="highlight" id="gw">GLOBAL WARMING?</span>
+            </h2>
+        </div>
     </div>
 </div>
+
+<script>
+    let gw = document.getElementById("gw");
+    setInterval(function () {
+        let y = Math.floor(Math.random() * 256);
+        gw.style.backgroundColor = "rgb(255," + y + ",0)";
+    }, 125)
+</script>
 
 </body>
 </html>
