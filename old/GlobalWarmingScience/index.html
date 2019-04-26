@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Global Warming Project</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link href="scripts/style.css" rel="stylesheet"/>
 </head>
 <body>
 <ul class="navbar">
@@ -31,12 +31,23 @@
     </div>
 
     <div class="inner">
-        <h1>Authors: Varun Thvar, Agastya Ravuri, Grant Yang</h1>
+        <h1>Authors: Varun Thvar<span id="nothing-to-see-here2">,</span> Agastya Ravuri<span
+                id="nothing-to-see-here">,</span> Grant Yang</h1>
         <h2>Made for a science project on 25 April 2019</h2>
     </div>
 </div>
 
 <script>
+    let ntsh = document.getElementById("nothing-to-see-here");
+    ntsh.onclick = function () {
+        window.location.replace("not-an-easter-egg.html");
+    };
+
+    let ntsh2 = document.getElementById("nothing-to-see-here2");
+    ntsh2.onclick = function () {
+        window.location.replace("not-an-easter-egg2.html");
+    };
+
     let gw = document.getElementById("gw");
     setInterval(function () {
         let y = Math.floor(Math.random() * 256);

@@ -1,6 +1,36 @@
+/* Agg's stuff */
+
+.limit-img {
+    width: 5rem;
+    height: 5rem;
+}
+
+.power {
+    background-color: yellow;
+}
+
+.ungreenhousify {
+    background-color: greenyellow;
+}
+
+.description {
+    color: blue;
+}
+
+/* end aggs stuff */
+
 body {
     margin: 0;
     background-color: lightcyan;
+}
+
+.nopadmargin {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+table, th, td {
+    border: 1px solid black;
 }
 
 .navbar {
@@ -14,6 +44,11 @@ body {
     overflow: auto;
     border: black 3px solid;
     background:darkblue;
+}
+
+.barcontainer {
+    padding: 1rem;
+    margin-bottom: 5rem;
 }
 
 .container {
@@ -33,9 +68,34 @@ body {
 }
 
 .same-line {
-    display: inline;
-    margin: 5rem 1rem!important;
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem!important;
+    /*display: inline;*/
+    float: left;
+    margin: 5rem 1rem;
+    padding: 0.5rem;
+}
+
+.item-category { /* inner same-line */
+    text-align: center;
+    margin: 0 !important;
+    max-width: 42.5%;
+    width: 42.5%;
+    padding: 3rem;
+    background-color: lightblue;
+    border-radius: 5rem;
+    border: 3px black solid;
+    float: left;
+}
+
+.nrg-source { /* inner same-line */
+    border-radius: 1rem !important;
+    padding: 0.5rem !important;
+    margin: 0.5rem !important;
+    float: left;
+    max-width: 25%;
+    height: 350px;
+    background-color: lightblue;
+    border: 3px black solid;
+    text-align: center;
 }
 
 .question {
