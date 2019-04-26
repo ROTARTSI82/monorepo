@@ -77,8 +77,8 @@ table, th, td {
 .item-category { /* inner same-line */
     text-align: center;
     margin: 0 !important;
-    max-width: 42.5%;
-    width: 42.5%;
+    max-width: 40%;
+    width: 40%;
     padding: 3rem;
     background-color: lightblue;
     border-radius: 5rem;
