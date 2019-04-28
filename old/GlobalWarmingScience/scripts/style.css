@@ -130,7 +130,7 @@ table, th, td {
 }
 
 .pro {
-    background-color: lightgreen;
+    background-color: #aaffaa;
     border: darkgreen 1px solid;
     border-radius: 1rem;
     margin: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -138,7 +138,7 @@ table, th, td {
 }
 
 .con {
-    background-color: red;
+    background-color: #ffaaaa;
     border: darkred 1px solid;
     border-radius: 1rem;
     margin: 0.5rem 0.5rem 0.5rem 0.5rem;
