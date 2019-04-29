@@ -26,7 +26,7 @@ var neededPowerPerSec=0;
 var pollution = 0;
 var pollutionPerSec = 0;
 var birthRate = 0;
-var population = 100;
+var population = 150;
 var moneyCounter = document.getElementById("moneyCounter");
 var moneyPerSecCounter = document.getElementById("moneyPerSecond");
 var powerPerSecondCounter = document.getElementById("powerPerSecond");
@@ -95,12 +95,12 @@ var update = function() {
     neededPowerPerSec = 700*population*Math.min(250/a(8), 1);
     powerPerSec = a(0)*24000+a(1)*480+a(2)*36000+a(3)*1160930+a(4)*1368000+a(5)*1000000+a(6)*12870000;
     pollutionPerSec = a(0)*21600 + a(5)*320 - a(7)*0.025 - a(8)*population/10000;
-    temperature = 21 + pollution/375000000000;
+    temperature = 22 + pollution/375000000000;
     let x = powerPerSec - neededPowerPerSec;
     if (x > 0) {
-        birthRate = Math.floor(x / 50000000 * population - population * taxes / 500 - (temperature - 22) * 410);
+        birthRate = Math.floor(x / 5000000 * population + Math.log2(population) / 7 - population * taxes / 750 - (temperature - 22) * 410);
     } else {
-        birthRate = Math.floor(x / 225000 * population - population * taxes / 250 - (temperature - 22) * 410);
+        birthRate = Math.floor(x / 500000 * population - population * taxes / 1000 - (temperature - 22) * 410);
     }
     population += birthRate;
     money += moneyPerSec;
