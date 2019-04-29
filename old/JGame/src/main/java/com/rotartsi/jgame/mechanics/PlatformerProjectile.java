@@ -1,7 +1,7 @@
 package com.rotartsi.jgame.mechanics;
 
-import com.rotartsi.jgame.game.Game;
 import com.rotartsi.jgame.math.Vector2;
+import com.rotartsi.jgame.util.ScreenBounds;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -40,6 +40,8 @@ public class PlatformerProjectile extends PlatformerEntity {
      */
     private Vector2 blume;
 
+    private static PlatformerObstacle dummy = new PlatformerObstacle();
+
     /**
      * Projectiles!
      *
@@ -50,8 +52,9 @@ public class PlatformerProjectile extends PlatformerEntity {
      * @param life     Life in milliseconds until projectile despawns
      * @param blume    Max offset of initial velocity
      */
-    public PlatformerProjectile(BufferedImage img, Vector2 target, Vector2 position, double speed, long life, Vector2 blume, Game game) {
-        super(img, game.runner.getBounds());
+    public PlatformerProjectile(BufferedImage img, ScreenBounds bounds, Vector2 target, Vector2 position,
+                                double speed, long life, Vector2 blume) {
+        super(img, bounds); // Makes sure that bounds are never checked.
         pos = position;
 
         projectileLife = life;
@@ -123,6 +126,22 @@ public class PlatformerProjectile extends PlatformerEntity {
         Vector2 accel = pos.velocityTo(target, speed).add(new Vector2((rand.nextBoolean() ? 1 : -1) *
                 (rand.nextDouble() * blume.x), (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.y)));
         vel = vel.add(accel);
+    }
+
+    @Override
+    protected void checkBounds() {
+        if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
+            requestKill();
+        }
+        if (absPos.y < bounds.minCoords[1] && bounds.doCollide("-y")) { // - y
+            requestKill();
+        }
+        if (pos.x + size.x / 2 > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
+            requestKill();
+        }
+        if (pos.y + size.y / 2 > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
+            requestKill();
+        }
     }
 
     /**

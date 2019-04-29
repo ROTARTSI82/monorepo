@@ -38,10 +38,12 @@ public class CrashLogger {
             out.write("\n\n");
 
             out.println(getStackTrace(err));
+            out.close();
         } catch (IOException e) {
             logger.fatal("Failed to write crash report: ", e);
             logger.fatal("Crash data will be logged here instead.");
-            logger.fatal("CRASH_MSG={}, EXC=", msg, err);
+            logger.fatal("CRASH_MSG={}, THREAD={}, DATETIME={} EXC=", msg,
+                    Thread.currentThread().getName(), date, err);
         }
 
     }

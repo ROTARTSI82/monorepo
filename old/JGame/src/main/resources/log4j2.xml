@@ -10,7 +10,7 @@
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%l] [%t] [%-5level]: %msg%n"/>
+            <PatternLayout pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%logger-(%F:%L)] [%t] [%-5level]: %msg%n"/>
             <!--Note: %l is pretty slow so replace with %logger or %c.
              (Doesn't matter anyways because of log4j2's async logging)-->
         </Console>
@@ -26,7 +26,9 @@
 
         <RollingRandomAccessFile name="textLog" fileName="logs/latest.log"
                                  filePattern="logs/textLogs/%d{yyyy-MM-dd HH:mm}-%i.log.gz">
-            <PatternLayout pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%l] [%t] [%-5level]: %msg%n"/>
+            <PatternLayout
+                    header="================================ [ NEW LOGGING SESSION ] ================================&#13;&#10;"
+                    pattern="[%d{yyy-MM-dd HH:mm:ss.SSS} - %rms] [%logger-(%F:%L)] [%t] [%-5level]: %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>

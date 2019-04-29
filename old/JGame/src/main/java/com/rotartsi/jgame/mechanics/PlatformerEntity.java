@@ -4,9 +4,9 @@ import com.rotartsi.jgame.event.AnyEvent;
 import com.rotartsi.jgame.math.Vector2;
 import com.rotartsi.jgame.sprite.Group;
 import com.rotartsi.jgame.sprite.Sprite;
+import com.rotartsi.jgame.util.ScreenBounds;
 import com.rotartsi.jgame.util.SettingsBundle;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -198,9 +198,10 @@ public class PlatformerEntity extends Sprite {
     public double speedMult = 1;
     public double gravityMult = 1;
     public double jumpMult = 1;
+    public double airFriction = 0.025;
 
-    public double jumpPower = 10;
-    public double gravity = 0.5;
+    public double jumpPower = 0;
+    public double gravity = 0;
 
     public int climbSkill = 1;
 
@@ -212,20 +213,19 @@ public class PlatformerEntity extends Sprite {
 
     public Group collidables;
 
-    private double[] maxCoords;
-    private double[] minCoords;
+    protected ScreenBounds bounds;
 
     public double frictionMult = 1;
     public double climbSpeedMult = 1;
-    public Vector2[] xBounceMult = new Vector2[]{new Vector2(-1, -1), new Vector2(-1, -1)};
-    public Vector2[] yBounceMult = new Vector2[]{new Vector2(-1, -1), new Vector2(-1, -1)};
+    public Vector2[] xBounceMult = new Vector2[]{new Vector2(1, 1), new Vector2(1, 1)};
+    public Vector2[] yBounceMult = new Vector2[]{new Vector2(1, 1), new Vector2(1, 1)};
 
     /**
      * Not yet implemented...
      *
      * @param img NOT IMPLEMENTED
      */
-    public PlatformerEntity(BufferedImage img, Rectangle bounds) {
+    public PlatformerEntity(BufferedImage img, ScreenBounds bounds) {
         super(img);
 
         internalState.put("forward", false);
@@ -234,15 +234,11 @@ public class PlatformerEntity extends Sprite {
         internalState.put("climb", false);
         internalState.put("grounded", false);
         //internalState.put("firing", false);
-
-        maxCoords = new double[]{bounds.x + bounds.width, bounds.y + bounds.height};
-        minCoords = new double[]{bounds.x, bounds.y};
-
+        this.bounds = bounds;
     }
 
-    public void setBounds(Rectangle bounds) {
-        maxCoords = new double[]{bounds.x + bounds.width, bounds.y + bounds.height};
-        minCoords = new double[]{bounds.x, bounds.y};
+    public void setBounds(ScreenBounds bounds) {
+        this.bounds = bounds;
     }
 
     @Override
@@ -250,33 +246,51 @@ public class PlatformerEntity extends Sprite {
         internalState.put("grounded", false);
         internalState.put("climb", false);
         checkYCollisions();
+        checkBounds();
         updateInputState();
-        if (!internalState.get("climb") || !internalState.get("grounded")) {
-            vel.y -= gravity;
+        if (!internalState.get("grounded")) {
+            vel.y += gravity;
         }
         clampVelocity();
-        checkBounds();
+        if (vel.x > 0) {
+            vel.x -= airFriction;
+        } else if (vel.x < 0) {
+            vel.x += airFriction;
+        }
         pos.y = pos.y + vel.y;
         updateRect();
     }
 
     protected void checkBounds() {
-        if (absPos.x < minCoords[0]) { // - x
+        if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
             internalState.put("climb", true);
-            pos.x = minCoords[0] + (size.x / 2);
+            pos.x = bounds.minCoords[0] + (size.x / 2);
+            bounds.handleCollision("-x", this);
+            vel.x = 0;
+            //vel = vel.multiply(bounds.left.xBounce[1]).multiply(xBounceMult[1]);
         }
-        if (absPos.y < minCoords[1]) { // - y
+        if (absPos.y < bounds.minCoords[1] && bounds.doCollide("-y")) { // - y
             vel.y = 0;
-            pos.y = minCoords[1] + (size.y / 2);
+            pos.y = bounds.minCoords[1] + (size.y / 2);
+            bounds.handleCollision("-y", this);
+            if (vel.x > 0) {
+                vel.x -= bounds.bottom.friction * frictionMult;
+            } else if (vel.x < 0) {
+                vel.x += bounds.bottom.friction * frictionMult;
+            }
         }
-        if (pos.x + size.x / 2 > maxCoords[0]) { // + x
-            pos.x = maxCoords[0] - (size.x / 2);
+        if (pos.x + size.x / 2 > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
+            pos.x = bounds.maxCoords[0] - (size.x / 2);
             internalState.put("climb", true);
+            bounds.handleCollision("+x", this);
+            vel.x = 0;
+            //vel = vel.multiply(bounds.right.xBounce[1]).multiply(xBounceMult[1]);
         }
-        if (pos.y + size.y / 2 > maxCoords[1]) { // + y
-            pos.y = maxCoords[1] - (size.y / 2);
+        if (pos.y + size.y / 2 > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
+            pos.y = bounds.maxCoords[1] - (size.y / 2);
             internalState.put("grounded", true);
             vel.y = 0;
+            bounds.handleCollision("+y", this);
         }
         updateRect();
     }
@@ -328,9 +342,6 @@ public class PlatformerEntity extends Sprite {
         if (internalState.get("backward")) {
             vel.x -= speed;
         }
-        if (internalState.get("climb")) {
-            vel.y -= climbSpeed;
-        }
         if (internalState.get("jump") && internalState.get("grounded")) {
             vel.y -= jumpPower;
         }
@@ -348,6 +359,9 @@ public class PlatformerEntity extends Sprite {
             checkNXCollisions();
             // checkBounds();
         }
+        if (internalState.get("climb")) {
+            vel.y -= climbSpeed;
+        }
     }
 
     private void checkPXCollisions() {
@@ -362,13 +376,10 @@ public class PlatformerEntity extends Sprite {
                 col.onCollide("+x", this);
                 boolean doClimb = (col.climbDifficulty <= climbSkill);
                 internalState.put("climb", doClimb);
-                if (doClimb) {
-                    climbSpeed = col.climbSpeed * climbSpeedMult;
-                }
                 pos.x = col.absPos.x - (size.x / 2);
                 updateRect();
-                vel.x -= col.friction * frictionMult;
-                vel = vel.add(vel.multiply(col.xBounce[1]).multiply(xBounceMult[1]));
+                vel.x = 0;
+//                vel = vel.multiply(col.xBounce[1]).multiply(xBounceMult[1]);
             }
         }
     }
@@ -385,13 +396,10 @@ public class PlatformerEntity extends Sprite {
                 col.onCollide("-x", this);
                 boolean doClimb = (col.climbDifficulty <= climbSkill);
                 internalState.put("climb", doClimb);
-                if (doClimb) {
-                    climbSpeed = col.climbSpeed * climbSpeedMult;
-                }
                 pos.x = (col.pos.x + (col.size.x / 2)) + (size.x / 2d);
                 updateRect();
-                vel.x += col.friction * frictionMult;
-                vel = vel.add(vel.multiply(col.xBounce[0]).multiply(xBounceMult[0]));
+                vel.x = 0;
+//                vel = vel.multiply(col.xBounce[0]).multiply(xBounceMult[0]);
             }
         }
     }
@@ -411,7 +419,12 @@ public class PlatformerEntity extends Sprite {
                     updateRect();
                     internalState.put("grounded", true);
                     vel.y = 0;
-                    vel = vel.add(vel.multiply(col.yBounce[1]).multiply(yBounceMult[1]));
+//                    vel = vel.multiply(col.yBounce[1]).multiply(yBounceMult[1]);
+                    if (vel.x > 0) {
+                        vel.x -= col.friction * frictionMult;
+                    } else if (vel.x < 0) {
+                        vel.x += col.friction * frictionMult;
+                    }
                 }
             }
         } else if (vel.y < 0) {
@@ -427,7 +440,7 @@ public class PlatformerEntity extends Sprite {
                     pos.y = (col.pos.y + (col.size.y / 2)) + (size.y / 2d);
                     updateRect();
                     vel.y = 0;
-                    vel = vel.add(vel.multiply(col.yBounce[0]).multiply(yBounceMult[0]));
+//                    vel = vel.multiply(col.yBounce[0]).multiply(yBounceMult[0]);
                 }
             }
         }

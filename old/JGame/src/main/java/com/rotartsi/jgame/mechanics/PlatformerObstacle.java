@@ -9,17 +9,20 @@ import com.rotartsi.jgame.sprite.Sprite;
  */
 public class PlatformerObstacle extends Sprite {
 
-    public int climbDifficulty;
+    public int climbDifficulty = 0;
 
-    public Vector2[] xBounce = new Vector2[]{new Vector2(3, 3), new Vector2(3, 3)}; // {nxBounce, pxBounce}
-    public Vector2[] yBounce = new Vector2[]{new Vector2(3, 3), new Vector2(3, 3)}; // {nyBounce, pyBounce}
+    /*
+    Bounces are very glitchy right now so disable them for now.
+     */
+    public Vector2[] xBounce = new Vector2[]{new Vector2(0, 0), new Vector2(0, 0)}; // {nxBounce, pxBounce}
+    public Vector2[] yBounce = new Vector2[]{new Vector2(0, 0), new Vector2(0, 0)}; // {nyBounce, pyBounce}
 
-    public double friction = 1;
+    public double friction = 0;
     public double climbSpeed = 5;
 
-    public double speed = 5;
+    public double speed = 0.1;
     public double jumpPower = 10;
-    public double gravity = 0.5;
+    public double gravity = 0.025;
     /**
      * Not yet implemented...
      */
@@ -29,9 +32,14 @@ public class PlatformerObstacle extends Sprite {
     }
 
     public void onCollide(String axis, PlatformerEntity player) {
-        player.speed = speed * player.speedMult;
-        player.gravity = gravity * player.gravityMult;
-        player.jumpPower = jumpPower * player.jumpMult;
+        if (axis.equals("-y")) {
+            player.speed = speed * player.speedMult;
+            player.gravity = gravity * player.gravityMult;
+            player.jumpPower = jumpPower * player.jumpMult;
+        }
+        if (climbDifficulty <= player.climbSkill && (axis.equals("+x") || axis.equals("-x"))) {
+            player.climbSpeed = climbSpeed * player.climbSpeedMult;
+        }
     }
 
     public boolean doCollide(String axis) {
