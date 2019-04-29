@@ -18,10 +18,10 @@ public class PlatformerObstacle extends Sprite {
     public Vector2[] yBounce = new Vector2[]{new Vector2(0, 0), new Vector2(0, 0)}; // {nyBounce, pyBounce}
 
     public double friction = 0;
-    public double climbSpeed = 5;
+    public double climbSpeed = 0.1;
 
     public double speed = 0.1;
-    public double jumpPower = 10;
+    public double jumpPower = 5;
     public double gravity = 0.025;
     /**
      * Not yet implemented...

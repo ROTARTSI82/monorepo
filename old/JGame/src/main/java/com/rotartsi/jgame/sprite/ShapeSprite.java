@@ -5,6 +5,7 @@ import com.rotartsi.jgame.math.Vector2;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 @Deprecated
 public class ShapeSprite extends Sprite {
@@ -15,9 +16,9 @@ public class ShapeSprite extends Sprite {
         super(ImageManager.fromShape(spriteShape, Color.BLACK));
         shape = spriteShape;
         multiplier = spriteMultiplier;
-        rect = shape.getBounds();
+        rect = (Rectangle2D.Double) shape.getBounds2D();
         vel = new Vector2(0, 0);
-        rect = shape.getBounds();
+        rect = (Rectangle2D.Double) shape.getBounds2D();
         size = new Vector2(rect.width, rect.height);
         absPos = new Vector2(rect.x, rect.y);
         pos = absPos.add(new Vector2(size.x / 2, size.y / 2));
@@ -25,7 +26,7 @@ public class ShapeSprite extends Sprite {
 
     @Override
     public void updateRect() {
-        rect = shape.getBounds();
+        rect = (Rectangle2D.Double) shape.getBounds2D();
         size = new Vector2(rect.width, rect.height);
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
         rect.x = (int) absPos.x;
@@ -38,8 +39,8 @@ public class ShapeSprite extends Sprite {
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
 
-        Rectangle tmpRect = shape.getBounds();
-        Vector2 center = new Vector2(tmpRect.width / 2d, tmpRect.height / 2d);
+        Rectangle2D tmpRect = shape.getBounds2D();
+        Vector2 center = new Vector2(tmpRect.getWidth() / 2d, tmpRect.getHeight() / 2d);
         id = AffineTransform.getTranslateInstance(rect.x, rect.y);
         trans = AffineTransform.getTranslateInstance(rect.x, rect.y);
         trans.setTransform(id);

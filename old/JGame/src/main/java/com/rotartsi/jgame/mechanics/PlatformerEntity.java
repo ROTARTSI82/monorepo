@@ -263,7 +263,7 @@ public class PlatformerEntity extends Sprite {
 
     protected void checkBounds() {
         if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
-            internalState.put("climb", true);
+            internalState.put("climb", bounds.left.climbDifficulty <= climbSkill);
             pos.x = bounds.minCoords[0] + (size.x / 2);
             bounds.handleCollision("-x", this);
             vel.x = 0;
@@ -281,7 +281,7 @@ public class PlatformerEntity extends Sprite {
         }
         if (pos.x + size.x / 2 > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
             pos.x = bounds.maxCoords[0] - (size.x / 2);
-            internalState.put("climb", true);
+            internalState.put("climb", bounds.right.climbDifficulty <= climbSkill);
             bounds.handleCollision("+x", this);
             vel.x = 0;
             //vel = vel.multiply(bounds.right.xBounce[1]).multiply(xBounceMult[1]);
@@ -346,19 +346,21 @@ public class PlatformerEntity extends Sprite {
             vel.y -= jumpPower;
         }
 
-        if (vel.x > 0) {
-            clampVelocity();
-            pos.x += vel.x;
-            updateRect();
-            checkPXCollisions();
-            // checkBounds();
-        } else if (vel.x < 0) {
+        if (vel.x < 0) {
             clampVelocity();
             pos.x += vel.x;
             updateRect();
             checkNXCollisions();
             // checkBounds();
+        } else if (vel.x > 0) {
+            clampVelocity();
+            pos.x += vel.x;
+            updateRect();
+            checkPXCollisions();
+            // checkBounds();
         }
+        System.out.println("pos = " + pos);
+
         if (internalState.get("climb")) {
             vel.y -= climbSpeed;
         }
@@ -374,12 +376,12 @@ public class PlatformerEntity extends Sprite {
                     return;
                 }
                 col.onCollide("+x", this);
-                boolean doClimb = (col.climbDifficulty <= climbSkill);
-                internalState.put("climb", doClimb);
-                pos.x = col.absPos.x - (size.x / 2);
+                internalState.put("climb", (col.climbDifficulty <= climbSkill));
+                col.updateRect();
+                pos.x = col.absPos.x - (size.x / 2d);
                 updateRect();
                 vel.x = 0;
-//                vel = vel.multiply(col.xBounce[1]).multiply(xBounceMult[1]);
+//                vel = vel.multiply(col.xBounce[0]).multiply(xBounceMult[0]);
             }
         }
     }
@@ -394,8 +396,7 @@ public class PlatformerEntity extends Sprite {
                     return;
                 }
                 col.onCollide("-x", this);
-                boolean doClimb = (col.climbDifficulty <= climbSkill);
-                internalState.put("climb", doClimb);
+                internalState.put("climb", (col.climbDifficulty <= climbSkill));
                 pos.x = (col.pos.x + (col.size.x / 2)) + (size.x / 2d);
                 updateRect();
                 vel.x = 0;

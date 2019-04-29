@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
@@ -58,7 +59,7 @@ public class Sprite {
     /**
      * The rectangle used for collision detection by the sprite.
      */
-    Rectangle rect;
+    Rectangle2D.Double rect;
 
     /**
      * The absolute position to blit this image to. (the topleft of the image.)
@@ -100,7 +101,7 @@ public class Sprite {
         visible = true;
         active = true;
         size = new Vector2(image.getWidth(null), image.getHeight(null));
-        rect = new Rectangle(0, 0, (int) size.x, (int) size.y);
+        rect = new Rectangle2D.Double(0, 0, size.x, size.y);
         pos = new Vector2(0, 0);
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
         vel = new Vector2(0, 0);
@@ -110,8 +111,8 @@ public class Sprite {
      * Update {@link #absPos} and {@link #rect} according to {@link #pos} and {@link #size}.
      */
     public void updateRect() {
-        absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
-        rect = new Rectangle((int) absPos.x, (int) absPos.y, (int) size.x, (int) size.y);
+        absPos = pos.subtract(new Vector2(size.x / 2d, size.y / 2d));
+        rect = new Rectangle2D.Double(absPos.x, absPos.y, size.x, size.y);
     }
 
     /**
@@ -200,7 +201,7 @@ public class Sprite {
      * @param screen Screen to blit to.
      */
     public void blitRect(Graphics2D screen) {
-        screen.drawRect(rect.x, rect.y, rect.width, rect.height);
+        screen.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
     }
 
     /**

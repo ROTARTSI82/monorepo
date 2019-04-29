@@ -3,7 +3,7 @@ package com.rotartsi.jgame.util;
 import com.rotartsi.jgame.mechanics.PlatformerEntity;
 import com.rotartsi.jgame.mechanics.PlatformerObstacle;
 
-import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
@@ -16,7 +16,7 @@ public class ScreenBounds {
     private PlatformerObstacle top;
     public PlatformerObstacle bottom;
 
-    public ScreenBounds(Rectangle area, PlatformerObstacle top, PlatformerObstacle bottom, PlatformerObstacle left,
+    public ScreenBounds(Rectangle2D.Double area, PlatformerObstacle top, PlatformerObstacle bottom, PlatformerObstacle left,
                         PlatformerObstacle right) {
         maxCoords = new double[]{area.x + area.width, area.y + area.height};
         minCoords = new double[]{area.x, area.y};

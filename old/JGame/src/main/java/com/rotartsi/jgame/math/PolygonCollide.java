@@ -3,6 +3,7 @@ package com.rotartsi.jgame.math;
 import com.rotartsi.jgame.Constants;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
 /**
@@ -54,7 +55,7 @@ public class PolygonCollide {
      *
      * @param rect Rectangle.
      */
-    public PolygonCollide(Rectangle rect) {
+    public PolygonCollide(Rectangle2D.Double rect) {
         verts = new double[][]{{rect.x, rect.y}, {rect.x + rect.width, rect.y},
                 {rect.x + rect.width, rect.y + rect.height}, {rect.x, rect.y + rect.height}};
         getCenter();
@@ -337,7 +338,7 @@ public class PolygonCollide {
      * @param rect other rectangle
      * @return true if colliding
      */
-    public boolean intersects(Rectangle rect) {
+    public boolean intersects(Rectangle2D.Double rect) {
         return intersects(new PolygonCollide(rect));
     }
 }

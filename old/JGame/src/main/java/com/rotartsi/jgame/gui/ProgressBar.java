@@ -3,6 +3,7 @@ package com.rotartsi.jgame.gui;
 import com.rotartsi.jgame.sprite.Sprite;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -36,12 +37,12 @@ public class ProgressBar extends Sprite {
     /**
      * The dimensions of the big rectangle outlining the entire progress bar
      */
-    private Rectangle outline;
+    private Rectangle2D.Double outline;
 
     /**
      * The dimensions of the actual bar.
      */
-    private Rectangle bar;
+    private Rectangle2D.Double bar;
 
     /**
      * The size of a full bar.
@@ -51,7 +52,7 @@ public class ProgressBar extends Sprite {
     /**
      * The width of the outline around the bar.
      */
-    private int width;
+    private double width;
 
     /**
      * The color of the bar.
@@ -75,10 +76,10 @@ public class ProgressBar extends Sprite {
      * @param outsideColor  Color of the outline
      * @param emptyBarColor Color of the bar filler (essentially a full bar rendered behind the bar)
      */
-    public ProgressBar(double min, double max, double val, Dimension barSize, int outlineWidth,
+    public ProgressBar(double min, double max, double val, Dimension barSize, double outlineWidth,
                        Color insideColor, Color outsideColor, Color emptyBarColor) {
-        super(new BufferedImage((int) barSize.getWidth() + outlineWidth * 2,
-                (int) barSize.getHeight() + outlineWidth * 2, BufferedImage.TYPE_INT_ARGB));
+        super(new BufferedImage((int) (barSize.getWidth() + outlineWidth * 2),
+                (int) (barSize.getHeight() + outlineWidth * 2), BufferedImage.TYPE_INT_ARGB));
         minVal = min;
         maxVal = max;
         value = val;
@@ -96,9 +97,9 @@ public class ProgressBar extends Sprite {
      */
     public void updateBar() {
         value = Math.max(minVal, Math.min(value, maxVal));  // Clamp value.
-        bar = new Rectangle(width, width,  // The bar is offset by [width, width] from the outline rect.
+        bar = new Rectangle2D.Double(width, width,  // The bar is offset by [width, width] from the outline rect.
                 (int) ((value - minVal) * (innerSize.width / (maxVal - minVal))), innerSize.height);
-        outline = new Rectangle(0, 0, innerSize.width + width * 2, innerSize.height + width * 2);
+        outline = new Rectangle2D.Double(0, 0, innerSize.width + width * 2, innerSize.height + width * 2);
     }
 
     /**
@@ -109,12 +110,12 @@ public class ProgressBar extends Sprite {
     @Override
     public void blit(Graphics2D screen) {
         screen.setColor(outlineColor);
-        screen.fillRect(outline.x + (int) absPos.x, outline.y + (int) absPos.y, outline.width, outline.height);
+        screen.fillRect((int) (outline.x + absPos.x), (int) (outline.y + absPos.y), (int) outline.width, (int) outline.height);
 
         screen.setColor(emptyColor);
-        screen.fillRect(width + (int) absPos.x, width + (int) absPos.y, innerSize.width, innerSize.height);
+        screen.fillRect((int) (width + absPos.x), (int) (width + absPos.y), innerSize.width, innerSize.height);
 
         screen.setColor(barColor);
-        screen.fillRect(bar.x + (int) absPos.x, bar.y + (int) absPos.y, bar.width, bar.height);
+        screen.fillRect((int) (bar.x + absPos.x), (int) (bar.y + absPos.y), (int) bar.width, (int) bar.height);
     }
 }
