@@ -26,7 +26,7 @@ var neededPowerPerSec=0;
 var pollution = 0;
 var pollutionPerSec = 0;
 var birthRate = 0;
-var population = 150;
+var population = 100;
 var moneyCounter = document.getElementById("moneyCounter");
 var moneyPerSecCounter = document.getElementById("moneyPerSecond");
 var powerPerSecondCounter = document.getElementById("powerPerSecond");
@@ -42,7 +42,7 @@ for (let i = 0; i < buyButtons.length; i++) {
         if (money > unshrinkify(prices[i].textContent)) {
             money -= unshrinkify(prices[i].textContent);
             moneyCounter.textContent = shrinkify(money);
-            numsOfEach[i].textContent = shrinkify(parseInt(numsOfEach[i].textContent) + 1);
+            numsOfEach[i].textContent = shrinkify(a(i) + 1);
         }
     }
 }
@@ -78,11 +78,14 @@ for (let i = 0; i < maintains.length; i++) {
     lels.push(unshrinkify(maintains[i].textContent));
 }
 var a = function (x) {
-    return parseFloat(numsOfEach[x].textContent)
+    return parseFloat(unshrinkify(numsOfEach[x].textContent));
 };
 var update = function() {
     if (daysElapsed % 365 === 0) {
-        numsOfEach[7].textContent = "" + Math.ceil(a(7)*1.25);
+        numsOfEach[7].textContent = "" + shrinkify(Math.ceil(a(7)*1.25));
+    }
+    if (a(7) > 1000000000) {
+        numsOfEach[7].textContent = "1B";
     }
     moneyPerSec = population*taxes/10*28.73;
     daysElapsed++;
@@ -95,9 +98,9 @@ var update = function() {
     temperature = 21 + pollution/375000000000;
     let x = powerPerSec - neededPowerPerSec;
     if (x > 0) {
-        birthRate = Math.floor(x / 5000000 * population + Math.log2(population) / 7 - population * taxes / 750 - (temperature - 22) * 410);
+        birthRate = Math.floor(x / 50000000 * population - population * taxes / 500 - (temperature - 22) * 410);
     } else {
-        birthRate = Math.floor(x / 500000 * population - population * taxes / 1000 - (temperature - 22) * 410);
+        birthRate = Math.floor(x / 225000 * population - population * taxes / 250 - (temperature - 22) * 410);
     }
     population += birthRate;
     money += moneyPerSec;
