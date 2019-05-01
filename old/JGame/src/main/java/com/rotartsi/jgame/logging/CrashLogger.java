@@ -47,7 +47,7 @@ public class CrashLogger {
         }
 
     }
-
+/*
     public static void main(String[] args) {
         try {
             recursive();
@@ -59,6 +59,8 @@ public class CrashLogger {
     public static void recursive() {
         recursive();
     }
+
+ */
 
     /**
      * Get the stack trace of a Throwable in the form of a string.

@@ -2,6 +2,9 @@ package com.rotartsi.jgame.tests.window;
 
 import com.rotartsi.jgame.game.Game;
 
+/*
+THIS CODE SHOULD NOT BE IN PRODUCTION. IF IT IS, SOMEBODY SCREWED UP!
+ */
 /**
  * @deprecated Only use for blitting tests.
  */

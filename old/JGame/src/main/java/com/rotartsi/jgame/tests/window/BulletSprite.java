@@ -6,6 +6,9 @@ import com.rotartsi.jgame.sprite.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/*
+THIS CODE SHOULD NOT BE IN PRODUCTION. IF IT IS, SOMEBODY SCREWED UP!
+ */
 /**
  * @deprecated Only use for blitting tests.
  */

@@ -26,7 +26,7 @@
 
     <groupId>com.rotartsi.jgame</groupId>
     <artifactId>JGame</artifactId>
-    <version>dev19.04.10</version>
+    <version>dev19.04.29</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -50,6 +50,14 @@
             <version>7.0.0-beta3</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
     </dependencies>
 
     <build>

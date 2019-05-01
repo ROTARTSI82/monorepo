@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 
 import static com.rotartsi.jgame.Constants.rand;
 
+/*
+THIS CODE SHOULD NOT BE IN PRODUCTION. IF IT IS, SOMEBODY SCREWED UP!
+ */
 /**
  * @deprecated Only use for blitting tests.
  */

@@ -24,6 +24,9 @@ import java.util.LinkedList;
 
 import static com.rotartsi.jgame.Constants.rand;
 
+/*
+THIS CODE SHOULD NOT BE IN PRODUCTION. IF IT IS, SOMEBODY SCREWED UP!
+ */
 /**
  * @deprecated Use SpriteTest. Only useful for testing blitting.
  */

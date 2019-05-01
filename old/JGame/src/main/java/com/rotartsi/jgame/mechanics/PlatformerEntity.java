@@ -359,7 +359,7 @@ public class PlatformerEntity extends Sprite {
             checkPXCollisions();
             // checkBounds();
         }
-        System.out.println("pos = " + pos);
+//        System.out.println("pos = " + pos);
 
         if (internalState.get("climb")) {
             vel.y -= climbSpeed;

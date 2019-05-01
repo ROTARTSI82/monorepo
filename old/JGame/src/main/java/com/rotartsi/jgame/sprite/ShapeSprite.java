@@ -16,9 +16,9 @@ public class ShapeSprite extends Sprite {
         super(ImageManager.fromShape(spriteShape, Color.BLACK));
         shape = spriteShape;
         multiplier = spriteMultiplier;
-        rect = (Rectangle2D.Double) shape.getBounds2D();
         vel = new Vector2(0, 0);
-        rect = (Rectangle2D.Double) shape.getBounds2D();
+        Rectangle2D tmpRect = shape.getBounds2D();
+        rect = new Rectangle2D.Double(tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight());
         size = new Vector2(rect.width, rect.height);
         absPos = new Vector2(rect.x, rect.y);
         pos = absPos.add(new Vector2(size.x / 2, size.y / 2));
@@ -26,7 +26,8 @@ public class ShapeSprite extends Sprite {
 
     @Override
     public void updateRect() {
-        rect = (Rectangle2D.Double) shape.getBounds2D();
+        Rectangle2D tmpRect = shape.getBounds2D();
+        rect = new Rectangle2D.Double(tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight());
         size = new Vector2(rect.width, rect.height);
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
         rect.x = (int) absPos.x;

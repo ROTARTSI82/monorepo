@@ -10,6 +10,9 @@ import com.rotartsi.jgame.math.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/*
+THIS CODE SHOULD NOT BE IN PRODUCTION. IF IT IS, SOMEBODY SCREWED UP!
+ */
 /**
  * @deprecated Use SurfaceMapTest. Only useful for testing blitting.
  */
