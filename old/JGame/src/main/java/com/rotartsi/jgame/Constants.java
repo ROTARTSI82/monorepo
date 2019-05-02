@@ -121,10 +121,10 @@ public class Constants {
      */
     public final static int NET_PACKET_SIZE;
     /**
-     * The current version of JGame. (dev19.04.10)
+     * The current version of JGame. (dev19.05.2)
      */
     public final static Version JGAME_VERSION = new Version(JGameStr.getString("versionFormat"),
-            (byte) 0, (byte) 19, (byte) 4, (byte) 10);
+            (byte) 0, (byte) 19, (byte) 5, (byte) 2);
 
     /**
      * Preset for quality render hints.
