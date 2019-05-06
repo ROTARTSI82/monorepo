@@ -11,7 +11,6 @@ import com.rotartsi.jgame.util.ScreenBounds;
 import com.rotartsi.jgame.util.SettingsBundle;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
 
@@ -55,21 +54,9 @@ public class PlayerTest extends GameRunner {
             player.keybinds = new SettingsBundle();
         }
 
-        private class PlayerKeyHandler extends KeyHandler {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                player.updateEvent(new AnyEvent(e));
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                player.updateEvent(new AnyEvent(e));
-            }
-        }
-
         @Override
-        public KeyHandler[] getKeyHandlers() {
-            return new KeyHandler[]{new PlayerKeyHandler()};
+        public void onEvent(AnyEvent event) {
+            player.updateEvent(event);
         }
 
         @Override

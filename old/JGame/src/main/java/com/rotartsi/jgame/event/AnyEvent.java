@@ -69,7 +69,7 @@ public class AnyEvent {
         assignID();
     }
 
-    public void assignID() {
+    private void assignID() {
         switch (event.getID()) {
             case (KeyEvent.KEY_PRESSED): {
                 id = "key.pressed";
@@ -157,9 +157,22 @@ public class AnyEvent {
     }
 
     public boolean matchesString(String str) {
+        boolean ret = true;
         try {
-            String[] prop = str.split(",");
-            for (String i : prop) {
+            for (String event : str.split(";")) {
+                ret &= matchesSingleEvent(event);
+            }
+
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            logger.warn(fmt("Skipping bad event string: %s", str), e);
+            return false;
+        }
+        return ret;
+    }
+
+    private boolean matchesSingleEvent(String event) {
+        try {
+            for (String i : event.split(",")) {
                 String[] pair = i.split(":");
                 switch (pair[0]) {
                     case "id": {
@@ -169,7 +182,7 @@ public class AnyEvent {
                         break;
                     }
                     case "mods": {
-                        if (!pair[1].equals("" + event.getModifiersEx())) {
+                        if (!pair[1].equals("" + this.event.getModifiersEx())) {
                             return false;
                         }
                         break;
@@ -250,7 +263,7 @@ public class AnyEvent {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            logger.warn(fmt("Skipping bad event string: %s", str), e);
+            logger.warn(fmt("Skipping bad event string: %s", event), e);
             return false;
         }
         return true;
