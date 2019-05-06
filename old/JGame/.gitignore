@@ -24,8 +24,6 @@ hs_err_pid*
 
 # Other
 .DS_Store
-.idea/
-*iml
 logs/
 
 # Maven

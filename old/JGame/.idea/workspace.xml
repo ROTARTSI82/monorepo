@@ -1,0 +1,1767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+    <option name="CUSTOM_SCOPE_NAME" value="Current File" />
+  </component>
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="AllTests" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="70d7071e-b058-453c-ae58-7783cc49dcf5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/JGame.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/JGame$.ic" NAME=" Coverage Results" MODIFIED="1549167367671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/JGame$Main.ic" NAME="Main Coverage Results" MODIFIED="1550725462744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>main.java.jgame.tests.net.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/JGame$Main___JAR_test.ic" NAME="Main | JAR test Coverage Results" MODIFIED="1549225191098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/JGame$GameRunner.ic" NAME="GameRunner Coverage Results" MODIFIED="1549166387719" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>io.github.jgame.game.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="203" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="JGame" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/JGame.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/AnyEvent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="785">
+              <caret line="191" column="41" lean-forward="true" selection-start-line="191" selection-start-column="41" selection-end-line="191" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="53" column="30" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="243">
+              <caret line="77" column="17" lean-forward="true" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/target/surefire-reports/index.html">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="AnnotationType" />
+        <option value="package-info" />
+        <option value="XML Properties File" />
+        <option value="JavaFXApplication" />
+        <option value="module-info" />
+        <option value="Singleton" />
+        <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+        <option value="TestNG Test Class" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>10.0.0.92</find>
+      <find>update</find>
+      <find>gravity</find>
+      <find>sy</find>
+      <find>bounce</find>
+      <find>vel = vel.mul</find>
+      <find>climbSpeed</find>
+      <find>climbSpeed =</find>
+      <find>req</find>
+      <find>bounds.right</find>
+      <find>bounds.left</find>
+      <find>doClimb</find>
+      <find>climbDiffi</find>
+      <find>pos.x += ve</find>
+      <find>intersects</find>
+      <find>rect</find>
+      <find>area</find>
+      <find>Rectangle</find>
+      <find>System</find>
+      <find>got</find>
+      <find>Version</find>
+      <find>!=</find>
+      <find>double</find>
+      <find>Rectangle2D.Double</find>
+      <find>Rectangle2D.Float</find>
+      <find>prop</find>
+      <find>syst</find>
+      <find>allE</find>
+      <find>event</find>
+      <find>matchesStr</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+      <replace>&quot;</replace>
+      <replace>,</replace>
+      <replace>settings</replace>
+      <replace>fmt</replace>
+      <replace>]</replace>
+      <replace>public</replace>
+      <replace>static io.github.jgame.Constants</replace>
+      <replace>Constants</replace>
+      <replace>&lt;=</replace>
+      <replace>let</replace>
+      <replace>settings.get</replace>
+      <replace>double</replace>
+      <replace>crash</replace>
+      <replace>import org.apache.log4j.Logger;</replace>
+      <replace>logger.warn(</replace>
+      <replace>logger.trace</replace>
+      <replace>logger.warn</replace>
+      <replace>org.apache.logging.log4j</replace>
+      <replace>LogManager.getLogger</replace>
+      <replace>&amp;</replace>
+      <replace>&amp;#10;</replace>
+      <replace>&amp;lt;init&amp;gt;</replace>
+      <replace>Rectangle2D.Float</replace>
+      <replace>Rectangle2D.Double</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/io/github/jgame</dir>
+      <dir>$PROJECT_DIR$/logs/jgameUnitTests</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="ROTARTSI82 &lt;38170305+rotartsi82@users.noreply.github.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="test" />
+      </map>
+    </option>
+    <option name="SIGN_OFF_COMMIT" value="true" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mixer/SoundManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mixer/TonePlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/DesktopUtils.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/assets/logging/logProfile.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/JGameFileAppender.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/mixer/SoundGeneratorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/testListeners/TestListener.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/testListeners/InvokedMethodListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/Log4jLogger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/GenericLogger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/GenericFormatter.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/testListeners/SuiteListener.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/settings.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/display/DisplayManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/HelloWorld.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/joystick/Joystick.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/GameRunner.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/SettingsBundle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/ScreenBounds.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/ImageManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/log4j2.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/PolygonCollide.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/ProgressBar.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/CrashLogger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/SurfaceMapDemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/net/UDPTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/net/TCPTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/SwearFilter.java" />
+        <option value="$PROJECT_DIR$/logs/latest.html" />
+        <option value="$PROJECT_DIR$/.gitattributes" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/Game.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/AnyEvent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="JGame" />
+      <scope name="SRC" />
+      <scope name="TESTS" />
+    </order>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <showMembers ProjectPane="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="event" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="gameLogic" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="math" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="mechanics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="site" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="site" type="462c0819:PsiDirectoryNode" />
+              <item name="markdown" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="site" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="site" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="archive" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="surefire-reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="JGame" type="58d84e3e:PackageViewProjectNode" />
+              <item name="JGame" type="616d4139:PackageViewModuleNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Production'; set:Production; class com.intellij.psi.search.scope.ProjectProductionScope">
+          <expand>
+            <path>
+              <item name="JGame" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="JGame" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="JGame" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="JGame" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="JGame" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="JGame" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="JGame" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="JGame" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="JGame" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="oracle" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="jgame" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553641131398" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JShellLanguage" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="TestNG" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.TestNG" value="" />
+    <property name="full.screen.before.presentation.mode" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="io.github.jgame.util" />
+      <recent name="io.github.jgame.crypto" />
+      <recent name="io.github.jgame.image" />
+      <recent name="io.github.jgame.event" />
+      <recent name="io.github.jgame.sprite" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="io.github.jgame.util" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+      <recent name="java.awt.image.BufferedImage" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/site/resources/archive" />
+      <recent name="$PROJECT_DIR$/src/site/resources" />
+      <recent name="$PROJECT_DIR$/src/site" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="cd /Users/Grant/Desktop" />
+      <command value="cat /dev/random" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.PlayerTest">
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.tests.window.Main" />
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.java.jgame.tests.net.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlayerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.mechanics.PlayerTest" />
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.mechanics.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SwearFilter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.util.SwearFilter" />
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AllTests" type="JarApplication">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/AllTests/JGame.jar" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2" />
+    </configuration>
+    <configuration name="JGame AllTests" type="TestNG">
+      <module name="JGame" />
+      <option name="SUITE_NAME" value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/AllTests.xml" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="SUITE" />
+      <option name="PARAMETERS" value="" />
+      <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/logs/jgameUnitTests/test-output" />
+      <option name="PROPERTIES_FILE" value="" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SpriteTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.sprite.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.rotartsi.jgame.sprite" />
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.sprite.SpriteTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TCPTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.net.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.rotartsi.jgame.net" />
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.net.TCPTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UDPTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.net.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.rotartsi.jgame.net" />
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.net.UDPTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.PlayerTest" />
+      <item itemvalue="Application.SwearFilter" />
+      <item itemvalue="JAR Application.AllTests" />
+      <item itemvalue="TestNG.JGame AllTests" />
+      <item itemvalue="TestNG.UDPTest" />
+      <item itemvalue="TestNG.TCPTest" />
+      <item itemvalue="TestNG.SpriteTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PlayerTest" />
+        <item itemvalue="Application.SwearFilter" />
+        <item itemvalue="TestNG.TCPTest" />
+        <item itemvalue="TestNG.UDPTest" />
+        <item itemvalue="TestNG.SpriteTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",GROUP_BY_PREFIXES" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="70d7071e-b058-453c-ae58-7783cc49dcf5" name="Default Changelist" comment="" />
+      <created>1548801462389</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1548801462389</updated>
+      <workItem from="1552873439310" duration="26000" />
+      <workItem from="1552956591358" duration="112000" />
+      <workItem from="1552956997447" duration="50000" />
+      <workItem from="1552957174096" duration="2878000" />
+      <workItem from="1552960485753" duration="168000" />
+      <workItem from="1553119149866" duration="15279000" />
+      <workItem from="1553140049472" duration="857000" />
+      <workItem from="1553193880997" duration="1323000" />
+      <workItem from="1553203873723" duration="6376000" />
+      <workItem from="1553221967136" duration="1158000" />
+      <workItem from="1553279353615" duration="596000" />
+      <workItem from="1553291430263" duration="32000" />
+      <workItem from="1553292085517" duration="132000" />
+      <workItem from="1553308715883" duration="4941000" />
+      <workItem from="1553352835728" duration="7933000" />
+      <workItem from="1553362014277" duration="131000" />
+      <workItem from="1553540810915" duration="112000" />
+      <workItem from="1553551816237" duration="1933000" />
+      <workItem from="1553624712409" duration="785000" />
+      <workItem from="1553627952248" duration="649000" />
+      <workItem from="1553640312718" duration="1178000" />
+      <workItem from="1553723587626" duration="680000" />
+      <workItem from="1553724354778" duration="1897000" />
+      <workItem from="1553727570152" duration="184000" />
+      <workItem from="1553819177766" duration="17000" />
+      <workItem from="1553823526612" duration="346000" />
+      <workItem from="1553883699122" duration="921000" />
+      <workItem from="1553962155158" duration="1364000" />
+      <workItem from="1554046456714" duration="3505000" />
+      <workItem from="1554089747905" duration="440000" />
+      <workItem from="1554129708407" duration="4662000" />
+      <workItem from="1554218426691" duration="1298000" />
+      <workItem from="1554219904175" duration="343000" />
+      <workItem from="1554220965211" duration="6556000" />
+      <workItem from="1554497687528" duration="7801000" />
+      <workItem from="1554525516077" duration="160000" />
+      <workItem from="1554576184698" duration="2410000" />
+      <workItem from="1554819671678" duration="725000" />
+      <workItem from="1554836307138" duration="106000" />
+      <workItem from="1554923211111" duration="121000" />
+      <workItem from="1554933714266" duration="4959000" />
+      <workItem from="1555093162229" duration="1068000" />
+      <workItem from="1555102179774" duration="250000" />
+      <workItem from="1555103244552" duration="210000" />
+      <workItem from="1555103783398" duration="113000" />
+      <workItem from="1555121931636" duration="12290000" />
+      <workItem from="1555301868129" duration="556000" />
+      <workItem from="1555365295063" duration="2437000" />
+      <workItem from="1555378870646" duration="1275000" />
+      <workItem from="1555449729461" duration="241000" />
+      <workItem from="1555453086389" duration="8639000" />
+      <workItem from="1555546459266" duration="3378000" />
+      <workItem from="1555550777949" duration="39000" />
+      <workItem from="1555719982898" duration="8792000" />
+      <workItem from="1555770809064" duration="2287000" />
+      <workItem from="1555793601090" duration="457000" />
+      <workItem from="1555798273806" duration="1876000" />
+      <workItem from="1555977305602" duration="201000" />
+      <workItem from="1556054667407" duration="28000" />
+      <workItem from="1556474067396" duration="203000" />
+      <workItem from="1556508661631" duration="5224000" />
+      <workItem from="1556564865043" duration="629000" />
+      <workItem from="1556567448935" duration="817000" />
+      <workItem from="1556568306796" duration="786000" />
+      <workItem from="1556573782632" duration="771000" />
+      <workItem from="1556580126055" duration="1271000" />
+      <workItem from="1556581888408" duration="926000" />
+      <workItem from="1556595295445" duration="432000" />
+      <workItem from="1556595912748" duration="149000" />
+      <workItem from="1556673948287" duration="1139000" />
+      <workItem from="1556736851774" duration="400000" />
+      <workItem from="1556756053791" duration="5000" />
+      <workItem from="1556832442146" duration="1861000" />
+      <workItem from="1556986523843" duration="876000" />
+      <workItem from="1557095802427" duration="1844000" />
+    </task>
+    <task id="LOCAL-00010" summary="notes + fix thread.run() instead of thread.start() + isPlaying">
+      <created>1549763991971</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1549763991971</updated>
+    </task>
+    <task id="LOCAL-00011" summary="stereo notes">
+      <created>1549820453275</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1549820453275</updated>
+    </task>
+    <task id="LOCAL-00012" summary="sound save/load + rendering">
+      <created>1549900827940</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1549900827941</updated>
+    </task>
+    <task id="LOCAL-00013" summary="tests">
+      <created>1549946092667</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1549946092667</updated>
+    </task>
+    <task id="LOCAL-00014" summary="SurfaceMap + tests">
+      <created>1550074648071</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1550074648071</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Crypto + tests">
+      <created>1550114266275</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1550114266276</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix UserDatabase allowing createAccount to override existing account.">
+      <created>1550119601458</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1550119601458</updated>
+    </task>
+    <task id="LOCAL-00017" summary="+UserDatabase &amp; RoEngine classes">
+      <created>1550451396650</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1550451396651</updated>
+    </task>
+    <task id="LOCAL-00018" summary="TCP + maxClients">
+      <created>1550523787771</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1550523787774</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Sprite update">
+      <created>1550622293879</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1550622293879</updated>
+    </task>
+    <task id="LOCAL-00020" summary="buttons">
+      <created>1550719312042</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1550719312042</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Progress bar">
+      <created>1550761913193</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1550761913193</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix sprite scaling + add mirroring.">
+      <created>1551030632234</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1551030632234</updated>
+    </task>
+    <task id="LOCAL-00023" summary="more efficient actions">
+      <created>1551034437792</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1551034437792</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Fix serialization (was modifying HashMap and causing errors) + javadoc">
+      <created>1551142597522</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1551142597523</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Rsa str encrypt">
+      <created>1551230526661</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1551230526662</updated>
+    </task>
+    <task id="LOCAL-00026" summary="internalization">
+      <created>1551322322980</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1551322322981</updated>
+    </task>
+    <task id="LOCAL-00027" summary="html logs">
+      <created>1551484336550</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1551484336550</updated>
+    </task>
+    <task id="LOCAL-00028" summary="exponential backoff + send filler msg /w VerifyPacket">
+      <created>1551493239668</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1551493239668</updated>
+    </task>
+    <task id="LOCAL-00029" summary="+logging better">
+      <created>1551902314819</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1551902314819</updated>
+    </task>
+    <task id="LOCAL-00030" summary="+better testing (listeners)">
+      <created>1552013282571</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1552013282571</updated>
+    </task>
+    <task id="LOCAL-00031" summary="refactoring VerifyPacket and net">
+      <created>1552153338276</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1552153338276</updated>
+    </task>
+    <task id="LOCAL-00032" summary="+experimental implementation of separate axis theorem.">
+      <created>1552245089614</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1552245089615</updated>
+    </task>
+    <task id="LOCAL-00033" summary="+recursive load from dir &amp; null checks">
+      <created>1552706419434</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1552706419435</updated>
+    </task>
+    <task id="LOCAL-00034" summary="+actions">
+      <created>1552956686652</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1552956686653</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Fix sound float controls! + duplicate code cleanup">
+      <created>1552958963130</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1552958963131</updated>
+    </task>
+    <task id="LOCAL-00036" summary="+ java doc at the github pages site">
+      <created>1553125125511</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1553125125511</updated>
+    </task>
+    <task id="LOCAL-00037" summary="+more javadoc...">
+      <created>1553137394395</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1553137394396</updated>
+    </task>
+    <task id="LOCAL-00038" summary="finally done adding javadoc">
+      <created>1553211697916</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1553211697916</updated>
+    </task>
+    <task id="LOCAL-00039" summary="website update">
+      <created>1553361582614</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1553361582614</updated>
+    </task>
+    <task id="LOCAL-00040" summary="no easter eggs">
+      <created>1553553920682</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1553553920682</updated>
+    </task>
+    <task id="LOCAL-00041" summary="yeet">
+      <created>1553641040014</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1553641040016</updated>
+    </task>
+    <task id="LOCAL-00042" summary="yeet">
+      <created>1554050021126</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1554050021126</updated>
+    </task>
+    <task id="LOCAL-00043" summary="fix rand color">
+      <created>1554050186067</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1554050186067</updated>
+    </task>
+    <task id="LOCAL-00044" summary="ok actually fix randColor.js">
+      <created>1554050307317</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1554050307317</updated>
+    </task>
+    <task id="LOCAL-00045" summary="change project structure to standard maven.">
+      <created>1554134711559</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1554134711559</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Maven!">
+      <created>1554249535710</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1554249535711</updated>
+    </task>
+    <task id="LOCAL-00047" summary="internationalization + FileUtils &amp; resource manager tests + tons of cleanup">
+      <created>1554505766876</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1554505766876</updated>
+    </task>
+    <task id="LOCAL-00048" summary="renamed everything from io.github to com.rotartsi 'cause i can!">
+      <created>1554577715479</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1554577715479</updated>
+    </task>
+    <task id="LOCAL-00049" summary="cleanup/remove misc files">
+      <created>1554936239463</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1554936239463</updated>
+    </task>
+    <task id="LOCAL-00050" summary="add gitignore and finalize">
+      <created>1554936935221</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1554936935222</updated>
+    </task>
+    <task id="LOCAL-00051" summary="FUU github is stupid">
+      <created>1554938418582</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1554938418582</updated>
+    </task>
+    <task id="LOCAL-00052" summary="+platformer player [WIP] &amp; log4j">
+      <created>1555468465447</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1555468465450</updated>
+    </task>
+    <task id="LOCAL-00053" summary="migrate to log4j">
+      <created>1555550802317</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1555550802320</updated>
+    </task>
+    <task id="LOCAL-00054" summary="upgrade to log4j2 (you have no idea how painful)">
+      <created>1555728408300</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1555728408302</updated>
+    </task>
+    <task id="LOCAL-00055" summary="+Some glitchy platforming code">
+      <created>1556565047075</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1556565047076</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Switch to Rectangle2D.Double for more accurate collision detection">
+      <created>1556574545648</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1556574545649</updated>
+    </task>
+    <task id="LOCAL-00057" summary="commit some files I forgot to add to git.">
+      <created>1556675091391</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1556675091392</updated>
+    </task>
+    <task id="LOCAL-00058" summary="re-add target/site only to branch gh-pages">
+      <created>1556833697735</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1556833697737</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="UDPTest - 2019.04.29 at 20h 37m 13s.xml">
+      <configuration name="UDPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 38m 40s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 39m 11s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="UDPTest - 2019.04.29 at 20h 39m 19s.xml">
+      <configuration name="UDPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 39m 36s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 40m 12s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 40m 31s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 41m 01s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 41m 26s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+    <history-entry file="TCPTest - 2019.04.29 at 20h 41m 50s.xml">
+      <configuration name="TCPTest" configurationId="TestNG" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="146805000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="800" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.40128756" />
+      <window_info id="Structure" order="1" sideWeight="0.50564975" side_tool="true" weight="0.33333334" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" sideWeight="0.5062241" side_tool="true" weight="0.26466382" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32489452" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49213162" weight="0.38135594" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.32340425" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32907802" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.48855507" visible="true" weight="0.3121469" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5114449" side_tool="true" visible="true" weight="0.3121469" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32909605" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49785408" weight="0.31779662" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32765958" />
+      <window_info anchor="bottom" id="Dependency Viewer" order="12" weight="0.36185133" />
+      <window_info anchor="bottom" id="Database Changes" order="13" />
+      <window_info anchor="bottom" id="Docker" order="14" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Duplicate detector" order="15" weight="0.32909605" />
+      <window_info anchor="bottom" id="Duplicates" order="16" weight="0.32907802" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24964234" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.3297568" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.3297568" />
+      <window_info anchor="right" id="Database" order="9" weight="0.3297568" />
+      <window_info anchor="right" x="100" y="123" width="1240" height="597" id="Byte Code Viewer" order="10" type="FLOATING" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.4527897" />
+      <window_info id="Structure" order="1" sideWeight="0.50564975" side_tool="true" weight="0.33333334" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" sideWeight="0.5062241" side_tool="true" weight="0.26466382" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32627118" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49356222" visible="true" weight="0.38418078" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.21445782" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32911393" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49213162" weight="0.31779662" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5078684" side_tool="true" weight="0.31914893" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32909605" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4985694" weight="0.31920904" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32765958" />
+      <window_info anchor="bottom" id="Dependency Viewer" order="12" weight="0.36185133" />
+      <window_info anchor="bottom" id="Database Changes" order="13" />
+      <window_info anchor="bottom" id="Docker" order="14" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Duplicate detector" order="15" weight="0.32909605" />
+      <window_info anchor="bottom" id="Duplicates" order="16" weight="0.32907802" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24964234" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.3297568" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.3297568" />
+      <window_info anchor="right" id="Database" order="9" weight="0.3297568" />
+      <window_info anchor="right" x="100" y="123" width="1240" height="597" id="Byte Code Viewer" order="10" type="FLOATING" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myShow1" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <MESSAGE value="+actions" />
+    <MESSAGE value="Fix sound float controls! + duplicate code cleanup" />
+    <MESSAGE value="+ java doc at the github pages site" />
+    <MESSAGE value="+more javadoc..." />
+    <MESSAGE value="finally done adding javadoc" />
+    <MESSAGE value="website update" />
+    <MESSAGE value="no easter eggs" />
+    <MESSAGE value="+Settings bundle" />
+    <MESSAGE value="yeet" />
+    <MESSAGE value="fix rand color" />
+    <MESSAGE value="ok actually fix randColor.js" />
+    <MESSAGE value="change project structure to standard maven." />
+    <MESSAGE value="Maven!" />
+    <MESSAGE value="internationalization + FileUtils &amp; resource manager tests + tons of cleanup" />
+    <MESSAGE value="renamed everything from io.github to com.rotartsi 'cause i can!" />
+    <MESSAGE value="cleanup/remove misc files" />
+    <MESSAGE value="add gitignore and finalize" />
+    <MESSAGE value="FUU github is stupid" />
+    <MESSAGE value="+platformer player [WIP] &amp; log4j" />
+    <MESSAGE value="migrate to log4j" />
+    <MESSAGE value="upgrade to log4j2 (you have no idea how painful)" />
+    <MESSAGE value="+Some glitchy platforming code" />
+    <MESSAGE value="Switch to Rectangle2D.Double for more accurate collision detection" />
+    <MESSAGE value="commit some files I forgot to add to git." />
+    <MESSAGE value="re-add target/site only to branch gh-pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="re-add target/site only to branch gh-pages" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/target/classes/com/rotartsi/jgame/logging/CrashLogger.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+          <folding>
+            <element signature="e#0#2284#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/CrashLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="60" column="5" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/SurfaceMapDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="16" selection-start-line="16" selection-end-line="18" selection-end-column="3" />
+          <folding>
+            <element signature="e#535#536#0" expanded="true" />
+            <element signature="e#566#567#0" expanded="true" />
+            <element signature="e#612#613#0" expanded="true" />
+            <element signature="e#647#648#0" expanded="true" />
+            <element signature="e#717#718#0" expanded="true" />
+            <element signature="e#780#781#0" expanded="true" />
+            <element signature="e#2707#2708#0" expanded="true" />
+            <element signature="e#2776#2777#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/net/udp/UDPClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="134" column="16" selection-start-line="134" selection-start-column="16" selection-end-line="134" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/net/tcp/TCPServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="68" column="65" selection-start-line="68" selection-start-column="65" selection-end-line="68" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/net/TCPTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="47" column="30" lean-forward="true" selection-start-line="47" selection-start-column="30" selection-end-line="47" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/net/UDPTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-86">
+          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/SwearFilter.java" />
+    <entry file="file://$PROJECT_DIR$/.gitattributes" />
+    <entry file="file://$PROJECT_DIR$/JGame.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/maven-archiver/pom.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1059" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-579" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/site/javadoc/io/github/jgame/mixer/package-tree.html" />
+    <entry file="file://$PROJECT_DIR$/src/site/site.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/site/css/maven-base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1366">
+          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/site/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="123" column="46" selection-start-line="123" selection-start-column="46" selection-end-line="123" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/site/resources/archive/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="240">
+            <caret line="16" selection-start-line="16" selection-end-line="16" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/latest.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16291">
+          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/site/apidocs/type-search-index.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html" />
+    <entry file="file://$PROJECT_DIR$/licenses.html" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/ActionManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/GameAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/Bullet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/site/markdown/index.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="180">
+            <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/push_to_pages.command">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/crypto/RSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-516">
+          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/PopupUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="35" column="44" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/PopupManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/State.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="127" lean-forward="true" selection-start-line="127" selection-end-line="127" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="227" column="46" lean-forward="true" selection-start-line="227" selection-start-column="46" selection-end-line="227" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="172" column="16" selection-start-line="172" selection-start-column="16" selection-end-line="172" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="103" column="44" selection-start-line="103" selection-start-column="44" selection-end-line="103" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="311" column="49" lean-forward="true" selection-start-line="311" selection-start-column="49" selection-end-line="311" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/AnyEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="785">
+          <caret line="191" column="41" lean-forward="true" selection-start-line="191" selection-start-column="41" selection-end-line="191" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="53" column="30" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="77" column="17" lean-forward="true" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/surefire-reports/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>AllTests</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Detection</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>11</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>JGame</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: org.testng:testng:7.0.0-beta3</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <last-edited>TESTS</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+          <order>
+            <scope name="JGame" />
+            <scope name="SRC" />
+            <scope name="TESTS" />
+          </order>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
