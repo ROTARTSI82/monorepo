@@ -11,6 +11,8 @@ import static com.rotartsi.jgame.Constants.JGameStr;
  */
 public class Vector2 {
 
+    public static Vector2 origin = new Vector2(0, 0);
+
     /**
      * The first double in the the set.
      */

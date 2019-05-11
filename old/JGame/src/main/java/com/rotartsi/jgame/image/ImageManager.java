@@ -212,7 +212,10 @@ public class ImageManager extends ResourceManager {
      */
     public static void saveToFile(Image img, String filename) throws IOException {
         File outFile = new File(filename);
-        outFile.getParentFile().mkdirs();
+        File parent = outFile.getParentFile();
+        if (parent != null) {
+            parent.mkdirs();
+        }
         outFile.createNewFile();
         ImageIO.write(toBuffered(img), getExtension(filename), outFile);
     }

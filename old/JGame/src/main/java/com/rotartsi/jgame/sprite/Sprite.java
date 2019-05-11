@@ -52,6 +52,8 @@ public class Sprite {
      * The velocity of the sprite.
      */
     public Vector2 vel;
+    public Vector2 rectPos;
+    public Vector2 rectSize;
     /**
      * The rotation of the sprite.
      */
@@ -105,14 +107,27 @@ public class Sprite {
         pos = new Vector2(0, 0);
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
         vel = new Vector2(0, 0);
+        rectPos = new Vector2(0, 0);
+        rectSize = new Vector2(size);
     }
 
     /**
      * Update {@link #absPos} and {@link #rect} according to {@link #pos} and {@link #size}.
      */
     public void updateRect() {
+        //absPos = pos.subtract(new Vector2(size.x / 2d, size.y / 2d));
+        //rect = new Rectangle2D.Double(absPos.x, absPos.y, size.x, size.y);
         absPos = pos.subtract(new Vector2(size.x / 2d, size.y / 2d));
-        rect = new Rectangle2D.Double(absPos.x, absPos.y, size.x, size.y);
+        onRectUpdate();
+        rect = new Rectangle2D.Double(rectPos.x, rectPos.y, rectSize.x, rectSize.y);
+    }
+
+    /**
+     * Override this function to define a custom rectangle.
+     */
+    public void onRectUpdate() {
+        rectPos = new Vector2(absPos);
+        rectSize = new Vector2(size);
     }
 
     /**

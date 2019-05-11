@@ -25,13 +25,21 @@ public class ShapeSprite extends Sprite {
     }
 
     @Override
-    public void updateRect() {
+    public void onRectUpdate() {
         Rectangle2D tmpRect = shape.getBounds2D();
-        rect = new Rectangle2D.Double(tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight());
-        size = new Vector2(rect.width, rect.height);
+        rectSize = new Vector2(tmpRect.getWidth(), tmpRect.getHeight());
+        rectPos = new Vector2(absPos);
+    }
+
+    @Override
+    public void updateRect() {
         absPos = pos.subtract(new Vector2(size.x / 2, size.y / 2));
-        rect.x = (int) absPos.x;
-        rect.y = (int) absPos.y;
+        onRectUpdate();
+        rect = new Rectangle2D.Double(rectPos.x, rectPos.y,
+                rectSize.x, rectSize.y);
+
+        Rectangle2D actualSize = shape.getBounds2D();
+        size = new Vector2(actualSize.getWidth(), actualSize.getHeight());
     }
 
     @Override

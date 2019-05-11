@@ -32,6 +32,15 @@ public class BulletSprite extends Sprite {
     }
 
     @Override
+    public void onRectUpdate() {
+        rectSize = new Vector2(25d, 25d);
+        double len = size.y / 2d;
+        //rectPos = new Vector2((pos.x - (rectSize.x / 2d)) + (Math.cos(Math.toRadians(rot + (flipVertical ? 180 : 0))) *  len),
+        //       (pos.y - (rectSize.y / 2d)) + (Math.sin(Math.toRadians(rot + (flipVertical ? 180 : 0))) * len));
+        rectPos = new Vector2(pos.x - (rectSize.x / 2d), pos.y - (rectSize.y / 2d));
+    }
+
+    @Override
     public void update() {
         if (System.currentTimeMillis() - life > 10000) {
             kill();

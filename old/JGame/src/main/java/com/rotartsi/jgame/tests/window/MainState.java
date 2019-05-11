@@ -5,12 +5,11 @@ import com.rotartsi.jgame.event.AnyEvent;
 import com.rotartsi.jgame.game.Game;
 import com.rotartsi.jgame.game.State;
 import com.rotartsi.jgame.image.ImageManager;
-import com.rotartsi.jgame.math.PolygonCollide;
 import com.rotartsi.jgame.math.Vector2;
 import com.rotartsi.jgame.mixer.Sound;
 import com.rotartsi.jgame.mixer.SoundManager;
 import com.rotartsi.jgame.sprite.Group;
-import com.rotartsi.jgame.sprite.MaskedSprite;
+import com.rotartsi.jgame.sprite.ShapeSprite;
 import com.rotartsi.jgame.sprite.Sprite;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +34,7 @@ public class MainState extends State {
     private final Logger logger = LogManager.getLogger(MainState.class);
     private final boolean displayRects = true;
 
-    private MaskedSprite player;
+    private Sprite player;
     private Group enemies;
     private Group bullets;
 
@@ -55,7 +54,7 @@ public class MainState extends State {
         //player = new Sprite(ImageManager.fromShape(testShape, Color.BLACK));
         //player = new Sprite(imageLoader.get("sprite"));
         //player.zoomTo(new double[]{64, 64});
-        player = new MaskedSprite(ImageManager.fromShape(testShape, Color.BLACK), new PolygonCollide(testShape));
+        player = new ShapeSprite(testShape, 1);
         player.zoomTo(new double[]{64, 64});
         enemies = new Group();
         bullets = new Group();
