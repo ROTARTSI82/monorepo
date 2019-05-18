@@ -19,15 +19,18 @@ public class Vector2Test {
     }
 
     @Test
-    public void testAdd() {
+    public void testAddSubtract() {
         assertEquals(origin.add(hundred).toInt(), new int[]{100, -100});
         assertEquals(hundred.add(origin).toInt(), new int[]{100, -100});
+
+        assertEquals(origin.subtract(hundred).toInt(), new int[]{-100, 100});
+        assertEquals(hundred.subtract(origin).toInt(), new int[]{100, -100});
     }
 
     @Test
-    public void testSubtract() {
-        assertEquals(origin.subtract(hundred).toInt(), new int[]{-100, 100});
-        assertEquals(hundred.subtract(origin).toInt(), new int[]{100, -100});
+    public void testProjection() {
+        assertEquals(hundred.projectOnto(0, 5).toInt(), new int[]{100, 5});
+        assertEquals(hundred.projectOnto(Double.NaN, 5).toInt(), new int[]{5, -100});
     }
 
     @Test
@@ -38,8 +41,8 @@ public class Vector2Test {
 
     @Test
     public void testAngleTo() {
-        assertEquals(origin.angleTo(hundred), 45);
-        assertEquals(hundred.angleTo(origin), 225);
+        assertEquals(origin.angleTo(hundred), -45);
+        assertEquals(hundred.angleTo(origin), 135);
     }
 
     @Test

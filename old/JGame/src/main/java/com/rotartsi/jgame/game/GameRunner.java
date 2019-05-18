@@ -2,6 +2,8 @@ package com.rotartsi.jgame.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Template for the main program.
@@ -29,6 +31,14 @@ public class GameRunner extends JFrame {
 
         setResizable(true);
         setSize(640, 480);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent winEvt) {
+                game.states.get(game.state).exit("SHUTDOWN");
+                System.exit(0);
+            }
+        });
+
     }
 
     /**

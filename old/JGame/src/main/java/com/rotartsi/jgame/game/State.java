@@ -135,6 +135,7 @@ public class State {
      */
     public void enter(String old_state) {
         game.runner.setJMenuBar(menuHandler);
+//        System.out.println("old_state = " + old_state);
     }
 
     /**
@@ -143,7 +144,7 @@ public class State {
      * @param new_state The state that the game was updated to.
      */
     public void exit(String new_state) {
-
+//        System.out.println("new_state = " + new_state);
     }
 
     /**

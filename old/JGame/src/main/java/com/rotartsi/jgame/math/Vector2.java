@@ -45,6 +45,52 @@ public class Vector2 {
     }
 
     /**
+     * Project a point onto the specified line using a parallel line passing through this point
+     * and finding where it intercepts with the specified line.
+     * <p>
+     * NOTE: If a NaN slope is supplied, the argument y_intercept would be interpreted to be the x_intercept.
+     *
+     * @param slope       Slope of line
+     * @param y_intercept The Y offset of the line
+     * @return Point that fits onto the specified line.
+     */
+    public Vector2 projectOnto(double slope, double y_intercept) {
+        if (Double.isNaN(slope)) {
+            return new Vector2(y_intercept, this.y);
+        }
+        if (slope == 0) {
+            return new Vector2(this.x, y_intercept);
+        }
+        double m = -(1d / slope);
+        double b = this.y - (m * this.x);
+        // this.y = m * this.x + b
+        Vector2 ret = new Vector2(0, 0);
+        ret.x = (b - y_intercept) / (slope - m);
+        ret.y = ret.x * m + b;
+        // This should be mathematically impossible. This is just here to test if I did my math correctly.
+        if (ret.y != (ret.x * slope + y_intercept)) {
+            System.out.println((ret.x * slope + y_intercept));
+            System.out.println(ret.x * m + b);
+            throw new ArithmeticException("Failed to calculate the intersect");
+        }
+        //  (b - y_intercept) / (slope - m) =  ret.x
+        return ret;
+    }
+
+    public Vector2 reflectAround(Vector2 point) {
+        Vector2 delta = this.subtract(point);
+        return new Vector2(point.x - delta.x, point.y - delta.y);
+    }
+
+    public static double degreesToSlope(double degrees) {
+        return Math.tan(Math.toRadians(degrees));
+    }
+
+    public static double slopeToDegrees(double slope) {
+        return Math.toDegrees(Math.atan2(slope, 1));
+    }
+
+    /**
      * Get the sum of two {@code Vector2}s
      *
      * @param other Vector2 to add to
@@ -85,7 +131,20 @@ public class Vector2 {
      */
     public double angleTo(Vector2 other) {
         Vector2 delta = other.subtract(this);
-        return Math.toDegrees(Math.atan2(delta.y, delta.x)) + 90d;
+        return Math.toDegrees(Math.atan2(delta.y, delta.x));
+    }
+
+    public static void main(String[] args) {
+        Vector2 origin = new Vector2(0, 0);
+        double size = 10;
+        System.out.println(origin.angleTo(new Vector2(size, 0)));
+        System.out.println(origin.angleTo(new Vector2(size, size)));
+        System.out.println(origin.angleTo(new Vector2(0, size)));
+        System.out.println(origin.angleTo(new Vector2(-size, size)));
+        System.out.println(origin.angleTo(new Vector2(-size, 0)));
+        System.out.println(origin.angleTo(new Vector2(-size, -size)));
+        System.out.println(origin.angleTo(new Vector2(0, -size)));
+        System.out.println(origin.angleTo(new Vector2(size, - size)));
     }
 
     /**
@@ -96,7 +155,7 @@ public class Vector2 {
      * @return position
      */
     public Vector2 positionFromDegrees(double angle, double length) {
-        angle = Math.toRadians(-(angle - 90));
+        angle = Math.toRadians(angle);
         return new Vector2(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
     }
 

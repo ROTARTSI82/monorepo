@@ -87,14 +87,14 @@ public class MainState extends State {
         if (displayRects) {
             player.blitRect(g2d);
         }
-        player.rot = player.pos.angleTo(mouseHandlers[0].mouseSprite.pos);
+        player.rot = player.pos.angleTo(mouseHandlers[0].mouseSprite.pos) + 90;
         player.blitTo(g2d);
         for (Sprite enemy : enemies.sprites) {
             enemy.update();
             if (displayRects) {
                 enemy.blitRect(g2d);
             }
-            enemy.rot = enemy.pos.angleTo(player.pos);
+            enemy.rot = enemy.pos.angleTo(player.pos) - 90;
             enemy.blitTo(g2d);
         }
         for (Object bullet : (LinkedList) bullets.sprites.clone()) {
