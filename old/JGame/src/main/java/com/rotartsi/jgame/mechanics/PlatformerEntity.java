@@ -251,12 +251,12 @@ public class PlatformerEntity extends Sprite {
         if (!internalState.get("grounded")) {
             vel.y += gravity;
         }
-        clampVelocity();
         if (vel.x > 0) {
             vel.x -= airFriction;
         } else if (vel.x < 0) {
             vel.x += airFriction;
         }
+        clampVelocity();
         pos.y = pos.y + vel.y;
         updateRect();
     }
@@ -265,8 +265,8 @@ public class PlatformerEntity extends Sprite {
         if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
             internalState.put("climb", bounds.left.climbDifficulty <= climbSkill);
             pos.x = bounds.minCoords[0] + (size.x / 2);
-            bounds.handleCollision("-x", this);
             vel.x = 0;
+            bounds.handleCollision("-x", this);
             //vel = vel.multiply(bounds.left.xBounce[1]).multiply(xBounceMult[1]);
         }
         if (absPos.y < bounds.minCoords[1] && bounds.doCollide("-y")) { // - y
@@ -282,8 +282,8 @@ public class PlatformerEntity extends Sprite {
         if (pos.x + size.x / 2 > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
             pos.x = bounds.maxCoords[0] - (size.x / 2);
             internalState.put("climb", bounds.right.climbDifficulty <= climbSkill);
-            bounds.handleCollision("+x", this);
             vel.x = 0;
+            bounds.handleCollision("+x", this);
             //vel = vel.multiply(bounds.right.xBounce[1]).multiply(xBounceMult[1]);
         }
         if (pos.y + size.y / 2 > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
@@ -375,12 +375,12 @@ public class PlatformerEntity extends Sprite {
                 if (!col.doCollide("+x")) {
                     return;
                 }
-                col.onCollide("+x", this);
                 internalState.put("climb", (col.climbDifficulty <= climbSkill));
                 col.updateRect();
                 pos.x = col.absPos.x - (size.x / 2d);
                 updateRect();
                 vel.x = 0;
+                col.onCollide("+x", this);
 //                vel = vel.multiply(col.xBounce[0]).multiply(xBounceMult[0]);
             }
         }
@@ -395,11 +395,11 @@ public class PlatformerEntity extends Sprite {
                 if (!col.doCollide("-x")) {
                     return;
                 }
-                col.onCollide("-x", this);
                 internalState.put("climb", (col.climbDifficulty <= climbSkill));
                 pos.x = (col.pos.x + (col.size.x / 2)) + (size.x / 2d);
                 updateRect();
                 vel.x = 0;
+                col.onCollide("-x", this);
 //                vel = vel.multiply(col.xBounce[0]).multiply(xBounceMult[0]);
             }
         }
@@ -415,11 +415,11 @@ public class PlatformerEntity extends Sprite {
                     if (!col.doCollide("+y")) {
                         return;
                     }
-                    col.onCollide("+y", this);
                     pos.y = col.absPos.y - (size.y / 2d);
                     updateRect();
                     internalState.put("grounded", true);
                     vel.y = 0;
+                    col.onCollide("+y", this);
 //                    vel = vel.multiply(col.yBounce[1]).multiply(yBounceMult[1]);
                     if (vel.x > 0) {
                         vel.x -= col.friction * frictionMult;

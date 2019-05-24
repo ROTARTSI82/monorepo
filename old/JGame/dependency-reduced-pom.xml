@@ -5,7 +5,7 @@
     <groupId>com.rotartsi.jgame</groupId>
     <artifactId>JGame</artifactId>
     <name>JGame</name>
-    <version>dev19.05.18</version>
+    <version>dev2019.05.18</version>
     <description>Generic utilities for (but not limited to) game development using Java.
         Written to mimic pygame.
     </description>
@@ -26,6 +26,9 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <excludes>
+                        <exclude>**/tests/window/*.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

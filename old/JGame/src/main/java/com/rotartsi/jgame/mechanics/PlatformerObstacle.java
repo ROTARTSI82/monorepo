@@ -9,13 +9,13 @@ import com.rotartsi.jgame.sprite.Sprite;
  */
 public class PlatformerObstacle extends Sprite {
 
-    public int climbDifficulty = 0;
+    public int climbDifficulty = 1;
 
     /*
     Bounces are very glitchy right now so disable them for now.
      */
-    public Vector2[] xBounce = new Vector2[]{new Vector2(0, 0), new Vector2(0, 0)}; // {nxBounce, pxBounce}
-    public Vector2[] yBounce = new Vector2[]{new Vector2(0, 0), new Vector2(0, 0)}; // {nyBounce, pyBounce}
+    public Vector2 bounce = new Vector2(-5, -5);
+    public double wallJumpPower = 2.5;
 
     public double friction = 0;
     public double climbSpeed = 0.1;
@@ -23,6 +23,8 @@ public class PlatformerObstacle extends Sprite {
     public double speed = 0.1;
     public double jumpPower = 5;
     public double gravity = 0.025;
+
+    public boolean doBounce = true;
     /**
      * Not yet implemented...
      */
@@ -39,6 +41,26 @@ public class PlatformerObstacle extends Sprite {
         }
         if (climbDifficulty <= player.climbSkill && (axis.equals("+x") || axis.equals("-x"))) {
             player.climbSpeed = climbSpeed * player.climbSpeedMult;
+        }
+//        System.out.println(axis);
+
+        if (!doBounce) {
+            return;
+        }
+
+        switch (axis) {
+            case "-x": {
+                player.vel.x -= bounce.x;
+                player.vel.y -= wallJumpPower;
+                player.clampVelocity();
+                break;
+            }
+            case "+x": {
+                player.vel.x += bounce.x;
+                player.vel.y -= wallJumpPower;
+                player.clampVelocity();
+                break;
+            }
         }
     }
 

@@ -11,284 +11,228 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70d7071e-b058-453c-ae58-7783cc49dcf5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/SpriteSheet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/GameRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/GameRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/State.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/PopupManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/PopupUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/SurfaceMapDemo.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/math/Vector2Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/math/Vector2Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allclasses-index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allclasses.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allpackages-index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/Constants.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/class-use/Constants.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/RSA.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/UserDatabase.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/RSA.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/UserDatabase.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/AnyEvent.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/DesktopUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/EventRobot.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/IndependentKeyTracker.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/AnyEvent.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/DesktopUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/EventRobot.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/IndependentKeyTracker.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/Game.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/GameRunner.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.KeyHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MenuHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MouseHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/Game.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/GameRunner.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.KeyHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MenuHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MouseHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/ActionManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/GameAction.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/Weapon.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/ActionManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/GameAction.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/Weapon.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ButtonManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/PopupManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/PopupUI.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ProgressBar.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ButtonManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/PopupManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/PopupUI.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ProgressBar.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/ImageManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/SurfaceMap.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allclasses-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/allclasses-index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allclasses.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/allclasses.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/allpackages-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/allpackages-index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/Constants.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/Constants.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/class-use/Constants.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/class-use/Constants.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/RSA.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/RSA.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/UserDatabase.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/UserDatabase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/RSA.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/RSA.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/UserDatabase.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/class-use/UserDatabase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/crypto/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/AnyEvent.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/AnyEvent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/DesktopUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/DesktopUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/EventRobot.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/EventRobot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/IndependentKeyTracker.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/IndependentKeyTracker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/AnyEvent.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/AnyEvent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/DesktopUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/DesktopUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/EventRobot.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/EventRobot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/IndependentKeyTracker.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/class-use/IndependentKeyTracker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/event/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/Game.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/Game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/GameRunner.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/GameRunner.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.KeyHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.KeyHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MenuHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MenuHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MouseHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.MouseHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/State.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/Game.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/Game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/GameRunner.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/GameRunner.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.KeyHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.KeyHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MenuHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MenuHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MouseHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.MouseHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/class-use/State.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/game/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/ActionManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/ActionManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/GameAction.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/GameAction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/Weapon.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/Weapon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/ActionManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/ActionManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/GameAction.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/GameAction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/Weapon.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/class-use/Weapon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gameLogic/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ButtonManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ButtonManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ProgressBar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/ProgressBar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ButtonManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ButtonManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ProgressBar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/class-use/ProgressBar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/gui/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/ImageManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/ImageManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/SurfaceMap.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/SurfaceMap.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/SurfaceMapDemo.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/ImageManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/SurfaceMap.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/ImageManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/ImageManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/SurfaceMap.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/SurfaceMap.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/class-use/SurfaceMapDemo.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/CrashLogger.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericFormatter.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericLogger.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/CrashLogger.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericFormatter.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericLogger.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/PolygonCollide.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/Vector2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/PolygonCollide.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/Vector2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/Bullet.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerEntity.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerObstacle.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerProjectile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/image/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/CrashLogger.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/CrashLogger.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericFormatter.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericFormatter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericLogger.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/GenericLogger.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/CrashLogger.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/CrashLogger.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericFormatter.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericFormatter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericLogger.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/class-use/GenericLogger.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/logging/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/PolygonCollide.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/PolygonCollide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/Vector2.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/Vector2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/PolygonCollide.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/PolygonCollide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/Vector2.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/class-use/Vector2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/math/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/Bullet.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/Bullet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerEntity.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerEntity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerObstacle.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerObstacle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerProjectile.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlatformerProjectile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/PlayerTest.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/Bullet.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerEntity.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerObstacle.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerProjectile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/Bullet.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/Bullet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerEntity.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerEntity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerObstacle.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerObstacle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerProjectile.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlatformerProjectile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/class-use/PlayerTest.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Note.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Sound.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundGenerator.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Tone.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/TonePlayer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Note.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Sound.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundGenerator.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Tone.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/TonePlayer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/NetUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/class-use/NetUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClient.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClientHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPServer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClient.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClientHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPServer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClient.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClientHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPServer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/VerifyPacket.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClient.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClientHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPServer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/VerifyPacket.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Group.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/MaskedSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/ShapeSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Sprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/TextSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Group.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/MaskedSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/ShapeSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Sprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/TextSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/BulletSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/ButtonTestState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Enemy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.KeyHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.MouseHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/TestGame.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/WindowCaptureState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/BulletSprite.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/ButtonTestState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Enemy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.KeyHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.MouseHandler.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/TestGame.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/WindowCaptureState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/FileUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ResourceManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScrapUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScreenBounds.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/SettingsBundle.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/StringManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/Version.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/FileUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ResourceManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScrapUtils.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScreenBounds.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/SettingsBundle.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/StringManager.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/Version.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-use.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/constant-values.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/deprecated-list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/element-list" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/help-doc.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/index-all.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/external/jquery/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_flat_0_aaaaaa_40x100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_flat_75_ffffff_40x100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_glass_55_fbf9ee_1x400.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_glass_65_ffffff_1x400.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_glass_75_dadada_1x400.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_glass_75_e6e6e6_1x400.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_glass_95_fef1ec_1x400.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-bg_highlight-soft_75_cccccc_1x100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-icons_222222_256x240.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-icons_2e83ff_256x240.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-icons_454545_256x240.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-icons_888888_256x240.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/images/ui-icons_cd0a0a_256x240.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-3.3.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-migrate-3.0.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.structure.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jquery-ui.structure.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip-utils/dist/jszip-utils-ie.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip-utils/dist/jszip-utils-ie.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip-utils/dist/jszip-utils.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip-utils/dist/jszip-utils.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip/dist/jszip.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/jquery/jszip/dist/jszip.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/member-search-index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/member-search-index.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/overview-summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/overview-tree.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/package-search-index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/package-search-index.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/resources/glass.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/resources/x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/script.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/search.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/serialized-form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/stylesheet.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/type-search-index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/apidocs/type-search-index.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/archive/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/archive/invincible.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/archive/randColor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/archive/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/css/maven-base.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/css/maven-theme.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/css/print.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/css/site.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/dependencies.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/dependency-info.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/close.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/collapsed.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/expanded.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/external.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/icon_error_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/icon_info_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/icon_success_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/icon_warning_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/logos/build-by-maven-black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/logos/build-by-maven-white.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/logos/maven-feather.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/images/newwindow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/licenses.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/plugin-management.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/plugins.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/project-info.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mechanics/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Note.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Note.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Sound.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Sound.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundGenerator.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundGenerator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/SoundManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Tone.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/Tone.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/TonePlayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/TonePlayer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Note.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Note.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Sound.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Sound.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundGenerator.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundGenerator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/SoundManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Tone.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/Tone.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/TonePlayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/class-use/TonePlayer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/mixer/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/NetUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/NetUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/class-use/NetUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/class-use/NetUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClientHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPClientHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPServer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/TCPServer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClientHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPClientHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPServer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/class-use/TCPServer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/tcp/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClientHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPClientHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPServer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/UDPServer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/VerifyPacket.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/VerifyPacket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClientHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPClientHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPServer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/UDPServer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/VerifyPacket.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/class-use/VerifyPacket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/net/udp/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Group.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Group.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/MaskedSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/MaskedSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/ShapeSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/ShapeSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Sprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/Sprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/TextSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/TextSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Group.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Group.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/MaskedSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/MaskedSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/ShapeSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/ShapeSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Sprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/Sprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/TextSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/class-use/TextSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/sprite/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/BulletSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/BulletSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/ButtonTestState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/ButtonTestState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Enemy.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Enemy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Main.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/Main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.KeyHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.KeyHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.MouseHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.MouseHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/MainState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/TestGame.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/TestGame.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/WindowCaptureState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/WindowCaptureState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/BulletSprite.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/BulletSprite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/ButtonTestState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/ButtonTestState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Enemy.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Enemy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Main.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/Main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.KeyHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.KeyHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.MouseHandler.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.MouseHandler.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/MainState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/TestGame.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/TestGame.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/WindowCaptureState.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/class-use/WindowCaptureState.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/tests/window/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/FileUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/FileUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ResourceManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ResourceManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScrapUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScrapUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScreenBounds.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/ScreenBounds.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/SettingsBundle.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/SettingsBundle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/StringManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/StringManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/Version.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/Version.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/FileUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/FileUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ResourceManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ResourceManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScrapUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScrapUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScreenBounds.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/ScreenBounds.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/SettingsBundle.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/SettingsBundle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/StringManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/StringManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/Version.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/class-use/Version.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-use.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/com/rotartsi/jgame/util/package-use.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/constant-values.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/constant-values.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/deprecated-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/deprecated-list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/help-doc.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/help-doc.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/index-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/index-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/member-search-index.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/member-search-index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/member-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/member-search-index.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/overview-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/overview-summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/overview-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/overview-tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/package-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/package-search-index.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/serialized-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/serialized-form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/type-search-index.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/type-search-index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/apidocs/type-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/apidocs/type-search-index.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/dependencies.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/dependencies.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/dependency-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/dependency-info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/licenses.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/licenses.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/plugin-management.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/plugin-management.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/plugins.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/plugins.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/project-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/project-info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/summary.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -334,19 +278,53 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            <state relative-caret-position="585">
+              <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="126" column="52" selection-start-line="126" selection-start-column="52" selection-end-line="126" selection-end-column="52" />
+            <state relative-caret-position="245">
+              <caret line="24" column="34" lean-forward="true" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+              <folding>
+                <element signature="e#1974#1975#0" expanded="true" />
+                <element signature="e#2001#2002#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-24">
+              <caret line="382" column="42" selection-start-line="382" selection-start-column="42" selection-end-line="382" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="276">
+              <caret line="92" column="7" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -374,16 +352,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>g2d.dispose()</find>
-      <find>updateState</find>
-      <find>Menu</find>
-      <find>menuHa</find>
-      <find>enter(</find>
-      <find>update</find>
-      <find>JFrame</find>
-      <find>enter</find>
-      <find>menuHandler</find>
-      <find>menu</find>
       <find>Timer</find>
       <find>tick</find>
       <find>handleRepaint</find>
@@ -404,6 +372,16 @@
       <find>rot =</find>
       <find>position</find>
       <find>projectPoint</find>
+      <find>jumpPower</find>
+      <find>system.</find>
+      <find>clampVel</find>
+      <find>update</find>
+      <find>onCollide</find>
+      <find>jumpP</find>
+      <find>Vector2[</find>
+      <find>clamp</find>
+      <find>-4.9</find>
+      <find>nx</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -444,6 +422,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="ROTARTSI &lt;rotartsi0482@gmail.com&gt;" />
         <option value="ROTARTSI82 &lt;38170305+rotartsi82@users.noreply.github.com&gt;" />
       </list>
     </option>
@@ -453,12 +432,11 @@
         <entry key="$PROJECT_DIR$" value="test" />
       </map>
     </option>
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/testListeners/InvokedMethodListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/Log4jLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/GenericLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/GenericFormatter.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/testListeners/SuiteListener.java" />
@@ -470,7 +448,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/SettingsBundle.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/ScreenBounds.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" />
         <option value="$PROJECT_DIR$/src/main/resources/log4j2.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/ProgressBar.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/CrashLogger.java" />
@@ -489,7 +466,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/AnyEvent.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" />
         <option value="$PROJECT_DIR$/target/surefire-reports/index.html" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/MaskedSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/ImageManager.java" />
@@ -503,11 +479,15 @@
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/State.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/PolygonCollide.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/math/Vector2Test.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/SurfaceMapDemo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" />
       </list>
     </option>
   </component>
@@ -551,6 +531,11 @@
             <path>
               <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
               <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="logs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -579,45 +564,18 @@
               <item name="JGame" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jgame" type="462c0819:PsiDirectoryNode" />
+              <item name="mechanics" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
               <item name="JGame" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jgame" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="math" type="462c0819:PsiDirectoryNode" />
+              <item name="window" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -739,10 +697,23 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="TestNG.Vector2Test">
+  <component name="RunManager" selected="Application.PlayerTest">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.tests.window.Main" />
       <module name="JGame" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlayerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.tests.window.PlayerTest" />
+      <module name="JGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.rotartsi.jgame.tests.window.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -797,6 +768,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PlayerTest" />
         <item itemvalue="TestNG.Vector2Test" />
         <item itemvalue="Application.Vector2" />
         <item itemvalue="TestNG.Vector2Test.testProjection" />
@@ -900,14 +872,12 @@
       <workItem from="1557802090883" duration="322000" />
       <workItem from="1557858926761" duration="213000" />
       <workItem from="1557960047892" duration="267000" />
-      <workItem from="1558197485847" duration="4229000" />
-    </task>
-    <task id="LOCAL-00012" summary="sound save/load + rendering">
-      <created>1549900827940</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1549900827941</updated>
+      <workItem from="1558197485847" duration="4557000" />
+      <workItem from="1558211283053" duration="1661000" />
+      <workItem from="1558312819139" duration="167000" />
+      <workItem from="1558397071223" duration="772000" />
+      <workItem from="1558737697363" duration="2450000" />
+      <workItem from="1558740210392" duration="517000" />
     </task>
     <task id="LOCAL-00013" summary="tests">
       <created>1549946092667</created>
@@ -1245,7 +1215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557597920734</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Vector2 changes + standardize rotation degrees (using unit circle now)">
+      <created>1558201927205</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1558201927207</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1281,7 +1258,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="161232000" />
+    <option name="totallyTimeSpent" value="167127000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1293,9 +1270,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="803" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="797" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.3190272" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49435028" weight="0.021459227" />
       <window_info id="Structure" order="1" sideWeight="0.50564975" side_tool="true" weight="0.33333334" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1304,15 +1282,15 @@
       <window_info id="Favorites" order="6" sideWeight="0.5062241" side_tool="true" weight="0.26466382" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32489452" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.48497853" weight="0.51476794" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.481402" visible="true" weight="0.2141844" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.32340425" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49928468" weight="0.32770744" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.71244633" visible="true" weight="0.30942336" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.28755364" side_tool="true" visible="true" weight="0.30942336" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32909605" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49659863" weight="0.31686747" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.70958513" weight="0.30932203" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.518598" side_tool="true" visible="true" weight="0.2141844" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49928468" weight="0.32770744" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49427754" weight="0.3148936" />
       <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32765958" />
       <window_info anchor="bottom" id="Dependency Viewer" order="12" weight="0.36185133" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
@@ -1421,7 +1399,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="+ java doc at the github pages site" />
     <MESSAGE value="+more javadoc..." />
     <MESSAGE value="finally done adding javadoc" />
     <MESSAGE value="website update" />
@@ -1446,48 +1423,12 @@
     <MESSAGE value="re-add target/site only to branch gh-pages" />
     <MESSAGE value="add idea files" />
     <MESSAGE value="support for custom rects" />
-    <option name="LAST_COMMIT_MESSAGE" value="support for custom rects" />
+    <MESSAGE value="Vector2 changes + standardize rotation degrees (using unit circle now)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Vector2 changes + standardize rotation degrees (using unit circle now)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/target/site/css/maven-base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1366">
-          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/site/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/site/resources/archive/index.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="240">
-            <caret line="16" selection-start-line="16" selection-end-line="16" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/logs/latest.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16291">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/site/apidocs/type-search-index.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html" />
     <entry file="file://$PROJECT_DIR$/licenses.html" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/ActionManager.java">
@@ -1528,24 +1469,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/push_to_pages.command">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/crypto/RSA.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-516">
           <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="311" column="49" lean-forward="true" selection-start-line="311" selection-start-column="49" selection-end-line="311" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -1570,31 +1497,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="92" column="7" lean-forward="true" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
-          <folding>
-            <element signature="e#3052#3053#0" expanded="true" />
-            <element signature="e#3074#3075#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
           <caret line="10" column="9" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlayerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="53" column="30" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1672,17 +1578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
-          <folding>
-            <element signature="e#2738#2739#0" expanded="true" />
-            <element signature="e#2801#2802#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1748,37 +1643,10 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/assets/bullet.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="92" column="7" lean-forward="true" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
-          <folding>
-            <element signature="e#2614#2615#0" expanded="true" />
-            <element signature="e#2727#2728#0" expanded="true" />
-            <element signature="e#2786#2787#0" expanded="true" />
-            <element signature="e#2973#2974#0" expanded="true" />
-            <element signature="e#3228#3229#0" expanded="true" />
-            <element signature="e#3334#3335#0" expanded="true" />
-            <element signature="e#3546#3547#0" expanded="true" />
-            <element signature="e#6654#6655#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
           <caret line="48" column="39" selection-start-line="48" selection-start-column="39" selection-end-line="48" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="97" column="59" selection-start-line="97" selection-start-column="59" selection-end-line="97" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1796,17 +1664,129 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/SurfaceMapDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="23" column="38" selection-start-line="23" selection-start-column="38" selection-end-line="23" selection-end-column="38" />
+          <folding>
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#757#758#0" expanded="true" />
+            <element signature="e#803#804#0" expanded="true" />
+            <element signature="e#838#839#0" expanded="true" />
+            <element signature="e#908#909#0" expanded="true" />
+            <element signature="e#971#972#0" expanded="true" />
+            <element signature="e#3003#3004#0" expanded="true" />
+            <element signature="e#3071#3072#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/site/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="33" column="26" lean-forward="true" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/log4j2.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="54" selection-start-line="19" selection-start-column="54" selection-end-line="19" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/site/css/maven-base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="152" column="7" selection-start-line="152" selection-start-column="1" selection-end-line="152" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="91" column="15" selection-start-line="91" selection-start-column="15" selection-end-line="91" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="3" />
+          <folding>
+            <element signature="e#2738#2739#0" expanded="true" />
+            <element signature="e#2801#2802#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        <state relative-caret-position="195">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/CrashLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="49" column="2" selection-start-line="49" selection-start-column="2" selection-end-line="49" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="126" column="52" selection-start-line="126" selection-start-column="52" selection-end-line="126" selection-end-column="52" />
+        <state relative-caret-position="409">
+          <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/push_to_pages.command">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="92" column="7" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-24">
+          <caret line="382" column="42" selection-start-line="382" selection-start-column="42" selection-end-line="382" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="24" column="34" lean-forward="true" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+          <folding>
+            <element signature="e#1974#1975#0" expanded="true" />
+            <element signature="e#2001#2002#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

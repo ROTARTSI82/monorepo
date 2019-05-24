@@ -1,8 +1,7 @@
 package com.rotartsi.jgame.math;
 
-import com.rotartsi.jgame.util.StringManager;
-
 import static com.rotartsi.jgame.Constants.JGameStr;
+import static com.rotartsi.jgame.util.StringManager.fmt;
 
 /**
  * Vector2 useful for adding two sets of coordinates such as applying velocities.
@@ -69,9 +68,8 @@ public class Vector2 {
         ret.y = ret.x * m + b;
         // This should be mathematically impossible. This is just here to test if I did my math correctly.
         if (ret.y != (ret.x * slope + y_intercept)) {
-            System.out.println((ret.x * slope + y_intercept));
-            System.out.println(ret.x * m + b);
-            throw new ArithmeticException("Failed to calculate the intersect");
+            throw new ArithmeticException(fmt("Failed to calculate intersect: line1=%s, line2=%s",
+                    (ret.x * slope + y_intercept), ret.x * m + b));
         }
         //  (b - y_intercept) / (slope - m) =  ret.x
         return ret;
@@ -80,6 +78,16 @@ public class Vector2 {
     public Vector2 reflectAround(Vector2 point) {
         Vector2 delta = this.subtract(point);
         return new Vector2(point.x - delta.x, point.y - delta.y);
+    }
+
+    public Vector2 dilateRelativeTo(Vector2 point, Vector2 scaleFactor) {
+        Vector2 delta = this.subtract(point);
+        return new Vector2(point.x + (delta.x * scaleFactor.x), point.y + (delta.y * scaleFactor.y));
+    }
+
+    public Vector2 rotateAround(Vector2 point, double rotation) {
+        double distance = point.distanceTo(this);
+        return positionFromDegrees(rotation, distance);
     }
 
     public static double degreesToSlope(double degrees) {
@@ -134,18 +142,18 @@ public class Vector2 {
         return Math.toDegrees(Math.atan2(delta.y, delta.x));
     }
 
-    public static void main(String[] args) {
-        Vector2 origin = new Vector2(0, 0);
-        double size = 10;
-        System.out.println(origin.angleTo(new Vector2(size, 0)));
-        System.out.println(origin.angleTo(new Vector2(size, size)));
-        System.out.println(origin.angleTo(new Vector2(0, size)));
-        System.out.println(origin.angleTo(new Vector2(-size, size)));
-        System.out.println(origin.angleTo(new Vector2(-size, 0)));
-        System.out.println(origin.angleTo(new Vector2(-size, -size)));
-        System.out.println(origin.angleTo(new Vector2(0, -size)));
-        System.out.println(origin.angleTo(new Vector2(size, - size)));
-    }
+//    public static void main(String[] args) {
+//        Vector2 origin = new Vector2(0, 0);
+//        double size = 10;
+//        System.out.println(origin.angleTo(new Vector2(size, 0)));
+//        System.out.println(origin.angleTo(new Vector2(size, size)));
+//        System.out.println(origin.angleTo(new Vector2(0, size)));
+//        System.out.println(origin.angleTo(new Vector2(-size, size)));
+//        System.out.println(origin.angleTo(new Vector2(-size, 0)));
+//        System.out.println(origin.angleTo(new Vector2(-size, -size)));
+//        System.out.println(origin.angleTo(new Vector2(0, -size)));
+//        System.out.println(origin.angleTo(new Vector2(size, - size)));
+//    }
 
     /**
      * Get the position of {@code length} units forward at an angle {@code angle} degrees from this point.
@@ -210,6 +218,6 @@ public class Vector2 {
      */
     @Override
     public String toString() {
-        return StringManager.fmt(JGameStr.getString("math.Vector2.toStringFormat"), x, y);
+        return fmt(JGameStr.getString("math.Vector2.toStringFormat"), x, y);
     }
 }
