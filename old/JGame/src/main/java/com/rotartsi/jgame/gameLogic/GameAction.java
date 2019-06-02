@@ -34,7 +34,7 @@ public abstract class GameAction {
     /**
      * The amount of time that has elapsed since the action was last done. Used for cooldown
      */
-    long progress;
+    long cooldownProgress;
 
     /**
      * The action id.
@@ -42,12 +42,14 @@ public abstract class GameAction {
     int id;
 
     /**
-     * The parent. Is null when the action is not being done.
+     * The weapon. Is null when the action is not being done.
      */
     ActionManager parent;
 
     /**
      * Action that takes {@code duration} to complete has a {@code cooldown} timeout after use
+     * Action Types:
+     * - 0: RELOAD
      *
      * @param type     integer containing the action type. (identifier)
      * @param duration duration in miliseconds
@@ -55,7 +57,7 @@ public abstract class GameAction {
      */
     public GameAction(int type, long duration, long cooldown) {
         this.latestUse = 0;
-        this.progress = 0;
+        this.cooldownProgress = 0;
 
         this.cooldown = cooldown;
         this.duration = duration;
@@ -66,14 +68,20 @@ public abstract class GameAction {
     /**
      * Get the amount of time left before the action can be used again.
      *
-     * @return Time in milliseconds
+     * @return Time in milliseconds (can be negative if the cooldown is already over)
      */
-    public long getCooldown() {
-        progress = System.currentTimeMillis() - latestUse;
-        if (cooldown > progress) {
-            return cooldown - progress;
+    public long getCooldownLeft() {
+        cooldownProgress = System.currentTimeMillis() - latestUse;
+        return cooldown - cooldownProgress;
+    }
+
+    public long getActionLeft() {
+        if (parent != null) {
+            parent.actionProgress = -System.currentTimeMillis() - parent.startTime;
+            return duration - parent.actionProgress;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     /**

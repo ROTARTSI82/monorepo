@@ -7,7 +7,7 @@ import com.rotartsi.jgame.sprite.Sprite;
  * Not yet implemented...
  * TODO: Implement this
  */
-public class PlatformerObstacle extends Sprite {
+public class PlatformerObstacle extends PlatformerEntity {
 
     public int climbDifficulty = 1;
 
@@ -29,7 +29,7 @@ public class PlatformerObstacle extends Sprite {
      * Not yet implemented...
      */
     public PlatformerObstacle() {
-        super(Sprite.defaultImage);
+        super(Sprite.defaultImage, null);
         //throw new UnsupportedOperationException(JGameStr.getString("notImplemented"));
     }
 

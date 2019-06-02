@@ -192,6 +192,8 @@ class PlatformerEntity(pygame.sprite.Sprite):
  * TODO: Implement this
  */
 public class PlatformerEntity extends Sprite {
+    public double health = 0;
+
     public double speed = 5;
     public double climbSpeed = 5;
 
@@ -224,6 +226,7 @@ public class PlatformerEntity extends Sprite {
      * Not yet implemented...
      *
      * @param img NOT IMPLEMENTED
+     * @param bounds   The boundaries of the screen.
      */
     public PlatformerEntity(BufferedImage img, ScreenBounds bounds) {
         super(img);
@@ -235,6 +238,10 @@ public class PlatformerEntity extends Sprite {
         internalState.put("grounded", false);
         //internalState.put("firing", false);
         this.bounds = bounds;
+    }
+
+    public void damage(double amount) {
+        health -= amount;
     }
 
     public void setBounds(ScreenBounds bounds) {
@@ -335,7 +342,7 @@ public class PlatformerEntity extends Sprite {
         }
     }
 
-    private void updateInputState() {
+    public void updateInputState() {
         if (internalState.get("forward")) {
             vel.x += speed;
         }
@@ -366,9 +373,10 @@ public class PlatformerEntity extends Sprite {
         }
     }
 
-    private void checkPXCollisions() {
+    void checkPXCollisions() {
         LinkedList<Sprite> cols = collidesWith(collidables);
         if (cols.size() > 0) {
+            onCollide(cols, "+x");
             Sprite c = cols.get(0);
             if (c instanceof PlatformerObstacle) {
                 PlatformerObstacle col = (PlatformerObstacle) c;
@@ -386,9 +394,14 @@ public class PlatformerEntity extends Sprite {
         }
     }
 
-    private void checkNXCollisions() {
+    public void onCollide(LinkedList<Sprite> collisions, String axis) {
+
+    }
+
+    void checkNXCollisions() {
         LinkedList<Sprite> cols = collidesWith(collidables);
         if (cols.size() > 0) {
+            onCollide(cols, "-x");
             Sprite c = cols.get(0);
             if (c instanceof PlatformerObstacle) {
                 PlatformerObstacle col = (PlatformerObstacle) c;
@@ -409,6 +422,7 @@ public class PlatformerEntity extends Sprite {
         if (vel.y > 0) {
             LinkedList<Sprite> cols = collidesWith(collidables);
             if (cols.size() > 0) {
+                onCollide(cols, "+y");
                 Sprite c = cols.get(0);
                 if (c instanceof PlatformerObstacle) {
                     PlatformerObstacle col = (PlatformerObstacle) c;
@@ -431,6 +445,7 @@ public class PlatformerEntity extends Sprite {
         } else if (vel.y < 0) {
             LinkedList<Sprite> cols = collidesWith(collidables);
             if (cols.size() > 0) {
+                onCollide(cols, "-y");
                 Sprite c = cols.get(0);
                 if (c instanceof PlatformerObstacle) {
                     PlatformerObstacle col = (PlatformerObstacle) c;

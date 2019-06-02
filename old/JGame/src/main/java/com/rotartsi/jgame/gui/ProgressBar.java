@@ -64,6 +64,8 @@ public class ProgressBar extends Sprite {
      */
     private Color outlineColor;
 
+    private boolean isVert;
+
     /**
      * ProgressBars!
      *
@@ -75,12 +77,14 @@ public class ProgressBar extends Sprite {
      * @param insideColor   Color of the bar
      * @param outsideColor  Color of the outline
      * @param emptyBarColor Color of the bar filler (essentially a full bar rendered behind the bar)
+     * @param isVertical    If the bar fills up vertically or horizontally
      */
     public ProgressBar(double min, double max, double val, Dimension barSize, double outlineWidth,
-                       Color insideColor, Color outsideColor, Color emptyBarColor) {
+                       Color insideColor, Color outsideColor, Color emptyBarColor, boolean isVertical) {
         super(new BufferedImage((int) (barSize.getWidth() + outlineWidth * 2),
                 (int) (barSize.getHeight() + outlineWidth * 2), BufferedImage.TYPE_INT_ARGB));
         minVal = min;
+        isVert = isVertical;
         maxVal = max;
         value = val;
         innerSize = barSize;
@@ -97,8 +101,13 @@ public class ProgressBar extends Sprite {
      */
     public void updateBar() {
         value = Math.max(minVal, Math.min(value, maxVal));  // Clamp value.
-        bar = new Rectangle2D.Double(width, width,  // The bar is offset by [width, width] from the outline rect.
-                (int) ((value - minVal) * (innerSize.width / (maxVal - minVal))), innerSize.height);
+        if (!isVert) {
+            bar = new Rectangle2D.Double(width, width,  // The bar is offset by [width, width] from the outline rect.
+                    (value - minVal) * (innerSize.width / (maxVal - minVal)), innerSize.height);
+        } else {
+            bar = new Rectangle2D.Double(width, width,  // The bar is offset by [width, width] from the outline rect.
+                    innerSize.width, (value - minVal) * (innerSize.height / (maxVal - minVal)));
+        }
         outline = new Rectangle2D.Double(0, 0, innerSize.width + width * 2, innerSize.height + width * 2);
     }
 

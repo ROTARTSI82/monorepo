@@ -1,10 +1,12 @@
 package com.rotartsi.jgame.mechanics;
 
 import com.rotartsi.jgame.math.Vector2;
+import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import static com.rotartsi.jgame.Constants.rand;
 
@@ -12,6 +14,14 @@ import static com.rotartsi.jgame.Constants.rand;
  * Projectiles. Support for despawning, blitting, updates, blume, etc
  */
 public class PlatformerProjectile extends PlatformerEntity {
+    /*
+    Properties used for bullets specifically. are defined optionally.
+     */
+    boolean isBullet = false;
+    int type = 0;
+    double damage = 0;
+    PlatformerEntity parent = null;
+
     /**
      * For how many milliseconds would the projectile last before it despawns?
      */
@@ -26,26 +36,25 @@ public class PlatformerProjectile extends PlatformerEntity {
     /**
      * The degree of random noise that should be added to the velocity every call to {@link #update()}
      */
-    private Vector2 wobble;
+    public Vector2 wobble;
 
-    private Vector2 target;
+    public Vector2 target;
 
     /**
      * Speed of the projectile.
      */
-    private double speed;
+    public double speed;
 
     /**
      * The degree of random noice that would be added to the velocity every call to {@link #recalculate(boolean, boolean)}
      */
-    private Vector2 blume;
-
-    private static PlatformerObstacle dummy = new PlatformerObstacle();
+    public Vector2 blume;
 
     /**
      * Projectiles!
      *
      * @param img      Image to blit for projectile
+     * @param bounds   The boundaries of the screen.
      * @param target   Target position
      * @param position current position
      * @param speed    Speed
@@ -68,6 +77,20 @@ public class PlatformerProjectile extends PlatformerEntity {
         this.speed = speed;
         this.target = target;
         wobble = new Vector2(0, 0);
+    }
+
+    public void setBulletAttributes(int type, PlatformerEntity parent, double damage) {
+        isBullet = true;
+        this.type = type;
+        this.parent = parent;
+        this.damage = damage;
+    }
+
+    @Override
+    public void onCollide(LinkedList<Sprite> collisions, String axis) {
+        if (!isBullet) {
+            return;
+        }
     }
 
     /**
@@ -152,7 +175,13 @@ public class PlatformerProjectile extends PlatformerEntity {
      */
     @Override
     public void update() {
-        super.update();
+        checkBounds();
+
+        //clampVelocity();
+        LinkedList<Sprite> cols = this.collidesWith(collidables);
+        if (cols.size() > 0) {
+            this.onCollide(cols, "?");
+        }
 
         vel = vel.add(new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.x),
                 (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.y)));

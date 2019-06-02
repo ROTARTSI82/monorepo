@@ -11,11 +11,11 @@ public class ActionManager {
     /**
      *
      */
-    public long progress;
+    public long actionProgress;
     /**
      * The millisecond time stamp that the action started.
      */
-    private long startTime;
+    public long startTime;
 
     /**
      * Create a new manager!
@@ -25,18 +25,18 @@ public class ActionManager {
     }
 
     /**
-     * Reset all fields. Close the {@link #currentAction} properly by setting progress and latestUse
+     * Reset all fields. Close the {@link #currentAction} properly by setting cooldownProgress and latestUse
      */
     private void reset() {
         if (currentAction != null) {
             currentAction.latestUse = System.currentTimeMillis();
-            currentAction.progress = currentAction.cooldown;
+            currentAction.cooldownProgress = currentAction.cooldown;
             currentAction.parent = null;
         }
 
         currentAction = null;
 
-        progress = 0;
+        actionProgress = 0;
         startTime = 0;
     }
 
@@ -50,8 +50,8 @@ public class ActionManager {
             if (currentAction == null) {  // Return if the tick routine canceled the action.
                 return;
             }
-            progress = now - startTime;
-            if (progress > currentAction.duration) {  // Action is done!
+            actionProgress = now - startTime;
+            if (actionProgress > currentAction.duration) {  // Action is done!
                 currentAction.onFinish();
                 reset();
             }
@@ -71,6 +71,9 @@ public class ActionManager {
     /**
      * Try to do a new action.
      * Checks for cooldowns and duplicates.
+     *
+     * example usage:
+     * <code>manager.doAction(jumpAction, jumpAction.priority &gt; manager.currentAction.priority, true);</code>
      *
      * @param action           Action to do
      * @param interrupt        If the action should interrupt the current one.

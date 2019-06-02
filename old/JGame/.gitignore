@@ -32,3 +32,5 @@ out/
 log/
 META-INF
 metadat/
+
+# **/tests/window

@@ -26,9 +26,6 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
-                    <excludes>
-                        <exclude>**/tests/window/*.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
