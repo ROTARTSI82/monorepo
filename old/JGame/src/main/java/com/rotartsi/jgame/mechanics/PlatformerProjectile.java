@@ -22,6 +22,9 @@ public class PlatformerProjectile extends PlatformerEntity {
     double damage = 0;
     PlatformerEntity parent = null;
 
+    long lastUpdate = System.currentTimeMillis();
+    double frameRateMult = 1;
+
     /**
      * For how many milliseconds would the projectile last before it despawns?
      */
@@ -131,6 +134,7 @@ public class PlatformerProjectile extends PlatformerEntity {
             rot = pos.angleTo(this.target);
         }
         if (velocity) {
+            // No multiplying by FrameRateMult here, because it's a recalculation
             vel = pos.velocityTo(this.target, this.speed).add(
                     new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * this.blume.x),
                             (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * this.blume.y)));
@@ -146,6 +150,7 @@ public class PlatformerProjectile extends PlatformerEntity {
      *               while {@code Vector2(1, 1)} means the velocity is accurate up to 1 unit.
      */
     public void accelerateTowards(Vector2 target, double speed, Vector2 blume) {
+        // Should we multiply by frameRateMult or let the user do that themselves?
         Vector2 accel = pos.velocityTo(target, speed).add(new Vector2((rand.nextBoolean() ? 1 : -1) *
                 (rand.nextDouble() * blume.x), (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * blume.y)));
         vel = vel.add(accel);
@@ -175,6 +180,8 @@ public class PlatformerProjectile extends PlatformerEntity {
      */
     @Override
     public void update() {
+        long now = System.currentTimeMillis();
+        frameRateMult = (now - lastUpdate) / 1000d;
         checkBounds();
 
         //clampVelocity();
@@ -183,14 +190,15 @@ public class PlatformerProjectile extends PlatformerEntity {
             this.onCollide(cols, "?");
         }
 
-        vel = vel.add(new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.x),
-                (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.y)));
-        pos = pos.add(vel);
+        vel = vel.add(new Vector2((rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.x * frameRateMult),
+                (rand.nextBoolean() ? 1 : -1) * (rand.nextDouble() * wobble.y * frameRateMult)));
+        pos = pos.add(vel.multiply(new Vector2(frameRateMult, frameRateMult)));
         updateRect();
 
         if (System.currentTimeMillis() - born >= projectileLife) {
             requestKill();
         }
+        lastUpdate = now;
     }
 
     /**

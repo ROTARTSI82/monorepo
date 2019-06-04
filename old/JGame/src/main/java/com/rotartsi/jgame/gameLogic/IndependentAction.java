@@ -4,7 +4,7 @@ public class IndependentAction {
     public long duration;
     public long cooldown;
     public long actionStarted = 0;
-    public long lastUse = 0;
+    public long lastUse = System.currentTimeMillis();
     public long cooldownProgress = 0;
     public long actionProgress = 0;
 

@@ -18,7 +18,7 @@ public class Weapon {
     public boolean reloading = false;
     public double shotDamage;
     public long shotCooldown;
-    public long lastFire = 0;
+    public long lastFire = System.currentTimeMillis();
     public PlatformerEntity owner;
     public ReloadAction reloadAction;
     public BulletFactory factory;
@@ -70,10 +70,14 @@ public class Weapon {
         ammo -= 1;
     }
 
-    public void tryFire(Vector2 target) {
+    public void tryFire(Vector2 target, boolean recallDamage) {
         long now = System.currentTimeMillis();
         if (now - lastFire > shotCooldown) {
-            fire(target, shotDamage);
+            if (!recallDamage) {
+                fire(target, shotDamage);
+            } else {
+                forceFire(target);
+            }
             lastFire = now;
         }
     }

@@ -14,15 +14,15 @@ public class PlatformerObstacle extends PlatformerEntity {
     /*
     Bounces are very glitchy right now so disable them for now.
      */
-    public Vector2 bounce = new Vector2(-5, -5);
-    public double wallJumpPower = 2.5;
+    public Vector2 bounce = new Vector2(-5 * PlatformerEntity.multSqr, -5 * PlatformerEntity.multSqr);
+    public double wallJumpPower = 2.5 * PlatformerEntity.multSqr;
 
     public double friction = 0;
-    public double climbSpeed = 0.1;
+    public double climbSpeed = 0.1 * PlatformerEntity.multConst;
 
-    public double speed = 0.1;
-    public double jumpPower = 5;
-    public double gravity = 0.025;
+    public double speed = 0.1 * PlatformerEntity.multConst;
+    public double jumpPower = 5 * PlatformerEntity.multSqr;
+    public double gravity = 0.025 * PlatformerEntity.multConst;
 
     public boolean doBounce = true;
     /**
