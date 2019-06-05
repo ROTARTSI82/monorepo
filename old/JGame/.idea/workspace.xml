@@ -10,14 +10,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70d7071e-b058-453c-ae58-7783cc49dcf5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/HeatMeter.java" afterDir="false" />
+    <list default="true" id="70d7071e-b058-453c-ae58-7783cc49dcf5" name="Default Changelist" comment="add support for changing center of rotation and dialation + full support for reflections + custom transforms. (Shearing may be added in the future)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/IndependentAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/IndependentAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -63,38 +62,80 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="68" column="72" lean-forward="true" selection-start-line="68" selection-start-column="72" selection-end-line="68" selection-end-column="72" />
+            <state relative-caret-position="240">
+              <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
               <folding>
-                <element signature="e#3648#3649#0" expanded="true" />
-                <element signature="e#3670#3671#0" expanded="true" />
-                <element signature="e#6687#6688#0" expanded="true" />
-                <element signature="e#6717#6718#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/HeatMeter.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="46" column="83" lean-forward="true" selection-start-line="46" selection-start-column="83" selection-end-line="46" selection-end-column="83" />
+            <state relative-caret-position="617">
+              <caret line="234" column="9" lean-forward="true" selection-start-line="234" selection-start-column="9" selection-end-line="234" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1424">
+              <caret line="83" column="38" selection-start-line="83" selection-start-column="24" selection-end-line="83" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" column="11" lean-forward="true" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
               <folding>
-                <element signature="e#1180#1181#0" expanded="true" />
-                <element signature="e#1259#1260#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="95" column="11" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="11" />
+            <state relative-caret-position="270">
+              <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/assets/bullet.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/assets/sprite.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -105,26 +146,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="16" column="100" selection-start-line="16" selection-start-column="100" selection-end-line="16" selection-end-column="100" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/ScreenBounds.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/GameAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+            <state relative-caret-position="201">
+              <caret line="41" column="51" selection-start-line="41" selection-start-column="51" selection-end-line="41" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -152,15 +175,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>reset</find>
-      <find>latestUse =</find>
-      <find>actionProgress</find>
-      <find>actionProgres=</find>
-      <find>ProgressBar</find>
-      <find>tests.window</find>
-      <find>exclude</find>
-      <find>tests/window</find>
-      <find>excludes</find>
       <find>base64</find>
       <find>rsa</find>
       <find>collidesWith</find>
@@ -179,9 +193,18 @@
       <find>gravity</find>
       <find>jumpPower</find>
       <find>pos</find>
-      <find>pos</find>
       <find>last</find>
       <find>climb</find>
+      <find>long</find>
+      <find>cooldown</find>
+      <find>double</find>
+      <find>rotate</find>
+      <find>override</find>
+      <find>size</find>
+      <find>zoom</find>
+      <find>reflect</find>
+      <find>RenderingHints</find>
+      <find>AffineTransformOp</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -237,10 +260,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/resources/log4j2.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/logging/CrashLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/SurfaceMapDemo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rotartsi/jgame/net/UDPTest.java" />
@@ -254,8 +275,6 @@
         <option value="$PROJECT_DIR$/target/surefire-reports/index.html" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/MaskedSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/ImageManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/SpriteSheet.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/game/GameRunner.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/PopupUI.java" />
@@ -268,26 +287,30 @@
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/SurfaceMapDemo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/math/Vector2.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gui/ProgressBar.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/dependency-reduced-pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/ButtonTestState.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/net/tcp/TCPClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/crypto/RSA.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/Bullet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/GameAction.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/BulletFactory.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/ActionManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/IndependentAction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/HeatMeter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/GameAction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java" />
+        <option value="$PROJECT_DIR$/TODO.md" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java" />
       </list>
     </option>
   </component>
@@ -322,7 +345,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -363,106 +385,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="crypto" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="event" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="gameLogic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="gui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="image" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="logging" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="math" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
               <item name="mechanics" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="mixer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JGame" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="sprite" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
@@ -478,14 +401,21 @@
               <item name="JGame" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jgame" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -560,7 +490,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.PlayerTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.rotartsi.jgame.tests.window.Main" />
       <module name="JGame" />
@@ -749,14 +679,11 @@
       <workItem from="1559445067068" duration="28000" />
       <workItem from="1559497525012" duration="1917000" />
       <workItem from="1559514082114" duration="4871000" />
-      <workItem from="1559600269973" duration="3589000" />
-    </task>
-    <task id="LOCAL-00016" summary="fix UserDatabase allowing createAccount to override existing account.">
-      <created>1550119601458</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1550119601458</updated>
+      <workItem from="1559600269973" duration="3692000" />
+      <workItem from="1559676637553" duration="582000" />
+      <workItem from="1559685074668" duration="70000" />
+      <workItem from="1559705693652" duration="664000" />
+      <workItem from="1559761846985" duration="3289000" />
     </task>
     <task id="LOCAL-00017" summary="+UserDatabase &amp; RoEngine classes">
       <created>1550451396650</created>
@@ -1094,7 +1021,14 @@
       <option name="project" value="LOCAL" />
       <updated>1559519700229</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="make player move at the same pace even if the FPS fluxes. (Useful to keep things fair in multiplayer)">
+      <created>1559609291000</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1559609291002</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1130,7 +1064,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="182127000" />
+    <option name="totallyTimeSpent" value="186835000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1145,7 +1079,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.27753934" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.29256082" />
       <window_info id="Structure" order="1" sideWeight="0.50564975" side_tool="true" weight="0.33333334" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1154,7 +1088,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.5062241" side_tool="true" weight="0.26466382" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49785408" weight="0.32409638" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.47854078" visible="true" weight="0.213253" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.47854078" visible="true" weight="0.30963856" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.32340425" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1180,7 +1114,7 @@
       <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.3297568" />
       <window_info anchor="right" id="Database" order="9" weight="0.3297568" />
       <window_info anchor="right" x="100" y="123" width="1240" height="597" id="Byte Code Viewer" order="10" type="FLOATING" />
-      <window_info anchor="right" x="0" y="0" width="184" height="700" id="Documentation" order="11" side_tool="true" weight="0.32997763" />
+      <window_info anchor="right" x="0" y="0" width="184" height="700" id="Documentation" order="11" side_tool="true" weight="0.3297568" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49435028" visible="true" weight="0.21316166" />
@@ -1272,7 +1206,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="website update" />
     <MESSAGE value="no easter eggs" />
     <MESSAGE value="+Settings bundle" />
     <MESSAGE value="yeet" />
@@ -1297,42 +1230,12 @@
     <MESSAGE value="Vector2 changes + standardize rotation degrees (using unit circle now)" />
     <MESSAGE value="Wall jumps." />
     <MESSAGE value="+Weapons (I haven't tested the code, assume it's full of bugs)" />
-    <option name="LAST_COMMIT_MESSAGE" value="+Weapons (I haven't tested the code, assume it's full of bugs)" />
+    <MESSAGE value="make player move at the same pace even if the FPS fluxes. (Useful to keep things fair in multiplayer)" />
+    <option name="LAST_COMMIT_MESSAGE" value="make player move at the same pace even if the FPS fluxes. (Useful to keep things fair in multiplayer)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/MaskedSprite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="40" column="8" selection-start-line="40" selection-start-column="8" selection-end-line="40" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/SpriteSheet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="27" column="19" selection-start-line="27" selection-start-column="19" selection-end-line="27" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/event/AnyEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="36" column="11" selection-start-line="36" selection-start-column="11" selection-end-line="36" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/WindowCaptureState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="26" column="20" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home/lib/src.zip!/java.desktop/java/awt/Container.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -1362,12 +1265,6 @@
           <caret line="306" column="13" selection-start-line="306" selection-start-column="13" selection-end-line="306" selection-end-column="13" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/assets/sprite.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/assets/bullet.png">
-      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/BulletSprite.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1430,27 +1327,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/push_to_pages.command">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1461,30 +1341,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="47">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="158">
           <caret line="30" column="34" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1526,27 +1386,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="78" column="2" selection-start-line="78" selection-start-column="2" selection-end-line="78" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="227" column="30" selection-start-line="227" selection-start-column="30" selection-end-line="227" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -1605,6 +1444,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-267">
+          <caret line="78" column="2" selection-start-line="78" selection-start-column="2" selection-end-line="78" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="68" column="72" selection-start-line="68" selection-start-column="72" selection-end-line="68" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/HeatMeter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" column="31" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/util/ScreenBounds.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1619,57 +1479,118 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java">
+    <entry file="file://$PROJECT_DIR$/TODO.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="75">
+            <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="78" column="34" lean-forward="true" selection-start-line="78" selection-start-column="34" selection-end-line="78" selection-end-column="34" />
+        <state relative-caret-position="195">
+          <caret line="13" column="11" lean-forward="true" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2747#2748#0" expanded="true" />
-            <element signature="e#3091#3092#0" expanded="true" />
-            <element signature="e#3139#3140#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/PlayerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="573">
+          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/image/ImageManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="63" column="32" selection-start-line="63" selection-start-column="32" selection-end-line="63" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/ShapeSprite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/gameLogic/Weapon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="2" column="39" lean-forward="true" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerObstacle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="16" column="100" selection-start-line="16" selection-start-column="100" selection-end-line="16" selection-end-column="100" />
+        <state relative-caret-position="201">
+          <caret line="41" column="51" selection-start-line="41" selection-start-column="51" selection-end-line="41" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerEntity.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/TestGame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="95" column="11" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="11" />
+        <state relative-caret-position="270">
+          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/MainState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/PlatformerProjectile.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/assets/bullet.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/assets/sprite.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/tests/window/Enemy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="68" column="72" lean-forward="true" selection-start-line="68" selection-start-column="72" selection-end-line="68" selection-end-column="72" />
-          <folding>
-            <element signature="e#3648#3649#0" expanded="true" />
-            <element signature="e#3670#3671#0" expanded="true" />
-            <element signature="e#6687#6688#0" expanded="true" />
-            <element signature="e#6717#6718#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="390">
+          <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/mechanics/HeatMeter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="46" column="83" lean-forward="true" selection-start-line="46" selection-start-column="83" selection-end-line="46" selection-end-column="83" />
-          <folding>
-            <element signature="e#1180#1181#0" expanded="true" />
-            <element signature="e#1259#1260#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-1424">
+          <caret line="83" column="38" selection-start-line="83" selection-start-column="24" selection-end-line="83" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rotartsi/jgame/sprite/Sprite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="617">
+          <caret line="234" column="9" lean-forward="true" selection-start-line="234" selection-start-column="9" selection-end-line="234" selection-end-column="9" />
         </state>
       </provider>
     </entry>

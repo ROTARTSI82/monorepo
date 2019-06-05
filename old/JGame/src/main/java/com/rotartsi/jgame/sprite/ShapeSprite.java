@@ -7,6 +7,10 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * @deprecated Use new <code>Sprite(ImageManager.fromShape(spriteShape, Color.BLACK))</code> instead of
+ * <code>new ShapeSprite(spriteShape, spriteMultiplier)</code>. Code no longer updated or maintained.
+ */
 @Deprecated
 public class ShapeSprite extends Sprite {
     private Shape shape;

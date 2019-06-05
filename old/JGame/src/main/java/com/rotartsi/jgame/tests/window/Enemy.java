@@ -28,5 +28,13 @@ public class Enemy extends Sprite {
         vel = new Vector2(rand.nextInt(3) - 1, rand.nextInt(3) - 1);
         pos = pos.add(vel);
         updateRect();
+        flipVertical = false;
+        flipHorizontal = true;
+    }
+
+    @Override
+    public void updateCOT() {
+        super.updateCOT();
+        //centerOfRotation = new Vector2(0, 0);
     }
 }

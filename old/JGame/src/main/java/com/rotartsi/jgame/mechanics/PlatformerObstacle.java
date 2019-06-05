@@ -39,7 +39,10 @@ public class PlatformerObstacle extends PlatformerEntity {
             player.gravity = gravity * player.gravityMult;
             player.jumpPower = jumpPower * player.jumpMult;
         }
-        if (climbDifficulty <= player.climbSkill && (axis.equals("+x") || axis.equals("-x"))) {
+        if (!(climbDifficulty <= player.climbSkill)) {
+            return;
+        }
+        if (axis.equals("+x") || axis.equals("-x")) {
             player.climbSpeed = climbSpeed * player.climbSpeedMult;
         }
 //        System.out.println(axis);

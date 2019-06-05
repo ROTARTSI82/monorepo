@@ -58,6 +58,8 @@ public class Sprite {
      * The rotation of the sprite.
      */
     public double rot = 0;
+    public Vector2 centerOfRotation;
+    public Vector2 centerOfDialation;
     /**
      * The rectangle used for collision detection by the sprite.
      */
@@ -109,6 +111,15 @@ public class Sprite {
         vel = new Vector2(0, 0);
         rectPos = new Vector2(0, 0);
         rectSize = new Vector2(size);
+        updateCOT();
+    }
+
+    /**
+     * The user should override this function to define a new center of transformation!
+     */
+    public void updateCOT() {
+        centerOfRotation = new Vector2(this.image.getWidth() / 2d, this.image.getHeight() / 2d);
+        centerOfDialation = new Vector2(this.image.getWidth() / 2d, this.image.getHeight() / 2d);
     }
 
     /**
@@ -156,28 +167,73 @@ public class Sprite {
      * @param screen Screen to blit to.
      */
     public void blitTo(Graphics2D screen) {
-        BufferedImage blitImg = image;
-        if (flipHorizontal) {
-            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-            tx.translate(-blitImg.getWidth(null), 0);
-            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-            blitImg = op.filter(blitImg, null);
-        }
+        BufferedImage blitImg = image; // TODO: Decide if we should deepcopy this.
 
+        AffineTransform trans = getTransform();
+
+        blitImg = applyCustomTransformations(blitImg, trans);
+
+        screen.drawImage(blitImg, trans, null);
+    }
+
+    public BufferedImage applyCustomTransformations(BufferedImage blitImg, AffineTransform trans) {
+
+        updateCOT();
+
+        blitImg = applyFlipHorizontal(blitImg);
+        blitImg = applyFlipsVertical(blitImg);
+
+        applyDialations(trans);
+        //applyShears(trans);
+        applyRotations(trans);
+
+        return blitImg;
+    }
+
+    public void applyRotations(AffineTransform trans) {
+        trans.translate(centerOfRotation.x, centerOfRotation.y);
+        trans.rotate(Math.toRadians(rot));
+        trans.translate(-centerOfRotation.x, -centerOfRotation.y);
+    }
+
+    public void applyShears(AffineTransform trans) {
+        //trans.translate(centerOfShearing.x, centerOfShearing.y);
+        //trans.shear(shear[0], shear[1]);
+        //trans.translate(-centerOfShearing.x, -centerOfShearing.y);
+    }
+
+    public AffineTransform getTransform() {
         AffineTransform id = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         AffineTransform trans = AffineTransform.getTranslateInstance(this.absPos.x, this.absPos.y);
         trans.setTransform(id);
+        return trans;
+    }
 
-        Vector2 center = new Vector2(this.image.getWidth(null) / 2d,
-                this.image.getHeight(null) / 2d);
-        trans.translate(center.x * zoom[0], center.y * zoom[1]);
-        trans.rotate(Math.toRadians(rot + (flipVertical ? 180 : 0)));
+    public void applyDialations(AffineTransform trans) {
+        trans.translate(centerOfDialation.x * zoom[0], centerOfDialation.y * zoom[1]);
         trans.scale(zoom[0], zoom[1]);
-        size.x = center.x * 2 * zoom[0];
-        size.y = center.y * 2 * zoom[1];
+        size.x = image.getWidth() * zoom[0];
+        size.y = image.getHeight() * zoom[1];
         updateRect();
-        trans.translate(-center.x, -center.y);
-        screen.drawImage(blitImg, trans, null);
+        trans.translate(-centerOfDialation.x, -centerOfDialation.y);
+    }
+
+    public BufferedImage applyFlipsVertical(BufferedImage blitImg) {
+        if (flipVertical) {
+            AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+            tx.translate(0, -blitImg.getWidth());
+            return new AffineTransformOp(tx, Constants.RENDER_HINTS).filter(blitImg, null);
+        }
+        return blitImg;
+    }
+
+    public BufferedImage applyFlipHorizontal(BufferedImage blitImg) {
+        if (flipHorizontal) {
+            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+            tx.translate(-blitImg.getWidth(), 0);
+            return new AffineTransformOp(tx, Constants.RENDER_HINTS).filter(blitImg, null);
+        }
+        return blitImg;
     }
 
     /**
