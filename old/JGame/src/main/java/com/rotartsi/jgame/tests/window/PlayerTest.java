@@ -5,8 +5,8 @@ import com.rotartsi.jgame.game.Game;
 import com.rotartsi.jgame.game.GameRunner;
 import com.rotartsi.jgame.game.State;
 import com.rotartsi.jgame.math.Vector2;
-import com.rotartsi.jgame.mechanics.PlatformerEntity;
 import com.rotartsi.jgame.mechanics.PlatformerObstacle;
+import com.rotartsi.jgame.mechanics.PlatformerPlayer;
 import com.rotartsi.jgame.sprite.Group;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
@@ -42,7 +42,7 @@ public class PlayerTest extends GameRunner {
     }
 
     private static class PlayerTestState extends State {
-        PlatformerEntity player;
+        PlatformerPlayer player;
 
         PlayerTestState(Game p) {
             super(p);
@@ -54,7 +54,7 @@ public class PlayerTest extends GameRunner {
             PlatformerObstacle ob = new PlatformerObstacle();
             ScreenBounds bounds = new ScreenBounds(new Rectangle2D.Double(0, 0, size.width, size.height),
                     ob, ob, ob, ob);
-            player = new PlatformerEntity(Sprite.defaultImage, bounds);
+            player = new PlatformerPlayer(Sprite.defaultImage, bounds);
             player.collidables = new Group();
             ob.updateImage(new BufferedImage(100, 900, BufferedImage.TYPE_INT_ARGB));
             ob.pos = new Vector2(700, 550);

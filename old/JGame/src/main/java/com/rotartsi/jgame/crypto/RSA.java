@@ -35,7 +35,7 @@ public class RSA implements Serializable {
     private BigInteger modulus;
 
     /**
-     * TODO: Add javadoc
+     * See <a href="https://en.wikipedia.org/wiki/Golden_ratio">Phi on Wikipedia</a>
      */
     private BigInteger phi;
 

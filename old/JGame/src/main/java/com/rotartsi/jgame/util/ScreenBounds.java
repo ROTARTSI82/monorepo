@@ -1,7 +1,7 @@
 package com.rotartsi.jgame.util;
 
-import com.rotartsi.jgame.mechanics.PlatformerEntity;
 import com.rotartsi.jgame.mechanics.PlatformerObstacle;
+import com.rotartsi.jgame.mechanics.PlatformerPlayer;
 
 import java.awt.geom.Rectangle2D;
 
@@ -31,7 +31,7 @@ public class ScreenBounds {
         return true;
     }
 
-    public void handleCollision(String axis, PlatformerEntity entity) {
+    public void handleCollision(String axis, PlatformerPlayer entity) {
         switch (axis) {
             case ("+x"): {
                 right.onCollide(axis, entity);

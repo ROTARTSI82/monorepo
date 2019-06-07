@@ -10,10 +10,24 @@ import java.awt.event.MouseWheelEvent;
 
 import static com.rotartsi.jgame.util.StringManager.fmt;
 
+/**
+ * Container for processing any event in one class. It can also be used to match String descriptors of events
+ * to actual events.
+ */
 public class AnyEvent {
+    /**
+     * Event class. Used for all events
+     */
     public InputEvent event;
+
+    /**
+     * Logger used to log info from this class.
+     */
     private Logger logger = LogManager.getLogger(AnyEvent.class);
 
+    /**
+     * Mouse event class. Only used if the event is a mouse event, otherwise it's null
+     */
     public MouseEvent mouseEvent;
     public KeyEvent keyEvent;
     public MouseWheelEvent mouseWheelEvent;

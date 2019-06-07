@@ -13,14 +13,14 @@ import static com.rotartsi.jgame.Constants.rand;
 /**
  * Projectiles. Support for despawning, blitting, updates, blume, etc
  */
-public class PlatformerProjectile extends PlatformerEntity {
+public class PlatformerProjectile extends Sprite implements PlatformerEntity {
     /*
     Properties used for bullets specifically. are defined optionally.
      */
     boolean isBullet = false;
     int type = 0;
     double damage = 0;
-    PlatformerEntity parent = null;
+    PlatformerPlayer parent = null;
 
     long lastUpdate = System.currentTimeMillis();
     double frameRateMult = 1;
@@ -53,6 +53,8 @@ public class PlatformerProjectile extends PlatformerEntity {
      */
     public Vector2 blume;
 
+    public ScreenBounds bounds;
+
     /**
      * Projectiles!
      *
@@ -66,8 +68,9 @@ public class PlatformerProjectile extends PlatformerEntity {
      */
     public PlatformerProjectile(BufferedImage img, ScreenBounds bounds, Vector2 target, Vector2 position,
                                 double speed, long life, Vector2 blume) {
-        super(img, bounds); // Makes sure that bounds are never checked.
+        super(img); // Makes sure that bounds are never checked.
         pos = position;
+        this.bounds = bounds;
 
         projectileLife = life;
         born = System.currentTimeMillis();
@@ -82,7 +85,7 @@ public class PlatformerProjectile extends PlatformerEntity {
         wobble = new Vector2(0, 0);
     }
 
-    public void setBulletAttributes(int type, PlatformerEntity parent, double damage) {
+    public void setBulletAttributes(int type, PlatformerPlayer parent, double damage) {
         isBullet = true;
         this.type = type;
         this.parent = parent;
@@ -156,7 +159,6 @@ public class PlatformerProjectile extends PlatformerEntity {
         vel = vel.add(accel);
     }
 
-    @Override
     protected void checkBounds() {
         if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
             requestKill();
@@ -170,6 +172,11 @@ public class PlatformerProjectile extends PlatformerEntity {
         if (pos.y + size.y / 2 > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
             requestKill();
         }
+    }
+
+    @Override
+    public void damage(double amount) {
+
     }
 
     /**

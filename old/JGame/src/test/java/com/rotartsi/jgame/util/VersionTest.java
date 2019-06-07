@@ -19,13 +19,13 @@ public class VersionTest {
 
     @Test
     public void testToString() {
-        Version str = new Version("xxx%s.%s.%syyy", 127, 255, 64, 32);
+        Version str = new Version("xxx%s.%s.%syyy", 127, 255, 64, 32, "none");
         assertEquals(str.toString(), "xxx255.64.32yyy");
     }
 
     @Test
     public void testGetValue() {
-        Version val = new Version("%s", 0, 128, 64, 255);
+        Version val = new Version("%s", 0, 128, 64, 255, "none");
         assertEquals(val.getValue(), 8405247);
 
         assertEquals(Version.fromAbsolute(8405247).toString(), val.toString());

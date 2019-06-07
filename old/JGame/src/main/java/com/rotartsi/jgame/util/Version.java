@@ -36,6 +36,8 @@ public class Version implements Serializable {
      */
     public transient byte micro;
 
+    public String stringRepr;
+
     /**
      * The integer value of the version
      */
@@ -50,13 +52,15 @@ public class Version implements Serializable {
      * @param minorValue Minor version
      * @param microValue Micro version
      */
-    public Version(String mode, int mValue, int majorValue, int minorValue, int microValue) {
+    public Version(String mode, int mValue, int majorValue, int minorValue, int microValue, String repr) {
         format = mode;
         modeValue = (byte) mValue;
 
         major = (byte) majorValue;
         minor = (byte) minorValue;
         micro = (byte) microValue;
+
+        stringRepr = repr;
 
         absoluteValue = getValue();
     }
@@ -70,7 +74,7 @@ public class Version implements Serializable {
      * @param minorValue Minor version
      * @param microValue Micro version
      */
-    public Version(String mode, byte mValue, byte majorValue, byte minorValue, byte microValue) {
+    public Version(String mode, byte mValue, byte majorValue, byte minorValue, byte microValue, String repr) {
         format = mode;
         modeValue = mValue;
 
@@ -79,6 +83,7 @@ public class Version implements Serializable {
         micro = microValue;
 
         absoluteValue = getValue();
+        stringRepr = repr;
     }
 
     /**
@@ -105,7 +110,7 @@ public class Version implements Serializable {
         abs /= 256d;
         byte majorVal = (byte) (abs % 256d);
         abs /= 256;
-        return new Version("%s", (byte) (abs % 256d), majorVal, minorVal, microVal);
+        return new Version("%s", (byte) (abs % 256d), majorVal, minorVal, microVal, "none");
     }
 
     /**
