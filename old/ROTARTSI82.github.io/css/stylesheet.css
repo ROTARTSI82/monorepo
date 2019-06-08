@@ -1,0 +1,74 @@
+.navbar-mod {
+    padding-bottom: 1rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+
+    margin: 0;
+
+    border-bottom-left-radius: 3rem;
+    border-bottom-right-radius: 3rem;
+
+    background-color: darkslateblue;
+}
+
+.body-mod {
+    background-color: lightsteelblue;
+    margin-top: 6.25rem;
+}
+
+.center-stuff {
+    text-align: center;
+}
+
+.sub-div {
+    margin: 5px;
+    padding: 1.5rem;
+    background-color: #dcdcdc;
+    border-radius: 2rem;
+}
+
+.normal-div {
+    background-color: lightgrey;
+    border-radius: 2rem;
+    margin: 1rem 0 0;
+    padding: 1.5rem;
+}
+
+/* Custom btn from bootstrap */
+.btn-custom {
+    color: aliceblue;
+    background-color: skyblue;
+    border-color: #6eb4c8;
+}
+
+.btn-custom:hover {
+    color: aliceblue;
+    background-color: lightskyblue;
+    border-color: #6eb4c8;
+}
+
+.btn-custom:focus, .btn-custom.focus {
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.btn-custom.disabled, .btn-custom:disabled {
+    color: aliceblue;
+    background-color: skyblue;
+    border-color: #6eb4c8;
+}
+
+.btn-custom:not(:disabled):not(.disabled):active, .btn-custom:not(:disabled):not(.disabled).active,
+.show > .btn-custom.dropdown-toggle {
+    color: aliceblue;
+    background-color: skyblue;
+    border-color: #6eb4c8;
+}
+
+.btn-custom:not(:disabled):not(.disabled):active:focus, .btn-custom:not(:disabled):not(.disabled).active:focus,
+.show > .btn-custom.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.limit-height {
+    height: 25rem;
+}
