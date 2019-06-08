@@ -18,6 +18,10 @@
 
 .center-stuff {
     text-align: center;
+    align-items: center;
+    align-content: center;
+    child-align: middle;
+
 }
 
 .sub-div {
@@ -71,4 +75,9 @@
 
 .limit-height {
     height: 25rem;
+}
+
+.card-custom {
+    width: 20vw;
+    height: 20vw;
 }
