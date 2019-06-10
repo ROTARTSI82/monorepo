@@ -18,7 +18,8 @@ public class BasicCharacter extends PlatformerPlayer {
 
     public BasicCharacter(BufferedImage img, ScreenBounds bounds, TestingState game) {
         super(img, bounds);
-        weapons.add(new Weapons.TestWeapon(this, game));
+        setBounds(bounds);
+        weapons.add(new Weapons.TestWeapon(this, game, bounds));
         currentWeapon = weapons.get(0);
         this.state = game;
     }

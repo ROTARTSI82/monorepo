@@ -3,6 +3,7 @@ package com.rotartsi.untitledgame.bullets;
 import com.rotartsi.jgame.Constants;
 import com.rotartsi.jgame.math.Vector2;
 import com.rotartsi.jgame.mechanics.PlatformerProjectile;
+import com.rotartsi.jgame.sprite.Group;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class CustomBulletClass extends PlatformerProjectile {
+    public Group collidables;
     public CustomBulletClass(BufferedImage img, ScreenBounds bounds, Vector2 target, Vector2 position, double speed, long life, Vector2 blume) {
         super(img, bounds, target, position, speed, life, blume);
     }
@@ -18,8 +20,8 @@ public class CustomBulletClass extends PlatformerProjectile {
     public void update() {
         long now = System.currentTimeMillis();
         this.frameRateMult = (double) (now - this.lastUpdate) / 1000.0D;
-//        this.checkBounds();
-        LinkedList<Sprite> cols = this.collidesWith(collidables);
+        this.checkBounds();
+        LinkedList<Sprite> cols = this.collidesWith(this.collidables);
         if (cols.size() > 0) {
             this.onCollide(cols, "?");
         }
