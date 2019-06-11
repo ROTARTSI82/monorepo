@@ -8,11 +8,13 @@ import com.rotartsi.jgame.image.SurfaceMap;
 import com.rotartsi.jgame.math.Vector2;
 import com.rotartsi.jgame.mechanics.PlatformerObstacle;
 import com.rotartsi.jgame.sprite.Group;
+import com.rotartsi.jgame.sprite.GroupCollection;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 import com.rotartsi.jgame.util.SettingsBundle;
 import com.rotartsi.untitledgame.bullets.CustomBulletClass;
 import com.rotartsi.untitledgame.characters.BasicCharacter;
+import com.rotartsi.untitledgame.characters.BasicEnemy;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -22,10 +24,12 @@ import java.io.IOException;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
 public class TestingState extends State {
+    public Group playerGroup = new Group();
     public BasicCharacter player;
     public PlatformerObstacle dummyObstacle = new PlatformerObstacle();
     public SurfaceMap map;
     public Sprite cooldown;
+    public Group enemies = new Group();
     public Group obstacles = new Group();
     public Font font = new Font("Times New Roman", Font.PLAIN, 25);
     private SurfaceMap gui;
@@ -34,6 +38,7 @@ public class TestingState extends State {
     public Group bullets = new Group();
     private Vector2 guiCenter;
     private double[] guiZoom = new double[]{1, 1};
+    private ScreenBounds bounds;
 
     public TestingState(Game parent) {
         // Put code here that you only want to build once. (like the obstacles)
@@ -54,17 +59,20 @@ public class TestingState extends State {
 
         guiCenter = new Vector2(gui.img.getWidth() / 2, gui.img.getHeight() / 2);
 
-        ScreenBounds bounds = new ScreenBounds(new Rectangle2D.Double(0, 0, map.img.getWidth(), map.img.getHeight() - 50),
+        bounds = new ScreenBounds(new Rectangle2D.Double(0, 0, map.img.getWidth(), map.img.getHeight() - 50),
                 dummyObstacle, dummyObstacle, dummyObstacle, dummyObstacle);
 
         player = new BasicCharacter(new BufferedImage(50, 50, TYPE_INT_ARGB),
                 bounds, this);
+        playerGroup.add(player);
         try {
             player.keybinds = new SettingsBundle("settings.properties");
         } catch (IOException e) {
             player.keybinds = new SettingsBundle();
         }
-        player.collidables = obstacles;
+        player.collidables = new GroupCollection();
+        player.collidables.add(obstacles);
+
         ammo = new Sprite(ImageManager.fromText(player.currentWeapon.ammo + "/" + player.currentWeapon.meter.reserve,
                 font, Color.BLACK));
         ammo.pos = new Vector2(100, 50);
@@ -78,6 +86,13 @@ public class TestingState extends State {
     @Override
     public void onEvent(AnyEvent event) {
         player.updateEvent(event);
+
+        if (event.matchesString("id:key.pressed,keyCode:78")) {
+            BasicEnemy ne = new BasicEnemy(new BufferedImage(50, 50, TYPE_INT_ARGB), bounds, this);
+            ne.collidables = new GroupCollection();
+            ne.collidables.add(obstacles);
+            enemies.add(ne);
+        }
     }
 
     @Override
@@ -87,6 +102,10 @@ public class TestingState extends State {
 //        System.out.println("bullets.sprites.size() = " + bullets.sprites.size());
         for (int i = 0; i < bullets.sprites.size(); i++) {
             bullets.sprites.get(i).update();
+        }
+
+        for (int i = 0; i < enemies.sprites.size(); i++) {
+            enemies.sprites.get(i).update();
         }
     }
 
@@ -120,6 +139,14 @@ public class TestingState extends State {
             bullet.blitRect(map.g2d);
 
             map.g2d.setColor(Color.YELLOW);
+            map.g2d.fillRect((int) bullet.rect.x, (int) bullet.rect.y, (int) bullet.rect.width, (int) bullet.rect.height);
+        }
+
+        for (int i = 0; i < enemies.sprites.size(); i++) {
+            BasicEnemy bullet = (BasicEnemy) enemies.sprites.get(i);
+            bullet.blitRect(map.g2d);
+
+            map.g2d.setColor(Color.RED);
             map.g2d.fillRect((int) bullet.rect.x, (int) bullet.rect.y, (int) bullet.rect.width, (int) bullet.rect.height);
         }
 
