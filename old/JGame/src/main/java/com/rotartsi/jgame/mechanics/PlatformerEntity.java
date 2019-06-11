@@ -1,6 +1,6 @@
 package com.rotartsi.jgame.mechanics;
 
-import com.rotartsi.jgame.sprite.Group;
+import com.rotartsi.jgame.sprite.GroupCollection;
 import com.rotartsi.jgame.sprite.Sprite;
 
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public interface PlatformerEntity {
     double health = 0;
 
-    Group collidables = new Group();
+    GroupCollection collidables = new GroupCollection();
 
     void damage(double amount);
 

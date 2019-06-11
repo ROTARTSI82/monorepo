@@ -77,7 +77,7 @@ public abstract class GameAction {
 
     public long getActionLeft() {
         if (parent != null) {
-            parent.actionProgress = -System.currentTimeMillis() - parent.startTime;
+            parent.actionProgress = System.currentTimeMillis() - parent.startTime;
             return duration - parent.actionProgress;
         } else {
             return 0;

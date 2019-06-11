@@ -63,7 +63,7 @@ public class Sprite {
     /**
      * The rectangle used for collision detection by the sprite.
      */
-    Rectangle2D.Double rect;
+    public Rectangle2D.Double rect;
 
     /**
      * The absolute position to blit this image to. (the topleft of the image.)
@@ -287,6 +287,14 @@ public class Sprite {
             if (s.rect.intersects(rect)) {
                 ret.add(s);
             }
+        }
+        return ret;
+    }
+
+    public LinkedList<Sprite> collidesWith(GroupCollection sprites) {
+        LinkedList<Sprite> ret = new LinkedList<>();
+        for (Group g : sprites.groups) {
+            ret.addAll(collidesWith(g));
         }
         return ret;
     }

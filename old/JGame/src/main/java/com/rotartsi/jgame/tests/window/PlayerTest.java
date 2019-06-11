@@ -8,6 +8,7 @@ import com.rotartsi.jgame.math.Vector2;
 import com.rotartsi.jgame.mechanics.PlatformerObstacle;
 import com.rotartsi.jgame.mechanics.PlatformerPlayer;
 import com.rotartsi.jgame.sprite.Group;
+import com.rotartsi.jgame.sprite.GroupCollection;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 import com.rotartsi.jgame.util.SettingsBundle;
@@ -55,11 +56,14 @@ public class PlayerTest extends GameRunner {
             ScreenBounds bounds = new ScreenBounds(new Rectangle2D.Double(0, 0, size.width, size.height),
                     ob, ob, ob, ob);
             player = new PlatformerPlayer(Sprite.defaultImage, bounds);
-            player.collidables = new Group();
+            player.collidables = new GroupCollection();
             ob.updateImage(new BufferedImage(100, 900, BufferedImage.TYPE_INT_ARGB));
             ob.pos = new Vector2(700, 550);
             ob.updateRect();
-            player.collidables.add(ob);
+
+            Group obstacles = new Group();
+            obstacles.add(ob);
+            player.collidables.add(obstacles);
             player.keybinds = new SettingsBundle();
         }
 
@@ -73,9 +77,11 @@ public class PlayerTest extends GameRunner {
             Graphics2D g2d = (Graphics2D) g;
             player.blitTo(g2d);
             player.blitRect(g2d);
-            for (Sprite sp : player.collidables.sprites) {
-                sp.blitTo(g2d);
-                sp.blitRect(g2d);
+            for (Group group : player.collidables.groups) {
+                for (Sprite sp : group.sprites) {
+                    sp.blitTo(g2d);
+                    sp.blitRect(g2d);
+                }
             }
         }
 

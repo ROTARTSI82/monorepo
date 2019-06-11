@@ -72,6 +72,7 @@ public class SurfaceMap {
      * Clear the image. Simply creates a new BufferedImage with the same dimensions and type.
      */
     public void clear() {
+        g2d.dispose();
         img = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
         reloadGraphics();
     }
@@ -117,8 +118,8 @@ public class SurfaceMap {
      * @return BufferedImage
      */
     public BufferedImage getResized(Dimension dim, double[] multipliers) {
-        int newWidth = Double.valueOf(dim.width * multipliers[0]).intValue();
-        int newHeight = Double.valueOf(dim.height * multipliers[1]).intValue();
+        int newWidth = multipliers[0] != 0 ? Double.valueOf(dim.width * multipliers[0]).intValue() : dim.width;
+        int newHeight = multipliers[1] != 0 ? Double.valueOf(dim.height * multipliers[1]).intValue() : dim.height;
 
         resized = new BufferedImage(newWidth, newHeight, img.getType());
         Graphics2D g = resized.createGraphics();

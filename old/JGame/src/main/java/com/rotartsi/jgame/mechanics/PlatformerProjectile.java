@@ -1,6 +1,7 @@
 package com.rotartsi.jgame.mechanics;
 
 import com.rotartsi.jgame.math.Vector2;
+import com.rotartsi.jgame.sprite.GroupCollection;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 
@@ -17,13 +18,15 @@ public class PlatformerProjectile extends Sprite implements PlatformerEntity {
     /*
     Properties used for bullets specifically. are defined optionally.
      */
-    boolean isBullet = false;
+    public boolean isBullet = false;
     int type = 0;
-    double damage = 0;
-    PlatformerPlayer parent = null;
+    public double damage = 0;
+    public PlatformerPlayer parent = null;
 
-    long lastUpdate = System.currentTimeMillis();
-    double frameRateMult = 1;
+    public GroupCollection collidables;
+
+    protected long lastUpdate = System.currentTimeMillis();
+    protected double frameRateMult = 1;
 
     /**
      * For how many milliseconds would the projectile last before it despawns?
@@ -97,6 +100,7 @@ public class PlatformerProjectile extends Sprite implements PlatformerEntity {
         if (!isBullet) {
             return;
         }
+        requestKill();
     }
 
     /**
@@ -160,16 +164,20 @@ public class PlatformerProjectile extends Sprite implements PlatformerEntity {
     }
 
     protected void checkBounds() {
-        if (absPos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
+        if (pos.x < bounds.minCoords[0] && bounds.doCollide("-x")) { // - x
+            System.out.println("kill -x");
             requestKill();
         }
-        if (absPos.y < bounds.minCoords[1] && bounds.doCollide("-y")) { // - y
+        if (pos.y < bounds.minCoords[1] && bounds.doCollide("-y")) { // - y
+            System.out.println("kill -y");
             requestKill();
         }
-        if (pos.x + size.x / 2 > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
+        if (pos.x > bounds.maxCoords[0] && bounds.doCollide("+x")) { // + x
+            System.out.println("kill +x");
             requestKill();
         }
-        if (pos.y + size.y / 2 > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
+        if (pos.y > bounds.maxCoords[1] && bounds.doCollide("+y")) { // + y
+            System.out.println("kill +y");
             requestKill();
         }
     }
@@ -202,7 +210,7 @@ public class PlatformerProjectile extends Sprite implements PlatformerEntity {
         pos = pos.add(vel.multiply(new Vector2(frameRateMult, frameRateMult)));
         updateRect();
 
-        if (System.currentTimeMillis() - born >= projectileLife) {
+        if (now - born >= projectileLife) {
             requestKill();
         }
         lastUpdate = now;

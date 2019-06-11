@@ -83,7 +83,7 @@ public class SettingsBundle {
                 return ret;
             }
         }
-        logger.warn(fmt(JGameStr.getString("util.SettingsBundle.missingProperty"), key));
+        logger.warn(fmt("Missing resource from settings bundle: %s", key));
         return fmt("!MISSING RESOURCE: %s!", key);
     }
 

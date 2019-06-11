@@ -72,6 +72,10 @@ public class Weapon {
         // Other two cases:  Already reloading or no need to reload.
     }
 
+    public void onAmmoUpdate() {
+
+    }
+
     public void tick() {
         if (ammo <= 0 && !reloading && meter.reserve > 0 && doReloads) {
             manager.doAction(reloadAction, true, true);
@@ -94,6 +98,7 @@ public class Weapon {
         } else {
             meter.reserve -= 1;
         }
+        onAmmoUpdate();
     }
 
     public void tryFire(Vector2 target, boolean recallDamage) {
@@ -166,6 +171,7 @@ public class Weapon {
                 weapon.ammo += weapon.meter.reserve;
                 weapon.meter.reserve = 0;
             }
+            weapon.onAmmoUpdate();
         }
     }
 }

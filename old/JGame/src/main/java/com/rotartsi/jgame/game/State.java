@@ -37,7 +37,7 @@ public class State {
      * The current game that this state is running on. Effectively the state's "parent"
      * See {@link Game}
      */
-    protected Game game;
+    public Game game;
 
     /**
      * New state!

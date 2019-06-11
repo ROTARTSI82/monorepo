@@ -2,7 +2,7 @@ package com.rotartsi.jgame.mechanics;
 
 import com.rotartsi.jgame.event.AnyEvent;
 import com.rotartsi.jgame.math.Vector2;
-import com.rotartsi.jgame.sprite.Group;
+import com.rotartsi.jgame.sprite.GroupCollection;
 import com.rotartsi.jgame.sprite.Sprite;
 import com.rotartsi.jgame.util.ScreenBounds;
 import com.rotartsi.jgame.util.SettingsBundle;
@@ -34,15 +34,15 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
 
     public int climbSkill = 1;
 
-    public Vector2[] terminalVelocity = new Vector2[]{new Vector2(10 * multConst, 10 * multConst), new Vector2(-10 * multConst, -10 * multConst)};
+    public Vector2[] terminalVelocity = new Vector2[]{new Vector2(10 * multSqr, 10 * multSqr), new Vector2(-10 * multSqr, -10 * multSqr)};
 
     public SettingsBundle keybinds;
 
     protected HashMap<String, Boolean> internalState = new HashMap<>();
 
-    public Group collidables;
+    public GroupCollection collidables;
 
-    protected ScreenBounds bounds;
+    public ScreenBounds bounds;
 
     public double frictionMult = 1;
     public double climbSpeedMult = 1;
@@ -61,7 +61,7 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
         internalState.put("jump", false);
         internalState.put("climb", false);
         internalState.put("grounded", false);
-        //internalState.put("firing", false);
+        internalState.put("firing", false);
         this.bounds = bounds;
     }
 
@@ -143,11 +143,11 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
     public void updateEvent(AnyEvent event) {
         if (event.matchesString(keybinds.get("keybinds.fire.activate",
                 "id:mouse.pressed,button:1"))) {
-            // internalState.put("firing", true);
+            internalState.put("firing", true);
         }
         if (event.matchesString(keybinds.get("keybinds.fire.deactivate",
                 "id:mouse.released,button:1"))) {
-            // internalState.put("firing", false);
+            internalState.put("firing", false);
         }
         if (event.matchesString(keybinds.get("keybinds.forward.activate",
                 "id:key.pressed,keyCode:68"))) {

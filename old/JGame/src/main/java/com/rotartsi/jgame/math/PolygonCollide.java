@@ -10,6 +10,7 @@ import java.util.LinkedList;
  * Implementation of seperate axis theorem:
  * <a href="https://www.youtube.com/watch?v=Ap5eBYKlGDo">Good video resource</a>
  */
+@Deprecated
 public class PolygonCollide {
     /**
      * Origin. Where all the axes start!

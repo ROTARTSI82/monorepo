@@ -56,7 +56,7 @@ public class SurfaceMapDemo extends GameRunner {
     }
 
     static class DemoState extends State {
-        Font font = new Font("Arial", Font.PLAIN, 12);
+        Font font = new Font("Times New Roman", Font.PLAIN, 12);
         SurfaceMap map = new SurfaceMap(1000, 1000, BufferedImage.TYPE_INT_ARGB);
         Sprite player = new Sprite(ImageManager.fromText("PLAYER", font, Color.BLACK));
         Group background = new Group();

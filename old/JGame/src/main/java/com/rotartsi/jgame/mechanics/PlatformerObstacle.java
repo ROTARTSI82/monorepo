@@ -75,7 +75,7 @@ public class PlatformerObstacle extends Sprite implements PlatformerEntity {
 
     @Override
     public void damage(double amount) {
-
+        System.out.println("damage amount = " + amount);
     }
 
     @Override
