@@ -19,11 +19,12 @@ public class PlatformerObstacle extends Sprite implements PlatformerEntity {
     public Vector2 bounce = new Vector2(-5 * PlatformerPlayer.multSqr, -5 * PlatformerPlayer.multSqr);
     public double wallJumpPower = 2.5 * PlatformerPlayer.multSqr;
 
+
     public double friction = 0;
     public double climbSpeed = 0.1 * PlatformerPlayer.multConst;
 
     public double speed = 0.1 * PlatformerPlayer.multConst;
-    public double jumpPower = 2.5 * PlatformerPlayer.multSqr;
+    public double jumpPower = 0.1 * PlatformerPlayer.multConst;
     public double gravity = 0.025 * PlatformerPlayer.multConst;
 
     public boolean doBounce = true;
@@ -55,15 +56,19 @@ public class PlatformerObstacle extends Sprite implements PlatformerEntity {
 
         switch (axis) {
             case "-x": {
-                player.vel.x -= bounce.x;
-                player.vel.y -= wallJumpPower;
-                player.clampVelocity();
+                if (player.internalState.get("jump") && player.vel.y > 0) {
+                    player.vel.x -= bounce.x;
+                    player.vel.y -= wallJumpPower;
+                    player.clampVelocity();
+                }
                 break;
             }
             case "+x": {
-                player.vel.x += bounce.x;
-                player.vel.y -= wallJumpPower;
-                player.clampVelocity();
+                if (player.internalState.get("jump") && player.vel.y > 0) {
+                    player.vel.x += bounce.x;
+                    player.vel.y -= wallJumpPower;
+                    player.clampVelocity();
+                }
                 break;
             }
         }

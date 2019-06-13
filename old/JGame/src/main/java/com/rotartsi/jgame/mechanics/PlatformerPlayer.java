@@ -27,8 +27,11 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
     public double airFriction = 0.025 * multConst;
 
     public double jumpPower = 0;
-    public int jumpsLeft = 3; // TODO: add a "hold jump" feature where you jump higher if you hold space and lower if you just tap it.
-    public int maxJumpNum = 3;
+    public int jumpsLeft = 2; // TODO: add a "hold jump" feature where you jump higher if you hold space and lower if you just tap it.
+    public int maxJumpNum = 2;
+    public int baseJumpDuration = 125;
+    public int jumpDuration = 125;
+    public long jumpStart = 0;
 
     public double gravity = 0;
 
@@ -176,6 +179,7 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
     }
 
     public void updateInputState() {
+        long now = System.currentTimeMillis();
         if (internalState.get("forward")) {
             vel.x += speed * framerateSpeedMultiplier;
         }
@@ -185,14 +189,20 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
         if (internalState.get("grounded")) {
             jumpsLeft = maxJumpNum;
             if (internalState.get("jump")) {
-                vel.y -= jumpPower * getJumpWeakMult();
+                jumpDuration = (int) (baseJumpDuration * getJumpWeakMult());
+                jumpStart = now;
                 jumpsLeft -= 1;
             }
         } else {
             if (internalState.get("jump") && jumpsLeft > 0 && vel.y > 0) {
-                vel.y -= jumpPower * getJumpWeakMult();
+                jumpDuration = (int) (baseJumpDuration * getJumpWeakMult());
+                jumpStart = now;
                 jumpsLeft -= 1;
             }
+        }
+
+        if (now - jumpStart <= jumpDuration && internalState.get("jump")) {
+            vel.y -= jumpPower * framerateSpeedMultiplier;
         }
 
         if (vel.x < 0) {
@@ -210,9 +220,9 @@ public class PlatformerPlayer extends Sprite implements PlatformerEntity {
         }
 //        System.out.println("pos = " + pos);
 
-        if (internalState.get("climb")) {
-            vel.y -= climbSpeed * framerateSpeedMultiplier;
-        }
+//        if (internalState.get("climb")) {
+//            vel.y -= climbSpeed * framerateSpeedMultiplier;
+//        }
     }
 
     void checkPXCollisions() {
