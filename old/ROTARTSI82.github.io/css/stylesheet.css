@@ -78,6 +78,16 @@
 }
 
 .card-custom {
-    width: 20vw;
-    height: 20vw;
+    width: 10vw;
+    height: 10vw;
+}
+
+.table-of-contents-mod {
+    margin-top: 7.5rem;
+    margin-left: 2rem;
+    /*width: 100%;*/
+}
+
+.content-mod {
+    margin-left: 12.5%;
 }
