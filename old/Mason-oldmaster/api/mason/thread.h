@@ -8,7 +8,7 @@
 #define MASON_THREAD_H
 
 #include <thread>
-#include <memory>
+#include <iostream>
 
 namespace mason {
     class Timer {

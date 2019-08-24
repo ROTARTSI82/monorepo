@@ -9,6 +9,7 @@
 
 #include "memory"
 #include "unordered_map"
+#include <iostream>
 
 namespace mason {
     class Application;

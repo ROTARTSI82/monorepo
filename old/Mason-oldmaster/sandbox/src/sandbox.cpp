@@ -4,12 +4,12 @@
 
 #include "mason/mason.h"
 #include "mason/application.h"
-#include <iostream>
+#include "mason/log.h"
 
 class SandboxScene : public mason::Scene {
 public:
     void tick() {
-        std::cout << "Hello! Now I\'m exiting! parent=" << parent << std::endl;
+        log_warn("Hello! I'm exiting!");
         parent->stop();
     }
 };
@@ -17,17 +17,19 @@ public:
 class SandboxFactory : public mason::SceneFactory {
 public:
     mason::Scene *loadScene() {
-        std::cout << "Making new sandbox scene!" << std::endl;
+        log_warn("Loading scene...");
+        log_trace("HELLO");
         return new SandboxScene();
     }
 };
 
 int main() {
+    mason::log::init(true);
+    log_warn("Starting!");
     mason::Application *app = new mason::Application();
     app->scenes[0] = std::make_shared<SandboxFactory>();
-    app->updateScene(0);
     app->start();
     delete app;
-    std::cout << "YES WE GOT IT TO THE END" << std::endl;
+    log_warn("GOT IT TO THE END WITHOUT ERRORS!");
     return 0;
 }

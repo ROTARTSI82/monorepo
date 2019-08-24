@@ -2,20 +2,16 @@
 // Created by Grant on 2019-08-23.
 //
 
-#include <iostream>
 #include "mason/application.h"
 
 namespace mason {
-//    Application::Application() {
-//       updateScene(0);
-//    }
-
     Application::~Application() {
         currentScene->exit(-1);
         delete currentScene;
     }
 
     void Application::start() {
+        updateScene(0);
         pre();
         while (running) {
             preScene();

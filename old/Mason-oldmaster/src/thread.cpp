@@ -3,8 +3,6 @@
 //
 
 #include "mason/thread.h"
-#include "thread"
-#include <iostream>
 
 namespace mason {
     Timer::~Timer() {
