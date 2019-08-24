@@ -3,6 +3,8 @@
 #ifndef MASON_MASON_H
 #define MASON_MASON_H
 
-void hello();
+namespace mason {
+
+}
 
 #endif //MASON_MASON_H

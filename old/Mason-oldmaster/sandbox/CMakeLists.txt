@@ -10,4 +10,4 @@ target_include_directories(Sandbox PRIVATE ../include)
 target_include_directories(Sandbox PRIVATE ../src)
 target_include_directories(Sandbox PRIVATE ..)
 
-target_link_libraries(Sandbox ${PROJECT_SOURCE_DIR}/../libMason.dylib)
+target_link_libraries(Sandbox ${PROJECT_SOURCE_DIR}/../build/lib/libMason.a)
