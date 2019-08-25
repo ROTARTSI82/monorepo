@@ -14,9 +14,8 @@ namespace mason {
         updateScene(0);
         pre();
         while (running) {
-            preScene();
+            tick();
             currentScene->tick();
-            postScene();
         }
         post();
     }
@@ -32,8 +31,8 @@ namespace mason {
         }
 
         delete currentScene;
-        currentScene = scenes[newScene]->loadScene();
-        currentScene->parent = this;
+        currentScene = scenes[newScene]();
+        currentScene->app = this;
 
         if (currentScene == nullptr) {
             std::cerr << "loadScene() returned null on scene " << newScene << std::endl;

@@ -10,13 +10,11 @@ namespace mason {
     }
 
     void Timer::threadFunc(Timer *tm) {
-        tm->pre();
         while (tm->running) {
             tm->tick();
             std::this_thread::sleep_for(
                     std::chrono::milliseconds(static_cast<std::chrono::milliseconds::rep>(tm->delay)));
         }
-        tm->post();
     }
 
     void Timer::start() {

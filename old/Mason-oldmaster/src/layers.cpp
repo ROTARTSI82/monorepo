@@ -6,29 +6,6 @@
 
 namespace mason {
 
-    void AsyncEventHandler::tick() const {
-        // Make it thread safe. what if a new event gets added between event_que.front() and event_que.pop()?
-        // One event would be handled twice and another wouldn't be handled at all ;(
-        std::lock_guard<std::mutex> lck(mason::event_mtx);
-
-        if (!mason::event_que.empty()) {
-            Event *e = mason::event_que.front();
-            for (auto iter = lsparent->rbegin(); iter != lsparent->rend(); iter++) {
-                if ((*iter)->active) {
-                    (*iter)->updateEvent(e);
-                    if (e->handled) {
-                        break;
-                    }
-                }
-            }
-
-            // Event is handled and deleted
-            delete e;
-
-            mason::event_que.pop();
-        }
-    }
-
     void Layer::enable() {
         this->onEnable();
         active = true;
@@ -39,13 +16,94 @@ namespace mason {
         active = false;
     }
 
-    LayerStack::LayerStack() {
-        eventHandler->start();
+    void UpdaterGroup::threadFunc(UpdaterGroup *group, unsigned int threadNum) {
+        while (group->isRunning) {
+            group->tickFunc(group, threadNum);
+            std::this_thread::sleep_for(
+                    std::chrono::milliseconds(static_cast<std::chrono::milliseconds::rep>(group->delay)));
+        }
     }
 
-    void LayerStack::update() {
-        for (const std::shared_ptr<Layer> &layer : (*this)) {
-            layer->update();
+    void UpdaterGroup::stop() {
+        isRunning = false;
+        for (int i = 0; i < numThreads; i++) {
+            // TODO: Decide whether to join or detach the threads.
+            if ((*(threads + i)).joinable()) {
+                (*(threads + i)).join();
+            }
+
+            // This probably isn't necessary due to delete[] threads;
+            delete (threads + i);
+        }
+        delete[] threads;
+    }
+
+    void UpdaterGroup::start() {
+        isRunning = true;
+        for (int i = 0; i < numThreads; i++) {
+            (*(threads + i)) = std::thread(threadFunc, this, i); // Maybe use new?
+        }
+    }
+
+    UpdaterGroup::UpdaterGroup(void (*func)(mason::UpdaterGroup *, unsigned int), unsigned int nthreads,
+                               unsigned int del,
+                               LayerStack *par) : tickFunc(func), numThreads(nthreads), delay(del), stack(par) {
+        threads = new std::thread[numThreads];
+    }
+
+    UpdaterGroup::~UpdaterGroup() {
+        stop();
+    }
+
+    void LayerStack::eventTick(UpdaterGroup *gp, unsigned int tn) {
+        Event *e;
+        mason::event_mtx.lock();
+        if (!mason::event_que.empty()) {
+            e = mason::event_que.front();
+            mason::event_que.pop();
+            mason::event_mtx.unlock();
+
+            for (auto iter = gp->stack->rbegin(); iter != gp->stack->rend(); iter++) {
+                if ((*iter)->active) {
+                    (*iter)->updateEvent(e);
+                    if (e->handled) {
+                        break;
+                    }
+                }
+            }
+
+            // Event is handled and deleted
+            delete e;
+        } else {
+            mason::event_mtx.unlock();
+        }
+    }
+
+    void
+    LayerStack::addUpdaterGroup(void(*func)(UpdaterGroup *, unsigned int), unsigned int threads, unsigned int del) {
+        updaterGroups.push_back(new UpdaterGroup(func, threads, del, this));
+    }
+
+    void LayerStack::startUpdaters() {
+        for (UpdaterGroup *g : updaterGroups) {
+            g->start();
+        }
+    }
+
+    void LayerStack::stopUpdaters() {
+        for (UpdaterGroup *g : updaterGroups) {
+            g->stop();
+        }
+    }
+
+    LayerStack::~LayerStack() {
+        for (UpdaterGroup *g : updaterGroups) {
+            g->stop();
+            delete g;
+        }
+
+        for (Layer *l : *this) {
+            delete l;
         }
     }
 

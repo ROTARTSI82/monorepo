@@ -8,20 +8,21 @@
 #define MASON_APPLICATION_H
 
 #include "mason/masonpch.h"
+#include "mason/layers.h"
 
 namespace mason {
     class Application;
 
     class Scene;
 
-    class SceneFactory {
-    public:
-        virtual Scene *loadScene() = 0;
-    };
-
     class Scene {
     public:
-        Application *parent = nullptr;  // Use raw pointers b/c there should only be 1 app obj at any time.
+        Application *app = nullptr;  // Use raw pointers b/c there should only be 1 app obj at any time.
+        mason::LayerStack *stack = new LayerStack();
+
+        ~Scene() {
+            delete stack;
+        };
 
         virtual void enter(int prevScene) {};
 
@@ -34,8 +35,9 @@ namespace mason {
     public:
         int sceneID = -1;
         Scene *currentScene = nullptr;
-        std::unordered_map<int, std::shared_ptr<SceneFactory>> scenes;
-        bool running = true;
+        // An unordered map of function pointers...
+        std::unordered_map<int, Scene *(*)()> scenes;
+        volatile bool running = true;
 
         Application() = default;
 
@@ -49,9 +51,7 @@ namespace mason {
 
         virtual void pre() {};
 
-        virtual void preScene() {};
-
-        virtual void postScene() {};
+        virtual void tick() {};
 
         virtual void post() {};
     };

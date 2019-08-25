@@ -8,6 +8,7 @@
 #define MASON_THREAD_H
 
 #include "mason/masonpch.h"
+#include "mason/mason.h"
 
 namespace mason {
     class Timer {
@@ -15,7 +16,7 @@ namespace mason {
         static void threadFunc(Timer *tm);
 
         std::thread *thread = nullptr;
-        bool running = true;
+        bool running = false;
         unsigned int delay = 0;
 
         explicit Timer(unsigned int wait) : delay(wait) {};
@@ -23,11 +24,7 @@ namespace mason {
         Timer() = default;
         ~Timer();
 
-        virtual void pre() const {};
-
         virtual void tick() const {};
-
-        virtual void post() const {};
 
         void start();
 
