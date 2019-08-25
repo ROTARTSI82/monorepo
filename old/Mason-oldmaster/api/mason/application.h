@@ -7,9 +7,7 @@
 #ifndef MASON_APPLICATION_H
 #define MASON_APPLICATION_H
 
-#include "memory"
-#include "unordered_map"
-#include <iostream>
+#include "mason/masonpch.h"
 
 namespace mason {
     class Application;

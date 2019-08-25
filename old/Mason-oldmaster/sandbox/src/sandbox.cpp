@@ -8,7 +8,7 @@
 
 class SandboxScene : public mason::Scene {
 public:
-    void tick() {
+    void tick() override {
         log_warn("Hello! I'm exiting!");
         parent->stop();
     }
@@ -16,7 +16,7 @@ public:
 
 class SandboxFactory : public mason::SceneFactory {
 public:
-    mason::Scene *loadScene() {
+    mason::Scene *loadScene() override {
         log_warn("Loading scene...");
         log_trace("HELLO");
         return new SandboxScene();

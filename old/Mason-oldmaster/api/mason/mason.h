@@ -3,11 +3,9 @@
 #ifndef MASON_MASON_H
 #define MASON_MASON_H
 
-#define MASON_DEBUG_MODE
+#include "mason/masonpch.h"
 
-//#include "log.h"
-//#include "application.h"
-//#include "thread.h"
+#define MASON_DEBUG_MODE
 
 namespace mason {}
 

@@ -5,6 +5,7 @@
     <excludeRoots>
       <file path="$PROJECT_DIR$/build" />
       <file path="$PROJECT_DIR$/include" />
+      <file path="$PROJECT_DIR$/lib" />
       <file path="$PROJECT_DIR$/sandbox/CMakeFiles" />
       <file path="$PROJECT_DIR$/sandbox/build" />
       <file path="$PROJECT_DIR$/vendor" />

@@ -7,19 +7,8 @@
 #ifndef MASON_LOG_H
 #define MASON_LOG_H
 
-#include <iostream>
-#include <ctime>
-#include <iomanip>
-#include <sstream>
-#include <unordered_map>
-
-#include "mason.h"
-
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
+#include "mason/masonpch.h"
+#include "mason/mason.h"
 
 #ifndef MASON_DEBUG_MODE
 #define log_trace(...)
