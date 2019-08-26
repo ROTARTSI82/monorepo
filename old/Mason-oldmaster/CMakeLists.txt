@@ -22,7 +22,7 @@ ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 
 ADD_MSVC_PRECOMPILED_HEADER("api/mason/masonpch.h" "src/masonpch.cpp" PCHSrc)
 add_library(Mason src/mason.cpp src/application.cpp src/thread.cpp src/log.cpp src/masonpch.cpp ${PCHSrc}
-        api/mason/log.h api/mason/application.h api/mason/layers.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h src/layers.cpp api/mason/event.h src/event.cpp)
+        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}

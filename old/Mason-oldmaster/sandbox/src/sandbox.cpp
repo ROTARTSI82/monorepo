@@ -9,30 +9,38 @@
 class SandboxLayer : public mason::Layer {
 public:
     int num = 0;
+    int scene = 0;
     int count = 0;
 
-    SandboxLayer(int n) : num(n) {
+    SandboxLayer(int n, int sn) : num(n), scene(sn) {
 
     }
 
-    void updateLogic(unsigned int tn) override {
-        log_warn("logic update {} thread {} layer {}", count, tn, num);
+    void updateLogic(mason::UpdaterGroup *gp, unsigned int tn) override {
+        log_warn("scene {} logic update {} thread {} layer {}", scene, count, tn, num);
         count++;
+        if (count > 5) {
+            gp->stack->scene->app->requestedScene = (scene == 1 ? 1 : 0);
+        }
     }
 };
 
 void func(mason::UpdaterGroup *g, unsigned int tn) {
     for (mason::Layer *l : *(g->stack)) {
-        l->updateLogic(tn);
+        l->updateLogic(g, tn);
     }
 }
 
 class SandboxScene : public mason::Scene {
 public:
+    int num;
+
+    SandboxScene(int n) : num(n) {}
+
     void enter(int prev) override {
-        stack->push_back(new SandboxLayer(1));
-        stack->push_back(new SandboxLayer(2));
-        stack->addUpdaterGroup(func, 2, 1000);
+        stack->push_back(new SandboxLayer(1, num));
+        stack->push_back(new SandboxLayer(2, num));
+        stack->addUpdaterGroup(func, 5, 0);
         stack->startUpdaters();
     }
     void tick() override {
@@ -43,14 +51,19 @@ public:
 mason::Scene *loadScene() {
     log_warn("Loading scene...");
     log_trace("nou");
-    return new SandboxScene();
+    return new SandboxScene(1);
 }
+
+mason::Scene *scene2() {
+    return new SandboxScene(2);
+};
 
 int main() {
     mason::log::init(true);
     log_warn("Starting!");
     mason::Application *app = new mason::Application();
     app->scenes[0] = loadScene;
+    app->scenes[1] = scene2;
     app->start();
     delete app;
     log_warn("GOT IT TO THE END WITHOUT ERRORS!");
