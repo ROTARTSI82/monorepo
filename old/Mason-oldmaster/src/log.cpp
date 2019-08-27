@@ -41,14 +41,15 @@ namespace mason::log {
             spdlog::set_level(spdlog::level::trace);
             spdlog::set_pattern("%v");
 
-            log_info("================================[NEW LOGGING SESSION | {}]================================",
-                     oss.str());
+                    MASON_INFO(
+                    "================================[NEW LOGGING SESSION | {}]================================",
+                    oss.str());
 
             spdlog::set_pattern(patternStr);
 
             spdlog::set_error_handler([](const std::string &msg) {
                 std::cerr << "[** LOG ERROR **]: " << msg << std::endl;
-                log_warn("[** LOG ERROR **]: {}", msg);
+                        MASON_WARN("[** LOG ERROR **]: {}", msg);
             });
         }
         catch (const spdlog::spdlog_ex &ex) {

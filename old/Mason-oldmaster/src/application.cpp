@@ -66,6 +66,14 @@ namespace mason {
         stop();
     }
 
+    Scene::Scene() {
+        stack->scene = this;
+    }
+
+    Scene::~Scene() {
+        delete stack;
+    }
+
     void LayerStack::eventTick(UpdaterGroup *gp, unsigned int tn) {
         Event *e;
         mason::event_mtx.lock();
@@ -137,7 +145,7 @@ namespace mason {
         pre();
         while (running) {
             if (requestedScene != sceneID) {
-                std::cout << "Scene " << requestedScene << " was requested" << std::endl;
+//                std::cout << "Scene " << requestedScene << " was requested" << std::endl;
                 updateScene(requestedScene);
             }
 

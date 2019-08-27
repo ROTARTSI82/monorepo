@@ -91,13 +91,9 @@ namespace mason {
         Application *app = nullptr;  // Use raw pointers b/c there should only be 1 app obj at any time.
         LayerStack *stack = new LayerStack();;
 
-        Scene() {
-            stack->scene = this;
-        }
+        Scene();
 
-        ~Scene() {
-            delete stack;
-        };
+        ~Scene();
 
         virtual void enter(int prevScene) {};
 

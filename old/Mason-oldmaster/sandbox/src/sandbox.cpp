@@ -17,7 +17,7 @@ public:
     }
 
     void updateLogic(mason::UpdaterGroup *gp, unsigned int tn) override {
-        log_warn("scene {} logic update {} thread {} layer {}", scene, count, tn, num);
+//        log_warn("scene {} logic update {} thread {} layer {}", scene, count, tn, num);
         count++;
         if (count > 5) {
             gp->stack->scene->app->requestedScene = (scene == 1 ? 1 : 0);
@@ -49,8 +49,8 @@ public:
 };
 
 mason::Scene *loadScene() {
-    log_warn("Loading scene...");
-    log_trace("nou");
+//    log_warn("Loading scene...");
+//    log_trace("nou");
     return new SandboxScene(1);
 }
 
@@ -60,12 +60,12 @@ mason::Scene *scene2() {
 
 int main() {
     mason::log::init(true);
-    log_warn("Starting!");
+            MASON_WARN("Starting!");
     mason::Application *app = new mason::Application();
     app->scenes[0] = loadScene;
     app->scenes[1] = scene2;
     app->start();
     delete app;
-    log_warn("GOT IT TO THE END WITHOUT ERRORS!");
+            MASON_WARN("GOT IT TO THE END WITHOUT ERRORS!");
     return 0;
 }

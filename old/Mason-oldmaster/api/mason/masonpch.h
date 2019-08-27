@@ -16,6 +16,9 @@
 #include <vector>
 #include <queue>
 
+#include "GLFW/glfw3.h"
+#include "GL/glew.h"
+
 #include "mason/event.h"
 
 
