@@ -13,11 +13,10 @@ namespace mason {
     class Event {
     public:
         bool handled = false;
-        std::string name = "Generic Event";
     };
 
-    extern std::queue<Event *> event_que;
-    extern std::mutex event_mtx;
+    extern std::queue<Event *> eventQueue;
+    extern std::mutex eventMtx;
 }
 
 #endif //MASON_EVENT_H

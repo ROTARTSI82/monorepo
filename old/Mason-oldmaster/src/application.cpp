@@ -48,6 +48,7 @@ namespace mason {
 
 //            delete t;
         }
+        threads.clear();
     }
 
     void UpdaterGroup::start() {
@@ -76,11 +77,11 @@ namespace mason {
 
     void LayerStack::eventTick(UpdaterGroup *gp, unsigned int tn) {
         Event *e;
-        mason::event_mtx.lock();
-        if (!mason::event_que.empty()) {
-            e = mason::event_que.front();
-            mason::event_que.pop();
-            mason::event_mtx.unlock();
+        mason::eventMtx.lock();
+        if (!mason::eventQueue.empty()) {
+            e = mason::eventQueue.front();
+            mason::eventQueue.pop();
+            mason::eventMtx.unlock();
 
             for (auto iter = gp->stack->rbegin(); iter != gp->stack->rend(); iter++) {
                 if ((*iter)->active) {
@@ -94,7 +95,7 @@ namespace mason {
             // Event is handled and deleted
             delete e;
         } else {
-            mason::event_mtx.unlock();
+            mason::eventMtx.unlock();
         }
     }
 
@@ -136,6 +137,7 @@ namespace mason {
     }
 
     Application::~Application() {
+        running = false;
         currentScene->exit(-1);
         delete currentScene;
     }

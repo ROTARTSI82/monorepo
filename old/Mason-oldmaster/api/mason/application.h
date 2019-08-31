@@ -20,7 +20,7 @@ namespace mason {
     public:
         Layer() = default;
 
-        ~Layer() = default;
+        virtual ~Layer() = default;
 
         bool active = false;
 
@@ -89,7 +89,7 @@ namespace mason {
     class Scene {
     public:
         Application *app = nullptr;  // Use raw pointers b/c there should only be 1 app obj at any time.
-        LayerStack *stack = new LayerStack();;
+        LayerStack *stack = new LayerStack();
 
         Scene();
 
@@ -122,11 +122,11 @@ namespace mason {
 
         void updateScene(int newScene);
 
-        virtual void pre() {};
+        virtual void pre() = 0;
 
-        virtual void tick() {};
+        virtual void tick() = 0;
 
-        virtual void post() {};
+        virtual void post() = 0;
     };
 }
 

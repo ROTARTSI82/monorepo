@@ -4,63 +4,79 @@
 
 #pragma once
 
-#ifndef MASON_WINDOW_H
-#define MASON_WINDOW_H
+#ifndef MASON_OPENGL_WINDOW_H
+#define MASON_OPENGL_WINDOW_H
 
 #include "mason/masonpch.h"
 #include "mason/log.h"
+#include "mason/mason.h"
+
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 namespace mason::gl {
-    class Window {
+    class GLWindow : public mason::Window {
     public:
         GLFWwindow *win = nullptr;
+        GLFWmonitor *monitor = nullptr;
 
-        Window(int w = 640, int h = 480, const char *t = "Mason Engine", GLFWmonitor *m = nullptr,
+        explicit GLWindow(int w = 0, int h = 0, const char *t = "Mason Engine", GLFWmonitor *m = nullptr,
                GLFWwindow *s = nullptr);
 
-        ~Window();
+        explicit GLWindow(GLWindow *parent);
 
-        void bind();
+        ~GLWindow() override;
 
-        void clear();
+        void bind() override;
 
-        void flip();
+        bool shouldClose() override;
 
-        bool isClosed();
+        void clear() override;
+
+        void submitRender() override {};
+
+        void asyncSubmitRender() override {};
+
+        void destroy() override;
+
+        void flip() override;
     };
 
-    bool glewHasInit = false;
-    bool glfwHasInit = false;
+    std::vector<std::thread::id> glewInitThreads;
+    std::vector<std::thread::id> glfwInitThreads;
 
-    void initGlew() {  // Only call this after you have a valid window
-        if (glewHasInit) {
-                    MASON_WARN("Tried to call mason::gl::initGlew() when glew has already been init! Ignoring call...");
+    void initGLEW() {  // Only call this after you have a valid window
+        if (std::find(glewInitThreads.begin(), glewInitThreads.end(), std::this_thread::get_id()) !=
+            glewInitThreads.end()) {
             return;
         }
 
         glewExperimental = GL_TRUE;
         GLenum glew = glewInit();
         if (glew != GLEW_OK) {
-                    MASON_CRITICAL("Failed to init GLEW: glewInit() = {}", glew);
+            MASON_CRITICAL("Failed to init GLEW: glewInit() = {}", glew)
             std::terminate();
         }
-                MASON_INFO("Successfully init GLEW {}", glewGetString(GLEW_VERSION));
-        glewHasInit = true;
+        MASON_INFO("Successfully init GLEW {}", glewGetString(GLEW_VERSION))
+        std::cout << "init glew for " << std::this_thread::get_id() << std::endl;
+        glewInitThreads.push_back(std::this_thread::get_id());
     }
 
     void initGLFW() {
-        if (glfwHasInit) {
-                    MASON_WARN("Tried to call mason::gl::initGLFW() when GLFW has already been init! Ignoring call...");
+        // If this thread's id is in glfwInitThreads, return.
+        if (std::find(glfwInitThreads.begin(), glfwInitThreads.end(), std::this_thread::get_id()) !=
+            glfwInitThreads.end()) {
             return;
         }
 
         int stat = glfwInit();
         if (!stat) {
-                    MASON_CRITICAL("Failed to init GLFW: glfwInit() = {}", stat);
+            MASON_CRITICAL("Failed to init GLFW: glfwInit() = {}", stat)
             std::terminate();
         }
-                MASON_INFO("Successfully init GLFW {}", glfwGetVersionString());
-        glfwHasInit = true;
+        MASON_INFO("Successfully init GLFW {}", glfwGetVersionString())
+        std::cout << "init glfw for " << std::this_thread::get_id() << std::endl;
+        glfwInitThreads.push_back(std::this_thread::get_id());
     }
 }
 

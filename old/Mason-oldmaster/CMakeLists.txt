@@ -4,7 +4,14 @@ project(Mason VERSION 1.0.0 DESCRIPTION "Mason description")
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(OpenGL REQUIRED)
+find_library(COCOA_LIBRARY Cocoa)
+
 include(GNUInstallDirs)
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar)
     IF (MSVC)
@@ -47,8 +54,6 @@ set_target_properties(MasonShare PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/lib"
         RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/bin"
         )
-#        PUBLIC_HEADER ${PROJECT_SOURCE_DIR}/api/mason/mason.h ${PROJECT_SOURCE_DIR}/api/mason/event.h ${PROJECT_SOURCE_DIR}/api/mason/log.h
-#        ${PROJECT_SOURCE_DIR}/api/mason/application.h ${PROJECT_SOURCE_DIR}/api/mason/masonpch.h ${PROJECT_SOURCE_DIR}/api/mason/thread.h)
 
 configure_file(${PROJECT_SOURCE_DIR}/build/mason.pc.in ${PROJECT_SOURCE_DIR}/build/mason.pc @ONLY)
 
@@ -57,10 +62,24 @@ target_include_directories(Mason PRIVATE api)
 target_include_directories(Mason PRIVATE include)
 target_include_directories(Mason PUBLIC .)
 
+target_include_directories(Mason PUBLIC ${OPENGL_INCLUDE_DIR})
+
 target_include_directories(MasonShare PUBLIC src)
 target_include_directories(MasonShare PRIVATE api)
 target_include_directories(MasonShare PRIVATE include)
 target_include_directories(MasonShare PUBLIC .)
+
+target_include_directories(MasonShare PUBLIC ${OPENGL_INCLUDE_DIR})
+
+target_link_libraries(Mason PUBLIC ${COCOA_LIBRARY})
+target_link_libraries(Mason PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw3.a)
+target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a ${PROJECT_SOURCE_DIR}/lib/libGLEW.a ${PROJECT_SOURCE_DIR}/lib/libglm_static.a)
+
+target_link_libraries(MasonShare PUBLIC ${COCOA_LIBRARY})
+target_link_libraries(MasonShare PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.3.dylib)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib ${PROJECT_SOURCE_DIR}/lib/libglm_shared.dylib)
 
 
 install(TARGETS Mason
@@ -73,8 +92,3 @@ install(TARGETS MasonShare
 
 install(FILES ${PROJECT_SOURCE_DIR}/build/mason.pc
         DESTINATION ${PROJECT_SOURCE_DIR}/build/pkgconfig)
-
-
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a ${PROJECT_SOURCE_DIR}/lib/libglfw3.a ${PROJECT_SOURCE_DIR}/lib/libGLEW.a ${PROJECT_SOURCE_DIR}/lib/libglm_static.a)
-target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib ${PROJECT_SOURCE_DIR}/lib/libglfw.3.dylib ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib ${PROJECT_SOURCE_DIR}/lib/libglm_shared.dylib)
-

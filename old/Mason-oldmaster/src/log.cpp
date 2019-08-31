@@ -43,13 +43,13 @@ namespace mason::log {
 
                     MASON_INFO(
                     "================================[NEW LOGGING SESSION | {}]================================",
-                    oss.str());
+                    oss.str())
 
             spdlog::set_pattern(patternStr);
 
             spdlog::set_error_handler([](const std::string &msg) {
                 std::cerr << "[** LOG ERROR **]: " << msg << std::endl;
-                        MASON_WARN("[** LOG ERROR **]: {}", msg);
+                MASON_WARN("[** SPDLOG ERROR **]: {}", msg)
             });
         }
         catch (const spdlog::spdlog_ex &ex) {

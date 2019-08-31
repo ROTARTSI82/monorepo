@@ -3,8 +3,30 @@
 //
 
 #include "mason/mason.h"
+#include "mason/gl/window.h"
 #include "mason/application.h"
 #include "mason/log.h"
+
+class SandboxApplication : public mason::Application {
+public:
+    mason::gl::GLWindow *window;
+
+    SandboxApplication() {
+        window = new mason::gl::GLWindow();
+    }
+
+    ~SandboxApplication() {
+        delete window;
+    }
+
+    void pre() override {};
+
+    void tick() override {};
+
+    void post() override {};
+};
+
+SandboxApplication *globalApp;
 
 class SandboxLayer : public mason::Layer {
 public:
@@ -23,6 +45,12 @@ public:
             gp->stack->scene->app->requestedScene = (scene == 1 ? 1 : 0);
         }
     }
+
+    ~SandboxLayer() {
+//        for (mason::gl::GLWindow* win : slaves) {
+//            delete win;
+//        }
+    }
 };
 
 void func(mason::UpdaterGroup *g, unsigned int tn) {
@@ -40,10 +68,16 @@ public:
     void enter(int prev) override {
         stack->push_back(new SandboxLayer(1, num));
         stack->push_back(new SandboxLayer(2, num));
-        stack->addUpdaterGroup(func, 5, 0);
+        stack->addUpdaterGroup(func, 1, 0);
         stack->startUpdaters();
     }
     void tick() override {
+        globalApp->window->clear();
+        globalApp->window->flip();
+
+        if (globalApp->window->shouldClose()) {
+            globalApp->stop();
+        }
 //        log_warn("Hello! Tick is executing!");
     }
 };
@@ -61,11 +95,13 @@ mason::Scene *scene2() {
 int main() {
     mason::log::init(true);
             MASON_WARN("Starting!");
-    mason::Application *app = new mason::Application();
-    app->scenes[0] = loadScene;
-    app->scenes[1] = scene2;
-    app->start();
-    delete app;
-            MASON_WARN("GOT IT TO THE END WITHOUT ERRORS!");
+    globalApp = new SandboxApplication();
+    globalApp->scenes[0] = loadScene;
+    globalApp->scenes[1] = scene2;
+    globalApp->start();
+    delete globalApp;
+    MASON_WARN("GOT IT TO THE END WITHOUT ERRORS!");
+
+    glfwTerminate();
     return 0;
 }

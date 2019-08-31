@@ -28,16 +28,6 @@
 #define MASON_FATAL SPDLOG_CRITICAL
 #endif // MASON_DEBUG_MODE
 
-#define FG_RED "\033[31m"
-#define FG_GREEN "\033[32m"
-#define FG_BLUE "\033[34m"
-#define FG_RESET "\033[39m"
-
-#define BG_RED "\033[41m"
-#define BG_GREEN "\033[42m"
-#define BG_BLUE "\033[44m"
-#define BG_RESET "\033[49m"
-
 namespace mason::log {
     void init(bool singleFileMode);
 }
