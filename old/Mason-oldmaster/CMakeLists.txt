@@ -33,9 +33,9 @@ ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 ADD_MSVC_PRECOMPILED_HEADER("api/mason/masonpch.h" "src/masonpch.cpp" PCHSrc)
 
 add_library(Mason STATIC src/mason.cpp src/application.cpp src/thread.cpp src/log.cpp src/masonpch.cpp ${PCHSrc}
-        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp)
+        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp)
 add_library(MasonShare SHARED src/mason.cpp src/application.cpp src/thread.cpp src/log.cpp src/masonpch.cpp ${PCHSrc}
-        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp)
+        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -74,12 +74,14 @@ target_include_directories(MasonShare PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(Mason PUBLIC ${COCOA_LIBRARY})
 target_link_libraries(Mason PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw3.a)
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a ${PROJECT_SOURCE_DIR}/lib/libGLEW.a ${PROJECT_SOURCE_DIR}/lib/libglm_static.a)
+target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a ${PROJECT_SOURCE_DIR}/lib/libGLEW.a)
+#target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglm_static.a)
 
 target_link_libraries(MasonShare PUBLIC ${COCOA_LIBRARY})
 target_link_libraries(MasonShare PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.3.dylib)
-target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib ${PROJECT_SOURCE_DIR}/lib/libglm_shared.dylib)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib)
+#target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglm_shared.dylib)
 
 
 install(TARGETS Mason

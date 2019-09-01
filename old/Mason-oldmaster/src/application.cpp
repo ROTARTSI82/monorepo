@@ -146,9 +146,9 @@ namespace mason {
         updateScene(0);
         pre();
         while (running) {
-            if (requestedScene != sceneID) {
-//                std::cout << "Scene " << requestedScene << " was requested" << std::endl;
+            if (loadScene) {
                 updateScene(requestedScene);
+                loadScene = false;
             }
 
             tick();
@@ -176,6 +176,5 @@ namespace mason {
         }
         currentScene->enter(sceneID);
         sceneID = newScene;
-        requestedScene = newScene;
     }
 }

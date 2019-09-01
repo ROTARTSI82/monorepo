@@ -10,74 +10,77 @@
 #include "mason/masonpch.h"
 #include "mason/log.h"
 #include "mason/mason.h"
+#include "mason/gl/texture.h"
+#include "mason/gl/gl_objects.h"
+#include "mason/gl/shaders.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace mason::gl {
-    class GLWindow : public mason::Window {
+
+    struct Model {
+        VertexArray *vao;
+        VertexBuffer *vbo;
+        IndexBuffer *ibo;
+        GLenum drawMode;
+    };
+
+    struct GameObject {
+        Model *model;
+        ShaderProgram *shader;
+        Texture2D *texture;
+        glm::mat4 transform;
+
+        void (*preRender)();
+    };
+
+    class GLWindow {
     public:
         GLFWwindow *win = nullptr;
         GLFWmonitor *monitor = nullptr;
+
+        glm::mat4 view = glm::mat4(1.0);
+        glm::mat4 projection = glm::mat4(1.0);
+
+        std::vector<GameObject *> renderQueue;
+
+        double lastFrame = 0;
+        double deltaTime = 0;
+
+        bool useVAOs = false;
+
+        glm::vec4 clearColor = glm::vec4(1.0);
 
         explicit GLWindow(int w = 0, int h = 0, const char *t = "Mason Engine", GLFWmonitor *m = nullptr,
                GLFWwindow *s = nullptr);
 
         explicit GLWindow(GLWindow *parent);
 
-        ~GLWindow() override;
+        ~GLWindow();
 
-        void bind() override;
+        void bind();
 
-        bool shouldClose() override;
+        void draw(GameObject *obj);
 
-        void clear() override;
+        void drawAll();
 
-        void submitRender() override {};
+        bool shouldClose();
 
-        void asyncSubmitRender() override {};
+        void clear();
 
-        void destroy() override;
+        void setClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a);
 
-        void flip() override;
+        void flip();
     };
 
-    std::vector<std::thread::id> glewInitThreads;
-    std::vector<std::thread::id> glfwInitThreads;
+    void initGLEW();
 
-    void initGLEW() {  // Only call this after you have a valid window
-        if (std::find(glewInitThreads.begin(), glewInitThreads.end(), std::this_thread::get_id()) !=
-            glewInitThreads.end()) {
-            return;
-        }
+    void initGL();
 
-        glewExperimental = GL_TRUE;
-        GLenum glew = glewInit();
-        if (glew != GLEW_OK) {
-            MASON_CRITICAL("Failed to init GLEW: glewInit() = {}", glew)
-            std::terminate();
-        }
-        MASON_INFO("Successfully init GLEW {}", glewGetString(GLEW_VERSION))
-        std::cout << "init glew for " << std::this_thread::get_id() << std::endl;
-        glewInitThreads.push_back(std::this_thread::get_id());
-    }
-
-    void initGLFW() {
-        // If this thread's id is in glfwInitThreads, return.
-        if (std::find(glfwInitThreads.begin(), glfwInitThreads.end(), std::this_thread::get_id()) !=
-            glfwInitThreads.end()) {
-            return;
-        }
-
-        int stat = glfwInit();
-        if (!stat) {
-            MASON_CRITICAL("Failed to init GLFW: glfwInit() = {}", stat)
-            std::terminate();
-        }
-        MASON_INFO("Successfully init GLFW {}", glfwGetVersionString())
-        std::cout << "init glfw for " << std::this_thread::get_id() << std::endl;
-        glfwInitThreads.push_back(std::this_thread::get_id());
-    }
+    void initGLFW();
 }
 
 #endif //MASON_WINDOW_H

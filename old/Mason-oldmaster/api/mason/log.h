@@ -28,6 +28,10 @@
 #define MASON_FATAL SPDLOG_CRITICAL
 #endif // MASON_DEBUG_MODE
 
+namespace mason {
+    void logAssert(bool condition, const std::string &log);
+}
+
 namespace mason::log {
     void init(bool singleFileMode);
 }

@@ -5,6 +5,51 @@
 #include "mason/gl/window.h"
 
 namespace mason::gl {
+    void initGLEW() {  // Only call this after you have a valid window
+        glewExperimental = GL_TRUE;
+        GLenum glew = glewInit();
+        if (glew != GLEW_OK) {
+            MASON_CRITICAL("Failed to init GLEW: glewInit() = {}", glew)
+            std::terminate();
+        }
+        MASON_INFO("Successfully init GLEW {}", glewGetString(GLEW_VERSION))
+    }
+
+    void initGL() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendEquation(GL_ADD);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+
+//        glEnable(GL_STENCIL_TEST);
+//        glStencilMask(0x00);  // Everything gets written as-is
+//        glStencilFunc(GL_ALWAYS, 0, 0x00);  // Everything passes
+//        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);  // Keep everything
+
+        Texture2D::activateSlot(GL_TEXTURE0);
+
+        MASON_INFO("Initialized OpenGL {}", glGetString(GL_VERSION))
+        MASON_INFO("OpenGL Vendor: {}", glGetString(GL_VENDOR))
+        MASON_INFO("GL Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION))
+        MASON_INFO("OpenGL Extensions: {}", glGetString(GL_EXTENSIONS))
+    }
+
+    void initGLFW() {
+
+        int stat = glfwInit();
+        if (!stat) {
+            MASON_CRITICAL("Failed to init GLFW: glfwInit() = {}", stat)
+            std::terminate();
+        }
+        MASON_INFO("Successfully init GLFW {}", glfwGetVersionString())
+    }
+
     GLWindow::GLWindow(int width, int height, const char *title, GLFWmonitor *mon, GLFWwindow *share) {
 
         initGLFW();
@@ -31,9 +76,7 @@ namespace mason::gl {
             height = mode->height;
         }
 
-        std::cout << "bf win = " << win << std::endl;
         win = glfwCreateWindow(width, height, title, mon, share);
-        std::cout << "af win = " << win << std::endl;
         if (!win) {
             MASON_CRITICAL("Failed to create window! Terminating...");
             glfwTerminate();
@@ -41,8 +84,8 @@ namespace mason::gl {
         }
 
         bind();
-
         initGLEW();
+        initGL();
     }
 
     GLWindow::GLWindow(mason::gl::GLWindow *parent) {
@@ -68,23 +111,19 @@ namespace mason::gl {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         win = glfwCreateWindow(width, height, "ThreadSlave", parent->monitor, parent->win);
         if (!win) {
-            MASON_FATAL("NOOO! win slave is null!");
+            MASON_FATAL("Failed to copy window! Ignoring.")
         }
 
         bind();
         initGLEW();
+        initGL();
     }
 
     GLWindow::~GLWindow() {
-        destroy();
-    }
-
-    void GLWindow::destroy() {
         if (win != nullptr) {
             glfwDestroyWindow(win);
         }
     }
-
     void GLWindow::bind() {
         glfwMakeContextCurrent(win);
     }
@@ -95,12 +134,49 @@ namespace mason::gl {
 
     void GLWindow::clear() {
         bind();
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        double now = glfwGetTime();
+        deltaTime = now - lastFrame;
+        lastFrame = now;
     }
 
     void GLWindow::flip() {
         bind();
         glfwSwapBuffers(win);
         glfwPollEvents();
+    }
+
+    void GLWindow::setClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a) {
+        clearColor = {r, g, b, a};
+    }
+
+    void GLWindow::draw(GameObject *obj) {
+        if (useVAOs) {
+            obj->model->vbo->bind();
+            obj->model->vao->bind();
+        } else {
+            obj->model->vbo->reloadLayout();
+        }
+
+        obj->model->ibo->bind();
+        obj->shader->bind();
+        Texture2D::activateSlot(GL_TEXTURE0);
+        obj->texture->bind();
+        obj->shader->setUniform1i("u_Texture", 0);
+        obj->shader->setUniformMat4f("u_ModelMatrix", obj->transform);
+        obj->shader->setUniformMat4f("u_ViewMatrix", view);
+        obj->shader->setUniformMat4f("u_ProjectionMatrix", projection);
+
+        obj->preRender();
+
+        glDrawElements(obj->model->drawMode, obj->model->ibo->count, obj->model->ibo->dataType, nullptr);
+    }
+
+    void GLWindow::drawAll() {
+        for (GameObject *go : renderQueue) {
+            draw(go);
+        }
     }
 }

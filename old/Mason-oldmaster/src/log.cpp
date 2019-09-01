@@ -5,8 +5,16 @@
 #include "mason/log.h"
 
 //struct stat info;
+namespace mason {
+    void logAssert(bool condition, const std::string &log) {
+        if (!condition) {
+            MASON_WARN("Assert Failed: {}", log)
+        }
+    }
+}
 
 #ifdef MASON_DEBUG_MODE
+
 namespace mason::log {
     void init(bool singleFileMode) {
         try {

@@ -15,6 +15,7 @@
 #include <memory>
 #include <vector>
 #include <queue>
+#include <fstream>
 
 
 #include "mason/event.h"

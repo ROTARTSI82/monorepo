@@ -111,6 +111,7 @@ namespace mason {
         volatile bool running = true;
 
         volatile int requestedScene = -1;
+        volatile bool loadScene = false;
 
         Application() = default;
 
