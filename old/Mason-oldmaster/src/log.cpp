@@ -56,12 +56,13 @@ namespace mason::log {
             spdlog::set_pattern(patternStr);
 
             spdlog::set_error_handler([](const std::string &msg) {
-                std::cerr << "[** LOG ERROR **]: " << msg << std::endl;
-                MASON_WARN("[** SPDLOG ERROR **]: {}", msg)
+                std::cerr << "[** SPDLOG ERROR **]: " << msg << std::endl;
+                MASON_CRITICAL("[** SPDLOG ERROR **]: {}", msg)
             });
         }
         catch (const spdlog::spdlog_ex &ex) {
             std::cerr << "Log initialization failed: " << ex.what() << std::endl;
+            MASON_CRITICAL("Log initialization failed: {}", ex.what());
         }
     }
 }

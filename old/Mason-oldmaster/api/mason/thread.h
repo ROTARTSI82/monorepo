@@ -7,7 +7,6 @@
 #ifndef MASON_THREAD_H
 #define MASON_THREAD_H
 
-#include "mason/masonpch.h"
 #include "mason/mason.h"
 
 namespace mason {

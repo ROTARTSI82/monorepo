@@ -2,7 +2,6 @@
 // Created by Grant on 2019-08-23.
 //
 
-#include <mason/log.h>
 #include "mason/application.h"
 
 namespace mason {
@@ -162,7 +161,6 @@ namespace mason {
     }
 
     void Application::updateScene(int newScene) {
-        // TODO: Add proper logging here for when currentScene is null
         if (currentScene != nullptr) {
             currentScene->exit(newScene);
             delete currentScene;
@@ -172,7 +170,7 @@ namespace mason {
         currentScene->app = this;
 
         if (currentScene == nullptr) {
-            std::cerr << "loadScene() returned null on scene " << newScene << std::endl;
+            MASON_CRITICAL("Scene {}'s loadScene() returned null! This will crash!", newScene)
         }
         currentScene->enter(sceneID);
         sceneID = newScene;

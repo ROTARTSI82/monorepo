@@ -2,15 +2,12 @@
 // Created by Grant on 2019-08-31.
 //
 
+#pragma once
+
 #ifndef MASON_CAMERA_H
 #define MASON_CAMERA_H
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "mason/gl/window.h"
+#include "gl_includes.h"
 
 namespace mason {
     double pi = atan(1) * 4;

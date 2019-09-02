@@ -7,7 +7,7 @@
 #ifndef MASON_APPLICATION_H
 #define MASON_APPLICATION_H
 
-#include "mason/masonpch.h"
+#include "mason/gl/gl_includes.h"
 
 namespace mason {
     class LayerStack;

@@ -7,19 +7,22 @@
 #ifndef MASON_OPENGL_WINDOW_H
 #define MASON_OPENGL_WINDOW_H
 
-#include "mason/masonpch.h"
-#include "mason/log.h"
-#include "mason/mason.h"
-#include "mason/gl/texture.h"
-#include "mason/gl/gl_objects.h"
-#include "mason/gl/shaders.h"
-
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "mason/gl/gl_includes.h"
 
 namespace mason::gl {
+
+    class VertexArray;
+
+    class VertexBuffer;
+
+    class IndexBuffer;
+
+    class ShaderProgram;
+
+    class Texture2D;
+
+    extern std::string OPENGL_VERSION;
+    extern std::string GLSL_VERSION;
 
     struct Model {
         VertexArray *vao;
@@ -51,6 +54,7 @@ namespace mason::gl {
         double deltaTime = 0;
 
         bool useVAOs = false;
+        bool useIMGUI = false;
 
         glm::vec4 clearColor = glm::vec4(1.0);
 
@@ -62,6 +66,12 @@ namespace mason::gl {
         ~GLWindow();
 
         void bind();
+
+        void setCallbacks();
+
+        void initIMGUI();
+
+        void drawIMGUI();
 
         void draw(GameObject *obj);
 
@@ -78,7 +88,7 @@ namespace mason::gl {
 
     void initGLEW();
 
-    void initGL();
+    void initGL(bool gl4 = false);
 
     void initGLFW();
 }

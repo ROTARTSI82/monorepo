@@ -33,9 +33,9 @@ ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 ADD_MSVC_PRECOMPILED_HEADER("api/mason/masonpch.h" "src/masonpch.cpp" PCHSrc)
 
 add_library(Mason STATIC src/mason.cpp src/application.cpp src/thread.cpp src/log.cpp src/masonpch.cpp ${PCHSrc}
-        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp)
+        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp api/mason/gl/gl_includes.h api/mason/imgui_includes.h)
 add_library(MasonShare SHARED src/mason.cpp src/application.cpp src/thread.cpp src/log.cpp src/masonpch.cpp ${PCHSrc}
-        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp)
+        api/mason/log.h api/mason/application.h api/mason/mason.h api/mason/masonpch.h api/mason/thread.h api/mason/event.h src/event.cpp api/mason/gl/window.h src/gl/window.cpp api/mason/gl/texture.h api/mason/gl/gl_objects.h api/mason/gl/shaders.h src/gl/gl_objects.cpp src/gl/shaders.cpp src/gl/texture.cpp api/mason/gl/camera.h src/gl/camera.cpp api/mason/gl/gl_includes.h api/mason/imgui_includes.h)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}

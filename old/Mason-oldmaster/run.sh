@@ -1,13 +1,13 @@
 cd build
 cmake ..
-make -j
+make -j 4
 sudo make install
 
 cd ../sandbox/build
 cmake ..
-make -j
+make -j 4
 # sudo make install
 
-./Sandbox
 
+sudo /Users/Grant/Desktop/CLion/Mason/sandbox/build/Sandbox
 sudo chown -R Grant /Users/Grant/Desktop/CLion/Mason

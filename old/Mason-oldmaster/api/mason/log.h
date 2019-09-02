@@ -7,7 +7,6 @@
 #ifndef MASON_LOG_H
 #define MASON_LOG_H
 
-#include "mason/masonpch.h"
 #include "mason/mason.h"
 
 #ifndef MASON_DEBUG_MODE

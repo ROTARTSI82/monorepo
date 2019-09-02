@@ -5,10 +5,7 @@
 #ifndef MASON_GL_OBJECTS_H
 #define MASON_GL_OBJECTS_H
 
-#include "mason/masonpch.h"
-
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+#include "mason/gl/gl_includes.h"
 
 namespace mason::gl {
     struct VBAttribute {

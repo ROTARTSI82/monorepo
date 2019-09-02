@@ -3,8 +3,6 @@
 //
 
 #include "mason/gl/camera.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace mason::gl {
     Camera::Camera(glm::vec3 pos, glm::vec2 look, GLWindow *window) : lookAngle(look), position(pos), win(window) {
@@ -17,8 +15,6 @@ namespace mason::gl {
 
         right = glm::vec3(sin(lookAngle.x - pi / 2.0f), 0, cos(lookAngle.x - pi / 2.0f));
         forward = glm::vec3(sin(lookAngle.x), 0, cos(lookAngle.x));
-        MASON_INFO("right = {}, {}, {} | lookDir = {}, {}, {}", right.x, right.y, right.z, lookDirection.x,
-                   lookDirection.y, lookDirection.z);
 //        up = glm::cross(right, lookDirection);
         up = glm::cross(right, lookDirection);
     }

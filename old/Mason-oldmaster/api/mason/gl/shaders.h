@@ -5,13 +5,7 @@
 #ifndef MASON_SHADERS_H
 #define MASON_SHADERS_H
 
-#include "mason/masonpch.h"
-#include "mason/log.h"
-
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "mason/gl/gl_includes.h"
 
 namespace mason::gl {
     class ShaderProgram {
@@ -20,7 +14,7 @@ namespace mason::gl {
         inline static std::unordered_map<std::string, GLenum> shaderTypes = {
                 {"fragment-shader", GL_FRAGMENT_SHADER},
                 {"vertex-shader",   GL_VERTEX_SHADER},
-                {"geometry-shader", GL_GEOMETRY_SHADER}
+                {"geometry-shader", GL_GEOMETRY_SHADER} // Geometry shaders unsupported in opengl 2.1
         };
 
         std::unordered_map<std::string, GLint> uniforms = {};
