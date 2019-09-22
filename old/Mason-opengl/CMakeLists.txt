@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.14.3)
 project(Mason VERSION 1.0.0 DESCRIPTION "Mason game engine for OpenGL")
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/bin)
+
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(OpenGL REQUIRED)
