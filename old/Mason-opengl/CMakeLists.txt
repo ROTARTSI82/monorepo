@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14.3)
-project(Mason VERSION 1.0.0 DESCRIPTION "Mason description")
+project(Mason VERSION 1.0.0 DESCRIPTION "Mason game engine for OpenGL")
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -12,7 +12,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 
-add_library(Mason STATIC src/mason.cpp api/mason.h)
+add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -48,7 +48,7 @@ install(TARGETS Mason
 
 project(MasonShare VERSION 1.0.0 DESCRIPTION "MasonShare description")
 
-add_library(MasonShare SHARED src/mason.cpp api/mason.h)
+add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp)
 
 set_target_properties(MasonShare PROPERTIES
         VERSION ${PROJECT_VERSION}
