@@ -16,7 +16,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 
-add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp)
+add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -52,7 +52,7 @@ install(TARGETS Mason
 
 project(MasonShare VERSION 1.0.0 DESCRIPTION "MasonShare description")
 
-add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp)
+add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp)
 
 set_target_properties(MasonShare PROPERTIES
         VERSION ${PROJECT_VERSION}
