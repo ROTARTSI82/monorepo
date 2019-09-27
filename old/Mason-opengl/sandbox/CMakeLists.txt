@@ -8,12 +8,24 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/bin)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(OpenGL REQUIRED)
+find_library(COCOA_LIBRARY Cocoa)
+
 add_executable(Sandbox src/main.cpp)
 
-target_include_directories(Sandbox PUBLIC "${PROJECT_SOURCE_DIR}/../api")
-target_include_directories(Sandbox PUBLIC "${PROJECT_SOURCE_DIR}/../include")
 
-target_link_libraries(Sandbox PUBLIC "${PROJECT_SOURCE_DIR}/../build/lib/libMason.a")
+target_include_directories(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../api)
+target_include_directories(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../include)
+
+#opengl
+target_include_directories(Sandbox PUBLIC ${OPENGL_INCLUDE_DIR})
+
+target_link_libraries(Sandbox PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+target_link_libraries(Sandbox PRIVATE ${COCOA_LIBRARY})
+
+target_link_libraries(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../lib/libGLEW.2.1.0.dylib)
+target_link_libraries(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../lib/libglfw.3.4.dylib)
+target_link_libraries(Sandbox PUBLIC "${PROJECT_SOURCE_DIR}/../build/lib/libMasonShare.1.0.0.dylib")
 
 set_target_properties(Sandbox PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/lib"

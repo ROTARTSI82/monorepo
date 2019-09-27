@@ -16,7 +16,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 
-add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp)
+add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp api/mason/gl/gl_window.h api/mason/gl/gl_core.h src/mason/gl/gl_core.cpp src/mason/gl/gl_window.cpp src/mason/log.cpp api/mason/log.h api/mason/mason.h src/mason/mason.cpp)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -52,7 +52,7 @@ install(TARGETS Mason
 
 project(MasonShare VERSION 1.0.0 DESCRIPTION "MasonShare description")
 
-add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp)
+add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_info.h api/mason/camera.h src/mason/camera.cpp api/mason/app_node.h api/mason/layer.h src/mason/app_node.cpp src/mason/layer.cpp api/mason/gl/gl_window.h api/mason/gl/gl_core.h src/mason/gl/gl_core.cpp src/mason/gl/gl_window.cpp src/mason/log.cpp api/mason/log.h api/mason/mason.h src/mason/mason.cpp)
 
 set_target_properties(MasonShare PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -72,10 +72,10 @@ target_include_directories(MasonShare PUBLIC .)
 target_include_directories(MasonShare PUBLIC ${OPENGL_INCLUDE_DIR})
 
 target_link_libraries(MasonShare PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.4.dylib)
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib)
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.4.dylib)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib)
 # glm and stb not here
 
 install(TARGETS MasonShare

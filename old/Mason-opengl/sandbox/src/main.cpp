@@ -1,6 +1,8 @@
 #include <iostream>
 #include "mason/app_node.h"
+#include "mason/gl/gl_window.h"
 
+mason::gl::gl_window *win;
 
 class custom_layer : public mason::layer {
 public:
@@ -28,8 +30,6 @@ public:
 
     void on_activate() {
         std::cout << "app was activated!" << std::endl;
-        this->push_overlay(new custom_layer(1, s));
-        this->push_underlay(new custom_layer(0, s));
     };
 
     void on_deactivate() {
@@ -38,19 +38,19 @@ public:
 };
 
 void custom_layer::on_update(int thread) {
-    {
-        std::cout << "update called on layer " << x << " from thread " << thread << std::endl;
-        parent_app->parent->remove_child(0);
-        parent_app->parent->push_child(new custom_app(!parState));
-
-    }
+    win->clear();
+    win->flip();
 }
 
 int main() {
+    mason::init_logging(true);
+    MASON_FATAL("Hello World! This is an SPDLOG test!");
+    win = new mason::gl::gl_window();
     custom_app *app = new custom_app(false);
+    app->push_overlay(new custom_layer(1, false));
     app->on_activate();
-    for (int i = 0; i < 5; i++) {
-        app->update(i);
+    while (!win->poll_close()) {
+        app->update(1);
     }
     app->on_deactivate();
     delete app;
