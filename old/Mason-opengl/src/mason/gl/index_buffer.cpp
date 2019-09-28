@@ -6,7 +6,7 @@
 
 namespace mason::gl {
 
-    index_buffer::index_buffer(const std::vector<unsigned int> indices) {
+    index_buffer::index_buffer(std::vector<unsigned int> indices) {
         glGenBuffers(1, &id);
         bind();
 

@@ -14,9 +14,9 @@
 namespace mason::gl {
     class index_buffer {
     public:
-        unsigned int id = 0;
+        GLuint id = 0;
 
-        index_buffer(const std::vector<unsigned int> indices);
+        explicit index_buffer(std::vector<unsigned int> indices);
 
         index_buffer(GLsizeiptr size, const GLvoid *data, GLenum usage);
 

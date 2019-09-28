@@ -39,7 +39,7 @@ namespace mason::gl {
         glfwPollEvents();
     }
 
-    bool gl_window::poll_close() {
+    int gl_window::poll_close() {
         return glfwWindowShouldClose(win);
     }
 }

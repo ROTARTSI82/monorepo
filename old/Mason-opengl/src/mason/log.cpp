@@ -7,7 +7,7 @@
 namespace mason {
     void init_logging(bool use_single_file) {
         try {
-            std::string patternStr = "%^[%Y.%m.%d] [%H:%M:%S.%F] [%n:%l] [%s:%#]: %v%$";
+            std::string pattern_str = "%^[%Y.%m.%d] [%H:%M:%S.%F] [%n:%l] [%s:%#]: %v%$";
 
             // Sink for outputting to the console
             auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
@@ -42,7 +42,7 @@ namespace mason {
                     "================================[NEW LOGGING SESSION | {}]================================",
                     oss.str());
 
-            spdlog::set_pattern(patternStr);
+            spdlog::set_pattern(pattern_str);
 
             spdlog::set_error_handler([](const std::string &msg) {
                 std::cerr << "[** SPDLOG ERROR **]: " << msg << std::endl;

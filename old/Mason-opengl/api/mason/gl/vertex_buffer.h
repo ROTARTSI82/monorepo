@@ -14,8 +14,8 @@
 
 namespace mason::gl {
     class vertex_buffer {
-
-        unsigned int id = 0;
+    public:
+        GLuint id = 0;
 
         vertex_buffer(GLsizeiptr size, const GLvoid *data, GLenum usage);
 

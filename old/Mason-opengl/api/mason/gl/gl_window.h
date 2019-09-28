@@ -27,7 +27,7 @@ namespace mason::gl {
 
         void flip();
 
-        bool poll_close();
+        int poll_close();
     };
 }
 

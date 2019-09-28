@@ -26,7 +26,7 @@ namespace mason::gl {
      */
     class vertex_array {
     public:
-        unsigned int id = 0;
+        GLuint id = 0;
 
         vertex_array();
 

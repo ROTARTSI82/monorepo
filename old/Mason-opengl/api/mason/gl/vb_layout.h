@@ -21,7 +21,7 @@ namespace mason::gl {
         virtual ~vb_layout() = default;
 
         template<typename T>
-        void push_attribute(GLenum type, int quantity, bool normalize = false);
+        void push_attribute(GLenum type, int quantity, GLboolean normalize = false);
 
         void set_attributes();
     };

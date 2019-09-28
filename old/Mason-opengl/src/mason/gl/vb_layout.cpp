@@ -7,7 +7,7 @@
 namespace mason::gl {
 
     template<typename T>
-    void vb_layout::push_attribute(GLenum type, int quantity, bool normalize) {
+    void vb_layout::push_attribute(GLenum type, int quantity, GLboolean normalize) {
         vb_attribute new_attrib = {quantity, type, normalize, stride};
         attributes.emplace_back(new_attrib);
 
