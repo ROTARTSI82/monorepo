@@ -1,0 +1,2 @@
+vertex-shader: vert.vsh
+fragment-shader: frag.fsh

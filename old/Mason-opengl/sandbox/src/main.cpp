@@ -1,6 +1,10 @@
 #include <iostream>
 #include "mason/app_node.h"
 #include "mason/gl/gl_window.h"
+#include "mason/gl/shader_program.h"
+#include "mason/gl/vertex_buffer.h"
+#include "mason/gl/index_buffer.h"
+#include "mason/gl/vb_layout.h"
 
 mason::gl::gl_window *win;
 
@@ -39,7 +43,6 @@ public:
 
 void custom_layer::on_update(int thread) {
     win->clear();
-    win->flip();
 }
 
 int main() {
@@ -47,10 +50,28 @@ int main() {
     MASON_FATAL("Hello World! This is an SPDLOG test!");
     win = new mason::gl::gl_window();
     custom_app *app = new custom_app(false);
+
+    mason::gl::shader_program *prog = new mason::gl::shader_program(
+            "/Users/Grant/Desktop/CLion/Mason/sandbox/res/shader_program");
+    prog->bind();
+
+    mason::gl::vertex_buffer *vbo =
+            new mason::gl::vertex_buffer(
+                    mason::gl::pack_vertex_data({
+                                                        {{0,  1,  0}, {0,   0,   1.0}, {1, 1}, {0,   0,   1.0, 1.0}},
+                                                        {{-1, -1, 0}, {0,   1.0, 0},   {0, 1}, {0,   1.0, 0,   1.0}},
+                                                        {{1,  -1, 0}, {1.0, 0,   0},   {1, 0}, {1.0, 0,   0,   1.0}}
+                                                }));
+
+    mason::gl::index_buffer *ibo = new mason::gl::index_buffer({0, 1, 2});
+    mason::gl::get_default_layout()->set_attributes();
+
     app->push_overlay(new custom_layer(1, false));
     app->on_activate();
     while (!win->poll_close()) {
         app->update(1);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+        win->flip();
     }
     app->on_deactivate();
     delete app;

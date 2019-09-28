@@ -7,7 +7,7 @@
 namespace mason::gl {
 
     shader_program::shader_program(const std::string &path) {
-        std::string meta_path = path + "/program.meta";
+        std::string meta_path = path + "/metadata.txt";
         std::ifstream meta_stream(meta_path);
 
         std::string line;
@@ -45,7 +45,7 @@ namespace mason::gl {
 
             // Process line.
 
-            unsigned long index = line.find(": ");
+            unsigned long index = line.find(':');
 
             std::string shader_type_str = line.substr(0, index);
             std::string filename = line.substr(index + 1);
@@ -82,7 +82,7 @@ namespace mason::gl {
             glDeleteShader(s);
         }
 
-        MASON_INFO("Successfully loaded shader program from {}", meta_path);
+        MASON_INFO("Successfully loaded {} shaders from {}", shaders.size(), meta_path);
     }
 
     shader_program::~shader_program() {
