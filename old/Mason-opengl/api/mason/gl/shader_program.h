@@ -27,6 +27,8 @@ namespace mason::gl {
 
         ~shader_program();
 
+        GLint get_uniform_location(const std::string &name);
+
         void bind();
     };
 

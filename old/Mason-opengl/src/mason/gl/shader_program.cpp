@@ -93,6 +93,21 @@ namespace mason::gl {
         glUseProgram(id);
     }
 
+    GLint shader_program::get_uniform_location(const std::string &name) {
+        auto loc = uniform_cache.find(name);
+        if (loc != uniform_cache.end()) {
+            return loc->second;
+        }
+
+        GLint uni = glGetUniformLocation(id, name.c_str());
+        if (uni == -1) {
+            MASON_WARN("Tried to access uniform {} which doesn't exist!", name);
+            return -1;
+        }
+        uniform_cache[name] = uni;
+        return uni;
+    }
+
     GLuint compile_shader(const std::string &type, const std::string &src, const std::string &full_path) {
         GLenum type_enum;
 

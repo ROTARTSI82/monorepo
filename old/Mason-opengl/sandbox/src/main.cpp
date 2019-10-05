@@ -24,6 +24,11 @@ public:
     }
 
     void on_update(int thread);
+
+    bool on_event(mason::gl::gl_event *ev) {
+        std::cout << "Got event!" << std::endl;
+        return false;
+    }
 };
 
 class custom_app : public mason::app_node {
@@ -52,7 +57,7 @@ int main() {
     custom_app *app = new custom_app(false);
 
     mason::gl::shader_program *prog = new mason::gl::shader_program(
-            "/Users/Grant/Desktop/CLion/Mason/sandbox/res/shader_program");
+            "/Users/25granty/Desktop/CLion/Mason/sandbox/res/shader_program");
     prog->bind();
 
     mason::gl::vertex_buffer *vbo =

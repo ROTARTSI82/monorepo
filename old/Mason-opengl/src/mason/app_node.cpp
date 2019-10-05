@@ -19,20 +19,20 @@ namespace mason {
         }
     }
 
-    void app_node::push_underlay(layer *obj) {
+    void app_node::push_underlay(mason::layer *obj) {
         obj->parent_app = this;
         obj->on_attach();
         layer_stack.insert(layer_stack.begin() + insert_index, obj);
         insert_index++;
     }
 
-    void app_node::push_overlay(layer *obj) {
+    void app_node::push_overlay(mason::layer *obj) {
         obj->parent_app = this;
         obj->on_attach();
         layer_stack.emplace_back(obj);
     }
 
-    void app_node::push_child(app_node *obj) {
+    void app_node::push_child(mason::app_node *obj) {
         obj->parent = this;
         obj->on_activate();
         active_children.emplace_back(obj);
@@ -74,5 +74,28 @@ namespace mason {
         for (unsigned long i = insert_index; i < layer_stack.size(); i++) {
             layer_stack[i]->on_update(thread);
         }
+    }
+
+    bool app_node::handle_event(mason::gl::gl_event *ev) {
+        for (unsigned long i = layer_stack.size(); i >= insert_index; i--) {
+            if (layer_stack[i]->on_event(ev)) {
+                return true;
+            }
+        }
+
+        for (unsigned i = active_children.size(); i-- > 0;) {
+            if (active_children.at(i)->handle_event(ev)) {
+                return true;
+            }
+        }
+
+        for (int i = insert_index - 1; i >= 0; i--) {
+            if (layer_stack[i]->on_event(ev)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }

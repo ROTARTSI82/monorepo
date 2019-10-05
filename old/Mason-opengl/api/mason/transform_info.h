@@ -15,22 +15,15 @@
 namespace mason {
 
     class transform_info {
-    private:
-        glm::vec3 last_position;
-        std::chrono::high_resolution_clock::time_point last_update;
     public:
         glm::vec3 position;
         glm::vec3 rotation;
         glm::vec3 scale;
 
-        glm::vec3 velocity;
-
         glm::mat4 transforms;
         glm::vec3 up, right, forward;
 
         explicit transform_info(glm::vec3 pos = glm::vec3(0), glm::vec3 rot = glm::vec3(0), glm::vec3 scale = glm::vec3(1));
-
-        void update_velocity();
 
         void update_transforms();
     };

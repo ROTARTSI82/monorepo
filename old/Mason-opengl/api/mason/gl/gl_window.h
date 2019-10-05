@@ -7,7 +7,9 @@
 #ifndef MASONSHARE_GL_WINDOW_H
 #define MASONSHARE_GL_WINDOW_H
 
+#include "mason/app_node.h"
 #include "mason/gl/gl_core.h"
+#include "mason/gl/gl_event_handler.h"
 
 #include "glm/glm.hpp"
 

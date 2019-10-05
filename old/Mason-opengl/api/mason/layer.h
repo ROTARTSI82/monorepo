@@ -7,6 +7,12 @@
 #ifndef MASONSHARE_LAYER_H
 #define MASONSHARE_LAYER_H
 
+#include <mason/gl/gl_event.h>
+
+namespace mason::gl {
+    struct gl_event;
+}
+
 namespace mason {
     class app_node;
 
@@ -21,6 +27,8 @@ namespace mason {
         virtual void on_attach() = 0;
 
         virtual void on_detach() = 0;
+
+        virtual bool on_event(mason::gl::gl_event *ev) = 0;
 
         virtual void on_update(int thread) = 0;
     };

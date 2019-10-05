@@ -20,6 +20,10 @@ namespace mason::gl {
 
         init_glew();
         init_gl();
+
+        glfwSetCursorPosCallback(this->win, mason::gl::event_handler::mouse_motion_handler);
+        glfwSetKeyCallback(this->win, mason::gl::event_handler::key_handler);
+        glfwSetMouseButtonCallback(this->win, mason::gl::event_handler::mouse_button_handler);
     }
 
     void gl_window::bind() {

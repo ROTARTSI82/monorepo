@@ -6,26 +6,10 @@
 
 namespace mason {
 
-    void transform_info::update_velocity() {
-        auto now = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<float, std::milli> diff = now - last_update;
-        last_update = now;
-
-        glm::vec3 displacement = position - last_position;
-        last_position = glm::vec3(position);  // Copy constructor
-
-        velocity = displacement / (diff.count() / 1000.0f);  // Calculate velocity in units per second
-    }
-
     transform_info::transform_info(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) {
         position = pos;
         rotation = rot;
         this->scale = scale;
-
-        last_position = glm::vec3(position);
-        last_update = std::chrono::high_resolution_clock::now();
-
-        velocity = glm::vec3(0);
 
         update_transforms();
     }
