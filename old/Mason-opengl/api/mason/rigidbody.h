@@ -11,6 +11,8 @@
 
 namespace mason {
     class rigidbody {
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> last_update;
     public:
         mason::transform_info transforms;
         glm::vec3 velocity;

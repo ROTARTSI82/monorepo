@@ -17,8 +17,12 @@ namespace mason::gl {
                         img->data);
     }
 
-    void texture2d::bind(GLenum slot) {
+    void texture2d::bind_slot(GLenum slot) {
         glActiveTexture(slot);
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
+
+    void texture2d::bind() {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
@@ -28,15 +32,26 @@ namespace mason::gl {
 
         glTexImage2D(GL_TEXTURE_2D, lod, GL_RGBA8, img->width, img->height, border, GL_RGBA, GL_UNSIGNED_BYTE,
                      img->data);
+
+        set_texture_hints(); // Hints need to be set or the texture would simply render a blank
     }
 
     texture2d::~texture2d() {
         glDeleteTextures(1, &id);
     }
 
+    void texture2d::generate_mipmaps() {
+        bind();
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
     void set_texture_hints(GLenum texture_type, const std::unordered_map<GLenum, GLenum> &hints) {
         for (auto pair : hints) {
             glTexParameteri(texture_type, pair.first, pair.second);
         }
+    }
+
+    void set_active_texture_slot(GLenum slot) {
+        glActiveTexture(slot);
     }
 }

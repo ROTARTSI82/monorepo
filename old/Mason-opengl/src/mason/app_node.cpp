@@ -77,7 +77,7 @@ namespace mason {
     }
 
     bool app_node::handle_event(mason::gl::gl_event *ev) {
-        for (unsigned long i = layer_stack.size(); i >= insert_index; i--) {
+        for (unsigned long i = layer_stack.size(); i-- > insert_index;) {
             if (layer_stack[i]->on_event(ev)) {
                 return true;
             }
@@ -89,7 +89,7 @@ namespace mason {
             }
         }
 
-        for (int i = insert_index - 1; i >= 0; i--) {
+        for (int i = insert_index; i-- > 0;) {
             if (layer_stack[i]->on_event(ev)) {
                 return true;
             }

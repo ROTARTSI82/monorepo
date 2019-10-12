@@ -108,6 +108,27 @@ namespace mason::gl {
         return uni;
     }
 
+    void shader_program::set_uniform_3f(const std::string &name, float f1, float f2, float f3) {
+        GLint loc = get_uniform_location(name);
+        if (loc != -1) {
+            glUniform3f(loc, f1, f2, f3);
+        }
+    }
+
+    void shader_program::set_uniform_mat4fv(const std::string &name, glm::mat4 &mat, GLboolean transpose) {
+        GLint loc = get_uniform_location(name);
+        if (loc != -1) {
+            glUniformMatrix4fv(loc, 1, transpose, &mat[0][0]);
+        }
+    }
+
+    void shader_program::set_uniform_1i(const std::string &name, int i) {
+        GLint loc = get_uniform_location(name);
+        if (loc != -1) {
+            glUniform1i(loc, i);
+        }
+    }
+
     GLuint compile_shader(const std::string &type, const std::string &src, const std::string &full_path) {
         GLenum type_enum;
 

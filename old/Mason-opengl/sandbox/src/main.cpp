@@ -5,6 +5,7 @@
 #include "mason/gl/vertex_buffer.h"
 #include "mason/gl/index_buffer.h"
 #include "mason/gl/vb_layout.h"
+#include "mason/gl/texture2d.h"
 
 mason::gl::gl_window *win;
 
@@ -26,7 +27,7 @@ public:
     void on_update(int thread);
 
     bool on_event(mason::gl::gl_event *ev) {
-        std::cout << "Got event!" << std::endl;
+        MASON_INFO("Got event!");
         return false;
     }
 };
@@ -55,17 +56,24 @@ int main() {
     MASON_FATAL("Hello World! This is an SPDLOG test!");
     win = new mason::gl::gl_window();
     custom_app *app = new custom_app(false);
+    mason::gl::event_handler::add_event_subscriber(app);
+
+    mason::image *img = new mason::image("/Users/25granty/Desktop/test.png");
+
+    mason::gl::texture2d *tex = new mason::gl::texture2d(img);
+    tex->bind_slot();
 
     mason::gl::shader_program *prog = new mason::gl::shader_program(
             "/Users/25granty/Desktop/CLion/Mason/sandbox/res/shader_program");
     prog->bind();
+    prog->set_uniform_1i("tex", 0);
 
     mason::gl::vertex_buffer *vbo =
             new mason::gl::vertex_buffer(
                     mason::gl::pack_vertex_data({
-                                                        {{0,  1,  0}, {0,   0,   1.0}, {1, 1}, {0,   0,   1.0, 1.0}},
-                                                        {{-1, -1, 0}, {0,   1.0, 0},   {0, 1}, {0,   1.0, 0,   1.0}},
-                                                        {{1,  -1, 0}, {1.0, 0,   0},   {1, 0}, {1.0, 0,   0,   1.0}}
+                                                        {{0,  1,  0}, {0,   0,   1.0}, {0,  1},  {0,   0,   1.0, 1.0}},
+                                                        {{-1, -1, 0}, {0,   1.0, 0},   {-1, -1}, {0,   1.0, 0,   1.0}},
+                                                        {{1,  -1, 0}, {1.0, 0,   0},   {1,  -1}, {1.0, 0,   0,   1.0}}
                                                 }));
 
     mason::gl::index_buffer *ibo = new mason::gl::index_buffer({0, 1, 2});
@@ -74,6 +82,7 @@ int main() {
     app->push_overlay(new custom_layer(1, false));
     app->on_activate();
     while (!win->poll_close()) {
+        mason::gl::event_handler::handle_single_event();
         app->update(1);
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
         win->flip();
