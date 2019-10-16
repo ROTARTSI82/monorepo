@@ -2,6 +2,7 @@
 // Created by Grant on 9/21/19.
 //
 
+#include <mason/log.h>
 #include "mason/camera.h"
 
 namespace mason {
@@ -10,11 +11,11 @@ namespace mason {
     }
 
     glm::mat4 camera::get_view() {
-        return glm::lookAt(transforms.position, transforms.forward + transforms.position, transforms.up);
+        return glm::lookAt(transforms.position, transforms.position + transforms.forward, transforms.up);
     }
 
     glm::mat4 camera::get_projection() {
-        if (!use_ortho) {
+        if (use_ortho) {
             return glm::ortho(0.0f, width, height, 0.0f, near, far);
         } else {
             return glm::perspective(fov, width / height, near, far);

@@ -18,7 +18,6 @@ namespace mason::gl {
         for (unsigned long i = 0; i < attributes.size(); i++) {
             vb_attribute attrib = attributes.at(i);
             glEnableVertexAttribArray(i);
-            // TODO: Find out if I should cast to `size_t` before casting to `const GLvoid *` to make the compiler happy.
             glVertexAttribPointer(i, attrib.count, attrib.type, attrib.normalized, stride,
                                   (const GLvoid *) attrib.pointer);
         }

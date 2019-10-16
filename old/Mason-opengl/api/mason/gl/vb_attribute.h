@@ -15,7 +15,7 @@ namespace mason::gl {
         GLint count;
         GLenum type;
         GLboolean normalized;
-        GLsizei pointer;
+        size_t pointer;  // The actual type is GLsizei but I choose to use an unsigned type.
     };
 }
 

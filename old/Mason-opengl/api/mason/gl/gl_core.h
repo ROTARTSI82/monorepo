@@ -17,6 +17,12 @@ namespace mason::gl {
     void init_glfw();
 
     void init_gl();
+
+    void handle_single_error(const std::string &msg = "Unknown Error");
+
+    void flush_errors(const std::string &msg = "Unknown Error");
+
+    extern void (*quit)();
 }
 
 #endif //MASONSHARE_GL_CORE_H

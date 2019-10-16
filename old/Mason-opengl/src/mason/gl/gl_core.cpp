@@ -5,6 +5,8 @@
 #include "mason/gl/gl_core.h"
 
 namespace mason::gl {
+    void (*quit)() = &glfwTerminate;
+
     void init_glfw() {
         if (!glfwInit()) {
             MASON_CRITICAL("Failed to init GLFW! This WILL crash!");
@@ -34,4 +36,26 @@ namespace mason::gl {
         glStencilFunc(GL_ALWAYS, 0, 0x00);  // Everything passes
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);  // Keep everything
     }
+
+#ifdef MASON_DEBUG_MODE
+
+    void handle_single_error(const std::string &msg) {
+        GLenum err = glGetError();
+        if (err != GL_NO_ERROR) {
+            MASON_WARN("[** OPENGL ERROR {} **]: {}", err, msg);
+        }
+    }
+
+    void flush_errors(const std::string &msg) {
+        GLenum err = glGetError();
+        while (err != GL_NO_ERROR) {
+            MASON_WARN("[** OPENGL ERROR {} **]: {}", err, msg);
+            err = glGetError();
+        }
+    }
+
+#else
+    void handle_single_error(const std::string &msg) {}
+    void flush_errors(const std::string &msg) {}
+#endif
 }

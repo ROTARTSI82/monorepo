@@ -14,7 +14,7 @@ namespace mason::gl {
     class vb_layout {
     public:
         std::vector<vb_attribute> attributes;
-        GLsizei stride = 0;
+        size_t stride = 0;
 
         vb_layout() = default;
 
