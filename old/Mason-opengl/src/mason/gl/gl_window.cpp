@@ -20,6 +20,9 @@ namespace mason::gl {
 
         init_glew();
         init_gl();
+#ifdef MASON_DEBUG_MODE
+        init_imgui();
+#endif
 
         glfwSetCursorPosCallback(this->win, mason::gl::event_handler::mouse_motion_handler);
         glfwSetKeyCallback(this->win, mason::gl::event_handler::key_handler);
@@ -35,10 +38,29 @@ namespace mason::gl {
     }
 
     void gl_window::clear() {
+
+#ifdef MASON_DEBUG_MODE
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+#endif
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
     void gl_window::flip() {
+#ifdef MASON_DEBUG_MODE
+        ImGui::Render();
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glUseProgram(0);
+//        glBindVertexArray(0);
+
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+#endif
+
         glfwSwapBuffers(win);
         glfwPollEvents();
     }
@@ -46,5 +68,30 @@ namespace mason::gl {
     int gl_window::poll_close() {
         return glfwWindowShouldClose(win);
     }
+
+#ifdef MASON_DEBUG_MODE
+
+    void gl_window::init_imgui() {
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO &io = ImGui::GetIO();
+        (void) io;
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsClassic();
+
+        // Setup Platform/Renderer bindings
+        ImGui_ImplGlfw_InitForOpenGL(win, true);
+        ImGui_ImplOpenGL2_Init();
+    }
+
+#else
+    void gl_window::init_imgui() {}
+#endif
+
 }
 

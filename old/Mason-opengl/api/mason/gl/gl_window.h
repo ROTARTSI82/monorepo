@@ -23,6 +23,8 @@ namespace mason::gl {
 
         virtual ~gl_window();
 
+        void init_imgui();
+
         void bind();
 
         void clear();

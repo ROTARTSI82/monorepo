@@ -23,6 +23,12 @@ namespace mason::gl {
         }
     }
 
+    void vb_layout::disable_attributes() {
+        for (unsigned long i = 0; i < attributes.size(); i++) {
+            glDisableVertexAttribArray(i);
+        }
+    }
+
 
     vb_layout *get_default_layout() {
         if (default_layout != nullptr) {

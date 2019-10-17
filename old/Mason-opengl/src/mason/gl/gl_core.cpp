@@ -4,8 +4,20 @@
 
 #include "mason/gl/gl_core.h"
 
+#ifdef MASON_DEBUG_MODE
+#define IMGUI_IMPL_OPENGL_LOADER_GLEW
+
+#include "imgui/imgui.cpp"
+#include "imgui/imgui_impl_glfw.cpp"
+#include "imgui/imgui_impl_opengl2.cpp"
+#include "imgui/imgui_draw.cpp"
+#include "imgui/imgui_widgets.cpp"
+#include "imgui/imgui_demo.cpp"
+
+#endif
+
 namespace mason::gl {
-    void (*quit)() = &glfwTerminate;
+    void (*quit_glfw)() = &glfwTerminate;
 
     void init_glfw() {
         if (!glfwInit()) {
@@ -54,8 +66,16 @@ namespace mason::gl {
         }
     }
 
+    void quit_imgui() {
+        // Cleanup
+        ImGui_ImplOpenGL2_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+    }
+
 #else
-    void handle_single_error(const std::string &msg) {}
-    void flush_errors(const std::string &msg) {}
+    void handle_single_error(const std::string &msg) {};
+    void flush_errors(const std::string &msg) {};
+    void quit_imgui() {};
 #endif
 }

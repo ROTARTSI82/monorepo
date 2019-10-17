@@ -54,7 +54,7 @@ target_link_libraries(Mason PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 target_link_libraries(Mason PUBLIC ${OPENAL_LIBRARY})
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw3.a)
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a)
-target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
+#target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.a)
 # glm and stb not here.
 
@@ -101,7 +101,7 @@ target_link_libraries(MasonShare PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRAR
 target_link_libraries(MasonShare PUBLIC ${OPENAL_LIBRARY})
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.4.dylib)
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib)
-target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
+#target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib)
 # glm and stb not here
 

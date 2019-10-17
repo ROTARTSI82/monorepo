@@ -1,6 +1,8 @@
 #include <iostream>
 #include "math.h"
 
+#define MASON_DEBUG_MODE
+
 #include "mason/app_node.h"
 #include "mason/gl/gl_window.h"
 #include "mason/gl/shader_program.h"
@@ -221,7 +223,6 @@ int main() {
     mason::gl::shader_program *prog = new mason::gl::shader_program(
             "/Users/25granty/Desktop/CLion/Mason/sandbox/res/shader_program");
     prog->bind();
-    prog->set_uniform_1i("tex", 0);
 
     app->push_overlay(new custom_layer(1, false));
     app->on_activate();
@@ -229,7 +230,11 @@ int main() {
 
     auto last_update = std::chrono::high_resolution_clock::now();
 
+    bool show = true;
+
     while (!win->poll_close()) {
+        app->update(1);
+
         auto now = std::chrono::high_resolution_clock::now();
         auto diff = std::chrono::duration_cast<std::chrono::duration<float>>(now - last_update);
         last_update = now;
@@ -286,18 +291,36 @@ int main() {
         cam->height = h;
 
         mason::gl::event_handler::handle_single_event();
-        app->update(1);
         glm::mat4 view, proj;
         view = cam->get_view();
         proj = cam->get_projection();
 
+        prog->bind();
+        prog->set_uniform_1i("tex", 0);
         prog->set_uniform_mat4fv("proj", proj);
         prog->set_uniform_mat4fv("view", view);
 
+        tex->bind_slot();
         vbo->bind();
         ibo->bind();
         lay.set_attributes();
-        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, nullptr);
+        ibo->draw(GL_QUADS);
+
+        ImGui::Begin("Test");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
+        ImGui::Checkbox("Demo Window", &show);      // Edit bools storing our window open/close state
+        ImGui::End();
+
+        ImGui::ShowDemoWindow(&show);
+        ImGui::ShowUserGuide();
+        ImGui::ShowFontSelector("Font select");
+        ImGui::ShowAboutWindow(&show);
+        ImGui::ShowMetricsWindow(&show);
+        ImGui::ShowStyleEditor();
+        ImGui::ShowTestWindow();
+        ImGui::ShowStyleSelector("Style select");
+
         win->flip();
 
         mason::al::al_listener::set_position(cam->transforms.position);
@@ -312,6 +335,7 @@ int main() {
     delete prog;
     delete win;
 
-    mason::gl::quit();
+    mason::gl::quit_imgui();
+    mason::gl::quit_glfw();
 
 }

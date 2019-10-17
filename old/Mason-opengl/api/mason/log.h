@@ -13,13 +13,13 @@
 
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
-
 #include "mason/mason.h"
 
 #ifdef MASON_DEBUG_MODE
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #define MASON_TRACE SPDLOG_TRACE
 #define MASON_DEBUG SPDLOG_DEBUG

@@ -24,6 +24,8 @@ namespace mason::gl {
         void push_attribute(GLenum type, int quantity, GLboolean normalize = false);
 
         void set_attributes();
+
+        void disable_attributes();
     };
 
     vb_layout *default_layout = nullptr;
