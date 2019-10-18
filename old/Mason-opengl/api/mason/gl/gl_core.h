@@ -11,7 +11,8 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_IMGUI
+
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
 #include "imgui/imgui.h"
@@ -21,17 +22,15 @@
 #endif
 
 namespace mason::gl {
-    void init_glew();
-
     void init_glfw();
 
-    void init_gl();
+    void init_glew(bool use_expiremental = true);
 
     void handle_single_error(const std::string &msg = "Unknown Error");
 
     void flush_errors(const std::string &msg = "Unknown Error");
 
-    extern void (*quit_glfw)();
+    extern void (*quit)();
 
     void quit_imgui();
 }

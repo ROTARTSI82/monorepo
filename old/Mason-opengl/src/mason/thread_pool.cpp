@@ -11,9 +11,14 @@ namespace mason {
         stop();
     }
 
-    void thread_pool::push_task(std::packaged_task<void(thread_pool *)> *task) {
+    void thread_pool::push_task(std::packaged_task<void *(thread_pool *, void *)> task, void *usr_dat) {
         std::lock_guard<std::mutex> lock(task_mutex); // Being exception safe, cause why not?
-        tasks.push(task);
+
+        __MASON_THREAD_POOL_TASK task_wrapper;
+        task_wrapper.func = std::move(task);
+        task_wrapper.dat = usr_dat;
+
+        tasks.push(std::move(task_wrapper));
     }
 
     void thread_pool::start(unsigned int limit) {
@@ -50,11 +55,11 @@ namespace mason {
         while (parent->is_running) {
             parent->task_mutex.lock();
             if (!parent->tasks.empty()) {
-                auto current_task = parent->tasks.front();
+                auto current_task = std::move(parent->tasks.front());
                 parent->tasks.pop();
                 parent->task_mutex.unlock();
 
-                (*current_task)(parent);
+                current_task.func(parent, current_task.dat);
             } else {
                 parent->task_mutex.unlock();
             }

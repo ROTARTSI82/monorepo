@@ -3,8 +3,13 @@
 //
 #include "mason/log.h"
 
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_LOGGING
 namespace mason {
+    static void on_spdlog_err(const std::string &msg) {
+        std::cerr << "[** SPDLOG ERROR **]: " << msg << std::endl;
+        MASON_CRITICAL("[** SPDLOG ERROR **]: {}", msg);
+    }
+
     void init_logging(bool use_single_file) {
         try {
             std::string pattern_str = "%^[%Y.%m.%d] [%H:%M:%S.%F] [%n:%l] [%s:%#]: %v%$";
@@ -44,10 +49,9 @@ namespace mason {
 
             spdlog::set_pattern(pattern_str);
 
-            spdlog::set_error_handler([](const std::string &msg) {
-                std::cerr << "[** SPDLOG ERROR **]: " << msg << std::endl;
-                MASON_CRITICAL("[** SPDLOG ERROR **]: {}", msg);
-            });
+            spdlog::set_error_handler(on_spdlog_err);
+
+            MASON_INFO("Mason logging successfully started! Using {}", MASON_VERSION_STRING);
         }
         catch (const spdlog::spdlog_ex &ex) {
             std::cerr << "Log initialization failed: " << ex.what() << std::endl;

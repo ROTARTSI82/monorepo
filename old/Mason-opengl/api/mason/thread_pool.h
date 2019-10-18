@@ -13,6 +13,13 @@
 #include <future>
 
 namespace mason {
+    class thread_pool;
+
+    struct __MASON_THREAD_POOL_TASK {
+        std::packaged_task<void *(thread_pool *, void *)> func;
+        void *dat;
+    };
+
     class thread_pool {
     private:
         static void worker_func(thread_pool *parent);
@@ -21,7 +28,9 @@ namespace mason {
         constexpr static double thread_mult = 1.0;
 
         std::vector<std::thread *> workers;
-        std::queue<std::packaged_task<void(thread_pool *)> *> tasks;
+
+        std::queue<__MASON_THREAD_POOL_TASK> tasks;
+
         std::mutex task_mutex;
 
         volatile bool is_running = false;
@@ -30,7 +39,7 @@ namespace mason {
 
         ~thread_pool();
 
-        void push_task(std::packaged_task<void(thread_pool *)> *task);
+        void push_task(std::packaged_task<void *(thread_pool *, void *)> task, void *usr_dat);
 
         void add_worker();
 //

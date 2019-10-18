@@ -5,11 +5,16 @@
 #include "mason/mason.h"
 
 namespace mason {
-#ifdef MASON_DEBUG_MODE
-#pragma message("Mason debug mode is ACTIVE! Disable this in release mode using #undef MASON_DEBUG_MODE before including mason!")
-    bool debug_mode = true;
+#ifdef MASON_ENABLE_IMGUI
+    bool imgui_enabled = true;
 #else
-#pragma message("Mason debug mode is OFF! This is the correct setting for release! Use #define MASON_DEBUG_MODE before including mason to enable debug mode.")
-    bool debug_mode = false;
+    bool imgui_enabled = false;
 #endif
+
+#ifdef MASON_ENABLE_LOGGING
+    bool logging_enabled = true;
+#else
+    bool logging_enabled = false;
+#endif
+
 }

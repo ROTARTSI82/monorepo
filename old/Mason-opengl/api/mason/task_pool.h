@@ -12,10 +12,22 @@
 #include <queue>
 
 namespace mason {
+
+    class task_pool;
+
+    struct __MASON_TASK_POOL_TASK {
+        void *(*func)(unsigned int, task_pool *, void *);
+
+        void *data;
+    };
+
     class task_pool {
     public:
-        std::vector<void (*)(unsigned int, task_pool *)> tasks;
+        std::vector<__MASON_TASK_POOL_TASK> tasks;
+
         std::queue<std::thread *> active_threads;
+
+        std::queue<std::future<void *>> futures;
 
         volatile bool is_running = false;
 
@@ -23,7 +35,7 @@ namespace mason {
 
         ~task_pool();
 
-        void push_task(void(*task)(unsigned int, task_pool *));
+        void push_task(void *(*task)(unsigned int, task_pool *, void *), void *usr_dat);
 
         void start_tasks();
 

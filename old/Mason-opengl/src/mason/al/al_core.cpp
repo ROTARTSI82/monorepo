@@ -6,8 +6,6 @@
 
 namespace mason::al {
 
-#ifdef MASON_DEBUG_MODE
-
     void handle_single_error(const std::string &msg) {
         ALenum err = alGetError();
         if (err != AL_NO_ERROR) {
@@ -23,8 +21,4 @@ namespace mason::al {
         }
     }
 
-#else
-    void flush_errors(const std::string &msg) {}
-    void handle_single_error(const std::string &msg) {}
-#endif
 }

@@ -11,8 +11,12 @@ namespace mason {
         stop_tasks();
     }
 
-    void task_pool::push_task(void(*task)(unsigned int, task_pool *)) {
-        tasks.emplace_back(task);
+    void task_pool::push_task(void *(*task)(unsigned int, task_pool *, void *), void *usr_dat) {
+        __MASON_TASK_POOL_TASK task_wrapper = {};
+        task_wrapper.func = task;
+        task_wrapper.data = usr_dat;
+
+        tasks.emplace_back(task_wrapper);
     }
 
     void task_pool::start_tasks() {
@@ -22,8 +26,13 @@ namespace mason {
         }
 
         is_running = true;
-        for (unsigned long i = 0; i < tasks.size(); i++) {
-            active_threads.push(new std::thread(tasks.at(i), i, this));
+        for (unsigned i = 0; i < tasks.size(); i++) {
+            auto current_task = tasks.at(i);
+            std::packaged_task<void *(unsigned int, task_pool *, void *)> tsk(*current_task.func);
+
+            futures.push(tsk.get_future());
+
+            active_threads.push(new std::thread(std::move(tsk), i, this, current_task.data));
         }
     }
 

@@ -23,6 +23,8 @@ namespace mason::gl {
 
         virtual ~gl_window();
 
+        void enable_vsync(int interval = 1);
+
         void init_imgui();
 
         void bind();

@@ -1,8 +1,6 @@
 #include <iostream>
 #include "math.h"
 
-#define MASON_DEBUG_MODE
-
 #include "mason/app_node.h"
 #include "mason/gl/gl_window.h"
 #include "mason/gl/shader_program.h"
@@ -19,6 +17,9 @@
 #include "mason/al/al_core.h"
 #include "mason/al/al_buffer.h"
 #include "mason/al/al_source.h"
+
+#include "mason/thread_pool.h"
+#include "mason/task_pool.h"
 
 #include <chrono>
 
@@ -139,8 +140,38 @@ void custom_layer::on_update(int thread) {
     win->clear();
 }
 
+void *tpt_func(unsigned i, mason::task_pool *tp, void *usr_dat) {
+    int val = *(reinterpret_cast<int *>(usr_dat));
+    std::cout << "Testing the thread pool! x=" << val << std::endl;
+    return usr_dat;
+}
+
 int main() {
     mason::init_logging(true);
+
+    mason::task_pool *tpt = new mason::task_pool();
+
+    int a = 4, b = 5, c = 6, d = 7, e = 8, f = 9, g = 10;
+    tpt->push_task(tpt_func, &a);
+    tpt->push_task(tpt_func, &b);
+    tpt->push_task(tpt_func, &c);
+    tpt->push_task(tpt_func, &d);
+    tpt->push_task(tpt_func, &e);
+    tpt->push_task(tpt_func, &f);
+    tpt->push_task(tpt_func, &g);
+
+    tpt->start_tasks();
+
+    tpt->stop_tasks();
+
+    while (!tpt->futures.empty()) {
+        auto fut = std::move(tpt->futures.front());
+        tpt->futures.pop();
+
+        std::cout << "Got future of " << *(reinterpret_cast<int *>(fut.get())) << std::endl;
+    }
+
+    delete tpt;
 
     mason::al::update_default_device();
     mason::al::al_context al_cont(mason::al::default_device->dev_obj);
@@ -233,6 +264,9 @@ int main() {
     bool show = true;
 
     while (!win->poll_close()) {
+//        mason::gl::flush_errors("GL error flushing within main loop");
+        mason::al::flush_errors("AL error flushing within main loop");
+
         app->update(1);
 
         auto now = std::chrono::high_resolution_clock::now();
@@ -336,6 +370,8 @@ int main() {
     delete win;
 
     mason::gl::quit_imgui();
-    mason::gl::quit_glfw();
+    mason::gl::quit();
+
+    MASON_INFO("Program terminated successfully!");
 
 }

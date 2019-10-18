@@ -19,8 +19,7 @@ namespace mason::gl {
         bind();
 
         init_glew();
-        init_gl();
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_IMGUI
         init_imgui();
 #endif
 
@@ -39,7 +38,7 @@ namespace mason::gl {
 
     void gl_window::clear() {
 
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_IMGUI
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -50,7 +49,7 @@ namespace mason::gl {
     }
 
     void gl_window::flip() {
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_IMGUI
         ImGui::Render();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -69,7 +68,11 @@ namespace mason::gl {
         return glfwWindowShouldClose(win);
     }
 
-#ifdef MASON_DEBUG_MODE
+    void gl_window::enable_vsync(int interval) {
+        glfwSwapInterval(interval);
+    }
+
+#ifdef MASON_ENABLE_IMGUI
 
     void gl_window::init_imgui() {
         // Setup Dear ImGui context
@@ -87,6 +90,8 @@ namespace mason::gl {
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(win, true);
         ImGui_ImplOpenGL2_Init();
+
+        MASON_INFO("Successfully initialized ImGui {}", ImGui::GetVersion());
     }
 
 #else

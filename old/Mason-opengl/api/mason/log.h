@@ -15,7 +15,7 @@
 
 #include "mason/mason.h"
 
-#ifdef MASON_DEBUG_MODE
+#ifdef MASON_ENABLE_LOGGING
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
