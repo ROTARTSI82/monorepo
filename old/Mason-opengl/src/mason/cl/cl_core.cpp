@@ -6,7 +6,7 @@
 
 namespace mason::cl {
 
-    std::vector<cl_platform_id> get_platform_ids(cl_uint max_ids) {
+    std::vector<mason::cl::cl_platform> get_platforms(cl_uint max_ids) {
         auto platforms = new cl_platform_id[max_ids];
         cl_uint size = 0;
         cl_int status = clGetPlatformIDs(max_ids, platforms, &size);
@@ -14,12 +14,13 @@ namespace mason::cl {
             MASON_WARN("mason::cl::get_platform_ids() failed! Returning empty");
             return {};
         }
-        std::vector<cl_platform_id> platform_vec;
+        std::vector<mason::cl::cl_platform> platform_vec;
+        platform_vec.reserve(size);
 
         for (unsigned i = 0; i < size; i++) {
             cl_platform_id plat = *(platforms + i);
             if (plat) {
-                platform_vec.emplace_back(plat);
+                platform_vec.emplace_back(mason::cl::cl_platform(plat));
             } else {
                 MASON_INFO("Breaking out of platform vector transfer! This shouldn't happen!");
                 break;
@@ -31,7 +32,7 @@ namespace mason::cl {
         return platform_vec;
     }
 
-    std::vector<cl_device_id> get_device_ids(cl_platform_id plat, cl_device_type dev_type, cl_uint max_devs) {
+    std::vector<mason::cl::cl_device> get_devices(cl_platform_id plat, cl_device_type dev_type, cl_uint max_devs) {
         auto devices = new cl_device_id[max_devs];
         cl_uint size = 0;
         cl_int status = clGetDeviceIDs(plat, dev_type, max_devs, devices, &size);
@@ -40,12 +41,13 @@ namespace mason::cl {
             MASON_WARN("mason::cl::get_device_ids() failed! Returning empty!");
             return {};
         }
-        std::vector<cl_device_id> dev_vec;
+        std::vector<mason::cl::cl_device> dev_vec;
+        dev_vec.reserve(size);
 
         for (unsigned i = 0; i < size; i++) {
             cl_device_id dev = *(devices + i);
             if (dev) {
-                dev_vec.emplace_back(dev);
+                dev_vec.emplace_back(mason::cl::cl_device(dev));
             } else {
                 MASON_INFO("Breaking out of device vector transfer! This shouldn't happen!");
                 break;
@@ -55,6 +57,11 @@ namespace mason::cl {
         delete[] devices;
 
         return dev_vec;
+    }
+
+    std::vector<mason::cl::cl_device>
+    get_devices(const mason::cl::cl_platform &plat, cl_device_type dev_type, cl_uint max_devs) {
+        return get_devices(plat.int_id, dev_type, max_devs);
     }
 }
 

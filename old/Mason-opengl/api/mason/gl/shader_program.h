@@ -11,6 +11,8 @@
 
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
+
 #include <algorithm>
 
 #include "glm/glm.hpp"

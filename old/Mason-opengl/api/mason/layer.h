@@ -7,7 +7,7 @@
 #ifndef MASONSHARE_LAYER_H
 #define MASONSHARE_LAYER_H
 
-#include <mason/gl/gl_event.h>
+#include "mason/gl/gl_event.h"
 
 namespace mason::gl {
     struct gl_event;

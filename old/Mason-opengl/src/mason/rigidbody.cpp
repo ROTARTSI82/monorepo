@@ -36,6 +36,6 @@ namespace mason {
 
     void rigidbody::apply_friction(float coefficient) {
         // Equivalent to `push_force(-velocity * coefficient)`
-        acceleration += (-velocity * coefficient) / mass;
+        acceleration += (coefficient * -(velocity * velocity)) / mass;
     }
 }

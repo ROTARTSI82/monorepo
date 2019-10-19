@@ -2,7 +2,6 @@
 // Created by Grant on 9/21/19.
 //
 
-#include <mason/log.h>
 #include "mason/camera.h"
 
 namespace mason {

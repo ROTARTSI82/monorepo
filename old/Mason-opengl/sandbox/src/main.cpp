@@ -151,11 +151,11 @@ int main() {
 
     mason::task_pool *tpt = new mason::task_pool();
 
-    int a = 4, b = 5, c = 6, d = 7, e = 8, f = 9, g = 10;
-    tpt->push_task(tpt_func, &a);
+    int k = 4, b = 5, c = 6, j = 7, e = 8, f = 9, g = 10;
+    tpt->push_task(tpt_func, &k);
     tpt->push_task(tpt_func, &b);
     tpt->push_task(tpt_func, &c);
-    tpt->push_task(tpt_func, &d);
+    tpt->push_task(tpt_func, &j);
     tpt->push_task(tpt_func, &e);
     tpt->push_task(tpt_func, &f);
     tpt->push_task(tpt_func, &g);

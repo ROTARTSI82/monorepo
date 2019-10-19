@@ -8,12 +8,18 @@
 #define MASONSHARE_CL_CORE_H
 
 #include "mason/log.h"
+#include "mason/cl/cl_platform.h"
+#include "mason/cl/cl_device.h"
+
 #include "OpenCL/opencl.h"
 
 namespace mason::cl {
-    std::vector<cl_platform_id> get_platform_ids(cl_uint max_ids);
+    std::vector<mason::cl::cl_platform> get_platforms(cl_uint max_ids);
 
-    std::vector<cl_device_id> get_device_ids(cl_platform_id plat, cl_device_type dev_type, cl_uint max_devs);
+    std::vector<mason::cl::cl_device> get_devices(cl_platform_id plat, cl_device_type dev_type, cl_uint max_devs);
+
+    std::vector<mason::cl::cl_device>
+    get_devices(const mason::cl::cl_platform &plat, cl_device_type dev_type, cl_uint max_devs);
 }
 
 #endif //MASONSHARE_CL_CORE_H
