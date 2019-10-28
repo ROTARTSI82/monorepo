@@ -4,13 +4,15 @@
 
 #pragma once
 
-#ifndef MASONSHARE_THREAD_POOL_H
-#define MASONSHARE_THREAD_POOL_H
+#ifndef __MASON_THREAD_POOL_H
+#define __MASON_THREAD_POOL_H
 
 #include <queue>
 #include <vector>
 #include <thread>
 #include <future>
+
+#include "mason/log.h"
 
 namespace mason {
     class thread_pool;
@@ -53,4 +55,4 @@ namespace mason {
 }
 
 
-#endif //MASONSHARE_THREAD_POOL_H
+#endif //__MASON_THREAD_POOL_H

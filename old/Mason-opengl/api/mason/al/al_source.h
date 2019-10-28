@@ -4,12 +4,11 @@
 
 #pragma once
 
-#ifndef MASONSHARE_AL_SOURCE_H
-#define MASONSHARE_AL_SOURCE_H
+#ifndef __MASON_AL_SOURCE_H
+#define __MASON_AL_SOURCE_H
 
 #include "glm/glm.hpp"
-#include "OpenAL.h" // This include is mac-specific
-#include "mason/al/al_buffer.h"
+#include "mason/al/al_buffer.h" // Get OpenAL from al_buffer.h
 
 namespace mason::al {
     class al_source {
@@ -42,4 +41,4 @@ namespace mason::al {
     };
 }
 
-#endif //MASONSHARE_AL_SOURCE_H
+#endif //__MASON_AL_SOURCE_H

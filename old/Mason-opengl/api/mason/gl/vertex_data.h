@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_VERTEX_DATA_H
-#define MASONSHARE_VERTEX_DATA_H
+#ifndef __MASON_VERTEX_DATA_H
+#define __MASON_VERTEX_DATA_H
 
 #include "mason/gl/gl_core.h"
 
@@ -20,4 +20,4 @@ namespace mason::gl {
     };
 }
 
-#endif //MASONSHARE_VERTEX_DATA_H
+#endif //__MASON_VERTEX_DATA_H

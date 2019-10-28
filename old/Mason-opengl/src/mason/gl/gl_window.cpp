@@ -20,7 +20,32 @@ namespace mason::gl {
 
         init_glew();
 #ifdef MASON_ENABLE_IMGUI
-        init_imgui();
+        std::string glver = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+        glver = glver.substr(0, 3);
+        MASON_INFO("Got OpenGL \"{}\" to deduce ImGUI GLSL version!", glver);
+
+        std::string slver;
+
+        if (glver == "2.0") {
+            slver = "#version 110";
+        } else if (glver == "2.1") {
+            slver = "#version 120";
+        } else if (glver == "3.0") {
+            slver = "#version 130";
+        } else if (glver == "3.1") {
+            slver = "#version 140";
+        } else if (glver == "3.2") {
+            slver = "#version 150";
+        } else {
+            slver = "#version ";
+            slver += glver[0];
+            slver += glver[2];
+            slver += "0";
+        }
+
+        MASON_INFO("Deduced GLSL version of \"{}\"", slver);
+
+        init_imgui(slver.c_str());
 #endif
 
         glfwSetCursorPosCallback(this->win, mason::gl::event_handler::mouse_motion_handler);
@@ -40,7 +65,7 @@ namespace mason::gl {
 
 #ifdef MASON_ENABLE_IMGUI
         // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 #endif
@@ -57,7 +82,7 @@ namespace mason::gl {
         glUseProgram(0);
 //        glBindVertexArray(0);
 
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
         glfwSwapBuffers(win);
@@ -74,7 +99,7 @@ namespace mason::gl {
 
 #ifdef MASON_ENABLE_IMGUI
 
-    void gl_window::init_imgui() {
+    void gl_window::init_imgui(const char *glsl_ver) {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -89,7 +114,7 @@ namespace mason::gl {
 
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(win, true);
-        ImGui_ImplOpenGL2_Init();
+        ImGui_ImplOpenGL3_Init(glsl_ver);
 
         MASON_INFO("Successfully initialized ImGui {}", ImGui::GetVersion());
     }

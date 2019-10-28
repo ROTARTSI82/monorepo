@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_IMAGE_H
-#define MASONSHARE_IMAGE_H
+#ifndef __MASON_IMAGE_H
+#define __MASON_IMAGE_H
 
 #include "stb/stb_image.h"
 
@@ -28,4 +28,4 @@ namespace mason {
 }
 
 
-#endif //MASONSHARE_IMAGE_H
+#endif //__MASON_IMAGE_H

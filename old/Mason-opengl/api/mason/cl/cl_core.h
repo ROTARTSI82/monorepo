@@ -1,5 +1,5 @@
 //
-// Created by 25granty on 10/17/19.
+// Created by 25granty on 10/28/19.
 //
 
 #pragma once
@@ -7,19 +7,18 @@
 #ifndef MASONSHARE_CL_CORE_H
 #define MASONSHARE_CL_CORE_H
 
-#include "mason/log.h"
-#include "mason/cl/cl_platform.h"
-#include "mason/cl/cl_device.h"
+#include "mason/cl/cl_config.h"
 
-#include "OpenCL/opencl.h"
+#include <vector>
 
 namespace mason::cl {
-    std::vector<mason::cl::cl_platform> get_platforms(cl_uint max_ids);
 
-    std::vector<mason::cl::cl_device> get_devices(cl_platform_id plat, cl_device_type dev_type, cl_uint max_devs);
+    template<typename T>
+    ::cl::Buffer *buf_from_vec(::cl::CommandQueue *queue, std::vector<T> buf, bool readonly = false);
 
-    std::vector<mason::cl::cl_device>
-    get_devices(const mason::cl::cl_platform &plat, cl_device_type dev_type, cl_uint max_devs);
+    template<typename T>
+    std::vector<T> read_buf(::cl::CommandQueue *queue, ::cl::Buffer *buf);
 }
+
 
 #endif //MASONSHARE_CL_CORE_H

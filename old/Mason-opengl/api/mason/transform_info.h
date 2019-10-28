@@ -13,6 +13,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/euler_angles.hpp"
 
+#include "mason/log.h"
+
 namespace mason {
 
     class transform_info {

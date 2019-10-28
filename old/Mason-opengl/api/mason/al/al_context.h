@@ -4,10 +4,18 @@
 
 #pragma once
 
-#ifndef MASONSHARE_AL_CONTEXT_H
-#define MASONSHARE_AL_CONTEXT_H
+#ifndef __MASON_AL_CONTEXT_H
+#define __MASON_AL_CONTEXT_H
 
+
+#if defined(__APPLE__) || defined(__MACOSX)
 #include "OpenAL.h"
+
+#else
+#include "AL/al.h"
+#include "AL/alc.h"
+#endif // !__APPLE__
+
 #include "mason/al/al_device.h"
 
 namespace mason::al {
@@ -25,4 +33,4 @@ namespace mason::al {
     };
 }
 
-#endif //MASONSHARE_AL_CONTEXT_H
+#endif //__MASON_AL_CONTEXT_H

@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_GL_EVENT_HANDLER_H
-#define MASONSHARE_GL_EVENT_HANDLER_H
+#ifndef __MASON_GL_EVENT_HANDLER_H
+#define __MASON_GL_EVENT_HANDLER_H
 
 #include "mason/app_node.h"
 #include <queue>
@@ -39,4 +39,4 @@ namespace mason::gl::event_handler {
 }
 
 
-#endif //MASONSHARE_GL_EVENT_HANDLER_H
+#endif //__MASON_GL_EVENT_HANDLER_H

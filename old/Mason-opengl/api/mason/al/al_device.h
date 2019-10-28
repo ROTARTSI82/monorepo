@@ -4,10 +4,16 @@
 
 #pragma once
 
-#ifndef MASONSHARE_AL_DEVICE_H
-#define MASONSHARE_AL_DEVICE_H
+#ifndef __MASON_AL_DEVICE_H
+#define __MASON_AL_DEVICE_H
 
+#if defined(__APPLE__) || defined(__MACOSX)
 #include "OpenAL.h"
+
+#else
+#include "AL/al.h"
+#include "AL/alc.h"
+#endif // !__APPLE__
 
 namespace mason::al {
     class al_device {
@@ -26,4 +32,4 @@ namespace mason::al {
     void update_default_device();
 }
 
-#endif //MASONSHARE_AL_DEVICE_H
+#endif //__MASON_AL_DEVICE_H

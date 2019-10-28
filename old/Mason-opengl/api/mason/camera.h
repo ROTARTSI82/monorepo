@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_CAMERA_H
-#define MASONSHARE_CAMERA_H
+#ifndef __MASON_CAMERA_H
+#define __MASON_CAMERA_H
 
 #include "mason/transform_info.h"
 
@@ -28,4 +28,4 @@ namespace mason {
     };
 }
 
-#endif //MASONSHARE_CAMERA_H
+#endif //__MASON_CAMERA_H

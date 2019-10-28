@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_MASON_H
-#define MASONSHARE_MASON_H
+#ifndef __MASON_MASON_H
+#define __MASON_MASON_H
 
 #include <string>
 
@@ -20,4 +20,4 @@ namespace mason {
     extern bool logging_enabled;
 }
 
-#endif //MASONSHARE_MASON_H
+#endif //__MASON_MASON_H

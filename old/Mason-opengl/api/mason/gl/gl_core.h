@@ -3,8 +3,8 @@
 //
 #pragma once
 
-#ifndef MASONSHARE_GL_CORE_H
-#define MASONSHARE_GL_CORE_H
+#ifndef __MASON_GL_CORE_H
+#define __MASON_GL_CORE_H
 
 #include "mason/log.h"
 
@@ -16,7 +16,7 @@
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
 #include "imgui/imgui.h"
-#include "imgui/imgui_impl_opengl2.h"
+#include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_glfw.h"
 
 #endif
@@ -35,4 +35,4 @@ namespace mason::gl {
     void quit_imgui();
 }
 
-#endif //MASONSHARE_GL_CORE_H
+#endif //__MASON_GL_CORE_H

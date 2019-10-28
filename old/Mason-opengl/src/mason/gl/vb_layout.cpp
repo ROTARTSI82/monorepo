@@ -19,7 +19,7 @@ namespace mason::gl {
             vb_attribute attrib = attributes.at(i);
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, attrib.count, attrib.type, attrib.normalized, stride,
-                                  (const GLvoid *) attrib.pointer);
+                                  reinterpret_cast<GLvoid *>(attrib.pointer));
         }
     }
 

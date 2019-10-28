@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_INDEX_BUFFER_H
-#define MASONSHARE_INDEX_BUFFER_H
+#ifndef __MASON_INDEX_BUFFER_H
+#define __MASON_INDEX_BUFFER_H
 
 #include "mason/gl/gl_core.h"
 
@@ -15,7 +15,7 @@ namespace mason::gl {
     class index_buffer {
     public:
         GLuint id = 0;
-        unsigned count = 0;
+        GLsizei count = 0;
         GLenum type;
 
         explicit index_buffer(std::vector<unsigned int> indices);
@@ -31,4 +31,4 @@ namespace mason::gl {
 }
 
 
-#endif //MASONSHARE_INDEX_BUFFER_H
+#endif //__MASON_INDEX_BUFFER_H

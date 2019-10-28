@@ -4,11 +4,18 @@
 
 #pragma once
 
-#ifndef MASONSHARE_AL_LISTENER_H
-#define MASONSHARE_AL_LISTENER_H
+#ifndef __MASON_AL_LISTENER_H
+#define __MASON_AL_LISTENER_H
+
+#if defined(__APPLE__) || defined(__MACOSX)
+#include "OpenAL.h"
+
+#else
+#include "AL/al.h"
+#include "AL/alc.h"
+#endif // !__APPLE__
 
 #include "glm/glm.hpp"
-#include "OpenAL.h"
 
 namespace mason::al {
     class al_listener {
@@ -21,4 +28,4 @@ namespace mason::al {
     };
 }
 
-#endif //MASONSHARE_AL_LISTENER_H
+#endif //__MASON_AL_LISTENER_H

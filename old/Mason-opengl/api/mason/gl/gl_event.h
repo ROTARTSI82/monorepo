@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_GL_EVENT_H
-#define MASONSHARE_GL_EVENT_H
+#ifndef __MASON_GL_EVENT_H
+#define __MASON_GL_EVENT_H
 
 #include "mason/gl/gl_core.h"
 #include "mason/gl/gl_window.h"
@@ -40,4 +40,4 @@ namespace mason::gl {
 }
 
 
-#endif //MASONSHARE_GL_EVENT_H
+#endif //__MASON_GL_EVENT_H

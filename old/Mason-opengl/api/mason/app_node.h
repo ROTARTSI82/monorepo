@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_APP_NODE_H
-#define MASONSHARE_APP_NODE_H
+#ifndef __MASON_APP_NODE_H
+#define __MASON_APP_NODE_H
 
 #include <vector>
 #include "mason/gl/gl_event.h"
@@ -57,4 +57,4 @@ namespace mason {
     };
 }
 
-#endif //MASONSHARE_APP_NODE_H
+#endif //__MASON_APP_NODE_H

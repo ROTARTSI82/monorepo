@@ -53,20 +53,13 @@ namespace mason::gl {
             std::string full_path = path;
             full_path += "/" + filename;
 
-            std::string current_line;
-
-            std::ifstream shader_stream(full_path);
-
-            if (!shader_stream.is_open()) {
-                MASON_INFO("Failed to load {} as {}. Skipping this shader!", full_path, shader_type_str);
-                continue;
-            }
-
-            std::stringstream shader_source;
-            shader_source << shader_stream.rdbuf();
+            std::ifstream sourceFile(full_path);
+            std::string shader_source(
+                    std::istreambuf_iterator<char>(sourceFile),
+                    (std::istreambuf_iterator<char>()));
 
             // Shader compilation code.
-            GLuint shader = compile_shader(shader_type_str, shader_source.str(), full_path);
+            GLuint shader = compile_shader(shader_type_str, shader_source, full_path);
             if (shader != 0) {
                 glAttachShader(id, shader);
                 shaders.push_back(shader);

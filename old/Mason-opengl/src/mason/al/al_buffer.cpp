@@ -43,5 +43,5 @@ namespace mason::al {
     al_buffer::~al_buffer() {
         alDeleteBuffers(1, &buf);
     }
-};
+}
 

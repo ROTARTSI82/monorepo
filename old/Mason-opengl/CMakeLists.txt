@@ -30,10 +30,8 @@ add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h
         api/mason/task_pool.h src/mason/thread_pool.cpp api/mason/thread_pool.h src/mason/al/al_source.cpp
         api/mason/al/al_source.h api/mason/al/al_core.h api/mason/al/al_context.h api/mason/al/al_device.h
         src/mason/al/al_device.cpp src/mason/al/al_context.cpp src/mason/al/al_core.cpp api/mason/al/al_listener.h
-        api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp api/mason/cl/cl_core.h
-        src/mason/cl/cl_core.cpp src/mason/cl/cl_context.cpp api/mason/cl/cl_context.h src/mason/cl/cl_queue.cpp
-        api/mason/cl/cl_queue.h src/mason/cl/cl_platform.cpp api/mason/cl/cl_platform.h src/mason/cl/cl_device.cpp
-        api/mason/cl/cl_device.h src/mason/cl/cl_buffer.cpp api/mason/cl/cl_buffer.h src/mason/cl/cl_program.cpp api/mason/cl/cl_program.h)
+        api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp src/mason/cl/cl_device.cpp
+        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -89,10 +87,8 @@ add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_i
         api/mason/task_pool.h src/mason/thread_pool.cpp api/mason/thread_pool.h src/mason/al/al_source.cpp
         api/mason/al/al_source.h api/mason/al/al_core.h api/mason/al/al_context.h api/mason/al/al_device.h
         src/mason/al/al_device.cpp src/mason/al/al_context.cpp src/mason/al/al_core.cpp api/mason/al/al_listener.h
-        api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp api/mason/cl/cl_core.h
-        src/mason/cl/cl_core.cpp src/mason/cl/cl_context.cpp api/mason/cl/cl_context.h src/mason/cl/cl_queue.cpp
-        api/mason/cl/cl_queue.h src/mason/cl/cl_platform.cpp api/mason/cl/cl_platform.h src/mason/cl/cl_device.cpp
-        api/mason/cl/cl_device.h src/mason/cl/cl_buffer.cpp api/mason/cl/cl_buffer.h src/mason/cl/cl_program.cpp api/mason/cl/cl_program.h)
+        api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp src/mason/cl/cl_device.cpp
+        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h)
 
 set_target_properties(MasonShare PROPERTIES
         VERSION ${PROJECT_VERSION}

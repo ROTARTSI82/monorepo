@@ -19,3 +19,6 @@
 [submodule "vendor/gl3w"]
 	path = vendor/gl3w
 	url = https://github.com/skaslev/gl3w.git
+[submodule "vendor/OpenCL-CLHPP"]
+	path = vendor/OpenCL-CLHPP
+	url = https://github.com/KhronosGroup/OpenCL-CLHPP

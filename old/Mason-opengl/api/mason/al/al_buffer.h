@@ -4,10 +4,18 @@
 
 #pragma once
 
-#ifndef MASONSHARE_AL_BUFFER_H
-#define MASONSHARE_AL_BUFFER_H
+#ifndef __MASON_AL_BUFFER_H
+#define __MASON_AL_BUFFER_H
 
+
+#if defined(__APPLE__) || defined(__MACOSX)
 #include "OpenAL.h"
+
+#else
+#include "AL/al.h"
+#include "AL/alc.h"
+#endif // !__APPLE__
+
 #include <string>
 
 #include "mason/log.h"
@@ -23,4 +31,4 @@ namespace mason::al {
     };
 }
 
-#endif //MASONSHARE_AL_BUFFER_H
+#endif //__MASON_AL_BUFFER_H

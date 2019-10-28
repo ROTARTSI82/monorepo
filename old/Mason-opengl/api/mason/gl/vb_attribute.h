@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_VB_ATTRIBUTE_H
-#define MASONSHARE_VB_ATTRIBUTE_H
+#ifndef __MASON_VB_ATTRIBUTE_H
+#define __MASON_VB_ATTRIBUTE_H
 
 #include "mason/gl/gl_core.h"
 
@@ -15,8 +15,8 @@ namespace mason::gl {
         GLint count;
         GLenum type;
         GLboolean normalized;
-        size_t pointer;  // The actual type is GLsizei but I choose to use an unsigned type.
+        GLsizei pointer;  // The actual type is GLsizei but I choose to use an unsigned type.
     };
 }
 
-#endif //MASONSHARE_VB_ATTRIBUTE_H
+#endif //__MASON_VB_ATTRIBUTE_H

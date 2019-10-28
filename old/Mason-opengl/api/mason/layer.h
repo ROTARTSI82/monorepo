@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_LAYER_H
-#define MASONSHARE_LAYER_H
+#ifndef __MASON_LAYER_H
+#define __MASON_LAYER_H
 
 #include "mason/gl/gl_event.h"
 
@@ -34,4 +34,4 @@ namespace mason {
     };
 }
 
-#endif //MASONSHARE_LAYER_H
+#endif //__MASON_LAYER_H

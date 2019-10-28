@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_GL_WINDOW_H
-#define MASONSHARE_GL_WINDOW_H
+#ifndef __MASON_GL_WINDOW_H
+#define __MASON_GL_WINDOW_H
 
 #include "mason/app_node.h"
 #include "mason/gl/gl_core.h"
@@ -25,7 +25,7 @@ namespace mason::gl {
 
         void enable_vsync(int interval = 1);
 
-        void init_imgui();
+        void init_imgui(const char *glsl_ver);
 
         void bind();
 
@@ -37,4 +37,4 @@ namespace mason::gl {
     };
 }
 
-#endif //MASONSHARE_GL_WINDOW_H
+#endif //__MASON_GL_WINDOW_H

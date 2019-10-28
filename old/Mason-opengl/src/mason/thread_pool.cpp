@@ -2,7 +2,6 @@
 // Created by 25granty on 10/12/19.
 //
 
-#include <mason/log.h>
 #include "mason/thread_pool.h"
 
 namespace mason {

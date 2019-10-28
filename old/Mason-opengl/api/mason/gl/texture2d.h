@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_TEXTURE2D_H
-#define MASONSHARE_TEXTURE2D_H
+#ifndef __MASON_TEXTURE2D_H
+#define __MASON_TEXTURE2D_H
 
 #include "mason/gl/gl_core.h"
 #include "mason/image.h"
@@ -38,4 +38,4 @@ namespace mason::gl {
 }
 
 
-#endif //MASONSHARE_TEXTURE2D_H
+#endif //__MASON_TEXTURE2D_H

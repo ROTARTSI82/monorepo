@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_TASK_POOL_H
-#define MASONSHARE_TASK_POOL_H
+#ifndef __MASON_TASK_POOL_H
+#define __MASON_TASK_POOL_H
 
 #include <vector>
 #include <future>
@@ -44,4 +44,4 @@ namespace mason {
 }
 
 
-#endif //MASONSHARE_TASK_POOL_H
+#endif //__MASON_TASK_POOL_H

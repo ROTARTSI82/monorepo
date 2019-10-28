@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_VERTEX_ARRAY_H
-#define MASONSHARE_VERTEX_ARRAY_H
+#ifndef __MASON_VERTEX_ARRAY_H
+#define __MASON_VERTEX_ARRAY_H
 
 #include "mason/gl/gl_core.h"
 
@@ -35,4 +35,4 @@ namespace mason::gl {
         void bind();
     };
 }
-#endif //MASONSHARE_VERTEX_ARRAY_H
+#endif //__MASON_VERTEX_ARRAY_H

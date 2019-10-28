@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_SHADER_PROGRAM_H
-#define MASONSHARE_SHADER_PROGRAM_H
+#ifndef __MASON_SHADER_PROGRAM_H
+#define __MASON_SHADER_PROGRAM_H
 
 #include "mason/gl/gl_core.h"
 
@@ -35,7 +35,7 @@ namespace mason::gl {
 
         void set_uniform_3f(const std::string &name, float f1, float f2, float f3);
 
-        void set_uniform_mat4fv(const std::string &name, glm::mat4 &mat, GLboolean transpose = false);
+        void set_uniform_mat4fv(const std::string &name, glm::mat4 &mat, GLboolean transpose = GL_FALSE);
 
         void set_uniform_1i(const std::string &name, int i);
 
@@ -45,4 +45,4 @@ namespace mason::gl {
 }
 
 
-#endif //MASONSHARE_SHADER_PROGRAM_H
+#endif //__MASON_SHADER_PROGRAM_H

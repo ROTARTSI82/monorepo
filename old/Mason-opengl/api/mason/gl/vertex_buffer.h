@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_VERTEX_BUFFER_H
-#define MASONSHARE_VERTEX_BUFFER_H
+#ifndef __MASON_VERTEX_BUFFER_H
+#define __MASON_VERTEX_BUFFER_H
 
 #include "mason/gl/gl_core.h"
 #include "mason/gl/vertex_data.h"
@@ -29,4 +29,4 @@ namespace mason::gl {
     std::vector<float> pack_vertex_data(const std::vector<vertex_data> &data);
 }
 
-#endif //MASONSHARE_VERTEX_BUFFER_H
+#endif //__MASON_VERTEX_BUFFER_H

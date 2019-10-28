@@ -1,30 +1,26 @@
 //
-// Created by 25granty on 10/18/19.
+// Created by 25granty on 10/27/19.
 //
 
 #pragma once
 
-#ifndef MASONSHARE_CL_DEVICE_H
-#define MASONSHARE_CL_DEVICE_H
+#ifndef __MASON_CL_DEVICE_H
+#define __MASON_CL_DEVICE_H
 
-#include "OpenCL/opencl.h"
-
-#include "mason/log.h"
+#include "mason/cl/cl_config.h"
 
 namespace mason::cl {
     class cl_device {
     public:
-        cl_device_id int_id;
+        std::vector<::cl::Device> devices;
+        ::cl::Context context;
+        ::cl::CommandQueue queue;
 
-        explicit cl_device(cl_device_id id);
+        explicit cl_device(cl_device_type type);
 
-        ~cl_device();
-
-        void bind();
+        virtual ~cl_device() = default;
     };
-
-    cl_device_id *__active_device = nullptr;
 }
 
 
-#endif //MASONSHARE_CL_DEVICE_H
+#endif //__MASON_CL_DEVICE_H

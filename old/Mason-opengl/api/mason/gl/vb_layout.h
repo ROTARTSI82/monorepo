@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_VB_LAYOUT_H
-#define MASONSHARE_VB_LAYOUT_H
+#ifndef __MASON_VB_LAYOUT_H
+#define __MASON_VB_LAYOUT_H
 
 #include "mason/gl/gl_core.h"
 #include "mason/gl/vb_attribute.h"
@@ -14,14 +14,14 @@ namespace mason::gl {
     class vb_layout {
     public:
         std::vector<vb_attribute> attributes;
-        size_t stride = 0;
+        GLsizei stride = 0;
 
         vb_layout() = default;
 
         virtual ~vb_layout() = default;
 
         template<typename T>
-        void push_attribute(GLenum type, int quantity, GLboolean normalize = false);
+        void push_attribute(GLenum type, int quantity, GLboolean normalize = GL_FALSE);
 
         void set_attributes();
 
@@ -33,4 +33,4 @@ namespace mason::gl {
     vb_layout *get_default_layout();
 }
 
-#endif //MASONSHARE_VB_LAYOUT_H
+#endif //__MASON_VB_LAYOUT_H

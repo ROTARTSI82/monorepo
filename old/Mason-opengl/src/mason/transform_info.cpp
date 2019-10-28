@@ -2,7 +2,6 @@
 // Created by Grant on 2019-09-03.
 //
 
-#include <mason/log.h>
 #include "mason/transform_info.h"
 
 namespace mason {

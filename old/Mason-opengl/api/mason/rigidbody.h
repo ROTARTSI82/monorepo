@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_RIGIDBODY_H
-#define MASONSHARE_RIGIDBODY_H
+#ifndef __MASON_RIGIDBODY_H
+#define __MASON_RIGIDBODY_H
 
 #include "mason/transform_info.h"
 
@@ -35,4 +35,4 @@ namespace mason {
 }
 
 
-#endif //MASONSHARE_RIGIDBODY_H
+#endif //__MASON_RIGIDBODY_H

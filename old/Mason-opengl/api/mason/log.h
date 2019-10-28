@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_LOG_H
-#define MASONSHARE_LOG_H
+#ifndef __MASON_LOG_H
+#define __MASON_LOG_H
 
 #include <sstream>
 #include <iomanip>
@@ -43,4 +43,4 @@ namespace mason {
     void init_logging(bool use_single_file);
 }
 
-#endif // MASONSHARE_LOG_H
+#endif // __MASON_LOG_H
