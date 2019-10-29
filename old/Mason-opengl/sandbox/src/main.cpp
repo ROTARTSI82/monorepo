@@ -11,6 +11,8 @@
 #include "mason/gl/texture2d.h"
 #include "mason/camera.h"
 
+#include "mason/ft/ft_face.h"
+
 #include "mason/al/al_context.h"
 #include "mason/al/al_device.h"
 #include "mason/al/al_listener.h"
@@ -197,6 +199,10 @@ int main() {
     mason::gl::event_handler::add_event_subscriber(app);
     cam = new mason::camera(640, 480);
 
+    mason::ft::init_ft();
+    mason::ft::ft_face *font = new mason::ft::ft_face(
+            "/Users/25granty/Desktop/CLion/Mason/sandbox/res/Crimson-Roman.ttf", 50);
+    font->set_screen_size({1440, 900});
     float x = 1.0f;
     float pos[] = {
             -x, x, x, 0, 0, // 0
@@ -355,6 +361,11 @@ int main() {
         ImGui::ShowTestWindow();
         ImGui::ShowStyleSelector("Style select");
 
+        font->render("This is test text for FreeType", {1.0f, 872.5f}, 0.75, glm::vec4(1, 1, 1, 1.0f));
+        glDisable(GL_BLEND);
+        font->render("OpenGL testing text! (c) Grant", {1.0f, 845.0f}, 0.75, glm::vec4(1, 1, 1, 1.0f));
+        glEnable(GL_BLEND);
+
         win->flip();
 
         mason::al::al_listener::set_position(cam->transforms.position);
@@ -369,6 +380,9 @@ int main() {
     delete prog;
     delete win;
 
+    delete font;
+
+    mason::ft::quit_ft();
     mason::gl::quit_imgui();
     mason::gl::quit();
 

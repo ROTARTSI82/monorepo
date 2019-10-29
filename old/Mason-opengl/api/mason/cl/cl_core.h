@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef MASONSHARE_CL_CORE_H
-#define MASONSHARE_CL_CORE_H
+#ifndef __MASON_CL_CORE_H
+#define __MASON_CL_CORE_H
 
 #include "mason/cl/cl_config.h"
 
@@ -21,4 +21,4 @@ namespace mason::cl {
 }
 
 
-#endif //MASONSHARE_CL_CORE_H
+#endif //__MASON_CL_CORE_H

@@ -7,6 +7,8 @@
 #ifndef __MASON_CL_CONFIG_H
 #define __MASON_CL_CONFIG_H
 
+#define CL_SILENCE_DEPRECATION  // Make apple shut up.
+
 #define CL_HPP_MINIMUM_OPENCL_VERSION 100
 #define CL_HPP_TARGET_OPENCL_VERSION 120
 

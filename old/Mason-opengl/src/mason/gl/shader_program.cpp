@@ -120,6 +120,35 @@ namespace mason::gl {
         }
     }
 
+    shader_program::shader_program(std::unordered_map<std::string, std::string> shaders) {
+        id = glCreateProgram();
+        std::vector<GLuint> shader_list;
+
+        for (auto pair : shaders) {
+            GLuint shader = compile_shader(pair.first, pair.second, "user input");
+            if (shader != 0) {
+                glAttachShader(id, shader);
+                shader_list.emplace_back(shader);
+                MASON_INFO("Successfully loaded user input as {}", pair.first);
+            }  // We don't need to handle logging here, as it is already handled in compile_shader.
+        }
+        glLinkProgram(id);
+        glValidateProgram(id);
+
+        for (GLuint s : shader_list) {
+            glDeleteShader(s);
+        }
+
+        MASON_INFO("Successfully loaded shader program from user input!");
+    }
+
+    void shader_program::set_uniform_4f(const std::string &name, float f1, float f2, float f3, float f4) {
+        GLint loc = get_uniform_location(name);
+        if (loc != -1) {
+            glUniform4f(loc, f1, f2, f3, f4);
+        }
+    }
+
     GLuint compile_shader(const std::string &type, const std::string &src, const std::string &full_path) {
         GLenum type_enum;
 

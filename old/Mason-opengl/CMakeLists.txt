@@ -31,7 +31,7 @@ add_library(Mason STATIC src/mason/transform_info.cpp api/mason/transform_info.h
         api/mason/al/al_source.h api/mason/al/al_core.h api/mason/al/al_context.h api/mason/al/al_device.h
         src/mason/al/al_device.cpp src/mason/al/al_context.cpp src/mason/al/al_core.cpp api/mason/al/al_listener.h
         api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp src/mason/cl/cl_device.cpp
-        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h)
+        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h src/mason/ft/ft_core.cpp api/mason/ft/ft_core.h src/mason/ft/ft_face.cpp api/mason/ft/ft_face.h api/mason/ft/ft_glyph.h)
 
 set_target_properties(Mason PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -64,6 +64,7 @@ target_link_libraries(Mason PUBLIC "-framework OpenCL")
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw3.a)
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.a)
 #target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
+target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libfreetype.a)
 target_link_libraries(Mason PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.a)
 # glm and stb not here.
 
@@ -88,7 +89,7 @@ add_library(MasonShare SHARED src/mason/transform_info.cpp api/mason/transform_i
         api/mason/al/al_source.h api/mason/al/al_core.h api/mason/al/al_context.h api/mason/al/al_device.h
         src/mason/al/al_device.cpp src/mason/al/al_context.cpp src/mason/al/al_core.cpp api/mason/al/al_listener.h
         api/mason/al/al_buffer.h src/mason/al/al_listener.cpp src/mason/al/al_buffer.cpp src/mason/cl/cl_device.cpp
-        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h)
+        api/mason/cl/cl_device.h src/mason/cl/cl_core.cpp api/mason/cl/cl_core.h api/mason/cl/cl_config.h src/mason/ft/ft_core.cpp api/mason/ft/ft_core.h src/mason/ft/ft_face.cpp api/mason/ft/ft_face.h api/mason/ft/ft_glyph.h)
 
 set_target_properties(MasonShare PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -119,6 +120,7 @@ target_link_libraries(MasonShare PUBLIC "-framework OpenCL")
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libglfw.3.4.dylib)
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libspdlog.dylib)
 #target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libimgui.a)
+target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libfreetype.6.16.0.dylib)
 target_link_libraries(MasonShare PUBLIC ${PROJECT_SOURCE_DIR}/lib/libGLEW.2.1.0.dylib)
 # glm and stb not here
 

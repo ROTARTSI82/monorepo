@@ -29,11 +29,15 @@ namespace mason::gl {
 
         explicit shader_program(const std::string &path);
 
+        explicit shader_program(std::unordered_map<std::string, std::string> shaders);
+
         ~shader_program();
 
         GLint get_uniform_location(const std::string &name);
 
         void set_uniform_3f(const std::string &name, float f1, float f2, float f3);
+
+        void set_uniform_4f(const std::string &name, float f1, float f2, float f3, float f4);
 
         void set_uniform_mat4fv(const std::string &name, glm::mat4 &mat, GLboolean transpose = GL_FALSE);
 

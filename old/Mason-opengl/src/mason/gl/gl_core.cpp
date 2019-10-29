@@ -40,17 +40,25 @@ namespace mason::gl {
 
         // General OpenGL code
 
+        // Required to make FreeType function, and not restrict texture sizes to multiples of 4
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        // Enable blending so transparency exists
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendEquation(GL_ADD);
 
+        // Enable depth testing so faces don't draw over each other.
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
+        // Enable backface culling so unnecessary faces aren't drawn.
+        // (Note: It is the standard for face to be defined counter-clockwise, but is is not always the case)
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);
 
+        // Enable stencil testing. This isn't used for anything as of now.
         glEnable(GL_STENCIL_TEST);
         glStencilMask(0x00);  // Everything gets written as-is
         glStencilFunc(GL_ALWAYS, 0, 0x00);  // Everything passes

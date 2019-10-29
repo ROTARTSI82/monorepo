@@ -13,7 +13,7 @@ find_library(COCOA_LIBRARY Cocoa)
 find_package(OpenAL REQUIRED)
 find_package(OpenCL REQUIRED)
 
-add_executable(Sandbox src/cl_test.cpp)
+add_executable(Sandbox src/main.cpp)
 
 target_include_directories(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../api)
 target_include_directories(Sandbox PUBLIC ${PROJECT_SOURCE_DIR}/../include)
