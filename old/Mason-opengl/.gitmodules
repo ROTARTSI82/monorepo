@@ -25,3 +25,9 @@
 [submodule "vendor/freetype2"]
 	path = vendor/freetype2
 	url = https://github.com/aseprite/freetype2
+[submodule "vendor/assimp"]
+	path = vendor/assimp
+	url = https://github.com/assimp/assimp.git
+[submodule "vendor/boost"]
+	path = vendor/boost
+	url = https://github.com/boostorg/boost.git
