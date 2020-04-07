@@ -1,3 +1,18 @@
 {
-  "item.mcpp.ascendium_dust": "Ascendium Dust"
+  "item.mcpp.ascendium_dust": "Ascendium Dust",
+  "item.mcpp.ruby": "Ruby",
+  "block.mcpp.ruby_ore": "Ruby Ore",
+  "block.mcpp.ruby_block": "Block of Ruby",
+  "item.minecraft.potion.effect.levitation": "Potion of Levitation",
+  "item.minecraft.potion.effect.strong_levitation": "Potion of Levitation",
+  "item.minecraft.potion.effect.long_levitation": "Potion of Levitation",
+  "item.minecraft.tipped_arrow.effect.levitation": "Arrow of Levitation",
+  "item.minecraft.tipped_arrow.effect.strong_levitation": "Arrow of Levitation",
+  "item.minecraft.tipped_arrow.effect.long_levitation": "Arrow of Levitation",
+  "item.minecraft.lingering_potion.effect.levitation": "Lingering Potion of Levitation",
+  "item.minecraft.lingering_potion.effect.strong_levitation": "Lingering Potion of Levitation",
+  "item.minecraft.lingering_potion.effect.long_levitation": "Lingering Potion of Levitation",
+  "item.minecraft.splash_potion.effect.levitation": "Splash Potion of Levitation",
+  "item.minecraft.splash_potion.effect.strong_levitation": "Splash Potion of Levitation",
+  "item.minecraft.splash_potion.effect.long_levitation": "Splash Potion of Levitation"
 }

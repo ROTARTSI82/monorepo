@@ -25,4 +25,7 @@ public class MCPPItems {
                             .effect(new EffectInstance(Effects.SLOWNESS, 4000, 1), 100)
                             .effect(new EffectInstance(Effects.BLINDNESS, 450, 3), 100)
                             .build())));
+
+    public static final RegistryObject<Item> RUBY = REGISTER.register("ruby", () -> new Item((new Item.Properties()).group(ItemGroup.MATERIALS)));
+
 }

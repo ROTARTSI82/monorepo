@@ -1,11 +1,11 @@
 package io.github.rotartsi82.mcpp.common.util;
 
 import io.github.rotartsi82.mcpp.common.MCPP;
+import io.github.rotartsi82.mcpp.common.block.MCPPBlocks;
 import io.github.rotartsi82.mcpp.common.item.MCPPItems;
 import io.github.rotartsi82.mcpp.common.potion.MCPPPotions;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.block.Block;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
@@ -22,8 +22,8 @@ public class MCPPModEventHandler {
     private static final Logger LOGGER = LogManager.getLogger(MCPPModEventHandler.class);
 
     @SubscribeEvent
-    public static void registerPotions(RegistryEvent.Register<Potion> event) {
-        addStandardBrewSet(Potions.AWKWARD, MCPPPotions.BASE_LEVITATION.get(), MCPPPotions.LONG_LEVITATION.get(), MCPPPotions.STRONG_LEVITATION.get(), MCPPItems.ASCENDIUM_DUST.get());
+    public static void onRegisterPotions(RegistryEvent.Register<Potion> event) {
+        addStandardBrewSet(Potions.AWKWARD, MCPPPotions.LEVITATION.get(), MCPPPotions.LONG_LEVITATION.get(), MCPPPotions.STRONG_LEVITATION.get(), MCPPItems.ASCENDIUM_DUST.get());
     }
 
     private static void addPotionRecipeForAllTypes(Potion bottomSlot, Item ingredient, Potion result) {
@@ -51,5 +51,17 @@ public class MCPPModEventHandler {
         if (strongResult != null) {
             addPotionRecipeForAllTypes(baselineResult, Items.REDSTONE, strongResult);
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterBlocks(RegistryEvent.Register<Block> event) {
+
+    }
+
+    @SubscribeEvent
+    public static void onRegisterItems(RegistryEvent.Register<Item> event) {
+        MCPPBlocks.REGISTER.getEntries().forEach((element) -> {
+            event.getRegistry().register(new BlockItem(element.get(), new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(element.get().getRegistryName()));
+        });
     }
 }
