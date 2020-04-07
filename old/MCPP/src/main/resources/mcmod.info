@@ -1,0 +1,12 @@
+[{
+  "modid": "mcpp",
+  "name": "MC++",
+  "description": "Rotartsi's Minecraft++, a mod that adds cool new features in the same style as vanilla minecraft!",
+  "version": "0.0.0",
+  "mcversion": "1.15.2",
+  "logoFile": "assets/mcpp/textures/logo.png",
+  "url": "https://rotartsi82.github.io/MCPP",
+  "updateJSON": "https://rotartsi82.github.io/MCPP/versions.json",
+  "authorList": ["Rotartsi"],
+  "credits": "Rotartsi is the creator of this mod"
+}]
