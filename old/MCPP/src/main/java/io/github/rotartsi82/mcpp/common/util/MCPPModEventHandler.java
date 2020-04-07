@@ -10,10 +10,19 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.ConfiguredPlacement;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,5 +72,13 @@ public class MCPPModEventHandler {
         MCPPBlocks.REGISTER.getEntries().forEach((element) -> {
             event.getRegistry().register(new BlockItem(element.get(), new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(element.get().getRegistryName()));
         });
+    }
+
+    @SubscribeEvent
+    public static void addCustomOreGen(FMLLoadCompleteEvent event) {
+        for (Biome biome : ForgeRegistries.BIOMES) {
+            ConfiguredPlacement config = Placement.COUNT_RANGE.configure(new CountRangeConfig(11, 0, 0, 32));
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, MCPPBlocks.RUBY_ORE.get().getDefaultState(), 1)).withPlacement(config));
+        }
     }
 }
