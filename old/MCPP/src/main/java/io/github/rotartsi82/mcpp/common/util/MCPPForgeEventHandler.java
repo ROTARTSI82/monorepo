@@ -18,31 +18,56 @@ public class MCPPForgeEventHandler {
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        clusterBreak(event.getPlayer(), event.getPos(), event.getPlayer().world.getBlockState(event.getPos()),
-                EnchantmentHelper.getEnchantmentLevel(MCPPEnchants.VEIN_MINER.get(), event.getPlayer().getHeldItemMainhand()));
+        int enchLvl = EnchantmentHelper.getEnchantmentLevel(MCPPEnchants.VEIN_MINER.get(), event.getPlayer().getHeldItemMainhand());
+        if (enchLvl > 0) {
+            BlockState target = event.getPlayer().world.getBlockState(event.getPos());
+            breakBlock(event.getPlayer(), event.getPos(), target);
+            clusterBreak(event.getPlayer(), event.getPos(), target, enchLvl);
+        }
     }
 
     private static void clusterBreak(PlayerEntity player, BlockPos pos, BlockState targetBlock, int lvl) {
-        player.addExhaustion(0.125f);
+        boolean px = breakBlock(player, pos.add(1, 0, 0), targetBlock);
+        boolean nx = breakBlock(player, pos.add(-1, 0, 0), targetBlock);
 
-        if (player.getHeldItemMainhand().canHarvestBlock(player.world.getBlockState(pos)) || player.world.getBlockState(pos).canHarvestBlock(player.world, pos, player)) {
-            if (player.world.getBlockState(pos) == targetBlock && player.world.getBlockState(pos).canEntityDestroy(player.world, pos, player)) {
-                player.world.destroyBlock(pos, true);
-                player.getHeldItemMainhand().attemptDamageItem(1, MCPP.rand, null);
-            }
-        }
+        boolean py = breakBlock(player, pos.add(0, 1, 0), targetBlock);
+        boolean ny = breakBlock(player, pos.add(0, -1, 0), targetBlock);
+
+        boolean pz = breakBlock(player, pos.add(0, 0, 1), targetBlock);
+        boolean nz = breakBlock(player, pos.add(0, 0, -1), targetBlock);
 
         if (lvl > 0) {
-            clusterBreak(player, pos.add(1, 0, 0), targetBlock, lvl - 1);
-            clusterBreak(player, pos.add(-1, 0, 0), targetBlock, lvl - 1);
+            if (px) {
+                clusterBreak(player, pos.add(1, 0, 0), targetBlock, lvl - 1);
+            }
+            if (nx) {
+                clusterBreak(player, pos.add(-1, 0, 0), targetBlock, lvl - 1);
+            }
 
-            clusterBreak(player, pos.add(0, -1, 0), targetBlock, lvl - 1);
-            clusterBreak(player, pos.add(0, 1, 0), targetBlock, lvl - 1);
+            if (py) {
+                clusterBreak(player, pos.add(0, 1, 0), targetBlock, lvl - 1);
+            }
+            if (ny) {
+                clusterBreak(player, pos.add(0, -1, 0), targetBlock, lvl - 1);
+            }
 
-            clusterBreak(player, pos.add(0, 0, 1), targetBlock, lvl - 1);
-            clusterBreak(player, pos.add(0, 0, -1), targetBlock, lvl - 1);
-
+            if (pz) {
+                clusterBreak(player, pos.add(0, 0, 1), targetBlock, lvl - 1);
+            }
+            if (nz) {
+                clusterBreak(player, pos.add(0, 0, -1), targetBlock, lvl - 1);
+            }
         }
     }
 
+    private static boolean breakBlock(PlayerEntity player, BlockPos pos, BlockState targetBlock) {
+        if (player.world.getBlockState(pos) == targetBlock && player.canHarvestBlock(player.world.getBlockState(pos))) {
+            player.world.destroyBlock(pos, true, player);
+            player.getHeldItemMainhand().attemptDamageItem(1, MCPP.rand, null);
+            player.addExhaustion(0.125f);
+            return true;
+        }
+        return false;
+    }
 }
+
