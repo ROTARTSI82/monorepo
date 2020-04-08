@@ -5,13 +5,15 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
 public class VeinMinerEnchant extends Enchantment {
+    public static final int MAX_LVL = 3;
+
     public VeinMinerEnchant() {
         super(Rarity.COMMON, EnchantmentType.DIGGER, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
     }
 
     @Override
     public int getMaxLevel() {
-        return 10;
+        return MAX_LVL;
     }
 
     @Override
