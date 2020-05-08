@@ -2,7 +2,6 @@
 // Created by grant on 5/8/20.
 //
 
-<<<<<<< HEAD
 #include <iostream>
 #include <vector>
 #include <GL/glew.h>
@@ -241,5 +240,3 @@ public:
         *this = std::move(rhs);
     }
 };
-=======
->>>>>>> a34588df6e0d72a81fdc4973d316d129d9fe1758
