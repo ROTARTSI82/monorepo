@@ -39,7 +39,7 @@ int main() {
     sProgram.link();
     sProgram.bind();
 
-    auto vboDat = std::vector<float>({1, 1, 0, 1, -1, 0, -1, -1, 0, -1, 1, 0});
+    auto vboDat = std::vector<float>({0.5, 0.5, 0, 0.5, -0.5, 0, -0.5, -0.5, 0, -0.5, 0.5, 0});
     VBO vbo(vboDat);
 
     auto iboDat = std::vector<unsigned>({0, 1, 3, 2, 3, 1});
@@ -62,6 +62,7 @@ int main() {
         ibo.draw();
         glfwSwapBuffers(win);
         glfwPollEvents();
+        flushErrors("null");
     }
 
     glfwDestroyWindow(win);

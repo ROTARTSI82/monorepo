@@ -5,11 +5,24 @@
 #include <iostream>
 #include <vector>
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 #include <fstream>
 #include <GLFW/glfw3.h>
 
-template <typename T, GLenum type>
+void flushErrors(const std::string &msg) {
+    if (msg != "null") {
+        std::cerr << msg << std::endl;
+    }
+
+    GLenum err = 1;
+    while (err != GL_NO_ERROR) {
+        if (err != 1) {
+            std::cerr << "OpenGL Error: " << err << std::endl;
+        }
+        err = glGetError();
+    }
+}
+
+template<typename T, GLenum type>
 class GenericBuffer {
 protected:
     GLuint id{};
@@ -20,7 +33,6 @@ public:
         glGenBuffers(1, &id);
         bind();
         glBufferData(type, contents.size() * sizeof(T), contents.data(), GL_STATIC_DRAW);
-        std::cout << "Buffer data called with type=" << type << " size=" << contents.size() * sizeof(T) << std::endl;
     }
 
     inline void bind() const {
@@ -59,7 +71,6 @@ public:
 
     inline void draw() {
         bind();
-        std::cout << "glDrawElements is " << &glDrawElements << ", Count: " << count << std::endl;
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 
@@ -105,10 +116,9 @@ public:
     void finalize() {
         bind();
         GLsizei ptr{};
-        for (size_t i = 0; i < attribs.size(); i++) {
+        for (GLuint i = 0; i < attribs.size(); i++) {
             glEnableVertexAttribArray(i);
-            std::cout << i << ": #" << attribs[i] << ", stride=" << stride << ", ptr=" << ptr << std::endl;
-            glVertexAttribPointer(i, sizeof(float) * attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(ptr));
+            glVertexAttribPointer(i, attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void *>(ptr));
             ptr += attribs[i] * sizeof(float);
         }
     }
