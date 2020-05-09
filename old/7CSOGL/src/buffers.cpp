@@ -5,7 +5,12 @@
 #include <iostream>
 #include <vector>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <fstream>
+#include "glm/gtx/euler_angles.hpp"
 #include <GLFW/glfw3.h>
 
 void flushErrors(const std::string &msg) {
@@ -209,6 +214,8 @@ public:
     }
 };
 
+typedef int UniformLocation;
+
 class ShaderProgram {
 private:
     GLuint id{};
@@ -234,7 +241,16 @@ public:
         glDeleteProgram(id);
     }
 
+    [[nodiscard]] inline UniformLocation getLocation(const std::string &in) const {
+        return glGetUniformLocation(id, in.c_str());
+    }
+
+    static inline void setMat4(UniformLocation in, glm::mat4 val) {
+        glUniformMatrix4fv(in, 1, GL_FALSE, glm::value_ptr(val));
+    }
+
     ShaderProgram &operator=(const ShaderProgram &rhs) = delete;
+
     ShaderProgram(const ShaderProgram &rhs) = delete;
 
     ShaderProgram &operator=(ShaderProgram &&rhs) noexcept {
@@ -248,5 +264,51 @@ public:
 
     ShaderProgram(ShaderProgram &&rhs) noexcept {
         *this = std::move(rhs);
+    }
+};
+
+
+class Camera {
+private:
+
+    glm::mat4 view;
+    glm::mat4 proj;
+
+public:
+    glm::vec3 pos;
+    glm::vec3 euler;
+
+    glm::vec3 forward;
+    glm::vec3 right;
+    glm::vec3 up;
+
+    Camera() = default;
+
+    inline void setOri(glm::vec3 eulerCoords) {
+        euler = eulerCoords;
+    }
+
+    inline void setPos(glm::vec3 newPos) {
+        this->pos = newPos;
+    }
+
+    inline void updateViewMat() {
+        view = glm::eulerAngleXYZ(euler.x, euler.y, euler.z);
+        forward = glm::vec4({0, 0, 1, 0}) * view;
+        right = glm::vec4({1, 0, 0, 0}) * view;
+        up = glm::vec4({0, 1, 0, 0}) * view;
+        view = view * glm::translate(glm::mat4(1.0f), pos);
+    }
+
+    inline glm::mat4 getView() {
+        return view;
+    }
+
+    inline glm::mat4 getProj() {
+        return proj;
+    }
+
+    inline void setProj(float fov, float ratio, float zNear = 0.1f, float zFar = 100.0f) {
+        proj = glm::perspective(glm::radians(fov), ratio, zNear, zFar);
     }
 };
