@@ -29,6 +29,8 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    glEnable(GL_CULL_FACE);
+
     auto vertShader = Shader("./shaders/default.vert", true);
     auto fragShader = Shader("./shaders/default.frag", false);
 
@@ -71,11 +73,11 @@ int main() {
                                      });
     VBO vbo(vboDat);
 
-    auto iboDat = std::vector<unsigned>({0, 1, 2, 3, 0, 2,
-                                         4, 5, 6, 7, 4, 6,
+    auto iboDat = std::vector<unsigned>({2, 1, 0, 2, 0, 3, // top
+                                         4, 5, 6, 7, 4, 6, // Bottom
                                          8, 9, 10, 11, 8, 10,
-                                         12, 13, 14, 15, 12, 14,
-                                         16, 17, 18, 19, 16, 18,
+                                         14, 13, 12, 14, 12, 15,
+                                         18, 17, 16, 18, 16, 19,
                                          20, 21, 22, 23, 20, 22
                                         });
     IBO ibo(iboDat);
@@ -120,7 +122,7 @@ int main() {
         ShaderProgram::setMat4(matV, cam.getView());
         ShaderProgram::setMat4(matP, cam.getProj());
 
-        ibo.draw();
+        ibo.draw(4096);
         glfwSwapBuffers(win);
         glfwPollEvents();
         flushErrors("null");

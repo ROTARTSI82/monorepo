@@ -76,9 +76,9 @@ public:
     explicit IBO(std::vector<unsigned> &contents) : GenericBuffer<unsigned, GL_ELEMENT_ARRAY_BUFFER>(contents),
             count(contents.size()) {};
 
-    inline void draw() {
+    void draw(int instances = 1) {
         bind();
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+        glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr, instances);
     }
 
     IBO &operator=(const IBO &rhs) = delete;
