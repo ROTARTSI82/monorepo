@@ -8,10 +8,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/quaternion.hpp>
+
+#define STB_IMAGE_IMPLEMENTATION
+
+#include <stb/stb_image.h>
 #include <fstream>
 #include "glm/gtx/euler_angles.hpp"
-#include <GLFW/glfw3.h>
 
 void flushErrors(const std::string &msg) {
     if (msg != "null") {
@@ -249,6 +251,10 @@ public:
         glUniformMatrix4fv(in, 1, GL_FALSE, glm::value_ptr(val));
     }
 
+    static inline void set1i(UniformLocation in, GLint val) {
+        glUniform1i(in, val);
+    }
+
     ShaderProgram &operator=(const ShaderProgram &rhs) = delete;
 
     ShaderProgram(const ShaderProgram &rhs) = delete;
@@ -310,5 +316,43 @@ public:
 
     inline void setProj(float fov, float ratio, float zNear = 0.1f, float zFar = 100.0f) {
         proj = glm::perspective(glm::radians(fov), ratio, zNear, zFar);
+    }
+};
+
+
+class Texture {
+private:
+    GLuint id{};
+public:
+    Texture() = default;
+
+    explicit Texture(const std::string &file, bool antiAlias = false) {
+        int width, height, nrChannels;
+        unsigned char *data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
+
+        glGenTextures(1, &id);
+        bind();
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, antiAlias ? GL_LINEAR : GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, antiAlias ? GL_LINEAR : GL_NEAREST);
+
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        } else {
+            throw std::runtime_error("Failed to load texture: " + file);
+        }
+
+    }
+
+    inline void bind() const {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
+
+    ~Texture() {
+        glDeleteTextures(1, &id);
     }
 };

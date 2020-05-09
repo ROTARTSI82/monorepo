@@ -8,5 +8,5 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_executable(CompSciProj src/main.cpp)
-target_include_directories(CompSciProj PUBLIC dep/glfw/include dep/glm ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} src)
+target_include_directories(CompSciProj PUBLIC dep/glfw/include dep/glm dep ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} src)
 target_link_libraries(CompSciProj PUBLIC glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})

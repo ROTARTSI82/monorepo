@@ -38,39 +38,66 @@ int main() {
     shaders.link();
     shaders.bind();
 
-    auto vboDat = std::vector<float>(
-            {.5f, .5f, .5f, -.5f, .5f, .5f, -.5f, -.5f, .5f, .5f, -.5f, .5f, // v0,v1,v2,v3 (front)
-             .5f, .5f, .5f, .5f, -.5f, .5f, .5f, -.5f, -.5f, .5f, .5f, -.5f, // v0,v3,v4,v5 (right)
-             .5f, .5f, .5f, .5f, .5f, -.5f, -.5f, .5f, -.5f, -.5f, .5f, .5f, // v0,v5,v6,v1 (top)
-             -.5f, .5f, .5f, -.5f, .5f, -.5f, -.5f, -.5f, -.5f, -.5f, -.5f, .5f, // v1,v6,v7,v2 (left)
-             -.5f, -.5f, -.5f, .5f, -.5f, -.5f, .5f, -.5f, .5f, -.5f, -.5f, .5f, // v7,v4,v3,v2 (bottom)
-             .5f, -.5f, -.5f, -.5f, -.5f, -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f  // v4,v7,v6,v5 (back)
-            });
+    auto vboDat = std::vector<float>({
+                                             -1, 1, -1, 0, 2 / 3.0f,
+                                             1, 1, -1, 1, 2 / 3.0f,
+                                             1, 1, 1, 1, 1.0,
+                                             -1, 1, 1, 0, 1.0,
 
+                                             -1, -1, -1, 0, 1 / 3.0f,
+                                             1, -1, -1, 1, 1 / 3.0f,
+                                             1, -1, 1, 1, 2 / 3.0f,
+                                             -1, -1, 1, 0, 2 / 3.0f,
+
+                                             -1, 1, -1, 0, 0,
+                                             1, 1, -1, 1, 0,
+                                             1, -1, -1, 1, 1 / 3.0f,
+                                             -1, -1, -1, 0, 1 / 3.0f,
+
+                                             -1, 1, 1, 0, 0,
+                                             1, 1, 1, 1, 0,
+                                             1, -1, 1, 1, 1 / 3.0f,
+                                             -1, -1, 1, 0, 1 / 3.0f,
+
+                                             1, 1, -1, 1, 0,
+                                             1, -1, -1, 1, 1 / 3.0f,
+                                             1, -1, 1, 0, 1 / 3.0f,
+                                             1, 1, 1, 0, 0,
+
+                                             -1, 1, -1, 1, 0,
+                                             -1, -1, -1, 1, 1 / 3.0f,
+                                             -1, -1, 1, 0, 1 / 3.0f,
+                                             -1, 1, 1, 0, 0
+                                     });
     VBO vbo(vboDat);
 
-    auto iboDat = std::vector<unsigned>({
-                                                0, 1, 2, 2, 3, 0,    // v0-v1-v2, v2-v3-v0 (front)
-                                                4, 5, 6, 6, 7, 4,    // v0-v3-v4, v4-v5-v0 (right)
-                                                8, 9, 10, 10, 11, 8,    // v0-v5-v6, v6-v1-v0 (top)
-                                                12, 13, 14, 14, 15, 12,    // v1-v6-v7, v7-v2-v1 (left)
-                                                16, 17, 18, 18, 19, 16,    // v7-v4-v3, v3-v2-v7 (bottom)
-                                                20, 21, 22, 22, 23, 20     // v4-v7-v6, v6-v5-v4 (back)
+    auto iboDat = std::vector<unsigned>({0, 1, 2, 3, 0, 2,
+                                         4, 5, 6, 7, 4, 6,
+                                         8, 9, 10, 11, 8, 10,
+                                         12, 13, 14, 15, 12, 14,
+                                         16, 17, 18, 19, 16, 18,
+                                         20, 21, 22, 23, 20, 22
                                         });
     IBO ibo(iboDat);
 
     auto vao = VAO();
-    vao.pushFloat(3);
+    vao.pushFloat(3); // Vertex pos
+    vao.pushFloat(2); // Texture coords (UV)
 
+    auto tex = Texture("./res/tex/grass_texture.png");
+
+    tex.bind();
     vbo.bind();
     ibo.bind();
     vao.bind();
     vao.finalize();
 
+    UniformLocation texSlot = shaders.getLocation("tex");
     UniformLocation matM = shaders.getLocation("model");
     UniformLocation matV = shaders.getLocation("view");
     UniformLocation matP = shaders.getLocation("projection");
 
+    ShaderProgram::set1i(texSlot, 0);
     ShaderProgram::setMat4(matM, glm::translate(glm::mat4(1.0f), {0, 0, 0}));
 
     Camera cam = Camera();
