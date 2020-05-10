@@ -3,9 +3,36 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
+#define TINYOBJLOADER_IMPLEMENTATION
+
+#include <tinyobjloader/tiny_obj_loader.h>
+
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <glm/gtx/hash.hpp>
+
 #include <buffers.cpp>
 
 GLFWwindow *win{};
+
+struct Vertex {
+    glm::vec3 pos;
+    glm::vec2 uv;
+
+    bool operator==(const Vertex &rhs) const {
+        return pos == rhs.pos && uv == rhs.uv;
+    }
+};
+
+namespace std {
+    template<>
+    struct hash<Vertex> {
+        size_t operator()(Vertex const &vertex) const {
+            return hash<glm::vec3>()(vertex.pos) ^ hash<glm::vec2>()(vertex.uv);
+        }
+    };
+}
+
 
 int main() {
 
@@ -39,6 +66,56 @@ int main() {
     shaders.attach(fragShader);
     shaders.link();
     shaders.bind();
+
+    std::vector<Vertex> rickVboDat;
+    std::vector<unsigned> rickIboDat;
+    std::unordered_map<Vertex, unsigned> rickVertMap;
+
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, "./res/obj/rick.obj")) {
+        throw std::runtime_error(warn + err);
+    }
+
+    for (const auto &shape : shapes) {
+        for (const auto &index : shape.mesh.indices) {
+            Vertex vertex{};
+            vertex.uv.x = attrib.texcoords[2 * index.texcoord_index + 0];
+            vertex.uv.y = 1.0f - attrib.texcoords[2 * index.texcoord_index + 1];
+
+            vertex.pos.x = attrib.vertices[3 * index.vertex_index + 0];
+            vertex.pos.y = attrib.vertices[3 * index.vertex_index + 1];
+            vertex.pos.z = attrib.vertices[3 * index.vertex_index + 2];
+
+            auto iter = std::find(rickVboDat.begin(), rickVboDat.end(), vertex);
+
+            if (iter == rickVboDat.end()) {
+                rickVboDat.emplace_back(vertex);
+                rickVertMap[vertex] = rickVboDat.size() - 1;
+                rickIboDat.emplace_back(rickVboDat.size() - 1);
+            } else {
+                rickIboDat.emplace_back(rickVertMap[vertex]);
+            }
+        }
+    }
+
+    // TODO: Location to play sound: {-64, 8, -64}
+    auto rickVbo = GenericBuffer<Vertex, GL_ARRAY_BUFFER>(rickVboDat);
+    auto rickIbo = IBO(rickIboDat);
+    auto rickTex = Texture("./res/tex/rick.jpg");
+    auto rickVao = VAO();
+
+    rickVbo.bind();
+    rickIbo.bind();
+    rickTex.bind();
+    rickVao.bind();
+    rickVao.pushFloat(3);
+    rickVao.pushFloat(2);
+    rickVao.finalize();
+
 
     auto vboDat = std::vector<float>({
                                              -1, 1, -1, 0, 2 / 3.0f,
@@ -122,7 +199,18 @@ int main() {
         ShaderProgram::setMat4(matV, cam.getView());
         ShaderProgram::setMat4(matP, cam.getProj());
 
+        tex.bind();
+        vbo.bind();
+        vao.bind();
+        ibo.bind();
         ibo.draw(4096);
+
+        rickVao.bind();
+        rickVbo.bind();
+        rickIbo.bind();
+        rickTex.bind();
+        rickIbo.draw(1);
+
         glfwSwapBuffers(win);
         glfwPollEvents();
         flushErrors("null");

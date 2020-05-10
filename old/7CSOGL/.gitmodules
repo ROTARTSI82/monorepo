@@ -7,3 +7,6 @@
 [submodule "dep/stb"]
 	path = dep/stb
 	url = git@github.com:nothings/stb.git
+[submodule "dep/tinyobjloader"]
+	path = dep/tinyobjloader
+	url = git@github.com:tinyobjloader/tinyobjloader.git
