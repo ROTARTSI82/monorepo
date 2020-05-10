@@ -120,10 +120,11 @@ public:
         stride += sizeof(float) * qty;
     }
 
-    void finalize() {
+    void finalize(int inc = 1) {
         bind();
         GLsizei ptr{};
-        for (GLuint i = 0; i < attribs.size(); i++) {
+        for (GLuint i = 0; i < (attribs.size() * inc); i += inc) {
+            std::cout << "I = " << i << std::endl;
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void *>(ptr));
             ptr += attribs[i] * sizeof(float);

@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
+#include <random>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 
@@ -11,7 +12,7 @@
 
 #include <glm/gtx/hash.hpp>
 
-#include <buffers.cpp>
+#include <abstract.cpp>
 
 GLFWwindow *win{};
 
@@ -35,6 +36,9 @@ namespace std {
 
 
 int main() {
+    std::random_device seeder;
+    std::default_random_engine randEngine(seeder());
+    auto radianDist = std::uniform_real_distribution<float>(0, 2 * 3.14159265);
 
     if (!glfwInit()) {
         throw std::runtime_error("GLFW initialization failed! Aborting!");
@@ -102,11 +106,15 @@ int main() {
         }
     }
 
+    std::vector<glm::mat4> rickInstanceVboDat;
+    rickInstanceVboDat.emplace_back(glm::mat4(1.0f));
+
     // TODO: Location to play sound: {-64, 8, -64}
     auto rickVbo = GenericBuffer<Vertex, GL_ARRAY_BUFFER>(rickVboDat);
     auto rickIbo = IBO(rickIboDat);
-    auto rickTex = Texture("./res/tex/rick.jpg");
+    auto rickTex = Texture("./res/tex/rick.jpg", true);
     auto rickVao = VAO();
+    auto rickInstanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(rickInstanceVboDat);
 
     rickVbo.bind();
     rickIbo.bind();
@@ -115,6 +123,12 @@ int main() {
     rickVao.pushFloat(3);
     rickVao.pushFloat(2);
     rickVao.finalize();
+    rickInstanceVbo.bind();
+    for (int i = 2; i < 6; i++) {
+        glEnableVertexAttribArray(i);
+        glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
+        glVertexAttribDivisor(i, 1);
+    }
 
 
     auto vboDat = std::vector<float>({
@@ -150,6 +164,15 @@ int main() {
                                      });
     VBO vbo(vboDat);
 
+    auto instanceVboDat = std::vector<glm::mat4>();
+    for (int i = 0; i < 4096; i++) {
+        auto newMat = glm::eulerAngleYXZ(radianDist(randEngine), radianDist(randEngine), radianDist(randEngine));
+        newMat = glm::translate(glm::mat4(1.0f),
+                                glm::vec3((i % 16) * 8 - 64, ((i % 256) / 16) * 8 - 64, (i / 256) * 8 - 64)) * newMat;
+        instanceVboDat.emplace_back(newMat);
+    }
+    auto instanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(instanceVboDat);
+
     auto iboDat = std::vector<unsigned>({2, 1, 0, 2, 0, 3, // top
                                          4, 5, 6, 7, 4, 6, // Bottom
                                          8, 9, 10, 11, 8, 10,
@@ -171,13 +194,20 @@ int main() {
     vao.bind();
     vao.finalize();
 
+    vao.bind();
+    instanceVbo.bind();
+    for (int i = 2; i < 6; i++) {
+        glEnableVertexAttribArray(i);
+        glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
+        glVertexAttribDivisor(i, 1);
+    }
+
     UniformLocation texSlot = shaders.getLocation("tex");
     UniformLocation matM = shaders.getLocation("model");
     UniformLocation matV = shaders.getLocation("view");
     UniformLocation matP = shaders.getLocation("projection");
 
     ShaderProgram::set1i(texSlot, 0);
-    ShaderProgram::setMat4(matM, glm::translate(glm::mat4(1.0f), {0, 0, 0}));
 
     Camera cam = Camera();
     cam.pos = {0, 0, 0};
@@ -186,6 +216,9 @@ int main() {
 
     float mouseSense = 0.0625;
     float speed = 0.125;
+
+    float rickYaw = 0;
+    float rickSpinSpeed = 0.0625;
 
     while (!glfwWindowShouldClose(win)) {
         int width, height;
@@ -199,16 +232,15 @@ int main() {
         ShaderProgram::setMat4(matV, cam.getView());
         ShaderProgram::setMat4(matP, cam.getProj());
 
+        ShaderProgram::setMat4(matM, glm::mat4(1.0f));
         tex.bind();
-        vbo.bind();
         vao.bind();
-        ibo.bind();
         ibo.draw(4096);
 
-        rickVao.bind();
-        rickVbo.bind();
-        rickIbo.bind();
+        rickYaw += rickSpinSpeed;
+        ShaderProgram::setMat4(matM, glm::eulerAngleYXZ(rickYaw, 0.0f, 0.0f));
         rickTex.bind();
+        rickVao.bind();
         rickIbo.draw(1);
 
         glfwSwapBuffers(win);
