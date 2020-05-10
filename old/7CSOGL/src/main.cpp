@@ -202,7 +202,37 @@ int main() {
         glVertexAttribDivisor(i, 1);
     }
 
-    UniformLocation texSlot = shaders.getLocation("tex");
+
+    constexpr float post1 = 1;
+    auto postVboDat = std::vector<float>({-post1, post1, 0.0f, 1.0f,
+                                          -post1, -post1, 0.0f, 0.0f,
+                                          post1, -post1, 1.0f, 0.0f,
+                                          post1, post1, 1.0f, 1.0f});
+    auto postIboDat = std::vector<unsigned>({0, 1, 2, 0, 2, 3});
+
+    auto postIbo = IBO(postIboDat);
+    auto postVbo = VBO(postVboDat);
+
+    VAO postVao;
+    postIbo.bind();
+    postVbo.bind();
+    postVao.bind();
+    postVao.pushFloat(2);
+    postVao.pushFloat(2);
+    postVao.finalize();
+
+    Shader postVert = Shader("./shaders/post.vert", true);
+    Shader postFrag = Shader("./shaders/post.frag", false);
+    ShaderProgram postShaders;
+    postShaders.attach(postVert);
+    postShaders.attach(postFrag);
+    postShaders.link();
+    postShaders.bind();
+    UniformLocation postTexSlot = postShaders.getLocation("texSlot");
+    ShaderProgram::set1i(postTexSlot, 0);
+
+    shaders.bind();
+    UniformLocation texSlot = shaders.getLocation("texSlot");
     UniformLocation matM = shaders.getLocation("model");
     UniformLocation matV = shaders.getLocation("view");
     UniformLocation matP = shaders.getLocation("projection");
@@ -212,6 +242,8 @@ int main() {
     Camera cam = Camera();
     cam.pos = {0, 0, 0};
 
+    Framebuffer postFramebuf = Framebuffer(640, 480);
+
     float fov = 70;
 
     float mouseSense = 0.0625;
@@ -220,13 +252,24 @@ int main() {
     float rickYaw = 0;
     float rickSpinSpeed = 0.0625;
 
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (!glfwWindowShouldClose(win)) {
+        shaders.bind();
         int width, height;
         glfwGetFramebufferSize(win, &width, &height);
         cam.setProj(fov, static_cast<float>(width) / static_cast<float>(height));
         cam.updateViewMat();
 
+        if (width != postFramebuf.width || height != postFramebuf.height) {
+            Framebuffer newFramebuf = Framebuffer(width, height);
+            postFramebuf = std::move(newFramebuf);
+        }
+
         glViewport(0, 0, width, height);
+
+        glEnable(GL_DEPTH_TEST);
+        postFramebuf.bind();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ShaderProgram::setMat4(matV, cam.getView());
@@ -242,6 +285,15 @@ int main() {
         rickTex.bind();
         rickVao.bind();
         rickIbo.draw(1);
+
+        glDisable(GL_DEPTH_TEST);
+        Framebuffer::bindDefault();
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        postShaders.bind();
+        postFramebuf.bindTex();
+        postVao.bind();
+        postIbo.draw();
 
         glfwSwapBuffers(win);
         glfwPollEvents();

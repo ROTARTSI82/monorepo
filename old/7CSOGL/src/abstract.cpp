@@ -46,22 +46,6 @@ public:
         glBindBuffer(type, id);
     }
 
-    GenericBuffer &operator=(const GenericBuffer &rhs) = delete;
-    GenericBuffer(const GenericBuffer &rhs) = delete;
-
-    GenericBuffer &operator=(GenericBuffer &&rhs) noexcept {
-        if (&rhs == this) {
-            return *this;
-        }
-        id = rhs.id;
-        rhs.id = 0;
-        return *this;
-    }
-
-    GenericBuffer(GenericBuffer &&rhs) noexcept {
-        *this = std::move(rhs);
-    }
-
     virtual ~GenericBuffer() {
         glDeleteBuffers(1, &id);
     }
@@ -79,24 +63,6 @@ public:
     void draw(int instances = 1) {
         bind();
         glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr, instances);
-    }
-
-    IBO &operator=(const IBO &rhs) = delete;
-    IBO(const IBO &rhs) = delete;
-
-    IBO &operator=(IBO &&rhs) noexcept {
-        if (&rhs == this) {
-            return *this;
-        }
-        id = rhs.id;
-        count = rhs.count;
-
-        rhs.id = 0;
-        return *this;
-    }
-
-    IBO(IBO &&rhs) noexcept {
-        *this = std::move(rhs);
     }
 };
 
@@ -129,25 +95,6 @@ public:
             glVertexAttribPointer(i, attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void *>(ptr));
             ptr += attribs[i] * sizeof(float);
         }
-    }
-
-    VAO &operator=(const VAO &rhs) = delete;
-    VAO(const VAO &rhs) = delete;
-
-    VAO &operator=(VAO &&rhs) noexcept {
-        if (&rhs == this) {
-            return *this;
-        }
-        attribs = std::move(rhs.attribs);
-        stride = rhs.stride;
-        id = rhs.id;
-
-        rhs.id = 0;
-        return *this;
-    }
-
-    VAO(VAO &&rhs) noexcept {
-        *this = std::move(rhs);
     }
 
     virtual ~VAO() {
@@ -198,23 +145,6 @@ public:
     ~Shader() {
         glDeleteShader(id);
     }
-
-    Shader &operator=(const Shader &rhs) = delete;
-    Shader(const Shader &rhs) = delete;
-
-    Shader &operator=(Shader &&rhs) noexcept {
-        if (&rhs == this) {
-            return *this;
-        }
-        id = rhs.id;
-
-        rhs.id = 0;
-        return *this;
-    }
-
-    Shader(Shader &&rhs) noexcept {
-        *this = std::move(rhs);
-    }
 };
 
 typedef int UniformLocation;
@@ -254,23 +184,6 @@ public:
 
     static inline void set1i(UniformLocation in, GLint val) {
         glUniform1i(in, val);
-    }
-
-    ShaderProgram &operator=(const ShaderProgram &rhs) = delete;
-
-    ShaderProgram(const ShaderProgram &rhs) = delete;
-
-    ShaderProgram &operator=(ShaderProgram &&rhs) noexcept {
-        if (&rhs == this) {
-            return *this;
-        }
-        id = rhs.id;
-        rhs.id = 0;
-        return *this;
-    }
-
-    ShaderProgram(ShaderProgram &&rhs) noexcept {
-        *this = std::move(rhs);
     }
 };
 
@@ -356,4 +269,77 @@ public:
     ~Texture() {
         glDeleteTextures(1, &id);
     }
+};
+
+class Framebuffer {
+private:
+    GLuint id{};
+    GLuint tex{};
+    GLuint rbo{};
+public:
+    int width;
+    int height;
+
+    Framebuffer(int width, int height) : width(width), height(height) {
+        glGenFramebuffers(1, &id);
+        glGenTextures(1, &tex);
+        glGenRenderbuffers(1, &rbo);
+
+        bind();
+
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+        bindTex();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            throw std::runtime_error("Framebuffer incomplete!");
+        }
+    }
+
+    inline void bind() const {
+        glBindFramebuffer(GL_FRAMEBUFFER, id);
+    }
+
+    inline void bindTex() const {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, tex);
+    }
+
+    static inline void bindDefault() {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    Framebuffer &operator=(Framebuffer &&rhs) noexcept {
+        if (&rhs == this) {
+            return *this;
+        }
+
+        glDeleteFramebuffers(1, &id);
+        glDeleteTextures(1, &tex);
+        glDeleteRenderbuffers(1, &rbo);
+
+        id = rhs.id;
+        tex = rhs.tex;
+        rbo = rhs.rbo;
+
+        rhs.rbo = 0;
+        rhs.tex = 0;
+        rhs.id = 0;
+
+
+        return *this;
+    }
+
+    ~Framebuffer() {
+        glDeleteFramebuffers(1, &id);
+        glDeleteTextures(1, &tex);
+        glDeleteRenderbuffers(1, &rbo);
+    }
+
 };
