@@ -12,6 +12,9 @@
 
 #include <glm/gtx/hash.hpp>
 
+#include <AL/al.h>
+#include <AL/alc.h>
+
 #include <abstract.cpp>
 
 GLFWwindow *win{};
@@ -36,6 +39,12 @@ namespace std {
 
 
 int main() {
+    ALCdevice *alDev = alcOpenDevice(nullptr);
+    ALCcontext *alCtx = alcCreateContext(alDev, nullptr);
+    alcMakeContextCurrent(alCtx);
+
+    alListener3f(AL_VELOCITY, 1, 1, 1);
+
     std::random_device seeder;
     std::default_random_engine randEngine(seeder());
     auto radianDist = std::uniform_real_distribution<float>(0, 2 * 3.14159265);
@@ -71,9 +80,9 @@ int main() {
     shaders.link();
     shaders.bind();
 
-    std::vector<Vertex> rickVboDat;
-    std::vector<unsigned> rickIboDat;
-    std::unordered_map<Vertex, unsigned> rickVertMap;
+    std::vector<Vertex> modelVboDat;
+    std::vector<unsigned> modelIboDat;
+    std::unordered_map<Vertex, unsigned> modelVertMap;
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -94,36 +103,36 @@ int main() {
             vertex.pos.y = attrib.vertices[3 * index.vertex_index + 1];
             vertex.pos.z = attrib.vertices[3 * index.vertex_index + 2];
 
-            auto iter = std::find(rickVboDat.begin(), rickVboDat.end(), vertex);
+            auto iter = std::find(modelVboDat.begin(), modelVboDat.end(), vertex);
 
-            if (iter == rickVboDat.end()) {
-                rickVboDat.emplace_back(vertex);
-                rickVertMap[vertex] = rickVboDat.size() - 1;
-                rickIboDat.emplace_back(rickVboDat.size() - 1);
+            if (iter == modelVboDat.end()) {
+                modelVboDat.emplace_back(vertex);
+                modelVertMap[vertex] = modelVboDat.size() - 1;
+                modelIboDat.emplace_back(modelVboDat.size() - 1);
             } else {
-                rickIboDat.emplace_back(rickVertMap[vertex]);
+                modelIboDat.emplace_back(modelVertMap[vertex]);
             }
         }
     }
 
-    std::vector<glm::mat4> rickInstanceVboDat;
-    rickInstanceVboDat.emplace_back(glm::mat4(1.0f));
+    std::vector<glm::mat4> modelInstanceVboDat;
+    modelInstanceVboDat.emplace_back(glm::mat4(1.0f));
 
     // TODO: Location to play sound: {-64, 8, -64}
-    auto rickVbo = GenericBuffer<Vertex, GL_ARRAY_BUFFER>(rickVboDat);
-    auto rickIbo = IBO(rickIboDat);
-    auto rickTex = Texture("./res/tex/rick.jpg", true);
-    auto rickVao = VAO();
-    auto rickInstanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(rickInstanceVboDat);
+    auto modelVbo = GenericBuffer<Vertex, GL_ARRAY_BUFFER>(modelVboDat);
+    auto modelIbo = IBO(modelIboDat);
+    auto modelTex = Texture("./res/tex/rick.jpg", true);
+    auto modelVao = VAO();
+    auto modelInstanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(modelInstanceVboDat);
 
-    rickVbo.bind();
-    rickIbo.bind();
-    rickTex.bind();
-    rickVao.bind();
-    rickVao.pushFloat(3);
-    rickVao.pushFloat(2);
-    rickVao.finalize();
-    rickInstanceVbo.bind();
+    modelVbo.bind();
+    modelIbo.bind();
+    modelTex.bind();
+    modelVao.bind();
+    modelVao.pushFloat(3);
+    modelVao.pushFloat(2);
+    modelVao.finalize();
+    modelInstanceVbo.bind();
     for (int i = 2; i < 6; i++) {
         glEnableVertexAttribArray(i);
         glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
@@ -202,12 +211,10 @@ int main() {
         glVertexAttribDivisor(i, 1);
     }
 
-
-    constexpr float post1 = 1;
-    auto postVboDat = std::vector<float>({-post1, post1, 0.0f, 1.0f,
-                                          -post1, -post1, 0.0f, 0.0f,
-                                          post1, -post1, 1.0f, 0.0f,
-                                          post1, post1, 1.0f, 1.0f});
+    auto postVboDat = std::vector<float>({-1.0f, 1.0f, 0.0f, 1.0f,
+                                          -1.0f, -1.0f, 0.0f, 0.0f,
+                                          1.0f, -1.0f, 1.0f, 0.0f,
+                                          1.0f, 1.0f, 1.0f, 1.0f});
     auto postIboDat = std::vector<unsigned>({0, 1, 2, 0, 2, 3});
 
     auto postIbo = IBO(postIboDat);
@@ -249,16 +256,33 @@ int main() {
     float mouseSense = 0.0625;
     float speed = 0.125;
 
-    float rickYaw = 0;
-    float rickSpinSpeed = 0.0625;
+    float modelYaw = 0;
+    float modelSpinSpeed = 0.0625;
 
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    ALSrc rickSrc;
+    ALBuf nevaGonna = ALBuf("./res/rick.ogg");
+    rickSrc.bind(&nevaGonna);
+    rickSrc.play();
+
     while (!glfwWindowShouldClose(win)) {
         shaders.bind();
         int width, height;
         glfwGetFramebufferSize(win, &width, &height);
         cam.setProj(fov, static_cast<float>(width) / static_cast<float>(height));
         cam.updateViewMat();
+
+        float ori[6] = {cam.forward.x, cam.forward.y, cam.forward.z,
+                        cam.up.x, cam.up.y, cam.up.z};
+        alListener3f(AL_POSITION, cam.pos.x, cam.pos.y, cam.pos.z);
+        alListenerfv(AL_ORIENTATION, ori);
+
+        ALCenum error;
+
+        error = alGetError();
+        while (error != AL_NO_ERROR) {
+            throw std::runtime_error(&"OpenAL ERR: "[error]);
+            error = alGetError();
+        }
 
         if (width != postFramebuf.width || height != postFramebuf.height) {
             Framebuffer newFramebuf = Framebuffer(width, height);
@@ -280,11 +304,15 @@ int main() {
         vao.bind();
         ibo.draw(4096);
 
-        rickYaw += rickSpinSpeed;
-        ShaderProgram::setMat4(matM, glm::eulerAngleYXZ(rickYaw, 0.0f, 0.0f));
-        rickTex.bind();
-        rickVao.bind();
-        rickIbo.draw(1);
+        modelYaw += modelSpinSpeed;
+        ShaderProgram::setMat4(matM,
+                               glm::translate(glm::mat4(1.0f), {4, 1, 0}) *
+                               glm::scale(glm::mat4(1.0f), glm::vec3({1, 1, 1}) * 0.1f)
+                               * glm::eulerAngleYXZ(modelYaw, 0.0f, 0.0f)
+        );
+        modelTex.bind();
+        modelVao.bind();
+        modelIbo.draw(1);
 
         glDisable(GL_DEPTH_TEST);
         Framebuffer::bindDefault();

@@ -9,9 +9,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <AL/al.h>
+#include <AL/alc.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stb/stb_image.h>
+#include <stb/stb_vorbis.c>
 #include <fstream>
 #include "glm/gtx/euler_angles.hpp"
 
@@ -90,7 +94,6 @@ public:
         bind();
         GLsizei ptr{};
         for (GLuint i = 0; i < (attribs.size() * inc); i += inc) {
-            std::cout << "I = " << i << std::endl;
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void *>(ptr));
             ptr += attribs[i] * sizeof(float);
@@ -342,4 +345,57 @@ public:
         glDeleteRenderbuffers(1, &rbo);
     }
 
+};
+
+class ALBuf {
+private:
+    ALuint id{};
+
+    friend class ALSrc;
+
+public:
+    explicit ALBuf(const std::string &filename) {
+        short *data;
+        int channels, sampleRate;
+        alGenBuffers(1, &id);
+        int len = stb_vorbis_decode_filename(filename.c_str(), &channels, &sampleRate, &data);
+        alGenBuffers(1, &id);
+
+        if (channels > 1) {
+            alBufferData(id, AL_FORMAT_STEREO16, data, len * 2 * sizeof(short), sampleRate);
+        } else {
+            alBufferData(id, AL_FORMAT_MONO16, data, len * sizeof(short), sampleRate);
+        }
+    }
+
+    ~ALBuf() {
+        alDeleteBuffers(1, &id);
+    }
+};
+
+
+class ALSrc {
+private:
+    ALuint id{};
+public:
+    ALSrc() {
+        alGenSources(1, &id);
+        alSourcef(id, AL_PITCH, 1);
+        alSourcef(id, AL_GAIN, 1);
+        alSource3f(id, AL_POSITION, -4, -8, 0);
+        alSource3f(id, AL_VELOCITY, 1, 1, 1);
+        alSourcei(id, AL_LOOPING, AL_TRUE);
+    }
+
+    ~ALSrc() {
+        alDeleteSources(1, &id);
+    }
+
+    void bind(ALBuf *buf) const {
+        alSourcei(id, AL_BUFFER, buf->id);
+    }
+
+    void play() const {
+        alSourcePlay(id);
+    }
 };

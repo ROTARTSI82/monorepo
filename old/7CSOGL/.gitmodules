@@ -10,3 +10,6 @@
 [submodule "dep/tinyobjloader"]
 	path = dep/tinyobjloader
 	url = git@github.com:tinyobjloader/tinyobjloader.git
+[submodule "dep/imgui"]
+	path = dep/imgui
+	url = git@github.com:ocornut/imgui.git
