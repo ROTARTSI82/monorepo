@@ -1,3 +1,9 @@
+#define GLFW_INCLUDE_NONE
+
+#include "imgui/imgui.h"
+#include "imgui/examples/imgui_impl_glfw.h"
+#include "imgui/examples/imgui_impl_opengl3.h"
+
 #include <iostream>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -251,6 +257,22 @@ int main() {
 
     Framebuffer postFramebuf = Framebuffer(640, 480);
 
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    (void) io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(win, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
     float fov = 70;
 
     float mouseSense = 0.0625;
@@ -265,6 +287,11 @@ int main() {
     rickSrc.play();
 
     while (!glfwWindowShouldClose(win)) {
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         shaders.bind();
         int width, height;
         glfwGetFramebufferSize(win, &width, &height);
@@ -314,14 +341,25 @@ int main() {
         modelVao.bind();
         modelIbo.draw(1);
 
+
+        ImGui::Begin("Stuff");
+
+        ImGui::Text("Position: [%f, %f, %f]", cam.pos.x, cam.pos.y, cam.pos.z);
+        ImGui::Text("Euler Angle: [%f, %f, %f]", cam.euler.x, cam.euler.y, cam.euler.z);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
+        ImGui::End();
+
         glDisable(GL_DEPTH_TEST);
         Framebuffer::bindDefault();
+        ImGui::Render();
         glClear(GL_COLOR_BUFFER_BIT);
 
         postShaders.bind();
         postFramebuf.bindTex();
         postVao.bind();
         postIbo.draw();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(win);
         glfwPollEvents();
@@ -362,5 +400,8 @@ int main() {
 
     glfwDestroyWindow(win);
     glfwTerminate();
+
+    alcDestroyContext(alCtx);
+    alcCloseDevice(alDev);
     return 0;
 }
