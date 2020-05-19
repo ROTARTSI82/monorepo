@@ -18,11 +18,7 @@ vec2(0.0f, -offset), // bottom-center
 vec2(offset, -offset)// bottom-right
 );
 
-const float kernel[9] = float[](
-0, -1, 0,
--1, 5, -1,
-0, -1, 0
-);
+uniform float kernel[9] = float[](0, 0, 0, 0, 1, 0, 0, 0, 0);
 
 void main() {
     vec3 sampleTex[9];

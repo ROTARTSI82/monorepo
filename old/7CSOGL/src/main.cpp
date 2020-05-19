@@ -1,3 +1,5 @@
+// Written by Grant Yang for my 7th Grade CS project.
+
 #define GLFW_INCLUDE_NONE
 
 #include "imgui/imgui.h"
@@ -70,7 +72,7 @@ int main() {
 
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    std::cout << "Initialized OpenGL " << version << " with renderer " << renderer << std::endl;
+//    std::cout << "Initialized OpenGL " << version << " with renderer " << renderer << std::endl;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -242,7 +244,10 @@ int main() {
     postShaders.link();
     postShaders.bind();
     UniformLocation postTexSlot = postShaders.getLocation("texSlot");
+    UniformLocation kernel = postShaders.getLocation("kernel");
     ShaderProgram::set1i(postTexSlot, 0);
+    float kernelArr[9] = {0, 0, 0, 0, 1, 0, 0, 0, 0};
+    ShaderProgram::setFv(kernel, kernelArr, 9);
 
     shaders.bind();
     UniformLocation texSlot = shaders.getLocation("texSlot");
@@ -348,6 +353,11 @@ int main() {
         ImGui::Text("Euler Angle: [%f, %f, %f]", cam.euler.x, cam.euler.y, cam.euler.z);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                     ImGui::GetIO().Framerate);
+        for (int i = 0; i < 9; i++) {
+            std::string name = "Kernel ";
+            name += std::to_string(i);
+            ImGui::SliderFloat(name.c_str(), &kernelArr[i], -9, 9);
+        }
         ImGui::End();
 
         glDisable(GL_DEPTH_TEST);
@@ -356,6 +366,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         postShaders.bind();
+        ShaderProgram::setFv(kernel, &kernelArr[0], 9);
         postFramebuf.bindTex();
         postVao.bind();
         postIbo.draw();

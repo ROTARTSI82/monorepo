@@ -20,14 +20,11 @@
 #include "glm/gtx/euler_angles.hpp"
 
 void flushErrors(const std::string &msg) {
-    if (msg != "null") {
-        std::cerr << msg << std::endl;
-    }
 
     GLenum err = 1;
     while (err != GL_NO_ERROR) {
         if (err != 1) {
-            std::cerr << "OpenGL Error: " << err << std::endl;
+            std::cerr << "OpenGL Error at " << msg << ": " << err << std::endl;
         }
         err = glGetError();
     }
@@ -183,6 +180,12 @@ public:
 
     static inline void setMat4(UniformLocation in, glm::mat4 val) {
         glUniformMatrix4fv(in, 1, GL_FALSE, glm::value_ptr(val));
+    }
+
+    static inline void setFv(UniformLocation in, GLfloat *val, GLsizei num) {
+        flushErrors("Pre fv");
+        glUniform1fv(in, num, val);
+        flushErrors("Post fv");
     }
 
     static inline void set1i(UniformLocation in, GLint val) {
