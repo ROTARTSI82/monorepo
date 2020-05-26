@@ -87,7 +87,6 @@ int main() {
     ShaderProgram shaders;
     shaders.bindAttribLoc(0, "pos");
     shaders.bindAttribLoc(1, "inTexCoord");
-    shaders.bindAttribLoc(2, "instanceMat");
     shaders.attach(vertShader);
     shaders.attach(fragShader);
     shaders.link();
@@ -128,15 +127,12 @@ int main() {
         }
     }
 
-    std::vector<glm::mat4> modelInstanceVboDat;
-    modelInstanceVboDat.emplace_back(glm::mat4(1.0f));
 
     // TODO: Location to play sound: {-64, 8, -64}
     auto modelVbo = GenericBuffer<Vertex, GL_ARRAY_BUFFER>(modelVboDat);
     auto modelIbo = IBO(modelIboDat);
     auto modelTex = Texture("./res/tex/rick.jpg", true);
     auto modelVao = VAO();
-    auto modelInstanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(modelInstanceVboDat);
 
     modelVbo.bind();
     modelIbo.bind();
@@ -145,12 +141,6 @@ int main() {
     modelVao.pushFloat(3);
     modelVao.pushFloat(2);
     modelVao.finalize();
-    modelInstanceVbo.bind();
-    for (int i = 2; i < 6; i++) {
-        glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
-        glVertexAttribDivisor(i, 1);
-    }
 
 
     auto vboDat = std::vector<float>({
@@ -186,15 +176,6 @@ int main() {
                                      });
     VBO vbo(vboDat);
 
-    auto instanceVboDat = std::vector<glm::mat4>();
-    for (int i = 0; i < 4096; i++) {
-        auto newMat = glm::eulerAngleYXZ(radianDist(randEngine), radianDist(randEngine), radianDist(randEngine));
-        newMat = glm::translate(glm::mat4(1.0f),
-                                glm::vec3((i % 16) * 8 - 64, ((i % 256) / 16) * 8 - 64, (i / 256) * 8 - 64)) * newMat;
-        instanceVboDat.emplace_back(newMat);
-    }
-    auto instanceVbo = GenericBuffer<glm::mat4, GL_ARRAY_BUFFER>(instanceVboDat);
-
     auto iboDat = std::vector<unsigned>({2, 1, 0, 2, 0, 3, // top
                                          4, 5, 6, 7, 4, 6, // Bottom
                                          8, 9, 10, 11, 8, 10,
@@ -217,13 +198,6 @@ int main() {
     vao.finalize();
 
     vao.bind();
-    instanceVbo.bind();
-    for (int i = 2; i < 6; i++) {
-        glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
-        glVertexAttribDivisor(i, 1);
-    }
-
     auto postVboDat = std::vector<float>({-1.0f, 1.0f, 0.0f, 1.0f,
                                           -1.0f, -1.0f, 0.0f, 0.0f,
                                           1.0f, -1.0f, 1.0f, 0.0f,
@@ -257,6 +231,8 @@ int main() {
     ShaderProgram::setFv(kernel, kernelArr, 9);
 
     shaders.bind();
+    shaders.bindAttribLoc(0, "pos");
+    shaders.bindAttribLoc(1, "inTexCoord");
     UniformLocation texSlot = shaders.getLocation("texSlot");
     UniformLocation matM = shaders.getLocation("model");
     UniformLocation matV = shaders.getLocation("view");
@@ -298,6 +274,14 @@ int main() {
     rickSrc.bind(&nevaGonna);
     rickSrc.play();
 
+    auto modelMats = std::vector<glm::mat4>();
+    for (int i = 0; i < 4096; i++) {
+        auto newMat = glm::eulerAngleYXZ(radianDist(randEngine), radianDist(randEngine), radianDist(randEngine));
+        newMat = glm::translate(glm::mat4(1.0f),
+                                glm::vec3((i % 16) * 8 - 64, ((i % 256) / 16) * 8 - 64, (i / 256) * 8 - 64)) * newMat;
+        modelMats.emplace_back(newMat);
+    }
+
     while (!glfwWindowShouldClose(win)) {
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL2_NewFrame();
@@ -305,6 +289,8 @@ int main() {
         ImGui::NewFrame();
 
         shaders.bind();
+        shaders.bindAttribLoc(0, "pos");
+        shaders.bindAttribLoc(1, "inTexCoord");
         int width, height;
         glfwGetFramebufferSize(win, &width, &height);
         cam.setProj(fov, static_cast<float>(width) / static_cast<float>(height));
@@ -338,17 +324,16 @@ int main() {
         ShaderProgram::setMat4(matV, cam.getView());
         ShaderProgram::setMat4(matP, cam.getProj());
 
-        ShaderProgram::setMat4(matM, glm::mat4(1.0f));
+
         tex.bind();
         vbo.bind();
         vao.bind();
-        instanceVbo.bind();
-        for (int i = 2; i < 6; i++) {
-            glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
-            glVertexAttribDivisor(i, 1);
+        for (int i = 0; i<4096; i++) {
+            ShaderProgram::setMat4(matM, modelMats[i]);
+            ibo.draw(4096);
         }
-        ibo.draw(4096);
+
+        ShaderProgram::setMat4(matM, glm::mat4(1.0f));
 
         modelYaw += modelSpinSpeed;
         ShaderProgram::setMat4(matM,
@@ -360,13 +345,6 @@ int main() {
 
         modelVbo.bind();
         modelVao.bind();
-        modelInstanceVbo.bind();
-        for (int i = 2; i < 6; i++) {
-            glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
-            glVertexAttribDivisor(i, 1);
-        }
-
         modelIbo.draw(1);
 
 
@@ -389,10 +367,20 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         postShaders.bind();
+        postShaders.bindAttribLoc(0, "pos");
+        postShaders.bindAttribLoc(1, "inTexCoord");
         ShaderProgram::setFv(kernel, &kernelArr[0], 9);
         postFramebuf.bindTex();
+        postVbo.bind();
         postVao.bind();
         postIbo.draw();
+
+        glUseProgram(0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(win);

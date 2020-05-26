@@ -63,13 +63,15 @@ public:
 
     void draw(int instances = 1) {
         bind();
-        glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr, instances);
+        // for (int i = 0; i < instances; i++) {
+            glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+        // }
     }
 };
 
 class VAO {
 protected:
-    GLuint id{};
+    // GLuint id{};
     std::vector<unsigned> attribs;
     GLsizei stride{};
 
