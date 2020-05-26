@@ -9,8 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <al.h>
+#include <alc.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -75,11 +75,13 @@ protected:
 
 public:
     VAO() {
-        glGenVertexArrays(1, &id);
+        // glGenVertexArrays(1, &id);
     }
 
     inline void bind() const {
-        glBindVertexArray(id);
+        // glBindVertexArray(id);
+
+        finalize();
     }
 
     void pushFloat(unsigned qty) {
@@ -87,9 +89,9 @@ public:
         stride += sizeof(float) * qty;
     }
 
-    void finalize(int inc = 1) {
-        bind();
-        GLsizei ptr{};
+    void finalize(int inc = 1) const {
+        // bind();
+        GLsizei ptr = 0;
         for (GLuint i = 0; i < (attribs.size() * inc); i += inc) {
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, attribs[i], GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void *>(ptr));
@@ -98,7 +100,7 @@ public:
     }
 
     virtual ~VAO() {
-        glDeleteVertexArrays(1, &id);
+        // glDeleteVertexArrays(1, &id);
     }
 };
 
@@ -168,6 +170,10 @@ public:
 
     inline void bind() const {
         glUseProgram(id);
+    }
+
+    inline void bindAttribLoc(GLuint idx, const GLchar *name) const {
+        glBindAttribLocation(id, idx, name);
     }
 
     ~ShaderProgram() {

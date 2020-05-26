@@ -4,9 +4,10 @@
 
 #include "imgui/imgui.h"
 #include "imgui/examples/imgui_impl_glfw.h"
-#include "imgui/examples/imgui_impl_opengl3.h"
+#include "imgui/examples/imgui_impl_opengl2.h"
 
 #include <iostream>
+#include <unordered_map>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
@@ -20,8 +21,8 @@
 
 #include <glm/gtx/hash.hpp>
 
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <al.h>
+#include <alc.h>
 
 #include <abstract.cpp>
 
@@ -66,13 +67,14 @@ int main() {
     glfwMakeContextCurrent(win);
     glfwSwapInterval(1);
 
+    glewExperimental = true;
     if (glewInit() != GLEW_OK) {
         throw std::runtime_error("GLEW initialization failed! Aborting!");
     }
 
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-//    std::cout << "Initialized OpenGL " << version << " with renderer " << renderer << std::endl;
+    std::cout << "Initialized OpenGL " << version << " with renderer " << renderer << std::endl;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -83,6 +85,9 @@ int main() {
     auto fragShader = Shader("./shaders/default.frag", false);
 
     ShaderProgram shaders;
+    shaders.bindAttribLoc(0, "pos");
+    shaders.bindAttribLoc(1, "inTexCoord");
+    shaders.bindAttribLoc(2, "instanceMat");
     shaders.attach(vertShader);
     shaders.attach(fragShader);
     shaders.link();
@@ -239,6 +244,8 @@ int main() {
     Shader postVert = Shader("./shaders/post.vert", true);
     Shader postFrag = Shader("./shaders/post.frag", false);
     ShaderProgram postShaders;
+    postShaders.bindAttribLoc(0, "pos");
+    postShaders.bindAttribLoc(1, "inTexCoord");
     postShaders.attach(postVert);
     postShaders.attach(postFrag);
     postShaders.link();
@@ -276,7 +283,7 @@ int main() {
 
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(win, true);
-    ImGui_ImplOpenGL3_Init("#version 330 core");
+    ImGui_ImplOpenGL2_Init();
 
     float fov = 70;
 
@@ -293,7 +300,7 @@ int main() {
 
     while (!glfwWindowShouldClose(win)) {
         // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
@@ -333,7 +340,14 @@ int main() {
 
         ShaderProgram::setMat4(matM, glm::mat4(1.0f));
         tex.bind();
+        vbo.bind();
         vao.bind();
+        instanceVbo.bind();
+        for (int i = 2; i < 6; i++) {
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
+            glVertexAttribDivisor(i, 1);
+        }
         ibo.draw(4096);
 
         modelYaw += modelSpinSpeed;
@@ -343,7 +357,16 @@ int main() {
                                * glm::eulerAngleYXZ(modelYaw, 0.0f, 0.0f)
         );
         modelTex.bind();
+
+        modelVbo.bind();
         modelVao.bind();
+        modelInstanceVbo.bind();
+        for (int i = 2; i < 6; i++) {
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(i, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *) ((i - 2) * 4 * sizeof(float)));
+            glVertexAttribDivisor(i, 1);
+        }
+
         modelIbo.draw(1);
 
 
@@ -370,7 +393,7 @@ int main() {
         postFramebuf.bindTex();
         postVao.bind();
         postIbo.draw();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(win);
         glfwPollEvents();

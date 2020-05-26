@@ -1,7 +1,6 @@
-#version 330 core
+#version 120
 
-out vec4 color;
-in vec2 texCoord;
+varying vec2 texCoord;
 uniform sampler2D texSlot;
 
 const float offset = 1.0 / 300.0;
@@ -23,7 +22,7 @@ uniform float kernel[9] = float[](0, 0, 0, 0, 1, 0, 0, 0, 0);
 void main() {
     vec3 sampleTex[9];
     for (int i = 0; i < 9; i++) {
-        sampleTex[i] = vec3(texture(texSlot, texCoord.st + offsets[i]));
+        sampleTex[i] = vec3(texture2D(texSlot, texCoord.st + offsets[i]));
     }
 
     vec3 col = vec3(0.0);
@@ -31,5 +30,5 @@ void main() {
         col += sampleTex[i] * kernel[i];
     }
 
-    color = vec4(col, 1.0);
+    gl_FragColor = vec4(col, 1.0);
 }

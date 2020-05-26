@@ -1,9 +1,9 @@
-#version 330 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 inTexCoord;
-layout (location = 2) in mat4 instanceMat;
+#version 120
+attribute vec3 pos;
+attribute vec2 inTexCoord;
+attribute mat4 instanceMat;
 
-out vec2 texCoord;
+varying vec2 texCoord;
 
 uniform mat4 model;
 uniform mat4 view;
