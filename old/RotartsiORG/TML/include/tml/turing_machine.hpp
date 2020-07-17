@@ -12,11 +12,19 @@
 #include <functional>
 
 namespace tml {
+    void emitWarning(const std::string &msg);
+
+    void emitError(const std::string &msg);
+
+    void emitVerbose(const std::string &msg);
+
     typedef long State;
     typedef long Symbol;
 
-    constexpr Symbol BLANK_SYMBOL = -1;
+    constexpr Symbol BLANK_SYMBOL = 0;
+    constexpr Symbol ILLEGAL_SYMBOL = -1;
 
+    constexpr State START_STATE = 0;
     constexpr State HALT_STATE = -1;
     constexpr State NOP_STATE = -2;
 
@@ -45,9 +53,9 @@ namespace std {
 namespace tml {
 
     enum MoveOperation {
-        eLeft,
-        eRight,
-        eNop
+        eLeft = -1,
+        eRight = 1,
+        eNop = NOP_STATE // have these be equal so NOP can resolve to 1 value
     };
 
     struct Instruction {
@@ -91,6 +99,14 @@ namespace tml {
 
         inline void setTape(long index, Symbol sym) {
             tape[index] = sym;
+        }
+
+        inline bool tapeIndexPresent(long index) {
+            return tape.find(index) != tape.end();
+        }
+
+        inline bool instructionPresent(const StateAndSymbolPair &ssp) {
+            return instructionTable.find(ssp) != instructionTable.end();
         }
 
         inline void setState(State s) {

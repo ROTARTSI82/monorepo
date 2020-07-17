@@ -15,6 +15,10 @@ namespace tml {
         std::cerr << "[TML ERROR]: " << msg << std::endl;
     }
 
+    void emitVerbose(const std::string &msg) {
+        std::cout << "[TML VERBOSE]: " << msg << std::endl;
+    }
+
     bool StateAndSymbolPair::operator==(const StateAndSymbolPair &rhs) const {
         return this->state == rhs.state && this->symbol == rhs.symbol;
     }
