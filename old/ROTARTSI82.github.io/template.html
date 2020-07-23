@@ -1,90 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-    <link href="/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="/favicon/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png">
-    <link href="/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-    <link href="/favicon/site.webmanifest" rel="manifest">
-    <link color="#ae4dd3" href="/favicon/safari-pinned-tab.svg" rel="mask-icon">
-    <link href="favicon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <link href="/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <meta content="Rotartsi's Blog" name="apple-mobile-web-app-title">
-    <meta content="Rotartsi's Blog" name="application-name">
-    <meta content="#603cba" name="msapplication-TileColor">
-    <meta content="/favicon/mstile-144x144.png" name="msapplication-TileImage">
-    <meta content="/favicon/browserconfig.xml" name="msapplication-config">
-    <meta content="#ffffff" name="theme-color">
-    <meta charset="UTF-8">
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
-    <link href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css" rel="stylesheet"/>
-    <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script>
-    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Rotartsi's Blog</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <link href="css/stylesheet.css" rel="stylesheet">
+    <title>Rotartsi's Site</title>
+
+    <!-- Bunch of favicon B.S. -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
-<nav class="navbar navbar-expand-lg navbar-dark navbar-mod fixed-top">
-    <a class="navbar-brand" href="index.html">
-        <img alt="ICON" src="favicon/favicon.ico"/>
-        Rotartsi's Blog
-    </a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active align-right form-inline">
-                <a class="nav-link" href="index.html#blog">Blog</a>
-            </li>
-            <li class="nav-item active align-right form-inline">
-                <a class="nav-link" href="index.html#projects">Projects</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input aria-label="Search" class="form-control mr-sm-2" placeholder="Search" type="search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
-</nav>
-<body class="body-mod" data-spy="scroll" data-target="#toc">
-<div class="container">
-    <div class="row">
-        <div class="col-sm-2 normal-div table-of-contents-mod fixed-top">
-            <h6>Table of Contents</h6>
-            <nav class="sticky-top" data-toggle="toc" id="toc"></nav>
-        </div>
-        <div class="col-sm-10 content-mod">
-            <div class="normal-div">
-                <h1>Title</h1>
-                <p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;Content!
-                </p>
-            </div>
-        </div>
+<body>
+<div class="container mt-5">
+    <div class="jumbotron text-center">
+        <h1>Hello, world!</h1>
     </div>
 </div>
-</div>
 
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
-
-<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 </html>

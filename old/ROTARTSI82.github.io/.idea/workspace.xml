@@ -1,81 +1,437 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="dbd3cae6-711c-45cb-b52c-a6add92ec386" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/StoneMason/annotated.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__dep__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__dep__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__dep__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/async_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/audio_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/bc_s.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/bdwn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/camera_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classes.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALBuffer-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALBuffer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALContext-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALContext.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALDevice-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALDevice.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALSource-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ALSource.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1CURLHandle-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1CURLHandle.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1Camera-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1Camera.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1FTLibrary-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1FTLibrary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1GenericWindow-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1GenericWindow.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__coll__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__coll__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__coll__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__inherit__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__inherit__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLClient__inherit__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__coll__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__coll__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__coll__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__inherit__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__inherit__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1SSLServer__inherit__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1Stopwatch-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1Stopwatch.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1TPSTimer-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1TPSTimer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ThreadPool-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1ThreadPool.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__FTFace-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__FTFace.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__coll__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__coll__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__coll__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__inherit__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__inherit__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__SSLBase__inherit__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__STMSInitializer-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/classstms_1_1__stms__STMSInitializer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/closed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/config_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/curl_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_19ff8d4aabc1224549b1ab9673f9bb36.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_748ebd5bc10a7314ee339f99423ac6e2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_748ebd5bc10a7314ee339f99423ac6e2_dep.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_748ebd5bc10a7314ee339f99423ac6e2_dep.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_748ebd5bc10a7314ee339f99423ac6e2_dep.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_8244f6c3461c1eb4c3ce803192c91fc2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_8244f6c3461c1eb4c3ce803192c91fc2_dep.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_8244f6c3461c1eb4c3ce803192c91fc2_dep.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_8244f6c3461c1eb4c3ce803192c91fc2_dep.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_d44c64559bbebec7f509842c48db8b23.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_f28550c6a8a3774e2e7330cfc699dd4b.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dir_fd9668ece7b2172952a807d902849fb5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/doc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/doxygen.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/doxygen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/dynsections.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/files.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/folderclosed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/folderopen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/freetype_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/functions.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/functions_func.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/functions_rela.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/functions_vars.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__ImGui_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__buffers_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__freetype_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__model_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__shaders_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/gl__window_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/graph_legend.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/graph_legend.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/graph_legend.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/hierarchy.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_0.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_0.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_1.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_1.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_10.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_10.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_11.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_11.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_11.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_12.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_12.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_12.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_13.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_13.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_13.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_14.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_14.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_14.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_15.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_15.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_15.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_16.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_16.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_17.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_17.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_17.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_18.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_18.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_19.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_19.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_19.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_2.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_2.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_3.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_3.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_4.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_4.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_5.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_5.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_6.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_6.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_7.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_7.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_8.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_8.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_9.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_9.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherit_graph_9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/inherits.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/jquery.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/logging_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/menu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/menudata.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/nav_f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/nav_g.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/nav_h.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/open.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_10.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_10.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_11.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_11.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_12.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_12.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_13.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_13.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_14.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_14.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_15.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_15.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_5.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_6.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_7.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_8.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_9.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_9.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_a.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_a.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_b.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_b.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_c.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_c.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_d.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_d.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_e.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_e.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_f.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/all_f.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_5.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_6.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_7.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_8.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_9.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/classes_9.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/close.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/enums_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/enums_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/enumvalues_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/enumvalues_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/files_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_10.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_10.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_11.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_11.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_5.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_6.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_7.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_8.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_9.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_9.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_a.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_a.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_b.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_b.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_c.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_c.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_d.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_d.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_e.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_e.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_f.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/functions_f.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/mag_sel.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/nomatches.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/related_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/related_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/search.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/search.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/search_l.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/search_m.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/search_r.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/searchdata.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_0.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_5.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_6.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/search/variables_7.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/splitbar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__dep__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__dep__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__dep__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl__client_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/ssl__server_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/stms_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation_1_1DTLSSpecific-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation_1_1DTLSSpecific.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation_1_1DTLSSpecific__coll__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation_1_1DTLSSpecific__coll__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation_1_1DTLSSpecific__coll__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation__coll__graph.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation__coll__graph.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1ClientRepresentation__coll__graph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1CurlResult-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1CurlResult.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1LogRecord-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1LogRecord.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1TransformInfo-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1TransformInfo.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1UUID-members.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/structstms_1_1UUID.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/sync_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/sync_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/tab_a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/tab_b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/tab_h.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/tab_s.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/tabs.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__dep__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__dep__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__dep__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__incl.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__incl.md5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp__incl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/timers_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/vk__instance_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/vk__window_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoneMason/window_8hpp_source.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ROTARTSI82.github.io.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ROTARTSI82.github.io.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/template.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/stylesheet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-144x144.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-192x192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-256x256.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-36x36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-384x384.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-48x48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-72x72.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/android-chrome-96x96.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-114x114-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-114x114.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-120x120-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-120x120.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-144x144-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-144x144.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-152x152-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-152x152.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-180x180-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-180x180.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-57x57-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-57x57.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-60x60-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-60x60.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-72x72-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-72x72.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-76x76-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-76x76.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon-precomposed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/apple-touch-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/browserconfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/html_code.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/mstile-144x144.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/mstile-150x150.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/mstile-310x150.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/mstile-310x310.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/mstile-70x70.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/safari-pinned-tab.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon/site.webmanifest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/controller.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/global-warming.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/java-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/python-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/tcbs.ico" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/template.html" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/template.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="29">
-              <caret line="34" column="34" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
-              <folding>
-                <element signature="e#3549#3555#0" expanded="true" />
-                <element signature="e#3555#3561#0" expanded="true" />
-                <element signature="e#3561#3567#0" expanded="true" />
-                <element signature="e#3567#3573#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/blog/template.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="69" column="24" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
-              <folding>
-                <element signature="e#4026#4032#1" expanded="true" />
-                <element signature="e#4032#4038#0" expanded="true" />
-                <element signature="e#4038#4044#0" expanded="true" />
-                <element signature="e#4044#4050#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="74" column="49" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="49" />
-              <folding>
-                <element signature="e#4095#4101#0" expanded="true" />
-                <element signature="e#4101#4107#0" expanded="true" />
-                <element signature="e#4107#4113#0" expanded="true" />
-                <element signature="e#4113#4119#0" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/stylesheet.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -117,87 +473,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/favicon/safari-pinned-tab.svg" />
-        <option value="$PROJECT_DIR$/css/bootstrap.css" />
-        <option value="$PROJECT_DIR$/js/image-size.js" />
-        <option value="$PROJECT_DIR$/blog/index.html" />
-        <option value="$PROJECT_DIR$/projects.html" />
-        <option value="$PROJECT_DIR$/css/stylesheet.css" />
-        <option value="$PROJECT_DIR$/blog/example-post1.html" />
-        <option value="$PROJECT_DIR$/template.html" />
-        <option value="$PROJECT_DIR$/blog/template.html" />
-        <option value="$PROJECT_DIR$/index.html" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1440" />
-    <option name="height" value="797" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="ROTARTSI82.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ROTARTSI82.github.io" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ROTARTSI82.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ROTARTSI82.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="blog" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ROTARTSI82.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ROTARTSI82.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ROTARTSI82.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ROTARTSI82.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="img" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ROTARTSI82.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectId" id="1f6iY3os3Grj2LFUSUOXHSQGAeF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -213,6 +504,7 @@
       <workItem from="1559964933065" duration="801000" />
       <workItem from="1560005540588" duration="3357000" />
       <workItem from="1560451826891" duration="4163000" />
+      <workItem from="1595544987630" duration="3252000" />
     </task>
     <task id="LOCAL-00001" summary="testing">
       <created>1559954485582</created>
@@ -252,76 +544,8 @@
     <option name="localTasksCounter" value="6" />
     <servers />
   </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17311000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="797" extended-state="0" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26037195" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32907802" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32907802" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Maven" order="6" />
-      <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-    </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25679544" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32907802" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32907802" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Maven" order="6" />
-      <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-    </layout-to-restore>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="UpdateCopyrightCheckinHandler">
     <option name="UPDATE_COPYRIGHT" value="true" />
@@ -337,154 +561,6 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/favicon/android-chrome-384x384.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/mstile-144x144.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/mstile-310x150.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/apple-touch-icon-180x180-precomposed.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/safari-pinned-tab.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="-68" />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/browserconfig.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/site.webmanifest">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/bootstrap.css" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/extLibs/http_stackpath.bootstrapcdn.com_bootstrap_4.3.1_js_bootstrap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/favicon/favicon.ico">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/image-size.js" />
-    <entry file="file://$PROJECT_DIR$/img/controller.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/global-warming.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/java-logo.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/tcbs.ico">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/python-logo.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/sectional.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="73" column="9" lean-forward="true" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blog/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/projects.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="56" column="15" lean-forward="true" selection-start-line="56" selection-start-column="15" selection-end-line="56" selection-end-column="15" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/stylesheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blog/example-post1.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="34" column="34" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
-          <folding>
-            <element signature="e#3549#3555#0" expanded="true" />
-            <element signature="e#3555#3561#0" expanded="true" />
-            <element signature="e#3561#3567#0" expanded="true" />
-            <element signature="e#3567#3573#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blog/template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="69" column="24" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
-          <folding>
-            <element signature="e#4026#4032#1" expanded="true" />
-            <element signature="e#4032#4038#0" expanded="true" />
-            <element signature="e#4038#4044#0" expanded="true" />
-            <element signature="e#4044#4050#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="74" column="49" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="49" />
-          <folding>
-            <element signature="e#4095#4101#0" expanded="true" />
-            <element signature="e#4101#4107#0" expanded="true" />
-            <element signature="e#4107#4113#0" expanded="true" />
-            <element signature="e#4113#4119#0" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
   </component>
   <component name="masterDetails">
     <states>
