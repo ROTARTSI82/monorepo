@@ -14,5 +14,5 @@
 <area shape="rect" id="node3" href="$curl_8hpp.html" title="C++ wrapper around libCurl (https://curl.haxx.se/libcurl/) Created by grant on 6/2/20." alt="" coords="26,177,187,203"/>
 <area shape="rect" id="node5" href="$ssl__server_8hpp.html" title="Provides functionality for DTLS or TLS servers in the form of SSLServer Created by grant on 4/22/20." alt="" coords="317,259,469,300"/>
 <area shape="rect" id="node11" href="$ssl_8hpp.html" title="This file provides basic functionality of OpenSSL server/client. Normally, you wouldn&#39;t have to touch..." alt="" coords="211,177,391,203"/>
-<area shape="rect" id="node12" href="$ssl__client_8hpp.html" title=" " alt="" coords="27,259,179,300"/>
+<area shape="rect" id="node12" href="$ssl__client_8hpp.html" title="Provides functionality for DTLS or TLS clients in the form of SSLClient Created by grant on 5/4/20." alt="" coords="27,259,179,300"/>
 </map>

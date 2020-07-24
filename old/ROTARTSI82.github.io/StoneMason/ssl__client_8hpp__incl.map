@@ -1,5 +1,5 @@
 <map id="include/stms/net/ssl_client.hpp" name="include/stms/net/ssl_client.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="368,5,520,47"/>
+<area shape="rect" id="node1" title="Provides functionality for DTLS or TLS clients in the form of SSLClient Created by grant on 5/4/20." alt="" coords="368,5,520,47"/>
 <area shape="rect" id="node2" title=" " alt="" coords="124,244,183,271"/>
 <area shape="rect" id="node3" href="$timers_8hpp.html" title="Provides timers Stopwatch and TPSTimer. Created by grant on 5/3/20." alt="" coords="51,95,179,121"/>
 <area shape="rect" id="node7" title=" " alt="" coords="207,244,313,271"/>

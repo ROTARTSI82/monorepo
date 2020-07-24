@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$logging_8hpp.html" title=" " alt="" coords="401,80,586,107"/>
 <area shape="rect" id="node4" href="$ssl__server_8hpp.html" title="Provides functionality for DTLS or TLS servers in the form of SSLServer Created by grant on 4/22/20." alt="" coords="568,155,720,196"/>
 <area shape="rect" id="node10" href="$ssl_8hpp.html" title="This file provides basic functionality of OpenSSL server/client. Normally, you wouldn&#39;t have to touch..." alt="" coords="662,80,842,107"/>
-<area shape="rect" id="node11" href="$ssl__client_8hpp.html" title=" " alt="" coords="784,155,936,196"/>
+<area shape="rect" id="node11" href="$ssl__client_8hpp.html" title="Provides functionality for DTLS or TLS clients in the form of SSLClient Created by grant on 5/4/20." alt="" coords="784,155,936,196"/>
 <area shape="rect" id="node5" href="$gl__shaders_8hpp.html" title=" " alt="" coords="155,155,309,196"/>
 <area shape="rect" id="node8" href="$vk__instance_8hpp.html" title=" " alt="" coords="334,155,493,196"/>
 <area shape="rect" id="node9" href="$vk__window_8hpp.html" title=" " alt="" coords="422,244,581,285"/>
