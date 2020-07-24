@@ -1,7 +1,7 @@
 <map id="include/stms/async.hpp" name="include/stms/async.hpp">
-<area shape="rect" id="node1" title="ThreadPools for async task scheduling and execution." alt="" coords="95,5,269,32"/>
+<area shape="rect" id="node1" title="ThreadPools for async task scheduling and execution. Created by grant on 12/30/19." alt="" coords="95,5,269,32"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,80,68,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="93,80,175,107"/>
 <area shape="rect" id="node4" title=" " alt="" coords="199,80,261,107"/>
-<area shape="rect" id="node5" href="$config_8hpp_source.html" title=" " alt="" coords="285,80,410,107"/>
+<area shape="rect" id="node5" href="$config_8hpp.html" title="Configuration for StoneMason. Full of variables and macros you can tweak. Created by grant on 1/26/20..." alt="" coords="285,80,410,107"/>
 </map>
