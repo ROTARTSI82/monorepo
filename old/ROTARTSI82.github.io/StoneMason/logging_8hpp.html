@@ -88,16 +88,20 @@ $(document).ready(function(){initNavTree('logging_8hpp.html',''); initResizable(
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">logging.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;sstream&gt;</code><br />
+
+<p>File providing basic logging &amp; formatting functionality (using fmtlib) Created by grant on 1/26/20.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8hpp_source.html">stms/config.hpp</a>&quot;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
-<code>#include &quot;<a class="el" href="config_8hpp_source.html">stms/config.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="async_8hpp_source.html">stms/async.hpp</a>&quot;</code><br />
 <code>#include &lt;fmt/format.h&gt;</code><br />
 <code>#include &lt;fmt/chrono.h&gt;</code><br />
@@ -108,18 +112,18 @@ $(document).ready(function(){initNavTree('logging_8hpp.html',''); initResizable(
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="logging_8hpp__incl.png" border="0" usemap="#include_2stms_2logging_8hpp" alt=""/></div>
 <map name="include_2stms_2logging_8hpp" id="include_2stms_2logging_8hpp">
-<area shape="rect" title=" " alt="" coords="277,5,462,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,80,107"/>
-<area shape="rect" title=" " alt="" coords="104,80,179,107"/>
-<area shape="rect" title=" " alt="" coords="203,80,283,107"/>
-<area shape="rect" title=" " alt="" coords="307,80,365,107"/>
-<area shape="rect" href="config_8hpp.html" title="Configuration for StoneMason. Full of variables and macros you can tweak. Created by grant on 1/26/20..." alt="" coords="321,155,447,181"/>
-<area shape="rect" href="async_8hpp.html" title="ThreadPools for async task scheduling and execution. Created by grant on 12/30/19." alt="" coords="441,80,565,107"/>
-<area shape="rect" title=" " alt="" coords="589,80,694,107"/>
-<area shape="rect" title=" " alt="" coords="718,80,823,107"/>
-<area shape="rect" title=" " alt="" coords="471,155,534,181"/>
-<area shape="rect" title=" " alt="" coords="559,155,641,181"/>
-<area shape="rect" title=" " alt="" coords="665,155,727,181"/>
+<area shape="rect" title="File providing basic logging &amp; formatting functionality (using fmtlib) Created by grant on 1/26/20." alt="" coords="215,5,401,32"/>
+<area shape="rect" href="config_8hpp.html" title="Configuration for StoneMason. Full of variables and macros you can tweak. Created by grant on 1/26/20..." alt="" coords="59,155,184,181"/>
+<area shape="rect" title=" " alt="" coords="24,80,99,107"/>
+<area shape="rect" title=" " alt="" coords="123,80,197,107"/>
+<area shape="rect" title=" " alt="" coords="221,80,301,107"/>
+<area shape="rect" title=" " alt="" coords="325,80,384,107"/>
+<area shape="rect" href="async_8hpp.html" title="ThreadPools for async task scheduling and execution. Created by grant on 12/30/19." alt="" coords="409,80,533,107"/>
+<area shape="rect" title=" " alt="" coords="557,80,662,107"/>
+<area shape="rect" title=" " alt="" coords="686,80,791,107"/>
+<area shape="rect" title=" " alt="" coords="342,155,405,181"/>
+<area shape="rect" title=" " alt="" coords="429,155,512,181"/>
+<area shape="rect" title=" " alt="" coords="536,155,597,181"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -129,7 +133,7 @@ $(document).ready(function(){initNavTree('logging_8hpp.html',''); initResizable(
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="logging_8hpp__dep__incl.png" border="0" usemap="#include_2stms_2logging_8hppdep" alt=""/></div>
 <map name="include_2stms_2logging_8hppdep" id="include_2stms_2logging_8hppdep">
-<area shape="rect" title=" " alt="" coords="257,5,442,32"/>
+<area shape="rect" title="File providing basic logging &amp; formatting functionality (using fmtlib) Created by grant on 1/26/20." alt="" coords="257,5,442,32"/>
 <area shape="rect" href="ssl__server_8hpp.html" title="Provides functionality for DTLS or TLS servers in the form of SSLServer Created by grant on 4/22/20." alt="" coords="5,80,157,121"/>
 <area shape="rect" href="gl__shaders_8hpp.html" title=" " alt="" coords="181,80,336,121"/>
 <area shape="rect" href="vk__instance_8hpp.html" title=" " alt="" coords="361,80,519,121"/>
@@ -144,6 +148,7 @@ $(document).ready(function(){initNavTree('logging_8hpp.html',''); initResizable(
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html">stms::LogRecord</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing a single log message.  <a href="structstms_1_1LogRecord.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -155,18 +160,25 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a0cd7c6a8e5cf3ce0fbdc66783b925654"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#a0cd7c6a8e5cf3ce0fbdc66783b925654">__STONEMASON_LOGGING_HPP</a></td></tr>
+<tr class="memdesc:a0cd7c6a8e5cf3ce0fbdc66783b925654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include guard.  <a href="logging_8hpp.html#a0cd7c6a8e5cf3ce0fbdc66783b925654">More...</a><br /></td></tr>
 <tr class="separator:a0cd7c6a8e5cf3ce0fbdc66783b925654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac40888c6a3a820870e0468ad5b4ee0f4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#ac40888c6a3a820870e0468ad5b4ee0f4">STMS_TRACE</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6acf3628d077390e7b48f736f16ef918c7">stms::eTrace</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:ac40888c6a3a820870e0468ad5b4ee0f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eTrace</code>. Used like a fmtlib function. <code>STMS_TRACE("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#ac40888c6a3a820870e0468ad5b4ee0f4">More...</a><br /></td></tr>
 <tr class="separator:ac40888c6a3a820870e0468ad5b4ee0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b2006d2c2078d12c9626f04844130dc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#a5b2006d2c2078d12c9626f04844130dc">STMS_DEBUG</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6a35ceb96d2d48dd2d9c5dbad9dc558167">stms::eDebug</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:a5b2006d2c2078d12c9626f04844130dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eDebug</code>. Used like a fmtlib function. <code>STMS_DEBUG("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#a5b2006d2c2078d12c9626f04844130dc">More...</a><br /></td></tr>
 <tr class="separator:a5b2006d2c2078d12c9626f04844130dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae849698e6380b9e065fa456cc1e56821"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#ae849698e6380b9e065fa456cc1e56821">STMS_INFO</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6abe9ce6059ae4b1b85201d00fc0c5352e">stms::eInfo</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:ae849698e6380b9e065fa456cc1e56821"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eInfo</code>. Used like a fmtlib function. <code>STMS_INFO("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#ae849698e6380b9e065fa456cc1e56821">More...</a><br /></td></tr>
 <tr class="separator:ae849698e6380b9e065fa456cc1e56821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff374dc187977630c718f59456645697"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#aff374dc187977630c718f59456645697">STMS_WARN</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6ae63f084e1614a7b1dcf678e1f646e132">stms::eWarn</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:aff374dc187977630c718f59456645697"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eWarn</code>. Used like a fmtlib function. <code>STMS_WARN("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#aff374dc187977630c718f59456645697">More...</a><br /></td></tr>
 <tr class="separator:aff374dc187977630c718f59456645697"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e8bfc4715425ca9450964f6dc69548d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#a9e8bfc4715425ca9450964f6dc69548d">STMS_ERROR</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6ab197443aa99e6fe7d6152b7aedcc96e7">stms::eError</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:a9e8bfc4715425ca9450964f6dc69548d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eError</code>. Used like a fmtlib function. <code>STMS_ERROR("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#a9e8bfc4715425ca9450964f6dc69548d">More...</a><br /></td></tr>
 <tr class="separator:a9e8bfc4715425ca9450964f6dc69548d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7730c48cd49cec5f3c55f4a2a57ae687"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logging_8hpp.html#a7730c48cd49cec5f3c55f4a2a57ae687">STMS_FATAL</a>(...)&#160;&#160;&#160;::<a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a>(::<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7">stms::eFatal</a>, __LINE__, __FILE__, __VA_ARGS__)</td></tr>
+<tr class="memdesc:a7730c48cd49cec5f3c55f4a2a57ae687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging macro for <code>LogLevel</code> of <code>eFatal</code>. Used like a fmtlib function. <code>STMS_FATAL("{1}, {0}!", "World", "Hello");</code>  <a href="logging_8hpp.html#a7730c48cd49cec5f3c55f4a2a57ae687">More...</a><br /></td></tr>
 <tr class="separator:a7730c48cd49cec5f3c55f4a2a57ae687"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -182,35 +194,49 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7">stms::eFatal</a> = 0b100000
 <br />
  }</td></tr>
+<tr class="memdesc:a9224e26cd34c80bee9ef9bd440366fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level of severity of the log message. Can be used as a bit flag.  <a href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">More...</a><br /></td></tr>
 <tr class="separator:a9224e26cd34c80bee9ef9bd440366fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a4a3c75647782a4a19030a5fc4efcfcb8">stms::initLogging</a> ()</td></tr>
+<tr class="memdesc:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init STMS logging module. If you wish to init everything, use <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code> instead.  <a href="namespacestms.html#a4a3c75647782a4a19030a5fc4efcfcb8">More...</a><br /></td></tr>
 <tr class="separator:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88a55a1dd9180244015e0b28a3f6edc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a88a55a1dd9180244015e0b28a3f6edc7">stms::quitLogging</a> ()</td></tr>
+<tr class="memdesc:a88a55a1dd9180244015e0b28a3f6edc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quit logging. If you used <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code>, you do not have to call this.  <a href="namespacestms.html#a88a55a1dd9180244015e0b28a3f6edc7">More...</a><br /></td></tr>
 <tr class="separator:a88a55a1dd9180244015e0b28a3f6edc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a089746bfe3d4d7ddb91d6d1ca26fced3"><td class="memItemLeft" align="right" valign="top">static std::queue&lt; LogRecord &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a089746bfe3d4d7ddb91d6d1ca26fced3">stms::getLogQueue</a> ()</td></tr>
-<tr class="separator:a089746bfe3d4d7ddb91d6d1ca26fced3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afee5204e6b756e0352d3f8472b0dce2e"><td class="memItemLeft" align="right" valign="top">static std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#afee5204e6b756e0352d3f8472b0dce2e">stms::getLogQueueMtx</a> ()</td></tr>
-<tr class="separator:afee5204e6b756e0352d3f8472b0dce2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a954643ffb4ae6c6ec7a219b76690be10"><td class="memItemLeft" align="right" valign="top">static ThreadPool *&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a954643ffb4ae6c6ec7a219b76690be10">stms::getLogThreadPool</a> ()</td></tr>
-<tr class="separator:a954643ffb4ae6c6ec7a219b76690be10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb2430d5aac2eedf9a8485eaafc90ca7"><td class="memItemLeft" align="right" valign="top">static bool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#acb2430d5aac2eedf9a8485eaafc90ca7">stms::getConsumingFlag</a> ()</td></tr>
-<tr class="separator:acb2430d5aac2eedf9a8485eaafc90ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84ab9701543bde8aa7d12d185313d219"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::function&lt; void(LogRecord *, std::string *)&gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a84ab9701543bde8aa7d12d185313d219">stms::getLogHooks</a> ()</td></tr>
-<tr class="separator:a84ab9701543bde8aa7d12d185313d219"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e7b1c8095c8526fddf5c70b6e8e89e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a8e7b1c8095c8526fddf5c70b6e8e89e9">stms::setLogPool</a> (ThreadPool *pool)</td></tr>
-<tr class="separator:a8e7b1c8095c8526fddf5c70b6e8e89e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7618605f331eabe54e0d2cfa6905dcc"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#ab7618605f331eabe54e0d2cfa6905dcc">stms::logLevelToString</a> (const LogLevel &amp;lvl)</td></tr>
+<tr class="memdesc:ab7618605f331eabe54e0d2cfa6905dcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a LogLevel to a formatted text string. Internal implementation detail.  <a href="namespacestms.html#ab7618605f331eabe54e0d2cfa6905dcc">More...</a><br /></td></tr>
 <tr class="separator:ab7618605f331eabe54e0d2cfa6905dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c183f2574a40567a2ccc70a42627015"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a7c183f2574a40567a2ccc70a42627015">stms::consumeLogs</a> ()</td></tr>
-<tr class="separator:a7c183f2574a40567a2ccc70a42627015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#aa80ad9ad51a1c4b22c07e05b5644e06a">stms::consumeLogs</a> ()</td></tr>
+<tr class="memdesc:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process all the logs in <code>logQueue</code>, essentially flushing the log message backlog.  <a href="namespacestms.html#aa80ad9ad51a1c4b22c07e05b5644e06a">More...</a><br /></td></tr>
+<tr class="separator:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9700654e4e6462139d93252a4c0641cb"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a9700654e4e6462139d93252a4c0641cb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">stms::insertLog</a> (LogLevel lvl, unsigned line, const char *file, const char *fmtStr, const Args &amp;... args)</td></tr>
+<tr class="memdesc:a9700654e4e6462139d93252a4c0641cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Don't use this function directly. Instead, use the logging macros (<code>STMS_INFO</code>, <code>STMS_WARN</code>, etc.). This function inserts a <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code> into <code>logQueue</code> and starts a log-consume task (<code>consumeLogs</code>). The consume task would be asynchronous if <code>logPool</code> is not <code>nullptr</code>.  <a href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">More...</a><br /></td></tr>
 <tr class="separator:a9700654e4e6462139d93252a4c0641cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:af265a2f91e0b20e7c9e9d7be05246320"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#af265a2f91e0b20e7c9e9d7be05246320">stms::logConsuming</a></td></tr>
+<tr class="memdesc:af265a2f91e0b20e7c9e9d7be05246320"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag for if there is currently a log-consume task (<code>consumeLogs</code>) active. Implementation detail.  <a href="namespacestms.html#af265a2f91e0b20e7c9e9d7be05246320">More...</a><br /></td></tr>
+<tr class="separator:af265a2f91e0b20e7c9e9d7be05246320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63fbd7735ff2ec12cd8911a944e6d508"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a63fbd7735ff2ec12cd8911a944e6d508">stms::logQMtx</a></td></tr>
+<tr class="memdesc:a63fbd7735ff2ec12cd8911a944e6d508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex for syncing IO for <code>logQueue</code>. Implementation detail.  <a href="namespacestms.html#a63fbd7735ff2ec12cd8911a944e6d508">More...</a><br /></td></tr>
+<tr class="separator:a63fbd7735ff2ec12cd8911a944e6d508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="memItemLeft" align="right" valign="top">std::queue&lt; LogRecord &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#ae3ffb0aac7d8363364f7b5cccad686e4">stms::logQueue</a></td></tr>
+<tr class="memdesc:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue of <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code>s to be processed. Implementation detail.  <a href="namespacestms.html#ae3ffb0aac7d8363364f7b5cccad686e4">More...</a><br /></td></tr>
+<tr class="separator:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe22340dea60d893b0c870c15447d8c"><td class="memItemLeft" align="right" valign="top">ThreadPool *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a2fe22340dea60d893b0c870c15447d8c">stms::logPool</a></td></tr>
+<tr class="memdesc:a2fe22340dea60d893b0c870c15447d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code><a class="el" href="classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool.">ThreadPool</a></code> to be used for processing log messages from <code>logQueue</code>. You can modify this variable. If set to <code>nullptr</code>, asynchronous logging will be disabled. Otherwise, log-consume tasks will be submitted to this pool. By default, this is <code>nullptr</code> and async logging is disabled.  <a href="namespacestms.html#a2fe22340dea60d893b0c870c15447d8c">More...</a><br /></td></tr>
+<tr class="separator:a2fe22340dea60d893b0c870c15447d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2c03ade4376fe8cea8522a806653701"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::function&lt; void(LogRecord *, std::string *)&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#aa2c03ade4376fe8cea8522a806653701">stms::logHooks</a></td></tr>
+<tr class="memdesc:aa2c03ade4376fe8cea8522a806653701"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of hooks to call for each log message processed, in order. You can modify this variable.  <a href="namespacestms.html#aa2c03ade4376fe8cea8522a806653701">More...</a><br /></td></tr>
+<tr class="separator:aa2c03ade4376fe8cea8522a806653701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>File providing basic logging &amp; formatting functionality (using fmtlib) Created by grant on 1/26/20. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a0cd7c6a8e5cf3ce0fbdc66783b925654"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0cd7c6a8e5cf3ce0fbdc66783b925654">&#9670;&nbsp;</a></span>__STONEMASON_LOGGING_HPP</h2>
 
@@ -222,6 +248,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Include guard. </p>
 
 </div>
 </div>
@@ -241,6 +269,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Logging macro for <code>LogLevel</code> of <code>eDebug</code>. Used like a fmtlib function. <code>STMS_DEBUG("{1}, {0}!", "World", "Hello");</code> </p>
+
 </div>
 </div>
 <a id="a9e8bfc4715425ca9450964f6dc69548d"></a>
@@ -258,6 +288,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Logging macro for <code>LogLevel</code> of <code>eError</code>. Used like a fmtlib function. <code>STMS_ERROR("{1}, {0}!", "World", "Hello");</code> </p>
 
 </div>
 </div>
@@ -277,6 +309,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Logging macro for <code>LogLevel</code> of <code>eFatal</code>. Used like a fmtlib function. <code>STMS_FATAL("{1}, {0}!", "World", "Hello");</code> </p>
+
 </div>
 </div>
 <a id="ae849698e6380b9e065fa456cc1e56821"></a>
@@ -294,6 +328,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Logging macro for <code>LogLevel</code> of <code>eInfo</code>. Used like a fmtlib function. <code>STMS_INFO("{1}, {0}!", "World", "Hello");</code> </p>
 
 </div>
 </div>
@@ -313,6 +349,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Logging macro for <code>LogLevel</code> of <code>eTrace</code>. Used like a fmtlib function. <code>STMS_TRACE("{1}, {0}!", "World", "Hello");</code> </p>
+
 </div>
 </div>
 <a id="aff374dc187977630c718f59456645697"></a>
@@ -331,6 +369,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Logging macro for <code>LogLevel</code> of <code>eWarn</code>. Used like a fmtlib function. <code>STMS_WARN("{1}, {0}!", "World", "Hello");</code> </p>
+
 </div>
 </div>
 </div><!-- contents -->
@@ -339,7 +379,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_748ebd5bc10a7314ee339f99423ac6e2.html">stms</a></li><li class="navelem"><a class="el" href="logging_8hpp.html">logging.hpp</a></li>
-    <li class="footer">Generated on Fri Jul 24 2020 15:38:31 for Stone Mason by
+    <li class="footer">Generated on Tue Jul 28 2020 11:43:04 for Stone Mason by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

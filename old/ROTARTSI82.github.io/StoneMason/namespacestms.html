@@ -156,6 +156,7 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstms_1_1GLWindow.html">GLWindow</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html">LogRecord</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing a single log message.  <a href="structstms_1_1LogRecord.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstms_1_1SSLClient.html">SSLClient</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TLS/TCP or DTLS/UDP client.  <a href="classstms_1_1SSLClient.html#details">More...</a><br /></td></tr>
@@ -214,6 +215,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7">eFatal</a> = 0b100000
 <br />
  }</td></tr>
+<tr class="memdesc:a9224e26cd34c80bee9ef9bd440366fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level of severity of the log message. Can be used as a bit flag.  <a href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">More...</a><br /></td></tr>
 <tr class="separator:a9224e26cd34c80bee9ef9bd440366fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1aa25efbdc4e59e77398910ca48ecc14"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a1aa25efbdc4e59e77398910ca48ecc14">FDEventType</a> { <a class="el" href="namespacestms.html#a1aa25efbdc4e59e77398910ca48ecc14a7f1464c24ac841e29c80bad44b3880c7">eWriteReady</a> = POLLOUT, 
 <a class="el" href="namespacestms.html#a1aa25efbdc4e59e77398910ca48ecc14a38fee16c863052364c7a198b4bae07e8">eReadReady</a> = POLLIN
@@ -345,27 +347,20 @@ Functions</h2></td></tr>
 <tr class="memitem:a2a29f194bffdd27f742fca5a07c10410"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstms_1_1FTLibrary.html">FTLibrary</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a2a29f194bffdd27f742fca5a07c10410">defaultFtLib</a> ()</td></tr>
 <tr class="separator:a2a29f194bffdd27f742fca5a07c10410"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a4a3c75647782a4a19030a5fc4efcfcb8">initLogging</a> ()</td></tr>
+<tr class="memdesc:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init STMS logging module. If you wish to init everything, use <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code> instead.  <a href="namespacestms.html#a4a3c75647782a4a19030a5fc4efcfcb8">More...</a><br /></td></tr>
 <tr class="separator:a4a3c75647782a4a19030a5fc4efcfcb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88a55a1dd9180244015e0b28a3f6edc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a88a55a1dd9180244015e0b28a3f6edc7">quitLogging</a> ()</td></tr>
+<tr class="memdesc:a88a55a1dd9180244015e0b28a3f6edc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quit logging. If you used <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code>, you do not have to call this.  <a href="namespacestms.html#a88a55a1dd9180244015e0b28a3f6edc7">More...</a><br /></td></tr>
 <tr class="separator:a88a55a1dd9180244015e0b28a3f6edc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a089746bfe3d4d7ddb91d6d1ca26fced3"><td class="memItemLeft" align="right" valign="top">static std::queue&lt; <a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a089746bfe3d4d7ddb91d6d1ca26fced3">getLogQueue</a> ()</td></tr>
-<tr class="separator:a089746bfe3d4d7ddb91d6d1ca26fced3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afee5204e6b756e0352d3f8472b0dce2e"><td class="memItemLeft" align="right" valign="top">static std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#afee5204e6b756e0352d3f8472b0dce2e">getLogQueueMtx</a> ()</td></tr>
-<tr class="separator:afee5204e6b756e0352d3f8472b0dce2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a954643ffb4ae6c6ec7a219b76690be10"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a> *&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a954643ffb4ae6c6ec7a219b76690be10">getLogThreadPool</a> ()</td></tr>
-<tr class="separator:a954643ffb4ae6c6ec7a219b76690be10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb2430d5aac2eedf9a8485eaafc90ca7"><td class="memItemLeft" align="right" valign="top">static bool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#acb2430d5aac2eedf9a8485eaafc90ca7">getConsumingFlag</a> ()</td></tr>
-<tr class="separator:acb2430d5aac2eedf9a8485eaafc90ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84ab9701543bde8aa7d12d185313d219"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::function&lt; void(<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> *, std::string *)&gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a84ab9701543bde8aa7d12d185313d219">getLogHooks</a> ()</td></tr>
-<tr class="separator:a84ab9701543bde8aa7d12d185313d219"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e7b1c8095c8526fddf5c70b6e8e89e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a8e7b1c8095c8526fddf5c70b6e8e89e9">setLogPool</a> (<a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a> *pool)</td></tr>
-<tr class="separator:a8e7b1c8095c8526fddf5c70b6e8e89e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7618605f331eabe54e0d2cfa6905dcc"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#ab7618605f331eabe54e0d2cfa6905dcc">logLevelToString</a> (const <a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">LogLevel</a> &amp;lvl)</td></tr>
+<tr class="memdesc:ab7618605f331eabe54e0d2cfa6905dcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a LogLevel to a formatted text string. Internal implementation detail.  <a href="namespacestms.html#ab7618605f331eabe54e0d2cfa6905dcc">More...</a><br /></td></tr>
 <tr class="separator:ab7618605f331eabe54e0d2cfa6905dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c183f2574a40567a2ccc70a42627015"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a7c183f2574a40567a2ccc70a42627015">consumeLogs</a> ()</td></tr>
-<tr class="separator:a7c183f2574a40567a2ccc70a42627015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#aa80ad9ad51a1c4b22c07e05b5644e06a">consumeLogs</a> ()</td></tr>
+<tr class="memdesc:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process all the logs in <code>logQueue</code>, essentially flushing the log message backlog.  <a href="namespacestms.html#aa80ad9ad51a1c4b22c07e05b5644e06a">More...</a><br /></td></tr>
+<tr class="separator:aa80ad9ad51a1c4b22c07e05b5644e06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9700654e4e6462139d93252a4c0641cb"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a9700654e4e6462139d93252a4c0641cb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">insertLog</a> (<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">LogLevel</a> lvl, unsigned line, const char *file, const char *fmtStr, const Args &amp;... args)</td></tr>
+<tr class="memdesc:a9700654e4e6462139d93252a4c0641cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Don't use this function directly. Instead, use the logging macros (<code>STMS_INFO</code>, <code>STMS_WARN</code>, etc.). This function inserts a <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code> into <code>logQueue</code> and starts a log-consume task (<code>consumeLogs</code>). The consume task would be asynchronous if <code>logPool</code> is not <code>nullptr</code>.  <a href="namespacestms.html#a9700654e4e6462139d93252a4c0641cb">More...</a><br /></td></tr>
 <tr class="separator:a9700654e4e6462139d93252a4c0641cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2231469231e50eaad35ba43621de4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#ae2231469231e50eaad35ba43621de4ca">initOpenSsl</a> ()</td></tr>
 <tr class="memdesc:ae2231469231e50eaad35ba43621de4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init OpenSSL parts of STMS. Use <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code> if you wish to init everything.  <a href="namespacestms.html#ae2231469231e50eaad35ba43621de4ca">More...</a><br /></td></tr>
@@ -504,6 +499,21 @@ Variables</h2></td></tr>
 <tr class="memitem:aa142350525bce7635a047f7dc97be27b"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#aa142350525bce7635a047f7dc97be27b">enableExperimentalGlew</a> = true</td></tr>
 <tr class="memdesc:aa142350525bce7635a047f7dc97be27b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, allow experimental OpenGL driver features, useful for backwards/forward compatibility.  <a href="namespacestms.html#aa142350525bce7635a047f7dc97be27b">More...</a><br /></td></tr>
 <tr class="separator:aa142350525bce7635a047f7dc97be27b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af265a2f91e0b20e7c9e9d7be05246320"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#af265a2f91e0b20e7c9e9d7be05246320">logConsuming</a></td></tr>
+<tr class="memdesc:af265a2f91e0b20e7c9e9d7be05246320"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag for if there is currently a log-consume task (<code>consumeLogs</code>) active. Implementation detail.  <a href="namespacestms.html#af265a2f91e0b20e7c9e9d7be05246320">More...</a><br /></td></tr>
+<tr class="separator:af265a2f91e0b20e7c9e9d7be05246320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63fbd7735ff2ec12cd8911a944e6d508"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a63fbd7735ff2ec12cd8911a944e6d508">logQMtx</a></td></tr>
+<tr class="memdesc:a63fbd7735ff2ec12cd8911a944e6d508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex for syncing IO for <code>logQueue</code>. Implementation detail.  <a href="namespacestms.html#a63fbd7735ff2ec12cd8911a944e6d508">More...</a><br /></td></tr>
+<tr class="separator:a63fbd7735ff2ec12cd8911a944e6d508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#ae3ffb0aac7d8363364f7b5cccad686e4">logQueue</a></td></tr>
+<tr class="memdesc:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue of <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code>s to be processed. Implementation detail.  <a href="namespacestms.html#ae3ffb0aac7d8363364f7b5cccad686e4">More...</a><br /></td></tr>
+<tr class="separator:ae3ffb0aac7d8363364f7b5cccad686e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe22340dea60d893b0c870c15447d8c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#a2fe22340dea60d893b0c870c15447d8c">logPool</a></td></tr>
+<tr class="memdesc:a2fe22340dea60d893b0c870c15447d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code><a class="el" href="classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool.">ThreadPool</a></code> to be used for processing log messages from <code>logQueue</code>. You can modify this variable. If set to <code>nullptr</code>, asynchronous logging will be disabled. Otherwise, log-consume tasks will be submitted to this pool. By default, this is <code>nullptr</code> and async logging is disabled.  <a href="namespacestms.html#a2fe22340dea60d893b0c870c15447d8c">More...</a><br /></td></tr>
+<tr class="separator:a2fe22340dea60d893b0c870c15447d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2c03ade4376fe8cea8522a806653701"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::function&lt; void(<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> *, std::string *)&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#aa2c03ade4376fe8cea8522a806653701">logHooks</a></td></tr>
+<tr class="memdesc:aa2c03ade4376fe8cea8522a806653701"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of hooks to call for each log message processed, in order. You can modify this variable.  <a href="namespacestms.html#aa2c03ade4376fe8cea8522a806653701">More...</a><br /></td></tr>
+<tr class="separator:aa2c03ade4376fe8cea8522a806653701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd2dba5c14caae9daf2451cbe2dbf130"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestms.html#acd2dba5c14caae9daf2451cbe2dbf130">secretCookie</a> [<a class="el" href="namespacestms.html#a4ab847c26fe63423437463286f56aeba">secretCookieLen</a>]</td></tr>
 <tr class="memdesc:acd2dba5c14caae9daf2451cbe2dbf130"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is <code>secretCookieLen</code> of random data to be used for DTLS stateless cookie exchanges (for protection against DDoS attacks).  <a href="namespacestms.html#acd2dba5c14caae9daf2451cbe2dbf130">More...</a><br /></td></tr>
 <tr class="separator:acd2dba5c14caae9daf2451cbe2dbf130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -810,14 +820,23 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The level of severity of the log message. Can be used as a bit flag. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a605a0a04b67e46c5287c86507fe88bc9"></a>eInvalid&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6acf3628d077390e7b48f736f16ef918c7"></a>eTrace&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a35ceb96d2d48dd2d9c5dbad9dc558167"></a>eDebug&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6abe9ce6059ae4b1b85201d00fc0c5352e"></a>eInfo&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6ae63f084e1614a7b1dcf678e1f646e132"></a>eWarn&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6ab197443aa99e6fe7d6152b7aedcc96e7"></a>eError&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7"></a>eFatal&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a605a0a04b67e46c5287c86507fe88bc9"></a>eInvalid&#160;</td><td class="fielddoc"><p>Invalid log level. Has value 0. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6acf3628d077390e7b48f736f16ef918c7"></a>eTrace&#160;</td><td class="fielddoc"><p>Trace info. Value 1. (first bit) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a35ceb96d2d48dd2d9c5dbad9dc558167"></a>eDebug&#160;</td><td class="fielddoc"><p>Debug message. Value 2. (2nd bit) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6abe9ce6059ae4b1b85201d00fc0c5352e"></a>eInfo&#160;</td><td class="fielddoc"><p>General info message. Value 4 (3rd bit) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6ae63f084e1614a7b1dcf678e1f646e132"></a>eWarn&#160;</td><td class="fielddoc"><p>Warning message. Value 8. (4th bit) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6ab197443aa99e6fe7d6152b7aedcc96e7"></a>eError&#160;</td><td class="fielddoc"><p>Error message. Value 16. (5th bit) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7"></a>eFatal&#160;</td><td class="fielddoc"><p>Fatal error! Value 32. (6th bit) </p>
+</td></tr>
 </table>
 
 </div>
@@ -901,28 +920,22 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a7c183f2574a40567a2ccc70a42627015"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c183f2574a40567a2ccc70a42627015">&#9670;&nbsp;</a></span>consumeLogs()</h2>
+<a id="aa80ad9ad51a1c4b22c07e05b5644e06a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa80ad9ad51a1c4b22c07e05b5644e06a">&#9670;&nbsp;</a></span>consumeLogs()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void stms::consumeLogs </td>
+          <td class="memname">void stms::consumeLogs </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Process all the logs in <code>logQueue</code>, essentially flushing the log message backlog. </p>
 
 </div>
 </div>
@@ -1321,31 +1334,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="acb2430d5aac2eedf9a8485eaafc90ca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb2430d5aac2eedf9a8485eaafc90ca7">&#9670;&nbsp;</a></span>getConsumingFlag()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool&amp; stms::getConsumingFlag </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a88bcefdeb2ce658accba6f7cbd7b4769"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a88bcefdeb2ce658accba6f7cbd7b4769">&#9670;&nbsp;</a></span>getForbiddenLayers()</h2>
 
@@ -1357,108 +1345,6 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">static std::unordered_set&lt;std::string&gt;&amp; stms::getForbiddenLayers </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a84ab9701543bde8aa7d12d185313d219"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84ab9701543bde8aa7d12d185313d219">&#9670;&nbsp;</a></span>getLogHooks()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::function&lt;void(<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> *, std::string *)&gt; &gt;&amp; stms::getLogHooks </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Gets the <code>std::vector</code> of log hooks for I/O. You may modify it to add your own hooks.</p>
-<dl class="section return"><dt>Returns</dt><dd>Reference to the vector of log hooks. </dd></dl>
-
-</div>
-</div>
-<a id="a089746bfe3d4d7ddb91d6d1ca26fced3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a089746bfe3d4d7ddb91d6d1ca26fced3">&#9670;&nbsp;</a></span>getLogQueue()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::queue&lt;<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a>&gt;&amp; stms::getLogQueue </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afee5204e6b756e0352d3f8472b0dce2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afee5204e6b756e0352d3f8472b0dce2e">&#9670;&nbsp;</a></span>getLogQueueMtx()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::mutex&amp; stms::getLogQueueMtx </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a954643ffb4ae6c6ec7a219b76690be10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a954643ffb4ae6c6ec7a219b76690be10">&#9670;&nbsp;</a></span>getLogThreadPool()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a>*&amp; stms::getLogThreadPool </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1647,6 +1533,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Init STMS logging module. If you wish to init everything, use <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code> instead. </p>
+
 </div>
 </div>
 <a id="ae2231469231e50eaad35ba43621de4ca"></a>
@@ -1713,6 +1601,24 @@ template&lt;typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Don't use this function directly. Instead, use the logging macros (<code>STMS_INFO</code>, <code>STMS_WARN</code>, etc.). This function inserts a <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code> into <code>logQueue</code> and starts a log-consume task (<code>consumeLogs</code>). The consume task would be asynchronous if <code>logPool</code> is not <code>nullptr</code>. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Args</td><td>Template param allowing fmtlib arguments to be passed in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lvl</td><td>Severity of the message. See <code>LogLevel</code>. </td></tr>
+    <tr><td class="paramname">line</td><td>Line of the source file the message is from </td></tr>
+    <tr><td class="paramname">file</td><td>Source file the message is from (e.g. <code>main.cpp</code>) </td></tr>
+    <tr><td class="paramname">fmtStr</td><td>String to format, the actual un-formatted log message. </td></tr>
+    <tr><td class="paramname">args</td><td>fmtlib formatting arguments. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1865,10 +1771,12 @@ template&lt;typename... Args&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Convert a LogLevel to a formatted text string. Internal implementation detail. </p>
 
 </div>
 </div>
@@ -1939,6 +1847,8 @@ template&lt;typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Quit logging. If you used <code><a class="el" href="namespacestms.html#a7d23bdb61a42fb748859559b62952000">stms::initAll</a></code>, you do not have to call this. </p>
 
 </div>
 </div>
@@ -2180,38 +2090,6 @@ template&lt;typename... Args&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8e7b1c8095c8526fddf5c70b6e8e89e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e7b1c8095c8526fddf5c70b6e8e89e9">&#9670;&nbsp;</a></span>setLogPool()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void stms::setLogPool </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a> *&#160;</td>
-          <td class="paramname"><em>pool</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets the thread pool to submit asynchronous logging tasks to. By calling this with a non-nullptr value, asynchronous logging is enabled. If this is called with <code>nullptr</code>, async logging is disabled. Async logging is disabled by default (since we don't know where to submit our tasks). </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pool</td><td>Pool to submit tasks to, or <code>nullptr</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -2571,6 +2449,92 @@ template&lt;typename... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Identity 4x4 matrix {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}. </p>
+
+</div>
+</div>
+<a id="af265a2f91e0b20e7c9e9d7be05246320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af265a2f91e0b20e7c9e9d7be05246320">&#9670;&nbsp;</a></span>logConsuming</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stms::logConsuming</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flag for if there is currently a log-consume task (<code>consumeLogs</code>) active. Implementation detail. </p>
+
+</div>
+</div>
+<a id="aa2c03ade4376fe8cea8522a806653701"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2c03ade4376fe8cea8522a806653701">&#9670;&nbsp;</a></span>logHooks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::function&lt;void(<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a> *, std::string *)&gt; &gt; stms::logHooks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List of hooks to call for each log message processed, in order. You can modify this variable. </p>
+<p>The first argument (<code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a> *</code>) is the raw <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code>, which contains info such as the time, file, line, and level of the log message. You can modify this.</p>
+<p>The second argument (<code>std::string *</code>) is the full formatted string of the log message. You could print this string directly. You can modify this. (example: <code>[9:30:15.125000000 ] [ <a href="file:///home/ubuntu/MyProject/main.cpp">file:///home/ubuntu/MyProject/main.cpp</a> ] [ info ]: Hello World!</code>)</p>
+<p>By default, 1 hook is guaranteed to be registered. It is either the first or second hook, depending on <code><a class="el" href="namespacestms.html#a8f84c3d23b18bf339d1b9b42ef1297fe" title="If true, write log output to stdout.">stms::logToStdout</a></code>. This hook simply removes the text format control characters from the second argument for printing to files. (e.g. <code>\u001b[1m\u001b[31mERROR[0m</code>-&gt; <code>ERROR</code>)</p>
+<p>If <code><a class="el" href="namespacestms.html#a8f84c3d23b18bf339d1b9b42ef1297fe" title="If true, write log output to stdout.">stms::logToStdout</a></code> is true, the first hook would be a hook that just prints the second argument to stdout.</p>
+<p>If <code><a class="el" href="namespacestms.html#a42a31bb715277fbeb2555b9ac5aa1d21" title="If true, write log output to latest.log">stms::logToLatestLog</a></code> is true, the next hook would be one that writes the second argument to <code>latest.log</code> without flushing the output with <code>fflush</code></p>
+<p>If <code><a class="el" href="namespacestms.html#a68ea5efce0a61c20bee4a5ede21227e2" title="If true, write log output to &lt;logsDir&gt;/&lt;datetime&gt;.log">stms::logToUniqueFile</a></code> is true, the next hook would be one that writes the second argument to <code>${<a class="el" href="namespacestms.html#a1e45dedb8dd0f294c33efae560587b7c" title="Directory for log output. There must NOT be a trailing slash.">stms::logsDir</a>}/${DATE_TIME}.log</code> </p>
+
+</div>
+</div>
+<a id="a2fe22340dea60d893b0c870c15447d8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fe22340dea60d893b0c870c15447d8c">&#9670;&nbsp;</a></span>logPool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstms_1_1ThreadPool.html">ThreadPool</a>* stms::logPool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code><a class="el" href="classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool.">ThreadPool</a></code> to be used for processing log messages from <code>logQueue</code>. You can modify this variable. If set to <code>nullptr</code>, asynchronous logging will be disabled. Otherwise, log-consume tasks will be submitted to this pool. By default, this is <code>nullptr</code> and async logging is disabled. </p>
+
+</div>
+</div>
+<a id="a63fbd7735ff2ec12cd8911a944e6d508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63fbd7735ff2ec12cd8911a944e6d508">&#9670;&nbsp;</a></span>logQMtx</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex stms::logQMtx</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mutex for syncing IO for <code>logQueue</code>. Implementation detail. </p>
+
+</div>
+</div>
+<a id="ae3ffb0aac7d8363364f7b5cccad686e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ffb0aac7d8363364f7b5cccad686e4">&#9670;&nbsp;</a></span>logQueue</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;<a class="el" href="structstms_1_1LogRecord.html">LogRecord</a>&gt; stms::logQueue</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Queue of <code><a class="el" href="structstms_1_1LogRecord.html" title="Struct representing a single log message.">LogRecord</a></code>s to be processed. Implementation detail. </p>
 
 </div>
 </div>
@@ -3058,7 +3022,7 @@ template&lt;typename... Args&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacestms.html">stms</a></li>
-    <li class="footer">Generated on Fri Jul 24 2020 15:38:31 for Stone Mason by
+    <li class="footer">Generated on Tue Jul 28 2020 11:43:04 for Stone Mason by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -17,15 +17,14 @@ var logging_8hpp =
       [ "eError", "logging_8hpp.html#a9224e26cd34c80bee9ef9bd440366fc6ab197443aa99e6fe7d6152b7aedcc96e7", null ],
       [ "eFatal", "logging_8hpp.html#a9224e26cd34c80bee9ef9bd440366fc6a07b883823a11b50c82aae1cb942cb1b7", null ]
     ] ],
-    [ "consumeLogs", "logging_8hpp.html#a7c183f2574a40567a2ccc70a42627015", null ],
-    [ "getConsumingFlag", "logging_8hpp.html#acb2430d5aac2eedf9a8485eaafc90ca7", null ],
-    [ "getLogHooks", "logging_8hpp.html#a84ab9701543bde8aa7d12d185313d219", null ],
-    [ "getLogQueue", "logging_8hpp.html#a089746bfe3d4d7ddb91d6d1ca26fced3", null ],
-    [ "getLogQueueMtx", "logging_8hpp.html#afee5204e6b756e0352d3f8472b0dce2e", null ],
-    [ "getLogThreadPool", "logging_8hpp.html#a954643ffb4ae6c6ec7a219b76690be10", null ],
+    [ "consumeLogs", "logging_8hpp.html#aa80ad9ad51a1c4b22c07e05b5644e06a", null ],
     [ "initLogging", "logging_8hpp.html#a4a3c75647782a4a19030a5fc4efcfcb8", null ],
     [ "insertLog", "logging_8hpp.html#a9700654e4e6462139d93252a4c0641cb", null ],
     [ "logLevelToString", "logging_8hpp.html#ab7618605f331eabe54e0d2cfa6905dcc", null ],
     [ "quitLogging", "logging_8hpp.html#a88a55a1dd9180244015e0b28a3f6edc7", null ],
-    [ "setLogPool", "logging_8hpp.html#a8e7b1c8095c8526fddf5c70b6e8e89e9", null ]
+    [ "logConsuming", "logging_8hpp.html#af265a2f91e0b20e7c9e9d7be05246320", null ],
+    [ "logHooks", "logging_8hpp.html#aa2c03ade4376fe8cea8522a806653701", null ],
+    [ "logPool", "logging_8hpp.html#a2fe22340dea60d893b0c870c15447d8c", null ],
+    [ "logQMtx", "logging_8hpp.html#a63fbd7735ff2ec12cd8911a944e6d508", null ],
+    [ "logQueue", "logging_8hpp.html#ae3ffb0aac7d8363364f7b5cccad686e4", null ]
 ];

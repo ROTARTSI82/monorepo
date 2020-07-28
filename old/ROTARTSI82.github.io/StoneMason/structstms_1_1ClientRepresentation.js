@@ -16,5 +16,6 @@ var structstms_1_1ClientRepresentation =
     [ "pSsl", "structstms_1_1ClientRepresentation.html#ad0aff633c509356cbc90b51ca48b0714", null ],
     [ "serv", "structstms_1_1ClientRepresentation.html#a74e715b74e3847adf77268fbb16c9496", null ],
     [ "sock", "structstms_1_1ClientRepresentation.html#a4e6cd62663bc890836dbc3713335c2ee", null ],
-    [ "sockAddrLen", "structstms_1_1ClientRepresentation.html#ade9644c01418d2d6157b8cb16d88e55b", null ]
+    [ "sockAddrLen", "structstms_1_1ClientRepresentation.html#ade9644c01418d2d6157b8cb16d88e55b", null ],
+    [ "timeoutTimer", "structstms_1_1ClientRepresentation.html#ab9a0094cae7219f49d5a90f1260e5a9d", null ]
 ];

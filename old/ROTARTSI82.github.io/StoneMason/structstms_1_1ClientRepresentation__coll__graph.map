@@ -1,17 +1,17 @@
 <map id="stms::ClientRepresentation" name="stms::ClientRepresentation">
-<area shape="rect" id="node1" title="Struct containing all the client&#39;s data. Internal impl detail, don&#39;t touch." alt="" coords="597,368,796,395"/>
-<area shape="rect" id="node13" title=" " alt="" coords="1029,350,1212,391"/>
-<area shape="rect" id="node2" href="$classstms_1_1SSLServer.html" title="A SSL/TLS server. Can be TCP (TLS) or UDP (DTLS)" alt="" coords="1751,248,1877,275"/>
-<area shape="rect" id="node3" href="$classstms_1_1__stms__SSLBase.html" title="Internal implementation detail. You shouldn&#39;t have to touch this! stms::SSLServer and stms::SSLClient..." alt="" coords="1417,197,1579,224"/>
-<area shape="rect" id="node4" href="$classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool." alt="" coords="1053,115,1188,141"/>
-<area shape="rect" id="node5" title=" " alt="" coords="599,130,794,171"/>
-<area shape="rect" id="node6" title="STL class." alt="" coords="651,5,743,32"/>
-<area shape="rect" id="node7" title=" " alt="" coords="601,79,792,105"/>
-<area shape="rect" id="node8" title="STL class." alt="" coords="339,79,431,105"/>
-<area shape="rect" id="node9" title="STL class." alt="" coords="341,273,428,300"/>
-<area shape="rect" id="node11" title=" " alt="" coords="820,248,1005,275"/>
-<area shape="rect" id="node12" title=" " alt="" coords="1341,299,1655,355"/>
+<area shape="rect" id="node1" title="Struct containing all the client&#39;s data. Internal impl detail, don&#39;t touch." alt="" coords="533,379,732,405"/>
+<area shape="rect" id="node13" title=" " alt="" coords="965,350,1148,391"/>
+<area shape="rect" id="node2" href="$classstms_1_1SSLServer.html" title="A SSL/TLS server. Can be TCP (TLS) or UDP (DTLS)" alt="" coords="1687,248,1813,275"/>
+<area shape="rect" id="node3" href="$classstms_1_1__stms__SSLBase.html" title="Internal implementation detail. You shouldn&#39;t have to touch this! stms::SSLServer and stms::SSLClient..." alt="" coords="1353,197,1515,224"/>
+<area shape="rect" id="node4" href="$classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool." alt="" coords="989,115,1124,141"/>
+<area shape="rect" id="node5" title=" " alt="" coords="535,130,730,171"/>
+<area shape="rect" id="node6" title="STL class." alt="" coords="587,5,679,32"/>
+<area shape="rect" id="node7" title=" " alt="" coords="537,79,728,105"/>
+<area shape="rect" id="node8" title="STL class." alt="" coords="247,79,339,105"/>
+<area shape="rect" id="node9" title="STL class." alt="" coords="249,273,336,300"/>
+<area shape="rect" id="node11" title=" " alt="" coords="756,248,941,275"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1277,299,1591,355"/>
 <area shape="rect" id="node10" title="STL class." alt="" coords="5,266,144,307"/>
-<area shape="rect" id="node14" href="$structstms_1_1ClientRepresentation_1_1DTLSSpecific.html" title="Struct containing the parts of a ClientRepresentation relevant for DTLS connections." alt="" coords="285,371,484,413"/>
-<area shape="rect" id="node15" href="$classstms_1_1Stopwatch.html" title="Stopwatch for timing. Can tell you how long it has been since start(), or it can tell you the time be..." alt="" coords="9,379,140,405"/>
+<area shape="rect" id="node14" href="$structstms_1_1ClientRepresentation_1_1DTLSSpecific.html" title="Struct containing the parts of a ClientRepresentation relevant for DTLS connections." alt="" coords="193,430,392,471"/>
+<area shape="rect" id="node15" href="$classstms_1_1Stopwatch.html" title="Stopwatch for timing. Can tell you how long it has been since start(), or it can tell you the time be..." alt="" coords="227,379,358,405"/>
 </map>

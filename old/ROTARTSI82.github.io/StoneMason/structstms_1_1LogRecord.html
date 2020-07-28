@@ -91,27 +91,38 @@ $(document).ready(function(){initNavTree('structstms_1_1LogRecord.html',''); ini
 </div><!--header-->
 <div class="contents">
 
+<p>Struct representing a single log message.  
+ <a href="structstms_1_1LogRecord.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="logging_8hpp_source.html">logging.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a399bdd351bb42a3e836ad7af03404cd9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#a399bdd351bb42a3e836ad7af03404cd9">LogRecord</a> (<a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">LogLevel</a> lvl, std::chrono::system_clock::time_point <a class="el" href="structstms_1_1LogRecord.html#a809f0bcf62d29d2f828790a085bb69a9">time</a>, const char *<a class="el" href="structstms_1_1LogRecord.html#aa8ebe9266794dddc0d46a3b0a7cd15c3">file</a>, unsigned <a class="el" href="structstms_1_1LogRecord.html#a8d613ce0325a452ce6308e0b88e2523c">line</a>)</td></tr>
+<tr class="memdesc:a399bdd351bb42a3e836ad7af03404cd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a log message record.  <a href="structstms_1_1LogRecord.html#a399bdd351bb42a3e836ad7af03404cd9">More...</a><br /></td></tr>
 <tr class="separator:a399bdd351bb42a3e836ad7af03404cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a1a59bb52046be3737b6bdcac2bb845ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6">LogLevel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#a1a59bb52046be3737b6bdcac2bb845ef">level</a> = <a class="el" href="namespacestms.html#a9224e26cd34c80bee9ef9bd440366fc6a605a0a04b67e46c5287c86507fe88bc9">eInvalid</a></td></tr>
+<tr class="memdesc:a1a59bb52046be3737b6bdcac2bb845ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Severity of the message. See <code>LogLevel</code>.  <a href="structstms_1_1LogRecord.html#a1a59bb52046be3737b6bdcac2bb845ef">More...</a><br /></td></tr>
 <tr class="separator:a1a59bb52046be3737b6bdcac2bb845ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a809f0bcf62d29d2f828790a085bb69a9"><td class="memItemLeft" align="right" valign="top">std::chrono::system_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#a809f0bcf62d29d2f828790a085bb69a9">time</a></td></tr>
+<tr class="memdesc:a809f0bcf62d29d2f828790a085bb69a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which the message was generated.  <a href="structstms_1_1LogRecord.html#a809f0bcf62d29d2f828790a085bb69a9">More...</a><br /></td></tr>
 <tr class="separator:a809f0bcf62d29d2f828790a085bb69a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8ebe9266794dddc0d46a3b0a7cd15c3"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#aa8ebe9266794dddc0d46a3b0a7cd15c3">file</a> = &quot;&quot;</td></tr>
+<tr class="memdesc:aa8ebe9266794dddc0d46a3b0a7cd15c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">File from which the message originated.  <a href="structstms_1_1LogRecord.html#aa8ebe9266794dddc0d46a3b0a7cd15c3">More...</a><br /></td></tr>
 <tr class="separator:aa8ebe9266794dddc0d46a3b0a7cd15c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d613ce0325a452ce6308e0b88e2523c"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#a8d613ce0325a452ce6308e0b88e2523c">line</a> {}</td></tr>
+<tr class="memdesc:a8d613ce0325a452ce6308e0b88e2523c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line of the source file from which the message originated.  <a href="structstms_1_1LogRecord.html#a8d613ce0325a452ce6308e0b88e2523c">More...</a><br /></td></tr>
 <tr class="separator:a8d613ce0325a452ce6308e0b88e2523c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ec2707ce7f8d162c0cabd4092ceef28"><td class="memItemLeft" align="right" valign="top">fmt::memory_buffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstms_1_1LogRecord.html#a5ec2707ce7f8d162c0cabd4092ceef28">msg</a></td></tr>
+<tr class="memdesc:a5ec2707ce7f8d162c0cabd4092ceef28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal memory buffer to format the actual log message into. Implementation detail.  <a href="structstms_1_1LogRecord.html#a5ec2707ce7f8d162c0cabd4092ceef28">More...</a><br /></td></tr>
 <tr class="separator:a5ec2707ce7f8d162c0cabd4092ceef28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Struct representing a single log message. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a399bdd351bb42a3e836ad7af03404cd9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a399bdd351bb42a3e836ad7af03404cd9">&#9670;&nbsp;</a></span>LogRecord()</h2>
 
@@ -150,6 +161,17 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Construct a log message record. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lvl</td><td>Level of severity of the message </td></tr>
+    <tr><td class="paramname">time</td><td>Time at which the message is generated </td></tr>
+    <tr><td class="paramname">file</td><td>File of origin of the log message (i.e. <code>main.cpp</code>) </td></tr>
+    <tr><td class="paramname">line</td><td>The line of the source file form which the message was emitted. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Field Documentation</h2>
@@ -165,6 +187,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>File from which the message originated. </p>
+
 </div>
 </div>
 <a id="a1a59bb52046be3737b6bdcac2bb845ef"></a>
@@ -178,6 +202,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Severity of the message. See <code>LogLevel</code>. </p>
 
 </div>
 </div>
@@ -193,6 +219,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Line of the source file from which the message originated. </p>
+
 </div>
 </div>
 <a id="a5ec2707ce7f8d162c0cabd4092ceef28"></a>
@@ -206,6 +234,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Internal memory buffer to format the actual log message into. Implementation detail. </p>
 
 </div>
 </div>
@@ -221,6 +251,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which the message was generated. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -232,7 +264,7 @@ Data Fields</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacestms.html">stms</a></li><li class="navelem"><a class="el" href="structstms_1_1LogRecord.html">LogRecord</a></li>
-    <li class="footer">Generated on Fri Jul 24 2020 15:38:31 for Stone Mason by
+    <li class="footer">Generated on Tue Jul 28 2020 11:43:04 for Stone Mason by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
