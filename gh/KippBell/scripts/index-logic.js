@@ -6,6 +6,7 @@ let table = document.getElementById("sched-body");
 let linkDisp = document.getElementById("link-disp");
 let endDisp = document.getElementById("end-disp");
 let noteDisp = document.getElementById("note-disp");
+let holidayTog = document.getElementById("no-monday-sched-toggle");
 
 document.getElementById("noscript").hidden = true;
 
@@ -100,22 +101,6 @@ let getLinkHTML = function (periodName) {
 
         return finalHTML;
     } else {
-        if (periodName === "Meeting" || periodName === "Assembly") {
-            return "Check <a href='https://schoology.harker.org' target='_blank'>Schoology</a> (Student Notes & Calendar) & <a target='_blank' href='https://gmail.com'>your email</a> & <a target=\"_blank\" href=\"https://docs.google.com/document/d/1sTkxpBtSHVsDVtlZuOgjbVR2ot434qEUplBgEp-nsmc/edit?usp=sharing\">this doc.</a>";
-        }
-
-        if (periodName === "L1" || periodName === "L2") {
-            return "Check <a href='https://schoology.harker.org' target='_blank'>Schoology</a> for lunchtime activities";
-        }
-
-        if (periodName === "Clubs") {
-            if (now.getDay() === 2) {
-                return "Check <a href='https://schoology.harker.org'>schoology</a> for Tuesday Club Offerings."
-            } else if (now.getDay() === 4) {
-                return "Check <a href='https://schoology.harker.org'>schoology</a> for Thursday Club Offerings."
-            }
-        }
-
         return "No Links";
     }
 };
@@ -215,8 +200,8 @@ let updateTable = function () {
             "                    <th scope=\"row\">Nothing to see here!</th>\n" +
             "                    <td>It's the weekend!</td>\n" +
             "                    <td>Have fun!</td>\n" +
-            "                    <td>Remember to wash your hands!</td>\n" +
-            "                    <td>Stay healthy!</td>\n" +
+            "                    <td>...</td>\n" +
+            "                    <td>¯\\_(ツ)_/¯</td>\n" +
             "                </tr>\n";
     }
 };
@@ -241,40 +226,47 @@ let intervalHandler = function () {
 
     switch (now.getDay()) {
         case (0): { // Sunday
-            noteDisp.textContent = "It's Sunday! ᕕ( ᐛ )ᕗ";
-            schoolsOut(1, 8, 5, "Period 1");
+            noteDisp.textContent = "It's Sunday!";
+            schoolsOut(holidayTog.checked ? 2 : 1, 9, 0, "Advisory");
             updateTable();
             break;
         }
         case (6): { // Saturday
-            noteDisp.textContent = "It's Saturday! ᕕ( ᐛ )ᕗ";
-            schoolsOut(2, 8, 5, "Period 1");
+            noteDisp.textContent = "It's Saturday!";
+            schoolsOut(holidayTog.checked ? 3 : 2, 9, 0, "Advisory");
             updateTable();
             break;
         }
         default: {
+            if (holidayTog.checked && now.getDay() === 1) {
+                noteDisp.textContent = "No school this Monday!";
+                schoolsOut(1, 9, 0, "Advisory");
+                updateTable();
+                break;
+            }
+
             updateSchedule();
             updateTable();
 
             switch (now.getDay()) {
                 case (1): {
-                    noteDisp.textContent = "Monday: No History. Meeting.";
+                    noteDisp.textContent = "Monday";
                     break;
                 }
                 case (2): {
-                    noteDisp.textContent = "Tuesday: No Science. Clubs.";
+                    noteDisp.textContent = "Tuesday";
                     break;
                 }
                 case (3): {
-                    noteDisp.textContent = "Wednesday: No Math. Double period today! Late Start.";
+                    noteDisp.textContent = "Wednesday";
                     break;
                 }
                 case (4): {
-                    noteDisp.textContent = "Thursday: No Language. Double period today! Clubs.";
+                    noteDisp.textContent = "Thursday";
                     break;
                 }
                 case (5): {
-                    noteDisp.textContent = "Friday: No English or Expos. Assembly.";
+                    noteDisp.textContent = "Friday";
                     break;
                 }
             }

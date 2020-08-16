@@ -32,6 +32,14 @@
     <title>Harker MS Virtual Bell</title>
 </head>
 <body>
+<!--<div class="alert alert-info fixed-top" role="alert">-->
+<!--    <h5 class="alert-heading">-->
+<!--        <button aria-label="Close" class="close" data-dismiss="alert" type="button">-->
+<!--            <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--        Were you looking for the <a href="https://rotartsi82.github.io/VirtualBell">harker bell</a> instead?-->
+<!--    </h5>-->
+<!--</div>-->
 <div class="pad center">
     <div class="pad center bg-dark dark-theme">
         <div class="alert alert-danger" id="noscript" role="alert">
@@ -46,19 +54,10 @@
             </h4>
         </div>
 
-        <!--
-        <div class="alert alert-danger" role="alert">
-            <h5 class="alert-heading">
-                <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                Welcome to version 3.3! As you may have heard, some classes will not be meeting on certain days,
-                starting next Monday (May 4). I've added a handy indicator for that! It will also indicate double
-                periods!
-            </h5>
-        </div> -->
-
-        <h1>Harker Middle School Virtual Bell <span class="badge badge-secondary">v3.3</span></h1>
+        <h1>Generic Virtual Bell</h1>
+        <p>
+            This is <b>NOT</b> the harker bell! That's at <a href="https://rotartsi82.github.io/VirtualBell">https://rotartsi82.github.io/VirtualBell</a>
+        </p>
         <h4>By Grant Yang <a href="mailto:25granty@students.harker.org"
                              target="_blank"><25granty@students.harker.org></a></h4>
         <h5 style="color: yellow">Turn on sound and allow autoplay to hear the bells! If you don't want to hear them,
@@ -70,11 +69,16 @@
             <div class="col-sm">
                 <h5><a href="settings.html">Settings</a></h5>
             </div>
-
             <div class="col-sm">
-                <h5><a href="links.html" target="_blank">Zoom/Flipgrid Links</a></h5>
+                <form>
+                    <div class="form-check h5">
+                        <input type="checkbox" class="form-check-input" id="no-monday-sched-toggle">
+                        <label class="form-check-label" for="no-monday-sched-toggle">Toggle Monday-holiday schedule</label>
+                    </div>
+                </form>
             </div>
         </div>
+        <hr>
 
         <hr>
         <h3><span class="disp" id="datetime-disp">ERROR</span></h3>
@@ -117,11 +121,11 @@
         <hr>
         <div class="row">
             <div class="col-sm">
-                <h5><a href="https://www.github.com/ROTARTSI82/VirtualBell" target="_blank">See the code on GitHub</a>
+                <h5><a href="https://www.github.com/ROTARTSI82/GenericBell" target="_blank">See the code on GitHub</a>
                 </h5>
             </div>
             <div class="col-sm">
-                <h5><a href="https://www.github.com/ROTARTSI82/VirtualBell/issues" target="_blank">Report an Issue</a>
+                <h5><a href="https://www.github.com/ROTARTSI82/GenericBell/issues" target="_blank">Report an Issue</a>
                 </h5>
             </div>
         </div>

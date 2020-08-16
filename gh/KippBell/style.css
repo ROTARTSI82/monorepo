@@ -1,5 +1,5 @@
 body {
-    background-color: darkgreen;
+    background-color: gray;
 }
 
 
@@ -24,7 +24,7 @@ body {
 }
 
 .disp {
-    color: greenyellow;
+    color: orange;
 }
 
 .col-font {
