@@ -10,6 +10,16 @@ let holidayTog = document.getElementById("no-monday-sched-toggle");
 
 document.getElementById("noscript").hidden = true;
 
+
+holidayTog.onclick = function() {
+    schedule = [];
+    loadSchedule();
+    location.reload(); // It's a new day! We need to reload the schedule.
+    clearInterval(updateInterval);
+    updateInterval = setInterval(intervalHandler, 250);
+    currentDay = now.getDate();
+}
+
 let offDuty = "Free Time";
 
 let schoolsOut = function (days, hours, min, next) {
