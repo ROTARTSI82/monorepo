@@ -1,0 +1,19 @@
+{
+  "name": "capitalistdiscordbot",
+  "version": "1.0.0",
+  "description": "An economy bot for discord",
+  "main": "index.js",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "discord.js": "^12.3.1",
+    "fs": "^0.0.1-security",
+    "levenshtein-edit-distance": "^2.0.5",
+    "pg": "^8.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Grant Yang",
+  "license": "ISC"
+}
