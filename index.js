@@ -44,5 +44,18 @@ bot.on('message', msg => {
 
 });
 
-bot.login('REDACTED');
+
+const fs = require('fs')
+
+fs.readFile('./token.txt', 'utf8' , (err, data) => {
+    if (err) {
+        console.error("cannot locate bot token! Make sure ./token.txt is set correctly")
+        console.error(err)
+        return
+    }
+
+    console.info(data)
+    bot.login(data);
+})
+
 
