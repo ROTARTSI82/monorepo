@@ -1,8 +1,8 @@
-const qb = require("../quizbowl")
+const qb = require("./quizbowl")
 const admin = require('./admin')
 const exec = require('child_process').exec
 
-const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("../settings")
+const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("./settings")
 
 let fnCase = function(n, thresh) {
     let base = n / thresh;
