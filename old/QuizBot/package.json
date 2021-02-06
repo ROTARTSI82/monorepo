@@ -1,14 +1,14 @@
 {
-  "name": "capitalistdiscordbot",
+  "name": "quizbot",
   "version": "1.0.0",
-  "description": "An economy bot for discord",
-  "main": "index.js",
+  "description": "An QuizBowl bot for discord",
+  "main": "src/index.js",
   "dependencies": {
     "child_process": "^1.0.2",
-    "discord.js": "^12.3.1",
+    "discord.js": "^12.5.1",
     "fs": "^0.0.1-security",
     "levenshtein-edit-distance": "^2.0.5",
-    "pg": "^8.3.3"
+    "pg": "^8.5.1"
   },
   "devDependencies": {},
   "scripts": {

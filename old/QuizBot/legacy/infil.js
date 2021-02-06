@@ -91,4 +91,4 @@ bot.on('message', msg => {
 
 });
 
-bot.login('REDACTED');
+bot.login('');

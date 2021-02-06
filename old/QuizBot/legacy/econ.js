@@ -1,7 +1,8 @@
-const qb = require("./quizbowl")
+const qb = require("../quizbowl")
+const admin = require('./admin')
 const exec = require('child_process').exec
 
-const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("./settings")
+const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("../settings")
 
 let fnCase = function(n, thresh) {
     let base = n / thresh;
@@ -46,6 +47,7 @@ let runEcon = function(client, msg) {
                     money += earnings;
 
                     qb.runQb(msg, client, usrProf, profName, money);
+                    admin.runAdmin(client, msg);
 
                     if (!msg.content.startsWith("$")) {
                         return;
