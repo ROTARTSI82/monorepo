@@ -1,6 +1,7 @@
 const { Client } = require('pg')
 const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor, newMsg } = require("./settings")
 
+let overrideNM = true;
 
 function edit_distance(string1, string2) {
     let dp = [];
@@ -32,6 +33,11 @@ function edit_distance(string1, string2) {
 
 class QBSettings {
     constructor() {
+
+        this.teams = new Map();
+        this.players = new Map();
+        this.teamCounter = 0;
+
         this.qShowText = "";
         this.qText = [];
         this.qAnswer = "";
@@ -58,6 +64,12 @@ class QBSettings {
         this.qShowInterval = 0;
 
         this.qPower = false;
+    }
+}
+
+class QBTeam {
+    constructor() {
+        this.points = 0;
     }
 }
 
@@ -140,7 +152,7 @@ function stopBuzzer(msg, cli, prof, active, money) {
         channelData.get(channel.id).qDeadline = setTimeout(stopQuestion, qTimeout, channel, "Time's up! ");
     }
 
-    if (newMsg) {
+    if (newMsg || overrideNM) {
         msg.channel.send("<Question is resuming>").then(nmsg => {
             channelData.get(channel.id).qShowMsg = nmsg
         })
@@ -205,7 +217,7 @@ function check(content, answer) {
         }
 
         if (med > 2) {
-            console.log(`"${cword}" cannot be matched in answer string!`)
+            // console.log(`"${cword}" cannot be matched in answer string!`)
             return false;
         }
 
@@ -251,14 +263,14 @@ function runQb(msg, cli, prof, active, money) {
             clearTimeout(dat.qBuzzerDeadline)
             clearTimeout(dat.qDeadline)
 
-            dat.qBuzzer = null;
-            dat.qActive = false;
-
             if (newMsg) {
                 msg.channel.send("<Question is resuming>").then(nmsg => {
                     dat.qShowMsg = nmsg
                 })
             }
+
+            dat.qBuzzer = null;
+            dat.qActive = false;
         } else {
             dat.qShowText += `:x:`
 
@@ -268,7 +280,7 @@ function runQb(msg, cli, prof, active, money) {
                 addPoints(msg, cli, prof, active, money, -5);
             }
 
-            if (newMsg) {
+            if (newMsg || overrideNM) {
                 msg.channel.send("<Question is resuming>").then(nmsg => {
                     dat.qShowMsg = nmsg
                 })
@@ -286,7 +298,7 @@ function runQb(msg, cli, prof, active, money) {
         }
     }
 
-    if (msg.content === "buzz" && dat.qActive && dat.qBuzzer === null) { // `\$qcust\ +(([a-z ]+)\,{0,1}\ *)*\ *\|\ *(([a-z ]+)\,{0,1}\ *)*`
+    if (check(msg.content, 'buzz') && dat.qActive && dat.qBuzzer === null) { // `\$qcust\ +(([a-z ]+)\,{0,1}\ *)*\ *\|\ *(([a-z ]+)\,{0,1}\ *)*`
         cli.query(`UPDATE profiles SET qb_buzzes=${parseInt(prof.qb_buzzes) + 1} WHERE userid=${msg.author.id} AND name LIKE '${active}';`);
 
         dat.qBuzzer = msg.author;
@@ -312,6 +324,8 @@ function runQb(msg, cli, prof, active, money) {
         ramUsrScore.set(msg.author.id, 0);
         msg.reply(`your score was reset to **0**`);
     } else if (msg.content === "$q" && !dat.qActive) {
+        dat.qActive = true;
+
         let catNames = "";
         for (let c of dat.qFilterCat) {
             catNames += `OR lower(name) LIKE '%${c.toLowerCase()}%' `
@@ -380,6 +394,7 @@ function runQb(msg, cli, prof, active, money) {
             });
         });
     } else if (msg.content.startsWith("$qcat ") && !dat.qActive) {
+        dat.qActive = true;
         let cat = msg.content.substr(6);
 
         // First, query the id of the category.
@@ -405,6 +420,7 @@ function runQb(msg, cli, prof, active, money) {
             })
         })
     } else if (msg.content.startsWith("$qscat ") && !dat.qActive) {
+        dat.qActive = true;
         let cat = msg.content.substr(7);
 
         qbCli.query({text: "SELECT * FROM subcategories WHERE lower(name) LIKE $1;", values: [cat.toLowerCase()]}).then((res) => {
