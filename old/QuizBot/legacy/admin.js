@@ -1,4 +1,4 @@
-const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("../settings")
+const {showDelay, qTimeout, buzzTimeout, coinMultiplier, anchor} = require("./settings")
 
 function runAdmin(client, msg) {
     if (msg.author.id === '450026704556130304') {

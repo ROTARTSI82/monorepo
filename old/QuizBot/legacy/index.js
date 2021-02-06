@@ -1,6 +1,6 @@
 const econ = require("./econ");
 
-const log = require("../logger");
+const log = require("./logger");
 
 const { Client } = require('pg')
 const client = new Client({

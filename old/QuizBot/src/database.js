@@ -25,7 +25,7 @@ class Bonus {
         this.subcategory = "";
         this.category = "";
 
-        this.tornament = null;
+        this.tournament = null;
         this.number = 0;
         this.round = "";
     }
@@ -63,7 +63,7 @@ class Tossup {
         this.subcategory = "";
         this.category = "";
 
-        this.tornament = null;
+        this.tournament = null;
         this.number = 0;
         this.round = "";
 
@@ -89,7 +89,28 @@ function generateSelector(params) {
     return ` WHERE tournament_id IN (${tournSelector}) AND (subcategory_id IN (${scatSel}) OR category_id IN (${catSel})) `;
 }
 
-function randomTossup(params) {
+function sqlLookup(id, table, cb) {
+    client.query(`SELECT * FROM ${table} WHERE id=${id};`).then(res => {
+        cb(res.rows[0]);
+    })
+}
+
+function constructTournament(id, cb) {
+    sqlLookup(id, "tournaments", t => {
+        let ret = new Tournament();
+        ret.year = t.year;
+        ret.name = t.name;
+        ret.difficulty = t.difficulty;
+        ret.quality = t.quality;
+        ret.address = t.address;
+        ret.type = t.type;
+        ret.link = t.link;
+
+        cb(ret);
+    })
+}
+
+function randomTossup(params, cb) {
     let sel = generateSelector(params);
 
     client.query(`SELECT COUNT(1) FROM tossups ${sel};`).then(res => {
@@ -97,9 +118,73 @@ function randomTossup(params) {
         console.log(q);
 
         client.query(q).then(finalRes => {
+            let ret = new Tossup();
+            ret.answer = finalRes.rows[0].answer;
+            ret.text = finalRes.rows[0].text;
 
-        })
-    })
+            ret.number = finalRes.rows[0].number;
+            ret.round = finalRes.rows[0].round;
+
+            ret.wikipedia = finalRes.rows[0].wikipedia_url;
+
+            sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", scat => {
+                ret.subcategory = scat.name;
+
+                sqlLookup(finalRes.rows[0].category_id, "categories", cat => {
+                    ret.category = cat.name;
+                });
+
+                constructTournament(finalRes.rows[0].tournament_id, tourn => {
+                    ret.tournament = tourn;
+                    cb(ret);
+                });
+            });
+
+        });
+    });
+}
+
+function randomBonus(params, cb) {
+    let sel = generateSelector(params);
+
+    client.query(`SELECT COUNT(1) FROM bonuses ${sel};`).then(res => {
+        let q = `SELECT * FROM bonuses ${sel} LIMIT 1 OFFSET ${Math.floor(Math.random() * res.rows[0].count)};`;
+        console.log(q);
+
+        client.query(q).then(finalRes => {
+            let ret = new Bonus();
+            ret.leadin = finalRes.rows[0].leadin;
+            ret.number = finalRes.rows[0].number;
+            ret.round = finalRes.rows[0].round;
+            ret.parts = [];
+
+            sqlLookup(finalRes.rows[0].category_id, "categories", v => {
+                ret.category = v;
+                sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", vs => {
+                    ret.subcategory = vs;
+
+                    constructTournament(finalRes.rows[0].tournament_id, "tournaments", t => {
+                        ret.tournament = t;
+                    });
+
+                    let pq = `SELECT * FROM bonus_parts WHERE bonus_id=${finalRes.rows[0].id} ORDER BY number ASC;`
+                    client.query(pq).then(pres => {
+                        for (let part of pres.rows) {
+                            let newPush = new BonusPart();
+                            newPush.answer = part.answer;
+                            newPush.number = part.number;
+                            newPush.text = part.text;
+                            newPush.wikipedia = part.wikipedia_url;
+
+                            ret.parts.push(newPush);
+                        }
+
+                        cb(ret);
+                    });
+                });
+            });
+        });
+    });
 }
 
 function init(secret) {
