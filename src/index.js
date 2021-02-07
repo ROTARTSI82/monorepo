@@ -1,12 +1,13 @@
 const db = require("./database")
 const qb = require("./quizbowl")
 const fs = require('fs')
-const edist = require("levenshtein-edit-distance")
 
 let config = JSON.parse(fs.readFileSync("./res/config.json", 'utf8'));
 let secret = JSON.parse(fs.readFileSync("./res/secret.json", 'utf8'));
 
 db.init(secret);
+
+let room = new qb.QBRoom();
 
 const Discord = require('discord.js')
 const bot = new Discord.Client();
@@ -22,7 +23,7 @@ stdin.addListener("data", d => {
 
 
 bot.on('message', msg => {
-    msg.reply(msg.content)
+    room.processMsg(msg);
 })
 
 bot.on('ready', c => {
