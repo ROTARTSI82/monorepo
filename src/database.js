@@ -4,9 +4,9 @@ let client = null;
 
 class QuestionParams {
     constructor() {
-        this.qFilterTourn = []; // explicit whitelist. all questions in tournaments here are allowed
-        this.qFilterScat = ["Literature European", "Fine Arts Visual", "Literature American", "Science Chemistry", "History British", "Fine Arts Auditory", "Science Other", "History American", "Science Biology", "History Classical", "Science Physics", "History World", "Literature British", "Science Computer Science", "History European", "Fine Arts Other", "Science Math", "Fine Arts Audiovisual", "History Other", "Literature Other", "Literature Classical", "Religion American", "Trash American", "Mythology American", "Social Science American", "Fine Arts American", "Science American", "Science World", "Geography American", "Philosophy American", "Current Events American", "Current Events Other", "Fine Arts World", "Geography World", "Fine Arts British", "Mythology Indian", "Mythology Chinese", "Mythology Other East Asian", "Mythology Japanese", "Fine Arts European", "Religion East Asian", "Philosophy East Asian", "Trash Video Games", "Mythology Other", "Trash Sports", "Social Science Economics", "Religion Christianity", "Mythology Greco-Roman", "Trash Other", "Social Science Other", "Philosophy Classical", "Literature World", "Religion Other", "Mythology Norse", "Social Science Political Science", "Mythology Egyptian", "Philosophy European", "Trash Music", "Religion Islam", "Religion Judaism", "Trash Television", "Social Science Psychology", "Trash Movies", "Social Science Sociology", "Philosophy Other", "Social Science Linguistics", "Social Science Anthropology", "Fine Arts Opera"];
-        this.qFilterCat = ["Mythology", "Literature", "Trash", "Science", "History", "Religion", "Geography", "Fine Arts", "Social Science", "Philosophy", "Current Events"];
+        this.qFilterTourn = new Set(); // explicit whitelist. all questions in tournaments here are allowed
+        this.qFilterScat = new Set(["Literature European", "Fine Arts Visual", "Literature American", "Science Chemistry", "History British", "Fine Arts Auditory", "Science Other", "History American", "Science Biology", "History Classical", "Science Physics", "History World", "Literature British", "Science Computer Science", "History European", "Fine Arts Other", "Science Math", "Fine Arts Audiovisual", "History Other", "Literature Other", "Literature Classical", "Religion American", "Trash American", "Mythology American", "Social Science American", "Fine Arts American", "Science American", "Science World", "Geography American", "Philosophy American", "Current Events American", "Current Events Other", "Fine Arts World", "Geography World", "Fine Arts British", "Mythology Indian", "Mythology Chinese", "Mythology Other East Asian", "Mythology Japanese", "Fine Arts European", "Religion East Asian", "Philosophy East Asian", "Trash Video Games", "Mythology Other", "Trash Sports", "Social Science Economics", "Religion Christianity", "Mythology Greco-Roman", "Trash Other", "Social Science Other", "Philosophy Classical", "Literature World", "Religion Other", "Mythology Norse", "Social Science Political Science", "Mythology Egyptian", "Philosophy European", "Trash Music", "Religion Islam", "Religion Judaism", "Trash Television", "Social Science Psychology", "Trash Movies", "Social Science Sociology", "Philosophy Other", "Social Science Linguistics", "Social Science Anthropology", "Fine Arts Opera"]);
+        this.qFilterCat = new Set(["Mythology", "Literature", "Trash", "Science", "History", "Religion", "Geography", "Fine Arts", "Social Science", "Philosophy", "Current Events"]);
 
         this.qMinYear = -1;
         this.qMaxYear = 9999;
@@ -74,11 +74,11 @@ class Tossup {
 function generateSelector(params) {
     let catSel = ` SELECT id FROM categories WHERE false `;
     for (let cat of params.qFilterCat) {
-        catSel += ` OR lower(name) LIKE '%${cat.toLowerCase()}%' `; // assuming this is safe!
+        catSel += ` OR name LIKE '${cat}' `; // assuming this is safe!
     }
     let scatSel = `SELECT id FROM subcategories WHERE false `;
     for (let scat of params.qFilterScat) {
-        scatSel += ` OR lower(name) LIKE '%${scat.toLowerCase()}%' `; // assuming this is safe!
+        scatSel += ` OR name LIKE '${scat}' `; // assuming this is safe!
     }
 
     let tournSelector = ` SELECT id FROM tournaments WHERE (quality >= ${params.qMinQuality} AND quality <= ${params.qMaxQuality} AND year >= ${params.qMinYear} AND year <= ${params.qMaxYear} AND difficulty >= ${params.qMinDifficulty} AND difficulty <= ${params.qMaxDifficulty}) `;

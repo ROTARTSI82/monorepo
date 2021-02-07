@@ -1,12 +1,13 @@
 const db = require("./database")
 const edist = require("levenshtein-edit-distance")
+const cmds = require("./qb_cmds")
 
 const showDelay = 1250;
 const tuTimeout = 10000; // 10 sec
 const bzTimeout = 10000; // 10 sec
 
 function addPoints(room, player, n) {
-    room.targetMsg.channel.send(`<@!${player.id}> ${n}`);
+    room.players.get(player.id).points += n;
 }
 
 function stopQuestion(room) {
@@ -74,22 +75,10 @@ function showMore(room) {
 
 }
 
-class Player {
-    constructor() {
-        this.points = 0;
-
-        this.correct = 0; // includes powers
-        this.powers = 0;
-        this.buzzes = 0;
-        // negs excluded as it is buzzes - correct.
-
-        this.team = 0;
-    }
-}
-
 class Team {
     constructor() {
         this.name = "";
+        this.captain = 0; // id of captain, also in players[]
         this.players = []; // list of discord ids
     }
 
@@ -97,6 +86,9 @@ class Team {
 
 class QBRoom {
     constructor() {
+        this.playersLockedOut = new Set();
+        this.teamsLockedOut = new Set();
+
         this.teams = new Map();
         this.teamInc = 0;
         this.players = new Map();
@@ -119,19 +111,67 @@ class QBRoom {
         this.buzzerDeadlineTimeout = 0;
 
         this.buzzer = null;
+
+        // settings
         this.showSpeed = 5;
+        this.isPausingEnabled = true;
+        this.isSkippingEnabled = true;
+        this.isMultipleBuzzesEnabled = false;
         this.settings = new db.QuestionParams();
     }
 
     isLockedOut(player) {
+        if (!this.isMultipleBuzzesEnabled) {
+            return this.playersLockedOut.has(player.id) || this.teamsLockedOut.has(this.players.get(player.id).team);
+        }
         return false;
     }
 
     isCorrectAnswer(answer) {
-        return true;
+        let needMatching = answer.split(/(?![A-z])+./g);
+        let words = this.answerLine.split(/(?![A-z])+./g);
+
+        let ignore = "the,a,an,or,and,of,lol,lmao,prompt,accept,lt,gt,do,lmfao".split(",");
+
+        let numMatch = 0;
+        for (let toMatch of needMatching) {
+            if ((!toMatch) || ignore.includes(toMatch.toLowerCase())) {
+                continue;
+            }
+
+            let mEditPercent = 0.0;
+            let match = "";
+
+            for (let word of words) {
+                if ((!word) || ignore.includes(word.toLowerCase())) {
+                    continue;
+                }
+
+                let editPercent = 1 - (edist(toMatch, word, true) / Math.max(toMatch.length, word.length));
+                if (editPercent > mEditPercent) {
+                    match = word;
+                    mEditPercent = editPercent;
+                }
+            }
+
+
+            console.log(`${toMatch} matches ${match} with ${mEditPercent} certainty`);
+
+            if (!(mEditPercent >= 0.75)) {
+                return false;
+            }
+
+            numMatch++;
+        }
+
+        return numMatch >= 1;
     }
 
     processMsg(msg) {
+        if (!this.players.has(msg.author.id)) {
+            this.players.set(msg.author.id, new cmds.Player());
+        }
+
         if (msg.content === "$q" && !this.isActive) {
 
             this.isActive = true;
@@ -146,6 +186,9 @@ class QBRoom {
                 this.answerLine = tu.answer;
                 this.isPower = tu.text.includes("*"); // only give power to qs having *
 
+                this.teamsLockedOut.clear();
+                this.playersLockedOut.clear();
+
                 msg.channel.send("<question starting>").then(tm => {
                     this.targetMsg = tm;
                     this.showInterval = setInterval(showMore, showDelay, this);
@@ -154,7 +197,7 @@ class QBRoom {
         }
 
         else if (msg.content === "buzz" && this.isActive && this.buzzer === null && !this.isLockedOut(msg.author) && !this.isPaused) {
-            // TODO: getStats(msg.author).buzzes++;
+            this.players.get(msg.author.id).buzzes++;
 
             clearInterval(this.showInterval);
             clearTimeout(this.deadlineTimeout);
@@ -172,6 +215,15 @@ class QBRoom {
             } else {
                 this.rawText += ":bell:";
             }
+
+            if (!this.isMultipleBuzzesEnabled) {
+                this.playersLockedOut.add(msg.author.id);
+
+                let team = this.players.get(msg.author.id).team;
+                if (team !== -1) {
+                    this.teamsLockedOut.add(team);
+                }
+            }
         }
 
         else if (msg.author === this.buzzer && this.isActive && !this.isPaused) {
@@ -183,9 +235,13 @@ class QBRoom {
                 clearTimeout(this.deadlineTimeout);
                 this.rawText += `:white_check_mark:`;
 
+                this.players.get(msg.author.id).correct++;
+
                 if (this.isPower) {
                     addPoints(this, msg.author, 15);
                     msg.reply(`POWER! The answer was **${this.answerLine}**. +15 points`);
+
+                    this.players.get(msg.author.id).powers++;
                 } else {
                     addPoints(this, msg.author, 10);
                     msg.reply(`Correct! The answer was **${this.answerLine}**. +10 points`);
@@ -213,27 +269,34 @@ class QBRoom {
             }
         }
 
-        else if (msg.content === "skip" && this.isActive && this.buzzer === null) {
+        else if (msg.content === "skip" && this.isActive && this.buzzer === null && this.isSkippingEnabled) {
             stopQuestion(this);
         }
 
-        else if (msg.content === "pause" && this.isActive && this.buzzer === null && !this.isPaused) {
+        else if (msg.content === "pause" && this.isActive && this.buzzer === null && !this.isPaused && this.isPausingEnabled) {
             this.isPaused = true;
             clearInterval(this.showInterval);
             clearTimeout(this.deadlineTimeout);
+            msg.reply("Tossup paused!");
         }
 
         else if (msg.content === "resume" && this.isActive && this.buzzer === null && this.isPaused) {
             this.isPaused = false;
-            if (this.isShowComplete) {
-                this.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, this);
-            } else {
-                this.showInterval = setInterval(showMore, showDelay, this);
-            }
+            msg.channel.send("<Question is resuming>").then(newMsg => {
+                this.targetMsg = newMsg;
+
+                if (this.isShowComplete) {
+                    this.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, this);
+                } else {
+                    this.showInterval = setInterval(showMore, showDelay, this);
+                }
+            });
+        } else {
+            cmds.exec(msg, this);
         }
+
+
     }
-
-
 
 }
 
