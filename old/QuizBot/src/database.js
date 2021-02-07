@@ -113,6 +113,8 @@ function constructTournament(id, cb) {
 function randomTossup(params, cb) {
     let sel = generateSelector(params);
 
+    console.log("ranTu")
+
     client.query(`SELECT COUNT(1) FROM tossups ${sel};`).then(res => {
         let q = `SELECT * FROM tossups ${sel} LIMIT 1 OFFSET ${Math.floor(Math.random() * res.rows[0].count)};`;
         console.log(q);
@@ -132,11 +134,11 @@ function randomTossup(params, cb) {
 
                 sqlLookup(finalRes.rows[0].category_id, "categories", cat => {
                     ret.category = cat.name;
-                });
 
-                constructTournament(finalRes.rows[0].tournament_id, tourn => {
-                    ret.tournament = tourn;
-                    cb(ret);
+                    constructTournament(finalRes.rows[0].tournament_id, tourn => {
+                        ret.tournament = tourn;
+                        cb(ret);
+                    });
                 });
             });
 
@@ -165,21 +167,21 @@ function randomBonus(params, cb) {
 
                     constructTournament(finalRes.rows[0].tournament_id, "tournaments", t => {
                         ret.tournament = t;
-                    });
 
-                    let pq = `SELECT * FROM bonus_parts WHERE bonus_id=${finalRes.rows[0].id} ORDER BY number ASC;`
-                    client.query(pq).then(pres => {
-                        for (let part of pres.rows) {
-                            let newPush = new BonusPart();
-                            newPush.answer = part.answer;
-                            newPush.number = part.number;
-                            newPush.text = part.text;
-                            newPush.wikipedia = part.wikipedia_url;
+                        let pq = `SELECT * FROM bonus_parts WHERE bonus_id=${finalRes.rows[0].id} ORDER BY number ASC;`
+                        client.query(pq).then(pres => {
+                            for (let part of pres.rows) {
+                                let newPush = new BonusPart();
+                                newPush.answer = part.answer;
+                                newPush.number = part.number;
+                                newPush.text = part.text;
+                                newPush.wikipedia = part.wikipedia_url;
 
-                            ret.parts.push(newPush);
-                        }
+                                ret.parts.push(newPush);
+                            }
 
-                        cb(ret);
+                            cb(ret);
+                        });
                     });
                 });
             });
@@ -189,6 +191,7 @@ function randomBonus(params, cb) {
 
 function init(secret) {
     client = new pg.Client(secret.quizDB);
+    client.connect();
 }
 
 function stop() {
@@ -196,5 +199,5 @@ function stop() {
 }
 
 module.exports = {
-    init, stop, QuestionParams
+    init, stop, QuestionParams, Bonus, BonusPart, Tossup, Tournament, randomBonus, randomTossup
 }
