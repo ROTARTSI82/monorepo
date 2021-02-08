@@ -1,6 +1,7 @@
 const allowedScats = new Set(["Literature European", "Fine Arts Visual", "Literature American", "Science Chemistry", "History British", "Fine Arts Auditory", "Science Other", "History American", "Science Biology", "History Classical", "Science Physics", "History World", "Literature British", "Science Computer Science", "History European", "Fine Arts Other", "Science Math", "Fine Arts Audiovisual", "History Other", "Literature Other", "Literature Classical", "Religion American", "Trash American", "Mythology American", "Social Science American", "Fine Arts American", "Science American", "Science World", "Geography American", "Philosophy American", "Current Events American", "Current Events Other", "Fine Arts World", "Geography World", "Fine Arts British", "Mythology Indian", "Mythology Chinese", "Mythology Other East Asian", "Mythology Japanese", "Fine Arts European", "Religion East Asian", "Philosophy East Asian", "Trash Video Games", "Mythology Other", "Trash Sports", "Social Science Economics", "Religion Christianity", "Mythology Greco-Roman", "Trash Other", "Social Science Other", "Philosophy Classical", "Literature World", "Religion Other", "Mythology Norse", "Social Science Political Science", "Mythology Egyptian", "Philosophy European", "Trash Music", "Religion Islam", "Religion Judaism", "Trash Television", "Social Science Psychology", "Trash Movies", "Social Science Sociology", "Philosophy Other", "Social Science Linguistics", "Social Science Anthropology", "Fine Arts Opera"]);
 const allowedCats = new Set(["Mythology", "Literature", "Trash", "Science", "History", "Religion", "Geography", "Fine Arts", "Social Science", "Philosophy", "Current Events"]);
 
+const { escape } = require('sqlutils/pg');
 
 
 class Player {
@@ -13,6 +14,15 @@ class Player {
         // negs excluded as it is buzzes - correct.
         this.team = -1;
     }
+}
+
+class Team {
+    constructor() {
+        this.name = "";
+        this.captain = 0; // id of captain, also in players[]
+        this.players = new Set(); // list of discord ids
+    }
+
 }
 
 function arrToStr(arr) {
@@ -83,7 +93,7 @@ function exec(msg, room) {
         msg.reply("Cleared tournaments");
     }
     else if (msg.content === "$filter ls") {
-        msg.reply(`Year in [${room.settings.qMinYear}, ${room.set.qMaxYear}]\n` +
+        msg.reply(`Year in [${room.settings.qMinYear}, ${room.settings.qMaxYear}]\n` +
                   `Quality in [${room.settings.qMinQuality}, ${room.settings.qMaxQuality}]\n` +
                   `Difficulty in [${room.settings.qMinDifficulty}, ${room.settings.qMaxDifficulty}]`)
     }
@@ -96,10 +106,132 @@ function exec(msg, room) {
         room.settings.qMaxQuality = 9;
         msg.reply("Filters reset!");
     }
+    else if (msg.content === "$team leave") {
+        let executor = room.players.get(msg.author.id);
+        let team = room.teams.get(executor.team);
+
+        if (executor.team === -1) {
+            msg.reply(`ERROR: You aren't on a team`);
+        } else if (team.captain === msg.author.id) {
+            msg.reply(`ERROR: You're captain! Transfer ownership with \`$team transfer\` first!`);
+        } else {
+            team.players.delete(msg.author.id);
+            executor.team = -1;
+            msg.reply(`You left \`${team.name}\`!`);
+        }
+    }
+    else if (msg.content === "$team disband") {
+        let team = room.teams.get(room.players.get(msg.author.id).team);
+
+        if (room.players.get(msg.author.id).team === -1) {
+            msg.reply(`ERROR: You aren't on a team`);
+        } else if (team.captain !== msg.author.id) {
+            msg.reply(`ERROR: You aren't team captain!`);
+        } else {
+            room.teams.delete(room.players.get(msg.author.id).team);
+
+            for (let player of team.players) {
+                room.players.get(player).team = -1;
+            }
+
+            msg.reply(`\`${team.name}\` has been disbanded.`);
+        }
+    }
+    else if (msg.content === "$team stat") {
+        let executor = room.players.get(msg.author.id);
+
+        if (executor.team === -1) {
+            msg.reply(`ERROR: You aren't on a team!`);
+        } else {
+            let team = room.teams.get(executor.team);
+            let r = `Team **${team.name}**\n\n`;
+            let points = 0, powers = 0, correct = 0, buzzes = 0;
+
+            for (let m of team.players) {
+                let p = room.players.get(m);
+                let notes = team.captain === m ? "- CAPTAIN" : "";
+                r += `<@${m}> - ${p.points}p ${p.powers}/${p.correct}/${p.buzzes} ${notes}\n`;
+
+                points += p.points; powers += p.powers; correct += p.correct; buzzes += p.buzzes;
+            }
+
+            r += `\nPoints: ${points}\tNegs: ${buzzes - correct}\tNeg%: ${100*((buzzes - correct) / buzzes)}\n`+
+                `Correct%: ${correct * 100 / buzzes}\tPower%: ${powers * 100 / buzzes}/${powers * 100 / correct}` +
+                `\nPower/Correct/Buzzes: ${powers}/${correct}/${buzzes}`;
+
+
+            msg.reply(r.substr(0, 1995));
+        }
+    }
 
     else {
 
-        let args = /^\$scat add ([A-z ]*)$/g.exec(msg.content);
+        let executor = room.players.get(msg.author.id);
+
+        let args = /^\$team new (.*)$/g.exec(msg.content);
+        if (args !== null) {
+            if (executor.team !== -1) {
+                msg.reply(`ERROR: Leave your team first to create a new team.`);
+            } else {
+                for (let [key, value] of room.teams) {
+                    if (value.name === args[1]) {
+                        msg.reply(`ERROR: A team with that name already exists!`);
+                        return;
+                    }
+                }
+
+                let nt = new Team();
+                nt.captain = msg.author.id;
+                nt.players.add(nt.captain);
+                nt.name = args[1];
+
+                room.teams.set(room.teamInc, nt);
+                executor.team = room.teamInc++;
+                msg.reply(`Created new team \`${args[1]}\``)
+            }
+
+            return;
+        }
+
+        args = /^\$team join (.*)$/g.exec(msg.content);
+        if (args !== null) {
+            if (executor.team !== -1) {
+                msg.reply(`ERROR: You're already on a team! Leave that team first!`);
+            } else {
+                let teamNames = new Map();
+                for (let [key, value] of room.teams) {
+                    teamNames.set(value.name, key);
+                }
+
+                if (!teamNames.has(args[1])) {
+                    msg.reply(`ERROR: No team named \`${args[1]}\``)
+                } else {
+                    executor.team = teamNames.get(args[1]);
+                    room.teams.get(executor.team).players.add(msg.author.id);
+                    msg.reply(`Joined team \`${args[1]}\``);
+                }
+            }
+
+            return;
+        }
+
+        args = /^\$team transfer <@!([0-9]+)>$/g.exec(msg.content);
+        if (args !== null) {
+            let team = room.teams.get(executor.team);
+            if (executor.team === -1) {
+                msg.reply(`ERROR: You're not on a team!`);
+            } else if (team.captain !== msg.author.id) {
+                msg.reply(`ERROR: You're not team captain!`);
+            } else if (!team.players.has(args[1])) {
+                msg.reply(`ERROR: <@${args[1]}> is not on your team!`);
+            } else {
+                team.captain = args[1];
+                msg.reply(`You made <@${args[1]}> captain.`);
+            }
+            return;
+        }
+
+        args = /^\$scat add ([A-z ]*)$/g.exec(msg.content);
         if (args !== null) {
             let arg = processCat(args);
 
@@ -150,26 +282,52 @@ function exec(msg, room) {
 
         args = /^\$tourn rm (.*)$/g.exec(msg.content);
         if (args !== null) {
-            if (room.settings.qFilterTourn.has(args[1])) {
-                room.settings.qFilterTourn.delete(args[1]);
-                msg.reply(`Removed \`${args[1]}\``)
+            let arg = escape(args[1]);
+            if (room.settings.qFilterTourn.has(arg)) {
+                room.settings.qFilterTourn.delete(arg);
+                msg.reply(`Removed \`${arg}\``)
             } else {
-                msg.reply(`\`${args[1]}\` not in enabled tournaments!`);
+                msg.reply(`\`${arg}\` not in enabled tournaments!`);
             }
             return;
         }
 
         args = /^\$tourn add (.*)$/g.exec(msg.content);
         if (args !== null) {
-            room.settings.qFilterTourn.add(args[1]);
-            msg.reply(`\`${args[1]}\` enabled!`);
+            let arg = escape(args[1]);
+            room.settings.qFilterTourn.add(arg);
+            msg.reply(`\`${arg}\` enabled!`);
             return;
         }
 
-        args = /^\$filter difficulty -?[0-9]+ -?[0-9]+$/g.exec(msg.content);
+        args = /^\$filter difficulty (-?[0-9]+) (-?[0-9]+)$/g.exec(msg.content);
+        if (args !== null) {
+            room.settings.qMinDifficulty = parseInt(args[1]);
+            room.settings.qMaxDifficulty = parseInt(args[2]);
 
+            msg.reply(`Difficulty now in [${room.settings.qMinDifficulty}, ${room.settings.qMaxDifficulty}]`);
+            return;
+        }
+
+        args = /^\$filter year (-?[0-9]+) (-?[0-9]+)$/g.exec(msg.content);
+        if (args !== null) {
+            room.settings.qMinYear = parseInt(args[1]);
+            room.settings.qMaxYear = parseInt(args[2]);
+
+            msg.reply(`Year now in [${room.settings.qMinYear}, ${room.settings.qMaxYear}]`);
+            return;
+        }
+
+        args = /^\$filter quality (-?[0-9]+) (-?[0-9]+)$/g.exec(msg.content);
+        if (args !== null) {
+            room.settings.qMinQuality = parseInt(args[1]);
+            room.settings.qMaxQuality = parseInt(args[2]);
+
+            msg.reply(`Quality now in [${room.settings.qMinQuality}, ${room.settings.qMaxQuality}]`);
+            return;
+        }
     }
 }
 
-module.exports = { exec, Player }
+module.exports = { exec, Player, Team }
 

@@ -2,10 +2,6 @@ const db = require("./database")
 const edist = require("levenshtein-edit-distance")
 const cmds = require("./qb_cmds")
 
-const showDelay = 1250;
-const tuTimeout = 10000; // 10 sec
-const bzTimeout = 10000; // 10 sec
-
 function addPoints(room, player, n) {
     room.players.get(player.id).points += n;
 }
@@ -41,9 +37,9 @@ function stopBuzzer(room) {
         room.targetMsg = newMsg;
 
         if (!room.isShowComplete) {
-            room.showInterval = setInterval(showMore, showDelay, room);
+            room.showInterval = setInterval(showMore, room.showDelay, room);
         } else {
-            room.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, room);
+            room.deadlineTimeout = setTimeout(stopQuestion, room.tuTimeout, room);
         }
     });
 }
@@ -61,7 +57,7 @@ function showMore(room) {
             room.isShowComplete = true;
             clearInterval(room.showInterval); // clear self.
             if (room.isActive) {
-                room.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, room);
+                room.deadlineTimeout = setTimeout(stopQuestion, room.tuTimeout, room);
             }
             break;
         }
@@ -72,15 +68,6 @@ function showMore(room) {
     }
 
     room.targetMsg.edit(room.rawText);
-
-}
-
-class Team {
-    constructor() {
-        this.name = "";
-        this.captain = 0; // id of captain, also in players[]
-        this.players = []; // list of discord ids
-    }
 
 }
 
@@ -117,7 +104,22 @@ class QBRoom {
         this.isPausingEnabled = true;
         this.isSkippingEnabled = true;
         this.isMultipleBuzzesEnabled = false;
+        this.showDelay = 1250;
+        this.tuTimeout = 10000; // 10 sec
+        this.bzTimeout = 10000; // 10 sec
         this.settings = new db.QuestionParams();
+    }
+
+    restartQuestion() {
+        this.targetMsg.channel.send("<Question is resuming>").then(newMsg => {
+            this.targetMsg = newMsg;
+
+            if (this.isShowComplete) {
+                this.deadlineTimeout = setTimeout(stopQuestion, this.tuTimeout, this);
+            } else {
+                this.showInterval = setInterval(showMore, this.showDelay, this);
+            }
+        });
     }
 
     isLockedOut(player) {
@@ -191,7 +193,7 @@ class QBRoom {
 
                 msg.channel.send("<question starting>").then(tm => {
                     this.targetMsg = tm;
-                    this.showInterval = setInterval(showMore, showDelay, this);
+                    this.showInterval = setInterval(showMore, this.showDelay, this);
                 })
             });
         }
@@ -204,9 +206,9 @@ class QBRoom {
 
             this.buzzer = msg.author;
 
-            msg.channel.send(`Buzz from ${msg.author.toString()}! ${bzTimeout / 1000}s to answer.`);
+            msg.channel.send(`Buzz from ${msg.author.toString()}! ${this.bzTimeout / 1000}s to answer.`);
 
-            this.buzzerDeadlineTimeout = setTimeout(stopBuzzer, bzTimeout, this);
+            this.buzzerDeadlineTimeout = setTimeout(stopBuzzer, this.bzTimeout, this);
 
             if (this.isShowComplete) {
                 this.rawText += ":large_blue_diamond:";
@@ -248,6 +250,7 @@ class QBRoom {
                 }
 
                 this.isActive = false;
+                showMore(this);
             } else {
                 this.rawText += ":x:";
 
@@ -257,15 +260,7 @@ class QBRoom {
                     addPoints(this, msg.author, -5);
                 }
 
-                msg.channel.send("<Question is resuming>").then(newMsg => {
-                    this.targetMsg = newMsg;
-
-                    if (this.isShowComplete) {
-                        this.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, this);
-                    } else {
-                        this.showInterval = setInterval(showMore, showDelay, this);
-                    }
-                })
+                this.restartQuestion();
             }
         }
 
@@ -282,16 +277,10 @@ class QBRoom {
 
         else if (msg.content === "resume" && this.isActive && this.buzzer === null && this.isPaused) {
             this.isPaused = false;
-            msg.channel.send("<Question is resuming>").then(newMsg => {
-                this.targetMsg = newMsg;
+            this.restartQuestion();
+        }
 
-                if (this.isShowComplete) {
-                    this.deadlineTimeout = setTimeout(stopQuestion, tuTimeout, this);
-                } else {
-                    this.showInterval = setInterval(showMore, showDelay, this);
-                }
-            });
-        } else {
+        else {
             cmds.exec(msg, this);
         }
 
