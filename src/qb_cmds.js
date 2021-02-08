@@ -3,10 +3,16 @@ const allowedCats = new Set(["Mythology", "Literature", "Trash", "Science", "His
 
 const { escape } = require('sqlutils/pg');
 
+const recognizedStaticCmds = new Set(["$q", "$b", "skip", "skip all", "buzz", "pause", "resume"]);
+
 
 class Player {
     constructor() {
         this.points = 0;
+        this.bonusPoints = 0;
+
+        this.boniCorrect = 0;
+        this.boniInterrupted = 0;
 
         this.correct = 0; // includes powers
         this.powers = 0;
@@ -42,18 +48,22 @@ function processCat(args) {
 }
 
 function exec(msg, room) {
-    if (msg.content === "$stat") {
+    if (msg.content === "$score") {
         let p = room.players.get(msg.author.id);
 
-        msg.reply(`\n\n**__Your Standings__**\nPoints: ${p.points}\n\n`+
+        msg.reply(`\n\n**__Your Standings__**\nPoints: ${p.points + p.bonusPoints} (${p.points} without bonuses)\n\n`+
             `Power/Correct/Buzzes: ${p.powers}/${p.correct}/${p.buzzes}  # NOTE: "Correct" includes powers.` +
             `\n\nNegs: ${p.buzzes - p.correct}\nNeg%: ${100*((p.buzzes - p.correct) / p.buzzes)}\n\n` +
             `Correct%: ${p.correct * 100 / p.buzzes}\nPower%: ${p.powers * 100 / p.buzzes}/${p.powers * 100 / p.correct}`);
     }
 
     else if (msg.content === "$reset") {
-        msg.reply(`Score reset from ${room.players.get(msg.author.id).points}`);
-        room.players.set(msg.author.id, new Player());
+        if (room.players.get(msg.author.id).team !== -1) {
+            msg.reply(`ERROR: You're on a team! Leave that team before resetting your score.`);
+        } else {
+            msg.reply(`Score reset from ${room.players.get(msg.author.id).points}.`);
+            room.players.set(msg.author.id, new Player());
+        }
     }
 
     else if (msg.content === "$lb") {
@@ -137,7 +147,7 @@ function exec(msg, room) {
             msg.reply(`\`${team.name}\` has been disbanded.`);
         }
     }
-    else if (msg.content === "$team stat") {
+    else if (msg.content === "$team score") {
         let executor = room.players.get(msg.author.id);
 
         if (executor.team === -1) {
@@ -152,7 +162,7 @@ function exec(msg, room) {
                 let notes = team.captain === m ? "- CAPTAIN" : "";
                 r += `<@${m}> - ${p.points}p ${p.powers}/${p.correct}/${p.buzzes} ${notes}\n`;
 
-                points += p.points; powers += p.powers; correct += p.correct; buzzes += p.buzzes;
+                points += p.points + p.bonusPoints; powers += p.powers; correct += p.correct; buzzes += p.buzzes;
             }
 
             r += `\nPoints: ${points}\tNegs: ${buzzes - correct}\tNeg%: ${100*((buzzes - correct) / buzzes)}\n`+
@@ -325,6 +335,10 @@ function exec(msg, room) {
 
             msg.reply(`Quality now in [${room.settings.qMinQuality}, ${room.settings.qMaxQuality}]`);
             return;
+        }
+
+        if (recognizedStaticCmds.has(msg.content)) {
+            msg.react("❌");
         }
     }
 }

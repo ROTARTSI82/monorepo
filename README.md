@@ -10,13 +10,15 @@ https://discord.com/api/oauth2/authorize?client_id=752356606850629722&permission
 
 ## Commands
 1. `$q` - Start a new tossup
-2. `skip` - Skip tossup (or bonus) if skipping enabled
+1. `$b` - Start a new bonus
+2. `skip` - Skip tossup (or bonus) if skipping enabled. Only the part of the bonus currently being read will be skipped.
+2. `skip all` - Skip all parts of a bonus. 
 3. `buzz` - Buzz in if not locked out
 4. `pause` - Pause tossup (or bonus) if pausing enabled
 5. `resume` - Resume tossup (or bonus)
-6. `$stat` - View quizbowl stats
+6. `$score` - View quizbowl score and stats
 7. `$reset` - Reset quizbowl stats
-8. `$lb` - View the leaderboard for the channel
+8. `$lb` - View the leaderboard for the channel #TODO: NOT IMPLEMENTED
 9. `$cat [subcommand[args?]]` - Manage which categories of questions you want 
     - `$cat ls` - list the enabled categories.
     - `$cat reset` - Reset categories to default (all categories enabled)
@@ -43,6 +45,23 @@ https://discord.com/api/oauth2/authorize?client_id=752356606850629722&permission
     - `$team leave` - Leave the current team you're on
     - `$team disband` - Dissolve the team. (Can only be used by team captain.)
     - `$team transfer [ping]` - Transfer ownership (team captain) of the team to `ping`.
-    - `$team stat` - List the stats for your team, including members
+    - `$team score` - List the stats and scores for your team, including members
     - `$team new [team]` - Create new `team`
     - `$team join [team]` - Join `team`
+
+
+# TODO LIST
+- Option to show bonuses after correct tossups
+- Implement leaderboards
+- Commands to change other settings like the following:
+```js
+this.showSpeed = 5;
+this.isPausingEnabled = true;
+this.isSkippingEnabled = true;
+this.isMultipleBuzzesEnabled = false;
+this.showDelay = 1250;
+this.bonusDelay = 1250;
+this.bonusTimeout = 10000;
+this.tuTimeout = 10000; // 10 sec
+this.bzTimeout = 10000; // 10 sec
+```
