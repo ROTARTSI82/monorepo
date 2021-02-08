@@ -12,10 +12,9 @@ function stopQuestion(room) {
     clearTimeout(room.buzzerDeadlineTimeout);
 
     setTimeout(() => {
-        room.isActive = false;
+        room.isTossupActive = false;
         room.buzzer = null;
 
-        room.rawText += ":x:";
         showMore(room);
 
         room.targetMsg.channel.send(`No points. The answer was **${room.answerLine}**`);
@@ -23,6 +22,8 @@ function stopQuestion(room) {
 }
 
 function stopBuzzer(room) {
+    clearTimeout(room.buzzerDeadlineTimeout);
+
     room.targetMsg.channel.send(`Buzz timed out! ${room.isShowComplete ? "No penalty" : "-5 points!"}`);
 
     if (!room.isShowComplete) {
@@ -46,7 +47,7 @@ function stopBuzzer(room) {
 
 function showMore(room) {
     let limit = room.showSpeed;
-    if (!room.isActive) {
+    if (!room.isTossupActive) {
         limit = 9999; // complete show
     }
 
@@ -56,7 +57,7 @@ function showMore(room) {
         } else {
             room.isShowComplete = true;
             clearInterval(room.showInterval); // clear self.
-            if (room.isActive) {
+            if (room.isTossupActive) {
                 room.deadlineTimeout = setTimeout(stopQuestion, room.tuTimeout, room);
             }
             break;
@@ -68,7 +69,63 @@ function showMore(room) {
     }
 
     room.targetMsg.edit(room.rawText);
+}
 
+function nextBonusPart(room) {
+    clearInterval(room.showInterval);
+    clearTimeout(room.deadlineTimeout);
+
+    if (room.answerLine) {
+        room.targetMsg.channel.send(`The answer was **${room.answerLine}**. No points.`);
+    }
+
+    room.isShowComplete = true;
+    showMoreBonus(room);
+
+    room.partIndex++;
+    if (room.partIndex < room.activeBonus.parts.length) {
+        console.log("nextpart");
+
+        room.rawText = "";
+        room.textList = room.activeBonus.parts[room.partIndex].text.split(" ");
+        room.answerLine = room.activeBonus.parts[room.partIndex].answer;
+        room.textProgress = 0;
+        room.isShowComplete = false;
+
+        room.targetMsg.channel.send("<bonus starting>").then(tm => {
+            room.targetMsg = tm;
+            room.showInterval = setInterval(showMoreBonus, room.bonusDelay, room);
+        });
+    } else {
+        console.log("end");
+        room.isBonusActive = false;
+    }
+}
+
+function showMoreBonus(room) {
+    let limit = room.showSpeed;
+
+    if (room.isShowComplete) {
+        limit = 99999;
+    }
+
+    console.log("showmore");
+    for (let i = 0; i < limit; i++) {
+        if (room.textProgress < room.textList.length) {
+            room.rawText += room.textList[room.textProgress++] + " ";
+        } else {
+            clearInterval(room.showInterval);
+            if (!room.isShowComplete) {
+                // room.partIndex++;
+                room.deadlineTimeout = setTimeout(nextBonusPart, room.partIndex === -1 ? 0 : room.bonusTimeout, room);
+            }
+
+            room.isShowComplete = true;
+            break;
+        }
+    }
+
+    room.targetMsg.edit(room.rawText);
 }
 
 class QBRoom {
@@ -88,10 +145,15 @@ class QBRoom {
         this.answerLine = "";
 
         this.activeQuestion = null;
-        this.isActive = false;
+        this.activeBonus = null;
+        this.isTossupActive = false;
+        this.isBonusActive = false;
         this.isPaused = false;
         this.isPower = false;
         this.isShowComplete = false;
+
+        this.whoseBonus = null; // null = everyone, `${number}` for a team, `p${number}` for a player
+        this.partIndex = -1;
 
         this.showInterval = 0;
         this.deadlineTimeout = 0;
@@ -105,6 +167,8 @@ class QBRoom {
         this.isSkippingEnabled = true;
         this.isMultipleBuzzesEnabled = false;
         this.showDelay = 1250;
+        this.bonusDelay = 1250;
+        this.bonusTimeout = 10000;
         this.tuTimeout = 10000; // 10 sec
         this.bzTimeout = 10000; // 10 sec
         this.settings = new db.QuestionParams();
@@ -127,6 +191,16 @@ class QBRoom {
             return this.playersLockedOut.has(player.id) || this.teamsLockedOut.has(this.players.get(player.id).team);
         }
         return false;
+    }
+
+    isTheirBonus(player) {
+        if (this.whoseBonus === null) {
+            return true;
+        } else if (this.whoseBonus.startsWith("p")) {
+            return player.id === this.whoseBonus.substr(1);
+        } else {
+            return this.players.get(player.id).team === parseInt(this.whoseBonus);
+        }
     }
 
     isCorrectAnswer(answer) {
@@ -174,9 +248,9 @@ class QBRoom {
             this.players.set(msg.author.id, new cmds.Player());
         }
 
-        if (msg.content === "$q" && !this.isActive) {
+        if (msg.content === "$q" && !this.isTossupActive && !this.isBonusActive) {
 
-            this.isActive = true;
+            this.isTossupActive = true;
 
             db.randomTossup(this.settings, tu => {
                 this.activeQuestion = tu;
@@ -198,7 +272,7 @@ class QBRoom {
             });
         }
 
-        else if (msg.content === "buzz" && this.isActive && this.buzzer === null && !this.isLockedOut(msg.author) && !this.isPaused) {
+        else if (msg.content === "buzz" && this.isTossupActive && this.buzzer === null && !this.isLockedOut(msg.author) && !this.isPaused) {
             this.players.get(msg.author.id).buzzes++;
 
             clearInterval(this.showInterval);
@@ -228,7 +302,7 @@ class QBRoom {
             }
         }
 
-        else if (msg.author === this.buzzer && this.isActive && !this.isPaused) {
+        else if (msg.author === this.buzzer && this.isTossupActive && !this.isPaused) {
             // TODO: update stats
             this.buzzer = null;
             clearTimeout(this.buzzerDeadlineTimeout);
@@ -249,7 +323,7 @@ class QBRoom {
                     msg.reply(`Correct! The answer was **${this.answerLine}**. +10 points`);
                 }
 
-                this.isActive = false;
+                this.isTossupActive = false;
                 showMore(this);
             } else {
                 this.rawText += ":x:";
@@ -264,18 +338,117 @@ class QBRoom {
             }
         }
 
-        else if (msg.content === "skip" && this.isActive && this.buzzer === null && this.isSkippingEnabled) {
+        else if (msg.content === "$b" && !this.isBonusActive && !this.isTossupActive) {
+            this.isBonusActive = true;
+
+            db.randomBonus(this.settings, bonus => {
+                this.activeBonus = bonus;
+                this.whoseBonus = null;
+                this.rawText = "";
+                this.textList = bonus.leadin.split(" ");
+                this.answerLine = null;
+                this.textProgress = 0;
+                this.partIndex = -1;
+                this.isShowComplete = false;
+
+                msg.channel.send("<bonus starting>").then(tm => {
+                    this.targetMsg = tm;
+                    this.showInterval = setInterval(showMoreBonus, this.bonusDelay, this);
+                });
+
+            })
+        }
+
+        else if (this.isBonusActive && this.answerLine && msg.content === msg.content.toUpperCase()) {
+            if (!this.isTheirBonus(msg.author)) {
+                msg.react("❌");
+                return;
+            }
+
+            clearInterval(this.showInterval);
+            clearTimeout(this.deadlineTimeout);
+
+            this.players.get(msg.author.id).boniInterrupted++; // THESE STATS ARE TRACKED BUT NOT REPORTED
+
+            if (this.isCorrectAnswer(msg.content)) {
+                msg.reply(`Correct! The answer was **${this.answerLine}**. +10 points`);
+                this.rawText += `:white_check_mark:`;
+
+                this.players.get(msg.author.id).bonusPoints += 10;
+                this.players.get(msg.author.id).boniCorrect++;  // THESE STATS ARE TRACKED BUT NOT REPORTED
+            } else {
+                msg.reply(`Incorrect! The answer was **${this.answerLine}**. No penalty.`);
+                this.rawText += ":x:";
+            }
+
+            // null answerLine to prevent nextBonusPart from printing it again with "no points" message
+            this.answerLine = null;
+            nextBonusPart(this);
+        }
+
+        else if (msg.content === "skip" && this.isTossupActive && this.buzzer === null && this.isSkippingEnabled) {
+            this.rawText += ":fast_forward:";
             stopQuestion(this);
         }
 
-        else if (msg.content === "pause" && this.isActive && this.buzzer === null && !this.isPaused && this.isPausingEnabled) {
+        else if (msg.content === "skip" && this.isBonusActive && this.isSkippingEnabled) {
+            clearInterval(this.showInterval);
+            clearTimeout(this.deadlineTimeout);
+
+            this.rawText += ":fast_forward:";
+            nextBonusPart(this);
+        } else if (msg.content === "skip all" && this.isBonusActive && this.isSkippingEnabled) {
+            clearInterval(this.showInterval);
+            clearTimeout(this.deadlineTimeout);
+
+            this.rawText += ":fast_forward:";
+
+            if (this.answerLine) {
+                this.targetMsg.channel.send(`Times up! The answer was **${this.answerLine}**. No points.`);
+            }
+
+            this.isShowComplete = true;
+            showMoreBonus(this);
+
+            this.partIndex++;
+            for (; this.partIndex < this.activeBonus.parts.length; this.partIndex++) {
+                this.targetMsg.channel.send(this.activeBonus.parts[this.partIndex].text);
+                this.targetMsg.channel.send(`Answer: **${this.activeBonus.parts[this.partIndex].answer}**`);
+            }
+
+            this.isBonusActive = false;
+        }
+
+        else if (msg.content === "pause" && this.isBonusActive && !this.isPaused && this.isPausingEnabled) {
+            this.rawText += ":pause_button:";
+            this.isPaused = true;
+            clearInterval(this.showInterval);
+            clearTimeout(this.deadlineTimeout);
+            msg.reply("bonus paused!");
+        }
+
+        else if (msg.content === "resume" && this.isBonusActive && this.isPaused) {
+            this.isPaused = false;
+            this.targetMsg.channel.send("<bonus is resuming>").then(newMsg => {
+                this.targetMsg = newMsg;
+
+                if (this.isShowComplete) {
+                    this.deadlineTimeout = setTimeout(nextBonusPart, this.partIndex === -1 ? 0 : this.bonusTimeout, this);
+                } else {
+                    this.showInterval = setInterval(showMoreBonus, this.bonusDelay, this);
+                }
+            });
+        }
+
+        else if (msg.content === "pause" && this.isTossupActive && this.buzzer === null && !this.isPaused && this.isPausingEnabled) {
+            this.rawText += ":pause_button:";
             this.isPaused = true;
             clearInterval(this.showInterval);
             clearTimeout(this.deadlineTimeout);
             msg.reply("Tossup paused!");
         }
 
-        else if (msg.content === "resume" && this.isActive && this.buzzer === null && this.isPaused) {
+        else if (msg.content === "resume" && this.isTossupActive && this.buzzer === null && this.isPaused) {
             this.isPaused = false;
             this.restartQuestion();
         }

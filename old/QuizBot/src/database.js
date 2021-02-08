@@ -167,7 +167,7 @@ function randomBonus(params, cb) {
                 sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", vs => {
                     if (vs) { ret.subcategory = vs; }
 
-                    constructTournament(finalRes.rows[0].tournament_id, "tournaments", t => {
+                    constructTournament(finalRes.rows[0].tournament_id, t => {
                         ret.tournament = t;
 
                         let pq = `SELECT * FROM bonus_parts WHERE bonus_id=${finalRes.rows[0].id} ORDER BY number ASC;`
