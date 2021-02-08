@@ -98,13 +98,15 @@ function sqlLookup(id, table, cb) {
 function constructTournament(id, cb) {
     sqlLookup(id, "tournaments", t => {
         let ret = new Tournament();
-        ret.year = t.year;
-        ret.name = t.name;
-        ret.difficulty = t.difficulty;
-        ret.quality = t.quality;
-        ret.address = t.address;
-        ret.type = t.type;
-        ret.link = t.link;
+        if (t) {
+            ret.year = t.year;
+            ret.name = t.name;
+            ret.difficulty = t.difficulty;
+            ret.quality = t.quality;
+            ret.address = t.address;
+            ret.type = t.type;
+            ret.link = t.link;
+        }
 
         cb(ret);
     })
@@ -130,10 +132,10 @@ function randomTossup(params, cb) {
             ret.wikipedia = finalRes.rows[0].wikipedia_url;
 
             sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", scat => {
-                ret.subcategory = scat.name;
+                if (scat) { ret.subcategory = scat.name; }
 
                 sqlLookup(finalRes.rows[0].category_id, "categories", cat => {
-                    ret.category = cat.name;
+                    if (cat) { ret.category = cat.name; }
 
                     constructTournament(finalRes.rows[0].tournament_id, tourn => {
                         ret.tournament = tourn;
@@ -161,9 +163,9 @@ function randomBonus(params, cb) {
             ret.parts = [];
 
             sqlLookup(finalRes.rows[0].category_id, "categories", v => {
-                ret.category = v;
+                if (v) { ret.category = v; }
                 sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", vs => {
-                    ret.subcategory = vs;
+                    if (vs) { ret.subcategory = vs; }
 
                     constructTournament(finalRes.rows[0].tournament_id, "tournaments", t => {
                         ret.tournament = t;

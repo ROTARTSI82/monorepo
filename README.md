@@ -33,3 +33,16 @@ https://discord.com/api/oauth2/authorize?client_id=752356606850629722&permission
     - `$tourn clear` - Clear the tournament whitelist
     - `$tourn rm [tournamnet]` - Remove `tournament` from the whitelist
     - `$tourn add [tournament]` - add `tournament` to the whitelist
+12. `$filter [subcommand[args?]]` - Manage filters of difficulty, year, or quality of the question.
+    - `$filter ls` - List the current filter settings
+    - `$filter clear` - Clear the filter. All questions allowed.
+    - `$filter difficulty [min] [max]` - Filter for difficulties between `min` and `max` inclusive.
+    - `$filter year [min] [max]` - Filter for years between `min` and `max` inclusive.
+    - `$filter quality [min] [max]` - Filter for qualities between `min` and `max` inclusive.
+13. `$team [subcommand[args?]]` - Manage quizbowl teams
+    - `$team leave` - Leave the current team you're on
+    - `$team disband` - Dissolve the team. (Can only be used by team captain.)
+    - `$team transfer [ping]` - Transfer ownership (team captain) of the team to `ping`.
+    - `$team stat` - List the stats for your team, including members
+    - `$team new [team]` - Create new `team`
+    - `$team join [team]` - Join `team`
