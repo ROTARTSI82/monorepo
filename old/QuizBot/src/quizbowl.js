@@ -164,6 +164,7 @@ class QBRoom {
         // settings
         this.showSpeed = 5;
         this.isPausingEnabled = true;
+        this.doShowBonusAfterTu = true;
         this.isSkippingEnabled = true;
         this.isMultipleBuzzesEnabled = false;
         this.showDelay = 1250;
@@ -243,6 +244,32 @@ class QBRoom {
         return numMatch >= 1;
     }
 
+    startBonus(msg) {
+        this.isBonusActive = true;
+
+        db.randomBonus(this.settings, bonus => {
+            if (bonus === null) {
+                this.isBonusActive = false;
+                msg.reply(`No bonuses in QuizDB matched the provided criterion! Adjust your filters and settings.`);
+                return;
+            }
+
+            this.activeBonus = bonus;
+            this.rawText = "";
+            this.textList = bonus.leadin.split(" ");
+            this.answerLine = null;
+            this.textProgress = 0;
+            this.partIndex = -1;
+            this.isShowComplete = false;
+
+            msg.channel.send("<bonus starting>").then(tm => {
+                this.targetMsg = tm;
+                this.showInterval = setInterval(showMoreBonus, this.bonusDelay, this);
+            });
+
+        });
+    }
+
     processMsg(msg) {
         if (!this.players.has(msg.author.id)) {
             this.players.set(msg.author.id, new cmds.Player());
@@ -253,6 +280,12 @@ class QBRoom {
             this.isTossupActive = true;
 
             db.randomTossup(this.settings, tu => {
+                if (tu === null) {
+                    this.isTossupActive = false;
+                    msg.reply(`No tossups in QuizDB matched the provided criterion! Adjust your filters and settings.`);
+                    return;
+                }
+
                 this.activeQuestion = tu;
                 this.buzzer = null;
                 this.rawText = "";
@@ -308,16 +341,18 @@ class QBRoom {
             clearTimeout(this.buzzerDeadlineTimeout);
 
             if (this.isCorrectAnswer(msg.content)) {
+                let player = this.players.get(msg.author.id);
+
                 clearTimeout(this.deadlineTimeout);
                 this.rawText += `:white_check_mark:`;
 
-                this.players.get(msg.author.id).correct++;
+                player.correct++;
 
                 if (this.isPower) {
                     addPoints(this, msg.author, 15);
                     msg.reply(`POWER! The answer was **${this.answerLine}**. +15 points`);
 
-                    this.players.get(msg.author.id).powers++;
+                    player.powers++;
                 } else {
                     addPoints(this, msg.author, 10);
                     msg.reply(`Correct! The answer was **${this.answerLine}**. +10 points`);
@@ -325,6 +360,16 @@ class QBRoom {
 
                 this.isTossupActive = false;
                 showMore(this);
+
+                if (this.doShowBonusAfterTu) {
+                    if (player.team !== -1) {
+                        this.whoseBonus = `${player.team}`;
+                    } else {
+                        this.whoseBonus = `p${msg.author.id}`;
+                    }
+
+                    this.startBonus(msg);
+                }
             } else {
                 this.rawText += ":x:";
 
@@ -339,24 +384,8 @@ class QBRoom {
         }
 
         else if (msg.content === "$b" && !this.isBonusActive && !this.isTossupActive) {
-            this.isBonusActive = true;
-
-            db.randomBonus(this.settings, bonus => {
-                this.activeBonus = bonus;
-                this.whoseBonus = null;
-                this.rawText = "";
-                this.textList = bonus.leadin.split(" ");
-                this.answerLine = null;
-                this.textProgress = 0;
-                this.partIndex = -1;
-                this.isShowComplete = false;
-
-                msg.channel.send("<bonus starting>").then(tm => {
-                    this.targetMsg = tm;
-                    this.showInterval = setInterval(showMoreBonus, this.bonusDelay, this);
-                });
-
-            })
+            this.whoseBonus = null;
+            this.startBonus(msg);
         }
 
         else if (this.isBonusActive && this.answerLine && msg.content === msg.content.toUpperCase()) {
@@ -451,6 +480,14 @@ class QBRoom {
         else if (msg.content === "resume" && this.isTossupActive && this.buzzer === null && this.isPaused) {
             this.isPaused = false;
             this.restartQuestion();
+        }
+
+        else if (msg.content === "$info tossup" && !this.isTossupActive && this.activeQuestion) {
+            msg.reply(`${this.activeQuestion.toString()}`);
+        }
+
+        else if (msg.content === "$info bonus" && !this.isBonusActive && this.activeBonus) {
+            msg.reply(`${this.activeBonus.toString()}`);
         }
 
         else {

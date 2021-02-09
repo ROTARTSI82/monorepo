@@ -29,6 +29,32 @@ bot.on('message', msg => {
         roomMap.set(msg.channel.id, new qb.QBRoom());
     }
 
+    if (msg.content === "$clear") {
+        msg.reply(`Are you sure? This will reset EVERYONE's score and stats! (10sec to confirm)`).then(m => {
+            m.react('✅').then(() => {m.react('❌')}).then(() => {
+
+                const filter = (reaction, user) => {
+                    // only allow original sender to confirm, allow anyone to abort.
+                    return (reaction.emoji.name !== '✅' || msg.author.id === user.id) && !user.bot;
+                };
+
+                m.awaitReactions(filter, { max: 1, time: 10000, errors: ['time'] })
+                    .then(collected => {
+                        const reaction = collected.first();
+
+                        if (reaction.emoji.name === '✅') {
+                            roomMap.set(msg.channel.id, new qb.QBRoom());
+                            msg.channel.send(`Cleared <#${msg.channel.id}>`);
+                        } else {
+                            msg.channel.send('Clear aborted!');
+                        }
+                    })
+                    .catch(collected => {
+                        msg.channel.send('Timed out! Clear aborted!');
+                    });
+            });
+        });
+    }
     roomMap.get(msg.channel.id).processMsg(msg);
 })
 

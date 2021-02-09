@@ -21,11 +21,13 @@ https://discord.com/api/oauth2/authorize?client_id=752356606850629722&permission
 8. `$lb` - View the leaderboard for the channel #TODO: NOT IMPLEMENTED
 9. `$cat [subcommand[args?]]` - Manage which categories of questions you want 
     - `$cat ls` - list the enabled categories.
+    - `$cat la` - List all possible categories
     - `$cat reset` - Reset categories to default (all categories enabled)
     - `$cat rm [category]` - Remove `category` from the rotation of questions
     - `$cat add [category` - Add `category` to the rotation of questions.
 10. `$scat [subcommand[args?]]` - Manage which subcategories of questions you want
     - `$scat ls` - list the enabled subcategories.
+    - `$scat la` - List all possible subcategories
     - `$scat reset` - Reset subcategories to default (all subcategories enabled)
     - `$scat rm [subcategory]` - Remove `subcategory` from the rotation of questions
     - `$scat add [subcategory` - Add `subcategory` to the rotation of questions.
@@ -48,11 +50,12 @@ https://discord.com/api/oauth2/authorize?client_id=752356606850629722&permission
     - `$team score` - List the stats and scores for your team, including members
     - `$team new [team]` - Create new `team`
     - `$team join [team]` - Join `team`
-
+16. `$info (tossup|bonus)` - Get metadata about a tossup (`$info tossup`) or bonus (`$info bonus`)
+17. `$clear` - Reset the quizbowl room. (anyone can execute)
 
 # TODO LIST
-- Option to show bonuses after correct tossups
 - Implement leaderboards
+- Reset all settings
 - Commands to change other settings like the following:
 ```js
 this.showSpeed = 5;
