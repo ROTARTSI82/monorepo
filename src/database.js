@@ -29,6 +29,17 @@ class Bonus {
         this.number = 0;
         this.round = "";
     }
+
+    toString() {
+        let ret = `Bonus **${this.number}**, round \`${this.round}\`.\n${this.category} (${this.subcategory})\n\n` +
+            `${this.tournament.toString()}\n`;
+
+        for (let part of this.parts) {
+            ret += part.toString();
+        }
+
+        return ret;
+    }
 }
 
 class BonusPart {
@@ -39,6 +50,10 @@ class BonusPart {
         this.text = "";
 
         this.wikipedia = "";
+    }
+
+    toString() {
+        return `\nPart **${this.number}**, Wikipedia: ${this.wikipedia}\n`
     }
 }
 
@@ -52,6 +67,11 @@ class Tournament {
         this.address = "";
         this.type = "";
         this.link = "";
+    }
+
+    toString() {
+        return `Tournament \`${this.name}\` (${this.year}).\nDifficulty **${this.difficulty}**, ` +
+            `Quality **${this.quality}**.\n${this.link} Type: \`${this.type}\`, Address: ${this.address}`
     }
 }
 
@@ -68,6 +88,11 @@ class Tossup {
         this.round = "";
 
         this.wikipedia = "";
+    }
+
+    toString() {
+        return `Tossup **${this.number}**, round \`${this.round}\`.\n${this.category} (${this.subcategory}).\n` +
+            `Wikipedia: ${this.wikipedia}\n\n${this.tournament.toString()}`;
     }
 }
 
@@ -92,6 +117,9 @@ function generateSelector(params) {
 function sqlLookup(id, table, cb) {
     client.query(`SELECT * FROM ${table} WHERE id=${id};`).then(res => {
         cb(res.rows[0]);
+    }).catch(err => {
+        console.error(`sqlLookup(${id}, ${table}, ${cb}) failed: ${err}`);
+        cb(null);
     })
 }
 
@@ -114,10 +142,16 @@ function constructTournament(id, cb) {
 
 function randomTossup(params, cb) {
     let sel = generateSelector(params);
+    let onErr = err => {cb(null)};
 
     console.log("ranTu")
 
     client.query(`SELECT COUNT(1) FROM tossups ${sel};`).then(res => {
+        if (res.rows[0].count < 1) {
+            cb(null);
+            return;
+        }
+
         let q = `SELECT * FROM tossups ${sel} LIMIT 1 OFFSET ${Math.floor(Math.random() * res.rows[0].count)};`;
         console.log(q);
 
@@ -144,14 +178,20 @@ function randomTossup(params, cb) {
                 });
             });
 
-        });
-    });
+        }).catch(onErr);
+    }).catch(onErr);
 }
 
 function randomBonus(params, cb) {
     let sel = generateSelector(params);
+    let onErr = err => {cb(null)};
 
     client.query(`SELECT COUNT(1) FROM bonuses ${sel};`).then(res => {
+        if (res.rows[0].count < 1) {
+            cb(null);
+            return;
+        }
+
         let q = `SELECT * FROM bonuses ${sel} LIMIT 1 OFFSET ${Math.floor(Math.random() * res.rows[0].count)};`;
         console.log(q);
 
@@ -163,9 +203,9 @@ function randomBonus(params, cb) {
             ret.parts = [];
 
             sqlLookup(finalRes.rows[0].category_id, "categories", v => {
-                if (v) { ret.category = v; }
+                if (v) { ret.category = v.name; }
                 sqlLookup(finalRes.rows[0].subcategory_id, "subcategories", vs => {
-                    if (vs) { ret.subcategory = vs; }
+                    if (vs) { ret.subcategory = vs.name; }
 
                     constructTournament(finalRes.rows[0].tournament_id, t => {
                         ret.tournament = t;
@@ -183,12 +223,12 @@ function randomBonus(params, cb) {
                             }
 
                             cb(ret);
-                        });
+                        }).catch(onErr);
                     });
                 });
             });
-        });
-    });
+        }).catch(onErr);
+    }).catch(onErr);
 }
 
 function init(secret) {
