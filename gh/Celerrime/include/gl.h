@@ -13,7 +13,7 @@
 #include <GLFW/glfw3.h>
 
 typedef struct {
-    smat3 transform;
+    smat4 transform;
     vec2 sampling_bottom_left;
     vec2 sampling_extent;
 } draw_instance_t;

@@ -23,27 +23,30 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
     glBufferData(GL_ARRAY_BUFFER, ctx->vbo_size, NULL, GL_DYNAMIC_DRAW);
 
     // 3 vec4s in the mat3 (2d model matrix)
-    glVertexAttribPointer(1, 3, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), 0);
-    glVertexAttribPointer(2, 3, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 3));
-    glVertexAttribPointer(3, 3, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 6));
+    glVertexAttribPointer(1, 4, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), 0);
+    glVertexAttribPointer(2, 4, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 4));
+    glVertexAttribPointer(3, 4, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 8));
+    glVertexAttribPointer(4, 4, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 12));
 
     // vec 2 for bottom left corner of sampling rect
-    glVertexAttribPointer(4, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 9));
+    glVertexAttribPointer(5, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 16));
 
     // vec 2 for extent of sampling rect (width, height)
-    glVertexAttribPointer(5, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 11));
+    glVertexAttribPointer(6, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 18));
 
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
     glEnableVertexAttribArray(3);
     glEnableVertexAttribArray(4);
     glEnableVertexAttribArray(5);
+    glEnableVertexAttribArray(6);
 
     glVertexAttribDivisor(1, 1);
     glVertexAttribDivisor(2, 1);
     glVertexAttribDivisor(3, 1);
     glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 

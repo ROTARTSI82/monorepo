@@ -25,7 +25,8 @@ static void on_win_resize(GLFWwindow* window, int width, int height) {
 extern inline void start(app_t *app) {
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
     app->projection = perspective(GFOV, (float) GWIN_WIDTH / (float) GWIN_HEIGHT, ZNEAR, ZFAR);
-    app->view_mat = *((smat3 *) sm3_identity);
+//    app->projection = ortho(-2, 2, -2, 2, ZNEAR, ZFAR);
+    app->view_mat = *((smat4 *) sm4_identity);
     glfwInit();
 
     app->win = glfwCreateWindow(GWIN_WIDTH, GWIN_HEIGHT, "Game Test", NULL, NULL);
@@ -42,6 +43,8 @@ extern inline void start(app_t *app) {
 
     glDisable(GL_DEPTH_TEST); // More efficient if we just render it in order lol
     glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_STENCIL_TEST);
     glViewport(0, 0, GWIN_WIDTH, GWIN_HEIGHT);
 
@@ -62,21 +65,41 @@ extern inline void start(app_t *app) {
 
 
     {
-        app->master_ctx.num_blits = 1;
+        app->master_ctx.num_blits = 2;
         glBindBuffer(GL_ARRAY_BUFFER, app->master_ctx.instance_vbo);
         draw_instance_t *buf = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
-        vec2 offset, scale;
+        vec2 scale1;
+
+        scale1.x = 30.414331436157227f;
+        scale1.y = 2.339162826538086f;
+
+        vec2 scale2;
+        scale2.x = 104.417f;
+        scale2.y = 8.03068f;
+
+        vec3 trans1, offset;
+        trans1.x = 0;
+        trans1.y = 2.3963f;
+        trans1.z = -42.2149f;
+
         offset.x = 0;
         offset.y = 0;
-        scale.x = 1;
-        scale.y = 1;
+        offset.z = 0;
 
-        buf->transform = *(smat3 *) sm3_identity;
+        buf[1].transform = sm4_transform(&offset, &scale1, 0);
 
 
-        buf->sampling_bottom_left = offset;
-        buf->sampling_extent = scale;
+        buf[1].sampling_bottom_left = *(vec2*)&offset;
+        scale1.y = 1;
+        buf[1].sampling_extent = scale1;
+
+        buf[0].transform = sm4_transform(&trans1, &scale2, PI);
+
+
+        buf[0].sampling_bottom_left = *(vec2*)&offset;
+        scale2.y = 1;
+        buf[0].sampling_extent = scale2;
 
         glFlush();
         EXIF(!glUnmapBuffer(GL_ARRAY_BUFFER), "buffer datastore corrupt")
@@ -129,8 +152,13 @@ extern inline void start(app_t *app) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        void *texdat = malloc(40 * 40 * 3);
-        memset(texdat, 0x88, 40 * 40 * 3);
+        unsigned char *texdat = malloc(40*40*4);
+        memset(texdat, 0x00, 20*40*4);
+        unsigned char v = 0;
+        for (unsigned char *i = texdat + 20*40*4; i < texdat + 40*40*4; i++) {
+            *i = (v*v++);
+        }
+//        memset(texdat, 0x88, 40*40*4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 40, 40, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdat);
         free(texdat);
 

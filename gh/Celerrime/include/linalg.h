@@ -56,16 +56,7 @@ typedef struct {
     FLOAT_T w; // should this be first?
 } vec4;
 
-
-// OpenGL uses column-major order so we will store it as such.
-// glsl mat3s are vec4s for alignment purposes. w component of columns are just ignored.
-typedef struct {
-    vec3 c0; // FLOAT_T pad0; // c stands for column
-    vec3 c1; // FLOAT_T pad1;
-    vec3 c2; // FLOAT_T pad2;
-} smat3; // Square MATrix 3x3
-
-extern const FLOAT_T sm3_identity[3][3];
+extern const FLOAT_T sm4_identity[4][4];
 
 
 typedef struct {
@@ -77,23 +68,23 @@ typedef struct {
 
 
 
-void v3_add_eq(vec3 *lhs, vec3 *rhs);
+void v4_add_eq(vec4 *lhs, vec4 *rhs);
 
-void v3_mults_eq(vec3 *lhs, FLOAT_T scalar);
+void v4_mults_eq(vec4 *lhs, FLOAT_T scalar);
 
-vec3 v3_multm(vec3 *a, smat3 *rhs); // vec2 multiply matrix
+vec4 v4_multm(vec4 *a, smat4 *rhs); // vec2 multiply matrix
 
 // todo: why mark extern
-static inline void v3_multm_eq(vec3 *lhs, smat3 *rhs) {
-    *lhs = v3_multm(lhs, rhs);
+static inline void v4_multm_eq(vec4 *lhs, smat4 *rhs) {
+    *lhs = v4_multm(lhs, rhs);
 }
 
 
 
 // transform lhs by rhs
-smat3 sm3_mult(smat3 *lhs, smat3 *rhs);
+smat4 sm4_mult(smat4 *lhs, smat4 *rhs);
 
-void sm3_mult_eq(smat3 *lhs, smat3 *rhs);
+void sm4_mult_eq(smat4 *lhs, smat4 *rhs);
 
 
 vec2 v2_add(vec2 *a, vec2 *b);
@@ -106,12 +97,12 @@ void v2_mults_eq(vec2 *lhs, FLOAT_T scalar);
 void v2_add_eq(vec2 *lhs, vec2 *rhs);
 
 
-smat3 sm3_translate(vec2 *offset, FLOAT_T depth);
-smat3 sm3_rotate(FLOAT_T theta); // counterclockwise rotation in radians
-smat3 sm3_scale(vec2 *scale);
+smat4 sm4_translate(vec3 *offset);
+smat4 sm4_rotate(FLOAT_T theta); // counterclockwise rotation in radians
+smat4 sm4_scale(vec2 *scale);
 
 // shortcut for applying all transformations. Applied in the order of: Scaling/Rotation, then Translation.
-smat3 sm3_transform(vec2 *translation, FLOAT_T depth, vec2 *scale, FLOAT_T theta);
+smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta);
 
 FLOAT_T radians(FLOAT_T deg);
 FLOAT_T degrees(FLOAT_T rad);
@@ -119,7 +110,7 @@ FLOAT_T degrees(FLOAT_T rad);
 
 // these do not print newlines.
 void printv3(vec3 *vec);
-void printsm3(smat3 *mat);
+void printsm4(smat4 *mat);
 void printv2(vec2 *vec);
 
 // from GLM https://github.com/g-truc/glm/blob/0.9.5/glm/gtc/matrix_transform.inl

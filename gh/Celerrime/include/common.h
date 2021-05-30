@@ -32,7 +32,7 @@ typedef struct {
     GLint su_tex_samp;
 
     smat4 projection;
-    smat3 view_mat;
+    smat4 view_mat;
 
     GLuint TMP_TEST_TEX;
 
