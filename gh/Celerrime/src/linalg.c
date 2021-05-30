@@ -9,9 +9,10 @@
 #include <stdio.h>
 #include <string.h> // memset
 
-const FLOAT_T sm3_identity[3][4] = {1, 0, 0, 0,
-                                    0, 1, 0, 0,
-                                    0, 0, 1, 0};
+const FLOAT_T sm3_identity[3][3] = {1, 0, 0, //0,
+                                    0, 1, 0, //0,
+                                    0, 0, 1 //, 0
+                                    };
 
 // these are extremely inefficient implementations but i'm too lazy to do it properly with assembly so eh
 
@@ -85,12 +86,13 @@ void v2_add_eq(vec2 *lhs, vec2 *rhs) {
     lhs->y += rhs->y;
 };
 
-smat3 sm3_translate(vec2 *offset) {
+smat3 sm3_translate(vec2 *offset, FLOAT_T depth) {
     smat3 ret;
     memcpy(&ret, sm3_identity, sizeof(ret));
 
     ret.c2.x = offset->x;
     ret.c2.y = offset->y;
+    ret.c2.z = depth;
     return ret;
 };
 
@@ -116,7 +118,7 @@ smat3 sm3_scale(vec2 *scale) {
     return ret;
 };
 
-smat3 sm3_transform(vec2 *translation, vec2 *scale, FLOAT_T theta) {
+smat3 sm3_transform(vec2 *translation, FLOAT_T depth, vec2 *scale, FLOAT_T theta) {
     smat3 ret;
     FLOAT_T sin = F_SIN(theta);
     FLOAT_T cos = F_COS(theta);
@@ -130,7 +132,7 @@ smat3 sm3_transform(vec2 *translation, vec2 *scale, FLOAT_T theta) {
 
     ret.c2.x = translation->x;
     ret.c2.y = translation->y;
-    ret.c2.z = 1;
+    ret.c2.z = depth;
 
     return ret;
 }

@@ -32,12 +32,11 @@ typedef struct {
     GLsizeiptr vbo_size;
 
     GLuint vao;
-
-    smat4 projection;
-    vec2 view_offset;
 } render_ctx_t;
 
 void new_framebuffer(GLuint *buf);
+
+void compile_and_check_shader(GLuint shader);
 
 void render(render_ctx_t *ctx);
 void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);

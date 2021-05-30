@@ -9,6 +9,9 @@
 
 #define GWIN_WIDTH 640
 #define GWIN_HEIGHT 480
+
+#define GUPDATE_PROJECTION 1
+
 #define GFOV 60
 #define ZNEAR 0.1f
 #define ZFAR 100

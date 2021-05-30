@@ -3,7 +3,7 @@ project(GameTest C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(GameTest src/main.c src/linalg.c src/gl.c)
+add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c)
 
 find_package(GLEW REQUIRED)
 find_package(OpenAL REQUIRED)
