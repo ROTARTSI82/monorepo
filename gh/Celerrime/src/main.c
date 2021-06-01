@@ -1,35 +1,46 @@
 #include "main_helper.h"
 #include "linalg.h"
 #include <stdio.h>
+#include <time.h>
 
 int main() {
+//    uint64_t seed = 0x5c27d496d1868dc8;
+
+//    uint8_t seed = 0xd4;
+
+    for (int k = 0; k < 256; k++) {
+        uint64_t orig = rand();
+        uint64_t seed = orig;
+
+        uint64_t bitcounts[64];
+        memset(bitcounts, 0, 512);
+
+        uint8_t run = 1;
+        uint64_t it = 0;
+        while (run) {
+            it++;
+            seed = rand_nextl(seed);
+            run = (seed != orig) && (it < 65536);
+
+            uint64_t cpy = seed;
+            for (int j = 0; j < 64; j++) {
+                bitcounts[j] += cpy & 1;
+                cpy >>= 1;
+            }
+        }
+
+        printf("it = %lu, orig = %u\n", it, orig);
+
+        for (int i = 0; i < 64; i++) {
+            printf("bit%i = %lu\n", i, bitcounts[i]);
+        }
+
+        printf("\n\n==============================");
+    }
+
     app_t app;
     start(&app);
 
-    printsm4((smat4 *) sm4_identity);
-    smat4 rot = sm4_rotate(PI);
-
-    vec2 toscale;
-    toscale.x = 2;
-    toscale.y = 3;
-    smat4 scale = sm4_scale(&toscale);
-
-    vec3 totrans;
-    totrans.x = 4;
-    totrans.y = 5;
-    totrans.z = 0;
-    smat4 trans = sm4_translate(&totrans);
-
-    smat4 comb = sm4_mult(&scale, &rot);
-    printsm4(&comb);
-
-    sm4_mult_eq(&comb, &trans);
-    printsm4(&comb);
-
-    smat4 shortcut = sm4_transform(&totrans, &toscale, PI);
-    printsm4(&shortcut);
-
-    float theta = 0.0f;
     float scroll = 0;
 
     while (!glfwWindowShouldClose(app.win)) {
@@ -37,29 +48,10 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         {
-//            glBindBuffer(GL_ARRAY_BUFFER, app.master_ctx.instance_vbo);
-//            draw_instance_t *buf = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-//
-//            vec2 s;
-//            s.x = 40;
-//            s.y = 8*tanf(GFOV * PI / 180);
-//
-//
-//            vec2 s2;
-//            s2.x = 180;
-//            s2.y = 24*tanf(GFOV * PI / 180);
-//
             vec3 o;
             o.x = 0;
             o.y = 0;
             o.z = -11.1958f;
-//
-//            buf->transform = sm4_transform(&o, -2, &s, 0);
-//            buf[1].transform = sm4_transform(&o, -6, &s, PI);
-//
-//            glFlush();
-//            EXIF(!glUnmapBuffer(GL_ARRAY_BUFFER), "buffer datastore corrupt")
-//            glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             scroll += 0.01f;
             o.x = (-5) + scroll;

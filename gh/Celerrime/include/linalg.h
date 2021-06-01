@@ -89,10 +89,17 @@ void sm4_mult_eq(smat4 *lhs, smat4 *rhs);
 
 vec2 v2_add(vec2 *a, vec2 *b);
 
+FLOAT_T v2_dot(vec2 *a, vec2 *b);
+
 vec2 v2_mults(vec2 *a, FLOAT_T scalar); // vec2 multiply scalar
 
+//FLOAT_T v2_magnitude(vec2 *v);
 
-void v2_mults_eq(vec2 *lhs, FLOAT_T scalar);
+vec2 v2_sub(vec2 *a, vec2 *b);
+
+void v2_sub_eq(vec2 *lhs, vec2 *rhs);
+
+//void v2_mults_eq(vec2 *lhs, FLOAT_T scalar);
 
 void v2_add_eq(vec2 *lhs, vec2 *rhs);
 
@@ -104,14 +111,14 @@ smat4 sm4_scale(vec2 *scale);
 // shortcut for applying all transformations. Applied in the order of: Scaling/Rotation, then Translation.
 smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta);
 
-FLOAT_T radians(FLOAT_T deg);
-FLOAT_T degrees(FLOAT_T rad);
+//FLOAT_T radians(FLOAT_T deg);
+//FLOAT_T degrees(FLOAT_T rad);
 
 
 // these do not print newlines.
-void printv3(vec3 *vec);
-void printsm4(smat4 *mat);
-void printv2(vec2 *vec);
+//void printv3(vec3 *vec);
+//void printsm4(smat4 *mat);
+//void printv2(vec2 *vec);
 
 // from GLM https://github.com/g-truc/glm/blob/0.9.5/glm/gtc/matrix_transform.inl
 smat4 perspective(FLOAT_T fovy, FLOAT_T aspect, FLOAT_T zNear, FLOAT_T zFar);

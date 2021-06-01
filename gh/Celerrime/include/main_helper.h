@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_MAIN_HELPER_CPP
-#define GAMETEST_MAIN_HELPER_CPP
+#ifndef GAMETEST_MAIN_HELPER_C
+#define GAMETEST_MAIN_HELPER_C
 
 #include "common.h"
 #include "config.h"
@@ -25,8 +25,7 @@ static void on_win_resize(GLFWwindow* window, int width, int height) {
 extern inline void start(app_t *app) {
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
     app->projection = perspective(GFOV, (float) GWIN_WIDTH / (float) GWIN_HEIGHT, ZNEAR, ZFAR);
-//    app->projection = ortho(-2, 2, -2, 2, ZNEAR, ZFAR);
-    app->view_mat = *((smat4 *) sm4_identity);
+    app->view_mat = *((smat4 *) sm4_identity); // should we just use a memcpy?
     glfwInit();
 
     app->win = glfwCreateWindow(GWIN_WIDTH, GWIN_HEIGHT, "Game Test", NULL, NULL);
@@ -156,7 +155,7 @@ extern inline void start(app_t *app) {
         memset(texdat, 0x00, 20*40*4);
         unsigned char v = 0;
         for (unsigned char *i = texdat + 20*40*4; i < texdat + 40*40*4; i++) {
-            *i = (v*v++);
+            *i = rand_table[v++];
         }
 //        memset(texdat, 0x88, 40*40*4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 40, 40, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdat);
@@ -177,4 +176,4 @@ extern inline void stop(app_t *app) {
 }
 
 
-#endif //GAMETEST_MAIN_HELPER_CPP
+#endif //GAMETEST_MAIN_HELPER_C

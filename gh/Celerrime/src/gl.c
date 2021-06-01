@@ -69,3 +69,7 @@ void compile_and_check_shader(GLuint shader) {
         exit(1);
     }
 }
+
+void new_texture(GLuint *tex) {
+
+}

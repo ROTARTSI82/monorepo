@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include <string.h> // memset
 
-const FLOAT_T sm4_identity[4][4] = {1, 0, 0, 0,//0,
-                                    0, 1, 0, 0, //0,
-                                    0, 0, 1, 0, //, 0
-                                    0, 0, 0, 1};
+const FLOAT_T sm4_identity[4][4] = {{1, 0, 0, 0},
+                                    {0, 1, 0, 0},
+                                    {0, 0, 1, 0},
+                                    {0, 0, 0, 1}};
 
 // these are extremely inefficient implementations but i'm too lazy to do it properly with assembly so eh
 
@@ -58,14 +58,14 @@ smat4 sm4_mult(smat4 *lhs, smat4 *rhs) {
     ret.c2 = v4_multm(&lhs->c3, rhs);
 
     return ret;
-};
+}
 
 void sm4_mult_eq(smat4 *lhs, smat4 *rhs) {
     v4_multm_eq(&lhs->c0, rhs);
     v4_multm_eq(&lhs->c1, rhs);
     v4_multm_eq(&lhs->c2, rhs);
     v4_multm_eq(&lhs->c3, rhs);
-};
+}
 
 
 vec2 v2_mults(vec2 *a, FLOAT_T scalar) {
@@ -73,24 +73,45 @@ vec2 v2_mults(vec2 *a, FLOAT_T scalar) {
     ret.x = a->x * scalar;
     ret.y = a->y * scalar;
     return ret;
-};
+}
+
+FLOAT_T v2_magnitude(vec2 *v) {
+    return sqrtf(v->x * v->x + v->y * v->y);
+}
+
+vec2 v2_sub(vec2 *a, vec2 *b) {
+    vec2 ret;
+    ret.x = a->x - b->x;
+    ret.y = a->y - b->y;
+    return ret;
+}
+
+
+void v2_sub_eq(vec2 *lhs, vec2 *rhs) {
+    lhs->x -= rhs->x;
+    rhs->y -= rhs->y;
+}
 
 vec2 v2_add(vec2 *a, vec2 *b) {
     vec2 ret;
     ret.x = a->x + b->x;
     ret.y = a->y + b->y;
     return ret;
-};
+}
+
+FLOAT_T v2_dot(vec2 *a, vec2 *b) {
+    return a->x * b->x + a->y * b->y;
+}
 
 void v2_mults_eq(vec2 *lhs, FLOAT_T scalar) {
     lhs->x *= scalar;
     lhs->y *= scalar;
-};
+}
 
 void v2_add_eq(vec2 *lhs, vec2 *rhs) {
     lhs->x += rhs->x;
     lhs->y += rhs->y;
-};
+}
 
 smat4 sm4_translate(vec3 *offset) {
     smat4 ret;
@@ -100,7 +121,7 @@ smat4 sm4_translate(vec3 *offset) {
     ret.c3.y = offset->y;
     ret.c3.z = offset->z;
     return ret;
-};
+}
 
 smat4 sm4_rotate(FLOAT_T theta) {
     smat4 ret;
@@ -113,7 +134,7 @@ smat4 sm4_rotate(FLOAT_T theta) {
     ret.c1.y = ret.c0.x; // sin(theta + 90deg) = sin(90deg - theta) = cos(theta)
 
     return ret;
-};
+}
 
 smat4 sm4_scale(vec2 *scale) {
     smat4 ret;
@@ -122,7 +143,7 @@ smat4 sm4_scale(vec2 *scale) {
     ret.c1.y = scale->y;
 
     return ret;
-};
+}
 
 smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta) {
     smat4 ret;
@@ -144,11 +165,11 @@ smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta) {
 
 FLOAT_T radians(FLOAT_T deg) {
     return deg * (PI / 180);
-};
+}
 
 FLOAT_T degrees(FLOAT_T rad) {
     return rad * (180 / PI);
-};
+}
 
 void printv3(vec3 *vec) {
     printf("[%f, %f, %f]", vec->x, vec->y, vec->z);

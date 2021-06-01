@@ -19,10 +19,6 @@ typedef struct {
 } draw_instance_t;
 
 typedef struct {
-    GLuint tex;
-} texture_t;
-
-typedef struct {
     GLuint framebuffer;
     // we aren't using depth or stencil so no render buffer object
 
@@ -40,5 +36,7 @@ void compile_and_check_shader(GLuint shader);
 
 void render(render_ctx_t *ctx);
 void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
+
+void new_texture(GLuint *tex);
 
 #endif //GAMETEST_GL_H
