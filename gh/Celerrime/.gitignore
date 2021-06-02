@@ -95,3 +95,8 @@ _deps
 *.exe
 *.out
 *.app
+
+.idea/workspace.xml
+.idea/*.iml
+.idea/usage.statistics.xml
+.idea/shelf

@@ -2,6 +2,7 @@
 // Created by grant on 5/30/21.
 //
 
+#include <memory.h>
 #include "common.h"
 
 // DOOM RNG!!
@@ -74,5 +75,182 @@ uint32_t rand_nexti(uint32_t x) {
     x ^= x >> 17;
     x ^= x << 5;
     return x;
+}
+
+uint8_t is_little_endian() {
+    short int number = 0x1;
+    char *numPtr = (char*)&number;
+    return (numPtr[0] == 1);
+}
+
+#define DCMP_ABORT(cond, msg) if (cond) {printf("Error decompressing: "msg"\n"); *out_size = 0; return NULL; }
+
+typedef struct huffman_instruction_t {
+    uint8_t type;
+    uint8_t value;
+} huffman_instruction_t;
+
+#define STORAGE_STACK_SIZE 4096
+
+// we should only need at max 512 but *shrug*
+#define INSTRUCTION_STACK_SIZE 1024
+
+#define WORK_STACK_SZIE 64
+
+// 16 mb
+#define INTER_BUF_SIZE 16000000
+
+void *decompress(void *src, size_t *out_size) {
+    printf("ENTER DCMP\n");
+    // TODO: I should probably just scrap this whole routine and go with representing the tree as an array
+    // TODO: I never check if I read past the end at any time. i also need to check if bit lengths lie to me
+
+    /*
+     * typedef struct node_t {
+     *     int index_to_c0;
+     *     int index_to_c1; // set to -1 for leaves
+     *     uint8_t value; // ignored for nodes
+     * } node_t;
+     */
+
+    const char magic[] = {'R', 'C', 'M', 'P'};
+    DCMP_ABORT(memcmp(magic, src, 4) != 0, "Magic bytes mismatch");
+
+    uint8_t *read_head = (uint8_t *) src + 4;
+    read_head += 4; // ignore version bytes for now
+
+    DCMP_ABORT(*read_head != e_node, "First chunk was not root of Huffman tree");
+    read_head++;
+
+    huffman_node_t root;
+    huffman_node_t *storage_stack = malloc(STORAGE_STACK_SIZE * sizeof(huffman_node_t));
+    memset(storage_stack, 0, STORAGE_STACK_SIZE * sizeof(huffman_node_t));
+    huffman_node_t *storage_stack_ptr = storage_stack; // stack pointer points to first empty slot
+
+    {
+        huffman_instruction_t *instructions = malloc(INSTRUCTION_STACK_SIZE * sizeof(huffman_instruction_t));
+        huffman_instruction_t *instruction_pointer = instructions;
+        memset(instructions, 0, INSTRUCTION_STACK_SIZE * sizeof(huffman_instruction_t)); // we don't need this.
+        instructions[0].type = e_node; // root node
+
+        // unpack the chunks. necessary because node chunks have no value field.
+        while (*read_head == e_leaf || *read_head == e_node) {
+            huffman_instruction_t *val = ++instruction_pointer; // to skip over the root node at the bottom
+
+            DCMP_ABORT(instruction_pointer > instructions + INSTRUCTION_STACK_SIZE, "Instructions stack overflowed!");
+
+            val->type = *(read_head++);
+            if (val->type == e_leaf) {
+                val->value = *(read_head++);
+            }
+        }
+
+        huffman_node_t *work_stack = malloc(WORK_STACK_SZIE * sizeof(huffman_node_t));
+        memset(work_stack, 0, WORK_STACK_SZIE * sizeof(huffman_node_t));
+        huffman_node_t *stack_ptr = work_stack; // stack pointer points to first empty slot
+
+        while (instruction_pointer >= instructions) {
+            huffman_instruction_t *val = instruction_pointer--;
+
+            huffman_node_t to_push;
+            huffman_node_t *storage0 = storage_stack_ptr, *storage1 = storage_stack_ptr + 1;
+
+            switch (val->type) {
+                case e_leaf:
+                    // push a leaf to the stack
+                    stack_ptr->value = val->value;
+                    stack_ptr->c0 = 0;
+                    stack_ptr->c1 = 0;
+                    stack_ptr++;
+
+                    DCMP_ABORT(stack_ptr > work_stack + WORK_STACK_SZIE, "Work stack overflowed!");
+                    break;
+                case e_node:
+                    // pop two values from the stack and enter them into permanent storage
+                    *(storage0) = *(--stack_ptr);
+                    *(storage1) = *(--stack_ptr); // this can write out of bounds but eh
+                    storage_stack_ptr += 2;
+                    DCMP_ABORT(storage_stack_ptr > storage_stack + STORAGE_STACK_SIZE, "Storage stack overflowed!");
+                    DCMP_ABORT(stack_ptr < work_stack, "Work stack underflowed!");
+
+                    // Order is reversed when we transfer it into the instruction stack and reversed
+                    // again when we transfer it to the work stack, so we don't reverse it here.
+                    to_push.c0 = storage0;
+                    to_push.c1 = storage1;
+                    to_push.value = 0;
+
+                    *(stack_ptr++) = to_push; // this should never overflow since we just popped 2 items
+                    break;
+
+                default:
+                    DCMP_ABORT(1, "Unrecognized huffman instruction type!");
+            }
+        };
+
+        // at the end, the root node should be the only item left in the work stack
+        DCMP_ABORT(stack_ptr != (work_stack + 1), "Huffman tree has no root node‽");
+        root = work_stack[0];
+
+        free(instructions);
+        free(work_stack);
+    }
+
+    DCMP_ABORT(*(read_head++) != e_begin_encoding, "Encoding does not begin after huffman tree.");
+
+    uint64_t bit_len = 0;
+    if (is_little_endian()) {
+        // the compiler should be smart enough to optimize this lol. prolly shouldn't count on that.
+        for (int i = 0; i < 8; i++) {
+            bit_len <<= 8;
+            bit_len |= *(read_head + i);
+        }
+    } else {
+        bit_len = *(uint64_t *) read_head;
+    }
+
+    printf("Got bit length of %lu. cast would return %lu\n", bit_len, *(uint64_t *) read_head);
+    read_head += 8;
+
+
+    uint8_t *inter_buf = malloc(INTER_BUF_SIZE); // 16 mb
+    uint8_t *write_head = inter_buf;
+    huffman_node_t *traverse_head = &root;
+
+    for (uint64_t bit = 0; bit < bit_len; bit++) {
+        if (((*(read_head + (bit / 8))) << (bit % 8)) & 128) { // get `bit`th bit of read_head. this *should* work?
+            traverse_head = traverse_head->c1;
+        } else {
+            traverse_head = traverse_head->c0;
+        }
+
+        // if this is true, we have encountered a leaf.
+        if (!(traverse_head->c0 && traverse_head->c1)) { // DeMorgan's law on (!c0) || (!c1)
+            *(write_head++) = traverse_head->value;
+            traverse_head = &root;
+        }
+    }
+
+    DCMP_ABORT(traverse_head != &root, "Stream stopped mid-tree!");
+
+    *out_size = write_head - inter_buf;
+    read_head = inter_buf; // WARNING: This is pretty confusing
+
+    // TEMPORARY: Null terminate and print
+    {
+        printf("Out size = %lu\n", *out_size);
+        *write_head = '\0';
+        printf("Contents = %s\n", inter_buf);
+
+    }
+
+    uint8_t *ret = malloc(*out_size);
+    write_head = ret;
+
+
+    free(storage_stack);
+    free(inter_buf);
+    return ret;
+
+
 }
 

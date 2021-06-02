@@ -10,7 +10,7 @@
 #include "linalg.h"
 #include "stdint.h"
 
-typedef struct {
+typedef struct phys_obj_t {
     // should be a pointer to the smat4 from draw_instance_t.
     // draw_instance_t needs it because it has to be sent to the GPU
     // 2D translation, rotation, and scaling data can be easily retrieved:
@@ -19,7 +19,6 @@ typedef struct {
     smat4 *trans;
 
     vec2 vel;
-    vec2 accl;
 
     FLOAT_T mass;
 } phys_obj_t;

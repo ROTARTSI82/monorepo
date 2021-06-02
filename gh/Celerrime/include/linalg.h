@@ -36,20 +36,20 @@
 
 // something something strict aliasing
 
-typedef struct {
+typedef struct vec2 {
     FLOAT_T x;
     FLOAT_T y;
 } vec2;
 
 
-typedef struct {
+typedef struct vec3 {
     FLOAT_T x;
     FLOAT_T y;
     FLOAT_T z;
 } vec3;
 
 
-typedef struct {
+typedef struct vec4 {
     FLOAT_T x;
     FLOAT_T y;
     FLOAT_T z;
@@ -59,7 +59,7 @@ typedef struct {
 extern const FLOAT_T sm4_identity[4][4];
 
 
-typedef struct {
+typedef struct smat4 {
     vec4 c0; // c stands for column
     vec4 c1;
     vec4 c2;

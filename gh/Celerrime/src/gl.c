@@ -64,8 +64,8 @@ void compile_and_check_shader(GLuint shader) {
     char infoLog[4096];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     glGetShaderInfoLog(shader, 4096, NULL, infoLog);
-    printf("Shader %i: %s\n", shader, infoLog);
     if (!success) {
+        printf("Error in shader %i: %s\n", shader, infoLog);
         exit(1);
     }
 }

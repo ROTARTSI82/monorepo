@@ -25,7 +25,7 @@
 uint64_t reverse_bits(uint64_t in);
 uint64_t reverse_bytes(uint64_t in);
 
-typedef struct {
+typedef struct app_t {
     GLFWwindow *win;
     GLuint quad_vbo;
 
@@ -69,5 +69,37 @@ uint16_t rand_nexts(uint16_t x);
  * Bits are pretty evenly distributed.
  */
 uint32_t rand_nexti(uint32_t rng);
+
+enum compression_chunk_type_t {
+    e_node = 'n', // node of huffman tree
+    e_leaf = 'l', // leaf node in huffman tree. value is next byte
+    e_begin_encoding = 'B',
+
+    e_data = 'd', // 4 byte length. 4gb max. do we even need chunks bigger than 65kb?
+    e_datas = 's', //  2 byte length 65kb max
+    e_datab = 'b', // 1 byte length 256bytes max
+    e_ptr = 'p', // pointer to a e_data or e_datab chunk to insert here.
+    e_rep = 'R' // Repeat the last e_data, e_datab, or e_ptr chunk x times
+};
+
+typedef struct cmp_head_t {
+    char magic[4]; // "RCMP"
+    uint32_t version; // big-endian, most sign 16 bits = compat version, least sign 16 bits = micro version.
+} cmp_head_t;
+
+// this is so fucking jank
+typedef struct huffman_node_t huffman_node_t;
+struct huffman_node_t {
+    huffman_node_t *c0; // route if 0
+    huffman_node_t *c1; // route if 1
+
+    uint8_t value;
+};
+
+void *decompress(void *src, size_t *out_size);
+
+// https://stackoverflow.com/questions/4239993/determining-endianness-at-compile-time/4240029
+uint8_t is_little_endian();
+
 
 #endif //GAMETEST_COMMON_H

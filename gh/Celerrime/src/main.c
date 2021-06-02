@@ -8,35 +8,12 @@ int main() {
 
 //    uint8_t seed = 0xd4;
 
-    for (int k = 0; k < 256; k++) {
-        uint64_t orig = rand();
-        uint64_t seed = orig;
-
-        uint64_t bitcounts[64];
-        memset(bitcounts, 0, 512);
-
-        uint8_t run = 1;
-        uint64_t it = 0;
-        while (run) {
-            it++;
-            seed = rand_nextl(seed);
-            run = (seed != orig) && (it < 65536);
-
-            uint64_t cpy = seed;
-            for (int j = 0; j < 64; j++) {
-                bitcounts[j] += cpy & 1;
-                cpy >>= 1;
-            }
-        }
-
-        printf("it = %lu, orig = %u\n", it, orig);
-
-        for (int i = 0; i < 64; i++) {
-            printf("bit%i = %lu\n", i, bitcounts[i]);
-        }
-
-        printf("\n\n==============================");
-    }
+    long size;
+    void *cont = full_read_file("./res/test.rcmp", &size);
+    size_t s;
+    void *out = decompress(cont, &s);
+    free(out);
+    free(cont);
 
     app_t app;
     start(&app);

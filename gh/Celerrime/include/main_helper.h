@@ -107,14 +107,12 @@ extern inline void start(app_t *app) {
 
     long frag_size, vert_size;
     GLchar *frag = full_read_file("./res/shader/default.frag", &frag_size);
-    frag[frag_size] = '\0';
-
-    printf("Fragment Shader:\n%s\n", frag);
+//    frag[frag_size] = '\0';
+//    printf("Fragment Shader:\n%s\n", frag);
 
     GLchar *vert = full_read_file("./res/shader/default.vert", &vert_size);
-    vert[vert_size] = '\0';
-
-    printf("Vertex Shader:\n%s\n", vert);
+//    vert[vert_size] = '\0';
+//    printf("Vertex Shader:\n%s\n", vert);
 
     GLuint vert_sp = glCreateShader(GL_VERTEX_SHADER);
     GLuint frag_sp = glCreateShader(GL_FRAGMENT_SHADER);

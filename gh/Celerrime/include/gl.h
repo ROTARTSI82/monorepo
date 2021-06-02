@@ -12,13 +12,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-typedef struct {
+typedef struct draw_instance_t {
     smat4 transform;
     vec2 sampling_bottom_left;
     vec2 sampling_extent;
 } draw_instance_t;
 
-typedef struct {
+typedef struct render_ctx_t {
     GLuint framebuffer;
     // we aren't using depth or stencil so no render buffer object
 
