@@ -11,7 +11,12 @@ int main() {
     long size;
     void *cont = full_read_file("./res/test.rcmp", &size);
     size_t s;
-    void *out = decompress(cont, &s);
+    uint8_t *out = decompress(cont, &s);
+
+    printf("out = %s\n", out);
+//    out[s] = '\0';
+//    printf("OUT = %s\n", out);
+
     free(out);
     free(cont);
 

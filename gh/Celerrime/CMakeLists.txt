@@ -3,7 +3,7 @@ project(GameTest C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c)
+add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c src/util.c)
 target_compile_options(GameTest PRIVATE -O3 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
 target_link_options(GameTest PRIVATE -O3 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
 

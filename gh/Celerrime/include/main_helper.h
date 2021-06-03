@@ -7,7 +7,7 @@
 #ifndef GAMETEST_MAIN_HELPER_C
 #define GAMETEST_MAIN_HELPER_C
 
-#include "common.h"
+#include "util.h"
 #include "config.h"
 #include <memory.h>
 
