@@ -6,70 +6,87 @@
 #include "phys.h"
 #include "math.h"
 
+#include "common.h"
+
 
 // Collision detection using the hyperplane separation theorem. Probably overkill for simple rects but this was
 // the first method i found.
 // https://en.wikipedia.org/wiki/Hyperplane_separation_theorem
-uint8_t collides_with(phys_obj_t *a, phys_obj_t *b) {
-    vec2 *possible_axes[4];
+// dyn should be the object that we want to push out of stat
+uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) {
+    vec2 possible_axes[4];
 
-    // should be safe from strict aliasing because we only access it through possible_axes and never a->trans
-    possible_axes[0] = (vec2 *) &a->trans->c0; // 0 = a's semi-major x axis
-    possible_axes[1] = (vec2 *) &a->trans->c1; // 1 = a's semi-major y axis
-    possible_axes[2] = (vec2 *) &b->trans->c0; // 2 = b's semi-major x axis
-    possible_axes[3] = (vec2 *) &b->trans->c1; // 3 = b's semi-major y axis
+    // should be safe from strict aliasing because we only access it through possible_axes and never dyn->trans
+    possible_axes[0] = *(vec2 *) &dyn->trans->c0; // 0 = dyn's semi-major x axis
+    possible_axes[1] = *(vec2 *) &dyn->trans->c1; // 1 = dyn's semi-major y axis
+    possible_axes[2] = *(vec2 *) &stat->trans->c0; // 2 = stat's semi-major x axis
+    possible_axes[3] = *(vec2 *) &stat->trans->c1; // 3 = stat's semi-major y axis
 
-    vec2 vertices[8]; // [0, 3] = verts of a, [4, 7] = verts of b
+
+    vec2 vertices[8]; // [0, 3] = verts of dyn, [4, 7] = verts of stat
     {  // this can probably be optimized a ton
-        vec2 *a_center = (vec2 *) &a->trans->c3;
-        vec2 *b_center = (vec2 *) &b->trans->c3;
+        vec2 *d_center = (vec2 *) &dyn->trans->c3;
+        vec2 *s_center = (vec2 *) &stat->trans->c3;
 
-        vertices[0] = v2_add(a_center, possible_axes[0]);
-        v2_add_eq(&vertices[0], possible_axes[1]);
+        vertices[0] = v2_add(d_center, &possible_axes[0]);
+        v2_add_eq(&vertices[0], &possible_axes[1]);
 
-        vertices[1] = v2_add(a_center, possible_axes[0]);
-        v2_sub_eq(&vertices[1], possible_axes[1]);
+        vertices[1] = v2_add(d_center, &possible_axes[0]);
+        v2_sub_eq(&vertices[1], &possible_axes[1]);
 
-        vertices[2] = v2_sub(a_center, possible_axes[0]);
-        v2_add_eq(&vertices[2], possible_axes[1]);
+        vertices[2] = v2_sub(d_center, &possible_axes[0]);
+        v2_add_eq(&vertices[2], &possible_axes[1]);
 
-        vertices[3] = v2_sub(a_center, possible_axes[0]);
-        v2_sub_eq(&vertices[3], possible_axes[1]);
+        vertices[3] = v2_sub(d_center, &possible_axes[0]);
+        v2_sub_eq(&vertices[3], &possible_axes[1]);
 
 
-        vertices[4] = v2_add(b_center, possible_axes[2]);
-        v2_add_eq(&vertices[4], possible_axes[3]);
+        vertices[4] = v2_add(s_center, &possible_axes[2]);
+        v2_add_eq(&vertices[4], &possible_axes[3]);
 
-        vertices[5] = v2_add(b_center, possible_axes[2]);
-        v2_sub_eq(&vertices[5], possible_axes[3]);
+        vertices[5] = v2_add(s_center, &possible_axes[2]);
+        v2_sub_eq(&vertices[5], &possible_axes[3]);
 
-        vertices[6] = v2_sub(b_center, possible_axes[2]);
-        v2_add_eq(&vertices[6], possible_axes[3]);
+        vertices[6] = v2_sub(s_center, &possible_axes[2]);
+        v2_add_eq(&vertices[6], &possible_axes[3]);
 
-        vertices[7] = v2_sub(b_center, possible_axes[2]);
-        v2_sub_eq(&vertices[7], possible_axes[3]);
+        vertices[7] = v2_sub(s_center, &possible_axes[2]);
+        v2_sub_eq(&vertices[7], &possible_axes[3]);
     }
+
+    // now that vertices are calculated, we want the unit vector so that
+    // the dot product is equal to the scalar projection
+    v2_mults_eq(&possible_axes[0], 1.0f / v2_magnitude(&possible_axes[0]));
+    v2_mults_eq(&possible_axes[1], 1.0f / v2_magnitude(&possible_axes[1]));
+    v2_mults_eq(&possible_axes[2], 1.0f / v2_magnitude(&possible_axes[2]));
+    v2_mults_eq(&possible_axes[3], 1.0f / v2_magnitude(&possible_axes[3]));
 
 
     // THIS IS NOT OPTIMISED AT ALL
     for (int i = 0; i < 4; i++) {
-        FLOAT_T a_min = 999, a_max = -999, b_min = 999, b_max = -999;
-        for (int j = 0; j < 4; j++) { // verts of a
-            FLOAT_T v = v2_dot(possible_axes[i], &vertices[j]);
+        FLOAT_T d_min = 999, d_max = -999, s_min = 999, s_max = -999;
+        for (int j = 0; j < 4; j++) { // verts of dyn
+            FLOAT_T v = v2_dot(&possible_axes[i], &vertices[j]);
 
-            a_max = fmaxf(a_max, v);
-            a_min = fminf(a_min, v);
+            d_max = fmaxf(d_max, v);
+            d_min = fminf(d_min, v);
         }
 
         for (int j = 4; j < 8; j++) {
-            FLOAT_T v = v2_dot(possible_axes[i], &vertices[j]);
+            FLOAT_T v = v2_dot(&possible_axes[i], &vertices[j]);
 
-            b_max = fmaxf(b_max, v);
-            b_min = fminf(b_min, v);
+            s_max = fmaxf(s_max, v);
+            s_min = fminf(s_min, v);
         }
 
-        if (b_min > a_max || b_max < a_min) { // only 2 cases where sections aren't overlapping
+        if (s_min > d_max || s_max < d_min) { // only 2 cases where sections aren't overlapping
             return 0;
+        }
+
+        if (i > 1) { // static axes
+            out_info->axes[i - 2].pos_push = s_max - d_min;
+            out_info->axes[i - 2].neg_push = s_min - d_max;
+            out_info->axes[i - 2].axis = possible_axes[i]; // this will store the unit vector
         }
     }
 
@@ -78,11 +95,68 @@ uint8_t collides_with(phys_obj_t *a, phys_obj_t *b) {
 
 void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_static) {
     for (int i = 0; i < num_static; i++) {
-        if (!collides_with(dynamic, static_objs + i)) {
+
+        push_info_t push_info;
+        if (!collides_with(dynamic, static_objs + i, &push_info)) {
             continue; // no collision to handle
         }
 
-        // TODO: implement
+        vec2 delta = v2_sub((vec2 *) &dynamic->trans->c3, (vec2 *) &static_objs[i].trans->c3);
+        FLOAT_T target_theta = atan2f(delta.y, delta.x);
+        if (target_theta < 0) {target_theta += PI * 2; }
+
+        vec2 v_1_1 = v2_add((vec2 *) &static_objs[i].trans->c0, (vec2 *) &static_objs[i].trans->c1); // 1, 1
+        vec2 v_n1_1 = v2_sub((vec2 *) &static_objs[i].trans->c1, (vec2 *) &static_objs[i].trans->c0); // -1, 1
+
+        // TODO: Optimize this fucking nightmare
+        FLOAT_T theta_1_1 = atan2f(v_1_1.y, v_1_1.x);
+        FLOAT_T theta_n1_1 = atan2f(v_n1_1.y, v_n1_1.x);
+        if (theta_1_1 < 0) {theta_1_1 += PI * 2;}
+        if (theta_n1_1 < 0) {theta_n1_1 += PI * 2;}
+
+        FLOAT_T theta_n1_n1 = PI + theta_1_1;
+        FLOAT_T theta_1_n1 = PI + theta_n1_1;
+        if (theta_n1_n1 > PI * 2) {theta_n1_n1 -= PI * 2;}
+        if (theta_1_n1 > PI * 2) {theta_1_n1 -= PI * 2;}
+
+        PRINT("(1,1) = %f, (-1,1) = %f, (-1,-1) = %f, (1,-1_ = %f\n", theta_1_1, theta_n1_1, theta_n1_n1, theta_1_n1);
+
+        vec2 push;
+        if ((target_theta > theta_1_1 && target_theta < theta_n1_1) || (target_theta > theta_n1_n1 && target_theta < theta_1_n1)) { // y axis
+            FLOAT_T y_push = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? 
+                        push_info.axes[1].neg_push : push_info.axes[1].pos_push;
+            push = v2_mults(&push_info.axes[1].axis, y_push);
+            v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
+        } else { // x axis
+            FLOAT_T x_push = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? 
+                        push_info.axes[0].neg_push : push_info.axes[0].pos_push;
+            push = v2_mults(&push_info.axes[0].axis, x_push);
+            v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
+        }
+
+        // normalize push vector for velocity change calculations
+        v2_mults_eq(&push, 1.0f / v2_magnitude(&push));
+
+        // ignore this possibility, ig. More efficient and possibly opens to door for some exploits
+
+        // the velocity vector is not within +/- 90deg of the normal and thus needs to be clamped.
+        // if (v2_dot(&push, &dynamic->vel) < 0) {}
+
+        // Rotate push by 90deg counterclockwise
+        FLOAT_T tmp_x = push.x;
+        push.x = -push.y;
+        push.y = tmp_x;
+
+        vec2 new_vel = v2_mults(&push, v2_dot(&push, &dynamic->vel));
+        vec2 delta_vel = v2_sub(&new_vel, &dynamic->vel); // this should point in the same direction as the normal.
+
+        dynamic->collide_callback(static_objs + i, &delta_vel, 0); // TODO: Null checks?
+        static_objs[i].collide_callback(dynamic, &delta_vel, 1);
+        // } else {
+        //     PRINT("This should never happen lol");
+        //     dynamic->collide_callback(static_objs + i, 0, 0);
+        //     static_objs[i].collide_callback(dynamic, 0, 1);
+        // }
     }
 }
 

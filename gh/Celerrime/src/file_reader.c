@@ -62,6 +62,7 @@ typedef struct dcmp_chunk_t {
 void *decompress(void *src, size_t *out_size) {
     // TODO: I should probably just scrap this whole routine and go with representing the tree as an array
     // TODO: I never check if I read past the end at any time. i also need to check if bit lengths lie to me
+    // TODO: It is never checked if read_head or write_head overrun their buffers
 
     /*
      * typedef struct node_t {
@@ -145,11 +146,11 @@ void *decompress(void *src, size_t *out_size) {
                     break;
                 case e_node:
                     // pop two values from the stack and enter them into permanent storage
+                    DCMP_ABORT(storage_stack_ptr + 2 > storage_stack + STORAGE_STACK_SIZE, "Storage stack overflowed!");
+                    DCMP_ABORT(stack_ptr - 2 < work_stack, "Work stack underflowed!");
                     *(storage0) = *(--stack_ptr);
-                    *(storage1) = *(--stack_ptr); // this can write out of bounds but eh
+                    *(storage1) = *(--stack_ptr);
                     storage_stack_ptr += 2;
-                    DCMP_ABORT(storage_stack_ptr > storage_stack + STORAGE_STACK_SIZE, "Storage stack overflowed!");
-                    DCMP_ABORT(stack_ptr < work_stack, "Work stack underflowed!");
 
                     // Order is reversed when we transfer it into the instruction stack and reversed
                     // again when we transfer it to the work stack, so we don't reverse it here.
@@ -193,7 +194,9 @@ void *decompress(void *src, size_t *out_size) {
         }
 
         // if this is true, we have encountered a leaf.
-        if (!(traverse_head->c0 && traverse_head->c1)) { // DeMorgan's law on (!c0) || (!c1)
+        DCMP_ABORT((traverse_head->c0 != 0) ^ (traverse_head->c1 != 0), "Tree node had only 1 child. Tree nodes must have 2 children or none at all.");
+
+        if (!traverse_head->c0) {
             *(write_head++) = traverse_head->value;
             traverse_head = &root;
         }
@@ -219,7 +222,6 @@ void *decompress(void *src, size_t *out_size) {
     while (read_head < end_of_inter) {
         uint32_t size;
         uint16_t reps;
-        dcmp_chunk_t *ins;
 
         switch (*(read_head++)) {
             case e_data:
@@ -282,7 +284,7 @@ void *decompress(void *src, size_t *out_size) {
 
     return ret;
 
-    abort:
+abort:
     free(instructions);
     free(work_stack);
 

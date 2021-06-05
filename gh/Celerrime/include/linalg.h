@@ -93,13 +93,13 @@ FLOAT_T v2_dot(vec2 *a, vec2 *b);
 
 vec2 v2_mults(vec2 *a, FLOAT_T scalar); // vec2 multiply scalar
 
-//FLOAT_T v2_magnitude(vec2 *v);
+FLOAT_T v2_magnitude(vec2 *v);
 
 vec2 v2_sub(vec2 *a, vec2 *b);
 
 void v2_sub_eq(vec2 *lhs, vec2 *rhs);
 
-//void v2_mults_eq(vec2 *lhs, FLOAT_T scalar);
+void v2_mults_eq(vec2 *lhs, FLOAT_T scalar);
 
 void v2_add_eq(vec2 *lhs, vec2 *rhs);
 

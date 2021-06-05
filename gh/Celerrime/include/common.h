@@ -17,6 +17,8 @@
 // EXit IF
 #define EXIF(exp, msg) if (exp) { printf(msg); exit(1); }
 
+#define PRINT(...) printf(__VA_ARGS__)
+
 typedef struct app_t {
     GLFWwindow *win;
     GLuint quad_vbo;
