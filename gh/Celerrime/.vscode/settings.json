@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "math.h": "c",
+        "phys.h": "c",
+        "stdint.h": "c",
+        "linalg.h": "c",
+        "util.h": "c",
+        "config.h": "c",
+        "*.tcc": "cpp",
+        "random": "cpp",
+        "time.h": "c",
+        "main_helper.h": "c"
+    }
+}

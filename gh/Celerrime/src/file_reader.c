@@ -11,6 +11,7 @@
 
 #include <arpa/inet.h>
 #include "util.h"
+#include "config.h"
 
 #include <errno.h>
 
@@ -24,6 +25,11 @@ void *full_read_file(const char *filename, long *size) {
     fseek(fp, 0L, SEEK_END);
     *size = ftell(fp);
     rewind(fp);
+
+    if (*size > MAX_FILE_SIZE) {
+        PRINT("Failed to open %s: File was over %d bytes!\n", filename, MAX_FILE_SIZE);
+        return NULL;
+    }
 
     void *ret = malloc((*size));
     fread(ret, 1, (*size), fp);

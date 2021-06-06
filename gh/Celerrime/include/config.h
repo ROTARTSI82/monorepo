@@ -20,4 +20,9 @@
 
 #define MAX_BLITS 16
 
+// 16 mb
+#define MAX_IMG_SIZE 16777216
+#define MAX_FILE_SIZE 16777216
+
+
 #endif //GAMETEST_CONFIG_H

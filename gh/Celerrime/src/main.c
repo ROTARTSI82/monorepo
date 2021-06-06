@@ -16,6 +16,7 @@ int main() {
     float scroll = 0;
 
     while (!glfwWindowShouldClose(app.win)) {
+        flush_gl_errors();
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -46,5 +47,6 @@ int main() {
     }
 
     stop(&app);
+    flush_gl_errors();
     return 0;
 }

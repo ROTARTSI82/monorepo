@@ -21,6 +21,19 @@ void on_win_resize(GLFWwindow* window, int width, int height) {
 
 }
 
+void GLAPIENTRY gl_error_MessageCallback( GLenum source,
+                 GLenum type,
+                 GLuint id,
+                 GLenum severity,
+                 GLsizei length,
+                 const GLchar* message,
+                 const void* userParam )
+{
+  fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            type, severity, message );
+}
+
 // TODO: Why do I have to mark these functions extern to get them to link?
 extern inline void start(app_t *app) {
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
@@ -38,6 +51,9 @@ extern inline void start(app_t *app) {
     glfwSetFramebufferSizeCallback(app->win, on_win_resize);
 
     EXIF(glewInit() != GLEW_OK, "GLEW initialization failed")
+
+    glEnable              ( GL_DEBUG_OUTPUT );
+    glDebugMessageCallback( gl_error_MessageCallback, 0 );
 
     printf("OpenGL initialized: Renderer %s version %s\n", glGetString(GL_RENDERER), glGetString(GL_VERSION));
 
@@ -87,20 +103,31 @@ extern inline void start(app_t *app) {
         offset.y = 0;
         offset.z = 0;
 
-        buf[1].transform = sm4_transform(&offset, &scale1, 0);
+        buf[1].transform = sm2_transform(&scale1, 0);
+        printf("buf1 transform");
+        printsm2(&buf[1].transform);
+
+        buf[1].translate = offset;
+        buf[1].alpha_mult = 0.5;
 
         offset.y = 0;
         buf[1].sampling_bottom_left = *(vec2*)&offset;
         scale1.y = 0.5;
+        scale1.x *= 0.5;
         buf[1].sampling_extent = scale1;
 
-        buf[0].transform = sm4_transform(&trans1, &scale2, PI);
+        buf[0].transform = sm2_transform(&scale2, PI);
+        printf("buf0 transform");
+        printsm2(&buf[0].transform);
+
+        buf[0].translate = trans1;
+        buf[0].alpha_mult = 1;
 
 
         offset.y = 0.5;
         buf[0].sampling_bottom_left = *(vec2*)&offset;
         scale2.y = 0.5;
-        scale2.x *= 0.5;
+        scale2.x *= 0.25;
         buf[0].sampling_extent = scale2;
 
         glFlush();

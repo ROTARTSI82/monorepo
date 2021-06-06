@@ -56,36 +56,49 @@ typedef struct vec4 {
     FLOAT_T w; // should this be first?
 } vec4;
 
-extern const FLOAT_T sm4_identity[4][4];
-
+typedef union col4_t {
+    vec4 v4;
+    vec2 v2;
+} col4_t;
 
 typedef struct smat4 {
-    vec4 c0; // c stands for column
-    vec4 c1;
-    vec4 c2;
-    vec4 c3;
+    col4_t c0; // c stands for column
+    col4_t c1;
+    col4_t c2;
+    col4_t c3;
 } smat4; // Square MATrix 4x4
 
 
+typedef struct smat2 {
+    vec2 c0;
+    vec2 c1;
+} smat2;
+
+extern const FLOAT_T sm4_identity[4][4];
 
 void v4_add_eq(vec4 *lhs, vec4 *rhs);
 
 void v4_mults_eq(vec4 *lhs, FLOAT_T scalar);
 
 vec4 v4_multm(vec4 *a, smat4 *rhs); // vec2 multiply matrix
+vec2 v2_multm(vec2 *a, smat2 *rhs);
 
 // todo: why mark extern
 static inline void v4_multm_eq(vec4 *lhs, smat4 *rhs) {
     *lhs = v4_multm(lhs, rhs);
 }
 
+static inline void v2_multm_eq(vec2 *lhs, smat2 *rhs) {
+    *lhs = v2_multm(lhs, rhs);
+}
 
 
 // transform lhs by rhs
 smat4 sm4_mult(smat4 *lhs, smat4 *rhs);
+smat2 sm2_mult(smat2 *lhs, smat2 *rhs);
 
 void sm4_mult_eq(smat4 *lhs, smat4 *rhs);
-
+void sm2_mult_eq(smat2 *lhs, smat2 *rhs);
 
 vec2 v2_add(vec2 *a, vec2 *b);
 
@@ -105,11 +118,16 @@ void v2_add_eq(vec2 *lhs, vec2 *rhs);
 
 
 smat4 sm4_translate(vec3 *offset);
+
 smat4 sm4_rotate(FLOAT_T theta); // counterclockwise rotation in radians
+smat2 sm2_rotate(FLOAT_T theta);
+
 smat4 sm4_scale(vec2 *scale);
+smat2 sm2_scale(vec2 *scale);
 
 // shortcut for applying all transformations. Applied in the order of: Scaling/Rotation, then Translation.
 smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta);
+smat2 sm2_transform(vec2 *scale, FLOAT_T theta);
 
 //FLOAT_T radians(FLOAT_T deg);
 //FLOAT_T degrees(FLOAT_T rad);
@@ -118,6 +136,7 @@ smat4 sm4_transform(vec3 *translation, vec2 *scale, FLOAT_T theta);
 // these do not print newlines.
 //void printv3(vec3 *vec);
 //void printsm4(smat4 *mat);
+void printsm2(smat2 *mat);
 //void printv2(vec2 *vec);
 
 // from GLM https://github.com/g-truc/glm/blob/0.9.5/glm/gtc/matrix_transform.inl

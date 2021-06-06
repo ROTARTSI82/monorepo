@@ -17,16 +17,16 @@ uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) 
     vec2 possible_axes[4];
 
     // should be safe from strict aliasing because we only access it through possible_axes and never dyn->trans
-    possible_axes[0] = *(vec2 *) &dyn->trans->c0; // 0 = dyn's semi-major x axis
-    possible_axes[1] = *(vec2 *) &dyn->trans->c1; // 1 = dyn's semi-major y axis
-    possible_axes[2] = *(vec2 *) &stat->trans->c0; // 2 = stat's semi-major x axis
-    possible_axes[3] = *(vec2 *) &stat->trans->c1; // 3 = stat's semi-major y axis
+    possible_axes[0] = dyn->trans->c0.v2; // 0 = dyn's semi-major x axis
+    possible_axes[1] = dyn->trans->c1.v2; // 1 = dyn's semi-major y axis
+    possible_axes[2] = stat->trans->c0.v2; // 2 = stat's semi-major x axis
+    possible_axes[3] = stat->trans->c1.v2; // 3 = stat's semi-major y axis
 
 
     vec2 vertices[8]; // [0, 3] = verts of dyn, [4, 7] = verts of stat
     {  // this can probably be optimized a ton
-        vec2 *d_center = (vec2 *) &dyn->trans->c3;
-        vec2 *s_center = (vec2 *) &stat->trans->c3;
+        vec2 *d_center = &dyn->trans->c3.v2;
+        vec2 *s_center = &stat->trans->c3.v2;
 
         vertices[0] = v2_add(d_center, &possible_axes[0]);
         v2_add_eq(&vertices[0], &possible_axes[1]);
@@ -100,12 +100,12 @@ void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_sta
             continue; // no collision to handle
         }
 
-        vec2 delta = v2_sub((vec2 *) &dynamic->trans->c3, (vec2 *) &static_objs[i].trans->c3);
+        vec2 delta = v2_sub(&dynamic->trans->c3.v2, &static_objs[i].trans->c3.v2);
         FLOAT_T target_theta = atan2f(delta.y, delta.x);
         if (target_theta < 0) {target_theta += PI * 2; }
 
-        vec2 v_1_1 = v2_add((vec2 *) &static_objs[i].trans->c0, (vec2 *) &static_objs[i].trans->c1); // 1, 1
-        vec2 v_n1_1 = v2_sub((vec2 *) &static_objs[i].trans->c1, (vec2 *) &static_objs[i].trans->c0); // -1, 1
+        vec2 v_1_1 = v2_add(&static_objs[i].trans->c0.v2, &static_objs[i].trans->c1.v2); // 1, 1
+        vec2 v_n1_1 = v2_sub(&static_objs[i].trans->c1.v2, &static_objs[i].trans->c0.v2); // -1, 1
 
         // TODO: Optimize this fucking nightmare
         FLOAT_T theta_1_1 = atan2f(v_1_1.y, v_1_1.x);
@@ -124,11 +124,11 @@ void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_sta
         if ((target_theta > theta_1_1 && target_theta < theta_n1_1) || (target_theta > theta_n1_n1 && target_theta < theta_1_n1)) { // y axis
             FLOAT_T y_push = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? push_info.axes[1].neg_push : push_info.axes[1].pos_push;
             push = v2_mults(&push_info.axes[1].axis, y_push);
-            v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
+            v2_add_eq(&dynamic->trans->c3.v2, &push);
         } else { // x axis
             FLOAT_T x_push = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? push_info.axes[0].neg_push : push_info.axes[0].pos_push;
             push = v2_mults(&push_info.axes[0].axis, x_push);
-            v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
+            v2_add_eq(&dynamic->trans->c3.v2, &push);
         }
 
         // normalize push vector for velocity change calculations

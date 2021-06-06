@@ -13,7 +13,10 @@
 #include <GLFW/glfw3.h>
 
 typedef struct draw_instance_t {
-    smat4 transform;
+    smat2 transform;
+    vec3 translate;
+    float alpha_mult;
+
     vec2 sampling_bottom_left;
     vec2 sampling_extent;
 } draw_instance_t;
@@ -39,5 +42,9 @@ void render(render_ctx_t *ctx);
 void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
 
 void new_tex_from_file(const char *filename, GLuint *tex);
+
+GLenum proc_gl_error();
+
+void flush_gl_errors();
 
 #endif //GAMETEST_GL_H
