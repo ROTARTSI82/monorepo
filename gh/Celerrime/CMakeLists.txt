@@ -4,8 +4,8 @@ project(GameTest C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c src/util.c)
-target_compile_options(GameTest PRIVATE -O3 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
-target_link_options(GameTest PRIVATE -O3 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
+target_compile_options(GameTest PRIVATE -O0 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
+target_link_options(GameTest PRIVATE -O0 -g3 -Wall -Wextra -Wpedantic -fsanitize=address -fno-omit-frame-pointer)
 
 find_package(GLEW REQUIRED)
 find_package(OpenAL REQUIRED)
@@ -27,8 +27,9 @@ find_package(OpenGL REQUIRED)
 #endif()
 
 find_package(glfw3 REQUIRED)
-target_link_libraries(GameTest glfw)
+find_package(ZLIB REQUIRED)
+target_link_libraries(GameTest glfw ZLIB::ZLIB)
 
 
 target_link_libraries(GameTest OpenGL::GL GLEW::GLEW ${OPENAL_LIBRARY} m) # m being libmath
-target_include_directories(GameTest PRIVATE ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} include src ${OPENAL_INCLUDE_DIR})
+target_include_directories(GameTest PRIVATE ${OPENGL_INCLUDE_DIR} include src ${OPENAL_INCLUDE_DIR})

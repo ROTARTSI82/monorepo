@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
+// https://github.com/madler/zlib/blob/cacf7f1d4e3d44d871b605da3b647f07d718623f/zlib.h#L1242
 
 void *full_read_file(const char *filename, long *size);
 
@@ -23,7 +24,10 @@ enum compression_chunk_type_t {
     e_data = 'd', // 4 byte length. 4gb max. do we even need chunks bigger than 65kb?
     e_datas = 's', //  2 byte length 65kb max
     e_datab = 'b', // 1 byte length 256bytes max
+
     e_ptr = 'p', // pointer to decoded data. 32-bit index, 32-bit size. this wastes a lot of space lol
+
+    e_dist_len_enc = 'D', // 32-bit distance, 32-bit length
 
     e_rep_large = 'R', // Repeat the last referenced region. 32-bit number of repetitions
     e_rep_med = 'm', // 16-bit number of repetitions
@@ -35,7 +39,6 @@ typedef struct cmp_head_t {
     uint32_t version; // big-endian, most sign 16 bits = compat version, least sign 16 bits = micro version.
 } cmp_head_t;
 
-// this is so fucking jank
 typedef struct huffman_node_t huffman_node_t;
 struct huffman_node_t {
     huffman_node_t *c0; // route if 0

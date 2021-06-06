@@ -11,7 +11,7 @@
 #include "config.h"
 #include <memory.h>
 
-static void on_win_resize(GLFWwindow* window, int width, int height) {
+void on_win_resize(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 
 #if GUPDATE_PROJECTION
@@ -24,6 +24,7 @@ static void on_win_resize(GLFWwindow* window, int width, int height) {
 // TODO: Why do I have to mark these functions extern to get them to link?
 extern inline void start(app_t *app) {
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
+    app->master_ctx.fbo_tex = 0;
     app->projection = perspective(GFOV, (float) GWIN_WIDTH / (float) GWIN_HEIGHT, ZNEAR, ZFAR);
     app->view_mat = *((smat4 *) sm4_identity); // should we just use a memcpy?
     glfwInit();
@@ -79,7 +80,7 @@ extern inline void start(app_t *app) {
 
         vec3 trans1, offset;
         trans1.x = 0;
-        trans1.y = 2.3963f;
+        trans1.y = -2.3963f;
         trans1.z = -42.2149f;
 
         offset.x = 0;
@@ -88,16 +89,18 @@ extern inline void start(app_t *app) {
 
         buf[1].transform = sm4_transform(&offset, &scale1, 0);
 
-
+        offset.y = 0;
         buf[1].sampling_bottom_left = *(vec2*)&offset;
-        scale1.y = 1;
+        scale1.y = 0.5;
         buf[1].sampling_extent = scale1;
 
         buf[0].transform = sm4_transform(&trans1, &scale2, PI);
 
 
+        offset.y = 0.5;
         buf[0].sampling_bottom_left = *(vec2*)&offset;
-        scale2.y = 1;
+        scale2.y = 0.5;
+        scale2.x *= 0.5;
         buf[0].sampling_extent = scale2;
 
         glFlush();
@@ -107,12 +110,10 @@ extern inline void start(app_t *app) {
 
     long frag_size, vert_size;
     GLchar *frag = full_read_file("./res/shader/default.frag", &frag_size);
-//    frag[frag_size] = '\0';
-//    printf("Fragment Shader:\n%s\n", frag);
+    EXIF(frag == NULL, "Default fragment shader missing!");
 
     GLchar *vert = full_read_file("./res/shader/default.vert", &vert_size);
-//    vert[vert_size] = '\0';
-//    printf("Vertex Shader:\n%s\n", vert);
+    EXIF(vert == NULL, "Default vertex shader missing!");
 
     GLuint vert_sp = glCreateShader(GL_VERTEX_SHADER);
     GLuint frag_sp = glCreateShader(GL_FRAGMENT_SHADER);
@@ -141,25 +142,26 @@ extern inline void start(app_t *app) {
     app->su_tex_samp = glGetUniformLocation(app->default_shader, "tex");
 
     {
-        glGenTextures(1, &app->TMP_TEST_TEX);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, app->TMP_TEST_TEX);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//         glGenTextures(1, &app->TMP_TEST_TEX);
+//         glActiveTexture(GL_TEXTURE0);
+//         glBindTexture(GL_TEXTURE_2D, app->TMP_TEST_TEX);
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        unsigned char *texdat = malloc(40*40*4);
-        memset(texdat, 0x00, 20*40*4);
-        unsigned char v = 0;
-        for (unsigned char *i = texdat + 20*40*4; i < texdat + 40*40*4; i++) {
-            *i = rand_table[v++];
-        }
-//        memset(texdat, 0x88, 40*40*4);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 40, 40, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdat);
-        free(texdat);
+//         unsigned char *texdat = malloc(40*40*4);
+//         memset(texdat, 0x00, 20*40*4);
+//         unsigned char v = 0;
+//         for (unsigned char *i = texdat + 20*40*4; i < texdat + 40*40*4; i++) {
+//             *i = rand_table[v++];
+//         }
+// //        memset(texdat, 0x88, 40*40*4);
+//         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 40, 40, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdat);
+//         free(texdat);
 
-        glGenerateMipmap(GL_TEXTURE_2D);
+//         glGenerateMipmap(GL_TEXTURE_2D);
+        new_tex_from_file("./res/out.rim", &app->TMP_TEST_TEX);
     }
 }
 

@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "gl.h"
+#include "file_reader.h"
+#include "common.h"
+
+#include <arpa/inet.h>
+
+#include <zlib.h>
 
 void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -70,6 +76,79 @@ void compile_and_check_shader(GLuint shader) {
     }
 }
 
-void new_texture(GLuint *tex) {
+void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
+    glGenFramebuffers(1, &ctx->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
+
+    glGenTextures(1, &ctx->fbo_tex);
+    glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx->fbo_tex, 0);
+
+    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void new_tex_from_file(const char *filename, GLuint *tex) {
+    long s = 0;
+    uint8_t *raw = full_read_file(filename, &s);
+    if (raw == NULL) {
+        // message was already printed by full_read_file
+        goto missing_texture;
+    }
+
+    uint32_t width = 0, height = 0;
+    unsigned long dest_len = 0;
+    uint8_t *tex_dat = 0;
+
+    if (s > 10) {
+        width = ntohl(*(uint32_t *) raw);
+        height = ntohl(*(uint32_t *) (raw + 4));
+
+        dest_len = width * height * 4;
+        tex_dat = malloc(dest_len);
+        if (uncompress(tex_dat, &dest_len, raw + 8, s - 8) != Z_OK) {
+            PRINT("Uncompression of %s failed!\n", filename);
+
+            free(tex_dat);
+            goto missing_texture;
+        } else {
+            goto success;
+        }
+    } else {
+        PRINT("Data from %s is too short!\n", filename);
+        // fall through to missing_texture.
+    }
+
+missing_texture:
+    width = 2;
+    height = 2;
+    dest_len = 2 * 2 * 4;
+    tex_dat = malloc(dest_len);
+
+    *((uint32_t *) tex_dat) = htonl(0xff0000ff); // red
+    *(((uint32_t *) tex_dat) + 1) = htonl(0x00ff00ff); // green
+    *(((uint32_t *) tex_dat) + 2) = htonl(0x0000ffff); // blue
+    *(((uint32_t *) tex_dat) + 3) = htonl(0xffffffff); // white
+
+success:
+
+    glGenTextures(1, tex);
+    glBindTexture(GL_TEXTURE_2D, *tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_dat);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    free(tex_dat);
+    free(raw);
 
 }

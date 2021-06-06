@@ -22,7 +22,7 @@ typedef struct phys_obj_t {
     FLOAT_T mass;
 
     void *data;
-    void (*collide_callback)(phys_obj_t *other, vec2 *deltVel, uint8_t is_static);
+    void (*collide_callback)(struct phys_obj_t *other, vec2 *deltVel, uint8_t is_static);
 } phys_obj_t;
 
 typedef struct push_info_t {

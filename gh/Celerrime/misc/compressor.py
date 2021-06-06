@@ -37,12 +37,13 @@ be crucified.
 """
 
 import struct
+import argparse
 from textwrap import wrap
+from os import urandom
 from enum import Enum
 
 COMPAT_VERSION = 0
 MICRO_VERSION = 0
-
 
 """
 enum compression_chunk_type_t {
@@ -68,6 +69,8 @@ class CmpChunkType(Enum):
     eDatab = b"b"
 
     ePtr = b"p"
+
+    eDistLen = b"D"
 
     eRepLarge = b"R"
     eRepMed = b"m"
@@ -139,6 +142,14 @@ class Encoder:
         self.final_size += size
         self.region_size = size
 
+    def add_dist_len_enc(self, dist, length):
+        self.pre_huffman += CmpChunkType.eDistLen.value
+        self.pre_huffman += struct.pack("!I", dist)
+        self.pre_huffman += struct.pack("!I", length)
+
+        self.final_size += length
+        self.region_size = length
+
     def add_repl(self, rep_times):
         self.pre_huffman += CmpChunkType.eRepLarge.value
         self.pre_huffman += struct.pack("!I", rep_times)
@@ -156,6 +167,57 @@ class Encoder:
         self.pre_huffman += struct.pack("!B", rep_times)
 
         self.final_size += self.region_size * rep_times
+
+    def dynamic_add_data(self, dat):
+        if len(dat) < 256:
+            self.add_datab(dat)
+        elif len(dat) < 65536:
+            self.add_datas(dat)
+        else:
+            self.add_data(dat)
+
+    def add_autocompress(self, txt):
+        proc_head = 0
+        start = self.final_size
+
+        # test = []
+
+        data_block = b""
+        while proc_head < len(txt):
+            search_head = 0
+            longest_match = -1
+            longest_length = 0
+            while search_head < proc_head:
+                length = 0
+                while proc_head + length < len(txt):
+                    if txt[search_head + length] == txt[proc_head + length]:
+                        length += 1
+                    else:
+                        break
+
+                if length > longest_length:
+                    longest_length = length
+                    longest_match = search_head
+                search_head += 1
+
+            # this isn't optimal
+            if longest_length > 9:  # ptrs take 9 bytes so we only save space if the sequence pointed to is > 9 bytes
+                self.dynamic_add_data(data_block)
+
+                data_block = b""
+
+                # self.add_ptr(start + longest_match, longest_length)
+                dist = proc_head - longest_match
+                # print("Dist = %s, length = %s" % (dist, longest_length))
+                self.add_dist_len_enc(dist, longest_length)
+
+                proc_head += longest_length
+            else:
+                data_block += struct.pack("!B", txt[proc_head])
+                proc_head += 1
+
+        if data_block:
+            self.dynamic_add_data(data_block)
 
     def finalize(self):
         self.pre_huffman = struct.pack("!I", self.final_size) + self.pre_huffman
@@ -208,6 +270,14 @@ class Encoder:
                 i += "0"
             self.compressed += struct.pack("!B", int("0b" + i, 2))
 
+        print("=" * 16 + " [ REPORT ] " + "=" * 16)
+        print("Original Data:\t\t", self.final_size)
+        print("Lempel-Ziv style:\t", len(self.pre_huffman), "(%.3f%% less)" %
+              ((self.final_size - len(self.pre_huffman)) * 100 / self.final_size))
+
+        print("Huffman Coded:\t\t", len(self.compressed), "(%.3f%% less than plain, %.3f%% less than Lempel-Ziv)" %
+              ((self.final_size - len(self.compressed)) * 100 / self.final_size,
+               (len(self.pre_huffman) - len(self.compressed)) * 100 / len(self.pre_huffman)))
         return self.compressed
 
 
@@ -308,19 +378,9 @@ I do so like green eggs and ham!
 Thank you! Thank you, Sam-I-Am.\0
 """.strip()
 
-
 enc = Encoder()
-enc.add_datab(b"Repeat-Ptr test\n")
-enc.add_reps(3)
-enc.add_datab(b"break\n")
-enc.add_ptr(0, len(b"Repeat-Ptr test\n"))
-enc.add_reps(3)
-enc.add_datab(b"end\n")
-enc.add_datas(raw_data2)
+enc.add_autocompress(bytes(raw_data2, 'utf-8'))
 enc.finalize()
 
-with open("./res/test.rcmp", "wb") as fp:
-    fp.write(enc.compressed)
-
-# with open("./res/target_pre_huffman2.bin", 'wb') as fp:
-#     fp.write(enc.pre_huffman)
+# with open("./res/test.rcmp", 'wb') as fp:
+#     fp.write(enc.compressed)

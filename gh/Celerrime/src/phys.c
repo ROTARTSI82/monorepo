@@ -95,7 +95,6 @@ uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) 
 
 void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_static) {
     for (int i = 0; i < num_static; i++) {
-
         push_info_t push_info;
         if (!collides_with(dynamic, static_objs + i, &push_info)) {
             continue; // no collision to handle
@@ -119,17 +118,15 @@ void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_sta
         if (theta_n1_n1 > PI * 2) {theta_n1_n1 -= PI * 2;}
         if (theta_1_n1 > PI * 2) {theta_1_n1 -= PI * 2;}
 
-        PRINT("(1,1) = %f, (-1,1) = %f, (-1,-1) = %f, (1,-1_ = %f\n", theta_1_1, theta_n1_1, theta_n1_n1, theta_1_n1);
+        PRINT("(1,1) = %f, (-1,1) = %f, (-1,-1) = %f, (1,-1) = %f\n", theta_1_1, theta_n1_1, theta_n1_n1, theta_1_n1);
 
         vec2 push;
         if ((target_theta > theta_1_1 && target_theta < theta_n1_1) || (target_theta > theta_n1_n1 && target_theta < theta_1_n1)) { // y axis
-            FLOAT_T y_push = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? 
-                        push_info.axes[1].neg_push : push_info.axes[1].pos_push;
+            FLOAT_T y_push = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? push_info.axes[1].neg_push : push_info.axes[1].pos_push;
             push = v2_mults(&push_info.axes[1].axis, y_push);
             v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
         } else { // x axis
-            FLOAT_T x_push = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? 
-                        push_info.axes[0].neg_push : push_info.axes[0].pos_push;
+            FLOAT_T x_push = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? push_info.axes[0].neg_push : push_info.axes[0].pos_push;
             push = v2_mults(&push_info.axes[0].axis, x_push);
             v2_add_eq((vec2 *) &dynamic->trans->c3, &push);
         }
@@ -137,26 +134,17 @@ void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_sta
         // normalize push vector for velocity change calculations
         v2_mults_eq(&push, 1.0f / v2_magnitude(&push));
 
-        // ignore this possibility, ig. More efficient and possibly opens to door for some exploits
-
-        // the velocity vector is not within +/- 90deg of the normal and thus needs to be clamped.
-        // if (v2_dot(&push, &dynamic->vel) < 0) {}
-
+        // Don't check if (v2_dot(&push, &dynamic->vel) < 0); More efficient and possibly opens to door for some exploits
         // Rotate push by 90deg counterclockwise
         FLOAT_T tmp_x = push.x;
         push.x = -push.y;
         push.y = tmp_x;
 
-        vec2 new_vel = v2_mults(&push, v2_dot(&push, &dynamic->vel));
+        vec2 new_vel = v2_mults(&push, v2_dot(&push, &dynamic->vel)); // TODO: Implement "bounciness" causing it to slightly overshoot?
         vec2 delta_vel = v2_sub(&new_vel, &dynamic->vel); // this should point in the same direction as the normal.
 
         dynamic->collide_callback(static_objs + i, &delta_vel, 0); // TODO: Null checks?
         static_objs[i].collide_callback(dynamic, &delta_vel, 1);
-        // } else {
-        //     PRINT("This should never happen lol");
-        //     dynamic->collide_callback(static_objs + i, 0, 0);
-        //     static_objs[i].collide_callback(dynamic, 0, 1);
-        // }
     }
 }
 

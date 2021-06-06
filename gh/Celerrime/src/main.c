@@ -3,22 +3,12 @@
 #include <stdio.h>
 #include <time.h>
 
+#include <zlib.h>
+
 int main() {
 //    uint64_t seed = 0x5c27d496d1868dc8;
 
 //    uint8_t seed = 0xd4;
-
-    long size;
-    void *cont = full_read_file("./res/test.rcmp", &size);
-    size_t s;
-    uint8_t *out = decompress(cont, &s);
-
-    printf("out = %s\n", out);
-//    out[s] = '\0';
-//    printf("OUT = %s\n", out);
-
-    free(out);
-    free(cont);
 
     app_t app;
     start(&app);

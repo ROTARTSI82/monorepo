@@ -20,6 +20,7 @@ typedef struct draw_instance_t {
 
 typedef struct render_ctx_t {
     GLuint framebuffer;
+    GLuint fbo_tex;
     // we aren't using depth or stencil so no render buffer object
 
     GLuint instance_vbo;
@@ -30,13 +31,13 @@ typedef struct render_ctx_t {
     GLuint vao;
 } render_ctx_t;
 
-void new_framebuffer(GLuint *buf);
+void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height);
 
 void compile_and_check_shader(GLuint shader);
 
 void render(render_ctx_t *ctx);
 void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
 
-void new_texture(GLuint *tex);
+void new_tex_from_file(const char *filename, GLuint *tex);
 
 #endif //GAMETEST_GL_H

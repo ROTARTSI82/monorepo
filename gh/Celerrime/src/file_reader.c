@@ -12,8 +12,15 @@
 #include <arpa/inet.h>
 #include "util.h"
 
+#include <errno.h>
+
 void *full_read_file(const char *filename, long *size) {
     FILE *fp = fopen(filename, "rb");
+    if (!fp) {
+        PRINT("Failed to open %s: %s\n", filename, strerror(errno));
+        return NULL;
+    }
+
     fseek(fp, 0L, SEEK_END);
     *size = ftell(fp);
     rewind(fp);
@@ -208,7 +215,7 @@ void *decompress(void *src, size_t *out_size) {
 
     uint8_t *end_of_inter = write_head;
 
-//    overwrite_file("./res/actual_pre_huffman.bin", inter_buf, end_of_inter - inter_buf);
+//   overwrite_file("./res/actual_pre_huffman.bin", inter_buf, end_of_inter - inter_buf);
 
     *out_size = ntohl(*(uint32_t *) inter_buf); // first bytes should be size of data.
     read_head = inter_buf + 4; // WARNING: This is pretty confusing
@@ -222,6 +229,7 @@ void *decompress(void *src, size_t *out_size) {
     while (read_head < end_of_inter) {
         uint32_t size;
         uint16_t reps;
+        uint8_t *dle_read;
 
         switch (*(read_head++)) {
             case e_data:
@@ -243,6 +251,17 @@ void *decompress(void *src, size_t *out_size) {
                 memcpy(write_head, region_start, region_size);
                 write_head += region_size;
                 continue; // skip the copy routine
+
+            case e_dist_len_enc:
+                dle_read = write_head - ntohl(*(uint32_t *) read_head); read_head += 4;
+                region_size = ntohl(*(uint32_t *) read_head); read_head += 4;
+                region_start = write_head;
+
+                for (uint64_t i = 0; i < region_size; i++) {
+                    *(write_head++) = *(dle_read++);
+                }
+
+                continue;
 
             case e_rep_large:
                 // reps do not get added to the chunk stack
@@ -276,7 +295,7 @@ void *decompress(void *src, size_t *out_size) {
         write_head += size;
         read_head += size;
     }
-//    printf("Decompress DEBUG: Expected %lu, actual %lu\n", *out_size, (write_head - ret));
+//    PRINT("Decompress DEBUG: Expected %lu, actual %lu\n", *out_size, (write_head - ret));
     DCMP_ABORT((unsigned long) (write_head - ret) != *out_size, "Size mismatch!");
 
     free(storage_stack);
