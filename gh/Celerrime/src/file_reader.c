@@ -234,7 +234,7 @@ void *decompress(void *src, size_t *out_size) {
     // this use of goto might be a little evil, but eh
     while (read_head < end_of_inter) {
         uint32_t size;
-        uint16_t reps;
+        uint32_t reps;
         uint8_t *dle_read;
 
         switch (*(read_head++)) {

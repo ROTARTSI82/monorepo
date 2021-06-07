@@ -19,6 +19,8 @@ typedef struct draw_instance_t {
 
     vec2 sampling_bottom_left;
     vec2 sampling_extent;
+    // number of times we want to tile the texture in each axis.
+    vec2 num_tiles;
 } draw_instance_t;
 
 typedef struct render_ctx_t {

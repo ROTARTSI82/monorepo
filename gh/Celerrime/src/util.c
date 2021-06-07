@@ -95,10 +95,6 @@ uint64_t reverse_bytes(uint64_t in) {
     return out;
 }
 
-#define RNG_A 0xe925a051f6aad614
-#define RNG_B 0xba2b482d0c4ac7dc
-#define RNG_C 0x5c27d496d1868dc8
-
 uint64_t rand_nextl(uint64_t x) {
     x ^= x >> 12;
     x ^= x << 25;

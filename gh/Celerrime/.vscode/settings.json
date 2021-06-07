@@ -9,6 +9,7 @@
         "*.tcc": "cpp",
         "random": "cpp",
         "time.h": "c",
-        "main_helper.h": "c"
+        "main_helper.h": "c",
+        "type_traits": "c"
     }
 }

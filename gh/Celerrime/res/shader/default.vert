@@ -8,20 +8,27 @@ layout (location = 4) in float alpha_mult;
 layout (location = 5) in vec2 sampling_bl;
 layout (location = 6) in vec2 sampling_extent;
 
+layout (location = 7) in vec2 num_tiles;
+
 uniform mat4 projection_mat;
 uniform mat4 view_mat;
 
 out vec2 tex_co;
 out float alpha_mult_io;
 
+flat out vec2 sample_extent_io;
+flat out vec2 sample_bl_io;
+
 void main() {
-    mat4 model_mat4 = mat4(model);
-    model_mat4[3] = vec4(translate, 1.0);
-
     alpha_mult_io = alpha_mult;
+    sample_extent_io = sampling_extent;
+    sample_bl_io = sampling_bl;
 
-    gl_Position = projection_mat * view_mat * model_mat4 * vec4(vertex_co.x, vertex_co.y, 0, 1);
+    {
+        mat4 model_mat4 = mat4(model);
+        model_mat4[3] = vec4(translate, 1.0);
+        gl_Position = projection_mat * view_mat * model_mat4 * vec4(vertex_co.x, vertex_co.y, 0, 1);
+    }
 
-    vec2 h = (sampling_extent / 2);
-    tex_co = sampling_bl + h + vertex_co * h;
+    tex_co = num_tiles * sampling_extent * (vertex_co + vec2(1, 1)) / 2;
 }

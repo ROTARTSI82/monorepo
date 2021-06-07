@@ -58,18 +58,21 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
 
     // 2 vec2s in the mat2 (2d model matrix)
     glVertexAttribPointer(1, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), 0);
-    glVertexAttribPointer(2, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 2));
+    glVertexAttribPointer(2, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 2));
 
     // 3d translation
-    glVertexAttribPointer(3, 3, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 4));
+    glVertexAttribPointer(3, 3, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 4));
     // alpha multiplier
-    glVertexAttribPointer(4, 1, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 7));
+    glVertexAttribPointer(4, 1, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 7));
 
     // vec 2 for bottom left corner of sampling rect
-    glVertexAttribPointer(5, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 8));
+    glVertexAttribPointer(5, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 8));
 
     // vec 2 for extent of sampling rect (width, height)
-    glVertexAttribPointer(6, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(float) * 10));
+    glVertexAttribPointer(6, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 10));
+
+    // vec 2 for the number of times we should tile in x and y
+    glVertexAttribPointer(7, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), (const void *) (sizeof(FLOAT_T) * 12));
 
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -77,6 +80,7 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
     glEnableVertexAttribArray(4);
     glEnableVertexAttribArray(5);
     glEnableVertexAttribArray(6);
+    glEnableVertexAttribArray(7);
 
     glVertexAttribDivisor(1, 1);
     glVertexAttribDivisor(2, 1);
@@ -84,6 +88,7 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
     glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
     glVertexAttribDivisor(6, 1);
+    glVertexAttribDivisor(7, 1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

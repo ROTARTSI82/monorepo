@@ -24,5 +24,10 @@
 #define MAX_IMG_SIZE 16777216
 #define MAX_FILE_SIZE 16777216
 
+// A collision will register when the player is closer than this value
+// to an object. The player won't be pushed out this far so a collision would
+// continually be registered when touching or standing on geometry.
+#define COLLIDE_THRESHOLD 0.1
+
 
 #endif //GAMETEST_CONFIG_H
