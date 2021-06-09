@@ -75,6 +75,7 @@ typedef struct smat2 {
 } smat2;
 
 extern const FLOAT_T sm4_identity[4][4];
+extern const FLOAT_T sm2_identity[2][2];
 
 void v4_add_eq(vec4 *lhs, vec4 *rhs);
 

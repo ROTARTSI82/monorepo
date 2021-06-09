@@ -25,7 +25,7 @@ set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual
 target_compile_options(GameTest PRIVATE ${WARNING_FLAGS})
 target_link_options(GameTest PRIVATE ${WARNING_FLAGS})
 
-option(USE_ASAN "Compile with google address sanitizer" ON)
+option(USE_ASAN "Compile with google address sanitizer" OFF)
 option(USE_O3 "Compile with -O3 (maximum optimization)" ON)
 option(USE_G3 "Compile with -g3 and -ggdb (debug symbols for gdb)" ON)
 

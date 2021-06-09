@@ -10,6 +10,7 @@
         "random": "cpp",
         "time.h": "c",
         "main_helper.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "memory.h": "c"
     }
 }

@@ -47,6 +47,7 @@ struct huffman_node_t {
     uint8_t value;
 };
 
+// this function is very insecure.
 void *decompress(void *src, size_t *out_size);
 
 

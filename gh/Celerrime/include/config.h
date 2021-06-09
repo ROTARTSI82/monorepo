@@ -7,14 +7,10 @@
 #ifndef GAMETEST_CONFIG_H
 #define GAMETEST_CONFIG_H
 
-#define GWIN_WIDTH (16*128)
-#define GWIN_HEIGHT (9*128)
+#define GFB_WIDTH (128.0f)
+#define GFB_HEIGHT (128.0f)
 
-#define GUPDATE_PROJECTION 1
-
-// #define GFOV 22.89616613
-#define GFOV 49.90734289
-//#define GFOV 180
+#define GFOV 90
 #define ZNEAR 0.1f
 #define ZFAR 100
 
@@ -29,5 +25,8 @@
 // continually be registered when touching or standing on geometry.
 #define COLLIDE_THRESHOLD 0.1
 
+#define M_STRIFY(name) #name
+
+#define APP_VERSION "develpment version " __DATE__ " " __TIME__" "__VERSION__
 
 #endif //GAMETEST_CONFIG_H

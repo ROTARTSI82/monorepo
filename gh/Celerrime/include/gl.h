@@ -31,17 +31,22 @@ typedef struct render_ctx_t {
     GLuint instance_vbo;
     unsigned num_blits;
     unsigned max_blits;
-    GLsizeiptr vbo_size;
 
     GLuint vao;
+
+    draw_instance_t *local_array;
+    uint8_t do_flush;
 } render_ctx_t;
 
+// MUST be called AFTER init_ctx()
 void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height);
+void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height);
 
 void compile_and_check_shader(GLuint shader);
 
 void render(render_ctx_t *ctx);
-void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
+void init_ctx(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
+void destroy_ctx(render_ctx_t *ctx);
 
 void new_tex_from_file(const char *filename, GLuint *tex);
 

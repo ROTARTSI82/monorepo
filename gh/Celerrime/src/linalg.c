@@ -14,6 +14,8 @@ const FLOAT_T sm4_identity[4][4] = {{1, 0, 0, 0},
                                     {0, 0, 1, 0},
                                     {0, 0, 0, 1}};
 
+const FLOAT_T sm2_identity[2][2] = {{1, 0}, {0, 1}};
+
 // these are extremely inefficient implementations but i'm too lazy to do it properly with assembly so eh
 
 void v4_add_eq(vec4 *lhs, vec4 *rhs) {
@@ -263,7 +265,7 @@ smat4 perspective(FLOAT_T fovy, FLOAT_T aspect, FLOAT_T zNear, FLOAT_T zFar) {
     EXIF(aspect == 0, "aspect ratio can't be 0")
     EXIF(zFar == zNear, "Near and far clipping planes must be distinct")
 
-    FLOAT_T const f = 1 / F_TAN(fovy / 2); // cotangent
+    FLOAT_T const f = 1.0 / F_TAN(radians(fovy) / 2); // cotangent
 
     smat4 ret;
     memset(&ret, 0, sizeof(ret));

@@ -78,3 +78,6 @@ _deps
 .idea/*.iml
 .idea/usage.statistics.xml
 .idea/shelf/
+
+build/
+cmake-build-debug/

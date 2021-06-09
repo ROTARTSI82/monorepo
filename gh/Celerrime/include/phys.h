@@ -38,7 +38,7 @@ typedef struct push_info_t {
 
     // axis 0 is the projection onto the static element's x axis, axis 1 is the y axis
     struct projection_info_t axes[2];
-    uint8_t is_true_collision; // to be used for grounded calculations
+    int is_true_collision; // to be used for grounded calculations
 } push_info_t;
 
 uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info);

@@ -40,7 +40,14 @@ void flush_gl_errors() {
     while (proc_gl_error() != GL_NO_ERROR);
 }
 
-void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) {
+void init_ctx(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) {
+    ctx->local_array = malloc(sizeof(draw_instance_t) * max_blits);
+    ctx->do_flush = 0;
+    ctx->max_blits = max_blits;
+    ctx->num_blits = 0;
+    ctx->fbo_tex = 0;
+    ctx->framebuffer = 0;
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glGenBuffers(1, &ctx->instance_vbo);
 
@@ -51,10 +58,9 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
     glVertexAttribPointer(0, 2, GL_FLOAT_T, GL_FALSE, 2 * sizeof(float), 0); // vertex vec2
     glEnableVertexAttribArray(0);
 
-    ctx->max_blits = max_blits;
-    ctx->vbo_size = (GLsizeiptr) sizeof(draw_instance_t) * max_blits;
+    GLsizeiptr vbo_size = (GLsizeiptr) sizeof(draw_instance_t) * max_blits;
     glBindBuffer(GL_ARRAY_BUFFER, ctx->instance_vbo);
-    glBufferData(GL_ARRAY_BUFFER, ctx->vbo_size, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vbo_size, NULL, GL_DYNAMIC_DRAW);
 
     // 2 vec2s in the mat2 (2d model matrix)
     glVertexAttribPointer(1, 2, GL_FLOAT_T, GL_FALSE, sizeof(draw_instance_t), 0);
@@ -91,10 +97,29 @@ void fill_vao_and_vbo(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) 
     glVertexAttribDivisor(7, 1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Don't unbind the vao because that causes a shader recompile.
+}
+
+void destroy_ctx(render_ctx_t *ctx) {
+    glDeleteVertexArrays(1, &ctx->vao);
+    glDeleteBuffers(1, &ctx->instance_vbo);
+    glDeleteFramebuffers(1, &ctx->framebuffer);
+    glDeleteTextures(1, &ctx->fbo_tex);
+    free(ctx->local_array);
 }
 
 void render(render_ctx_t *ctx) {
+    if (ctx->do_flush) {
+        ctx->do_flush = 0;
+        glBindBuffer(GL_ARRAY_BUFFER, ctx->instance_vbo);
+        
+        // this might be expensive? maybe double buffer this asynchronously?
+        glBufferSubData(GL_ARRAY_BUFFER, 0, ctx->num_blits * sizeof(draw_instance_t), ctx->local_array);
+    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindVertexArray(ctx->vao);
     glDrawArraysInstanced(GL_QUADS, 0, 4, (GLsizei) ctx->num_blits);
 }
 
@@ -112,8 +137,14 @@ void compile_and_check_shader(GLuint shader) {
 
 void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glGenFramebuffers(1, &ctx->framebuffer);
+    ctx->fbo_tex = 0;
+    resize_fbo(ctx, width, height);
+}
+
+void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
 
+    glDeleteTextures(1, &ctx->fbo_tex);
     glGenTextures(1, &ctx->fbo_tex);
     glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -124,7 +155,6 @@ void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx->fbo_tex, 0);
 
     EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void new_tex_from_file(const char *filename, GLuint *tex) {
