@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(GameTest C)
 
+SET(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_C_STANDARD 99)
+
+message("CXX Compiler = ${CMAKE_CXX_COMPILER} C Compiler = ${CMAKE_C_COMPILER}")
 
 add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c src/util.c src/main_helper.c)
 
@@ -25,7 +28,7 @@ set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual
 target_compile_options(GameTest PRIVATE ${WARNING_FLAGS})
 target_link_options(GameTest PRIVATE ${WARNING_FLAGS})
 
-option(USE_ASAN "Compile with google address sanitizer" OFF)
+option(USE_ASAN "Compile with google address sanitizer" ON)
 option(USE_O3 "Compile with -O3 (maximum optimization)" ON)
 option(USE_G3 "Compile with -g3 and -ggdb (debug symbols for gdb)" ON)
 
@@ -69,5 +72,5 @@ find_package(ZLIB REQUIRED)
 target_link_libraries(GameTest glfw ZLIB::ZLIB)
 
 
-target_link_libraries(GameTest OpenGL::GL GLEW::GLEW ${OPENAL_LIBRARY} m) # m being libmath
+target_link_libraries(GameTest OpenGL::GL GLEW::GLEW ${OPENAL_LIBRARY} m pthread) # m being libmath
 target_include_directories(GameTest PRIVATE ${OPENGL_INCLUDE_DIR} include src ${OPENAL_INCLUDE_DIR})

@@ -13,6 +13,11 @@ static void GLAPIENTRY gl_error_MessageCallback( GLenum source,
             type, severity, message );
 }
 
+void glfw_error_callback(int code, const char* description)
+{
+    PRINT("GLFW ERROR %i: %s\n", code, description);
+}
+
 static void on_win_resize(GLFWwindow* window, int width, int height) {
     app_t *app = glfwGetWindowUserPointer(window);
     app->win_width = width;
@@ -28,40 +33,71 @@ static void on_win_resize(GLFWwindow* window, int width, int height) {
     }
 }
 
+static void *logic_thread(void *args) {
+    app_t *app = (app_t *) args;
+    logic_thread_data_t *dat = &app->lt_dat;
+    init_fps_limiter(&dat->limiter, 1000000000UL / GPHYS_FPS);
+
+    while (app->is_logic_thread_running) {
+        tick_fps_limiter(&dat->limiter);
+    }
+}
+
 void start(app_t *app) {
     PRINT("%s\n", APP_VERSION);
 
     // TODO: Proper settings loader
     app->settings.win_width = 640;
     app->settings.win_height = 480;
+    app->settings.fps_cap = 24; // tmp
 
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
     app->master_ctx.fbo_tex = 0;
 
     // view matrix is not set
     
-    app->perspective = perspective(GFOV, (float) GFB_WIDTH / (float) GFB_HEIGHT, ZNEAR, ZFAR);
+    app->perspective = perspective(GFOV, GFB_WIDTH / GFB_HEIGHT, ZNEAR, ZFAR);
 
-    glfwInit();
 
+    glfwSetErrorCallback(glfw_error_callback);
+    EXIF(!glfwInit(), "GLFW initialization failed!\n");
+    printf("GLFW compiled with %i.%i.%i, linked with %s\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString());
+
+    // 3.3 is the minimum version we need (3.3 is required for glVertexAttribDivisor)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS support
     app->win = glfwCreateWindow(app->settings.win_width, app->settings.win_height, "Game Test", NULL, NULL);
 
-    EXIF(app->win == NULL,  "GLFW window creation failed")
+    EXIF(app->win == NULL,  "GLFW window creation failed\n")
     glfwMakeContextCurrent(app->win);
-    glfwSwapInterval(1);
     glfwSetWindowUserPointer(app->win, app);
+    if (app->settings.fps_cap == 0) {
+        glfwSwapInterval(1);
+    } else {
+        glfwSwapInterval(0);
+    }
+
+    if (app->settings.fps_cap <= 0) { // fps_cap is just going to be ignored
+        init_fps_limiter(&app->limiter, 0);
+    } else {
+        init_fps_limiter(&app->limiter, 1000000000UL / app->settings.fps_cap);
+    }
 
     glfwSetFramebufferSizeCallback(app->win, on_win_resize);
 
     // IMPORTANT: Set orthographic projection and set app->win_(width|height)
     on_win_resize(app->win, app->settings.win_width, app->settings.win_height);
 
-    EXIF(glewInit() != GLEW_OK, "GLEW initialization failed")
+    // we don't ever use non-standard stuff but this might increase compatability.
+    glewExperimental = GL_TRUE;
+    EXIF(glewInit() != GLEW_OK, "GLEW initialization failed\n")
 
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(gl_error_MessageCallback, 0);
 
-    PRINT("OpenGL initialized: Renderer %s version %s\n", glGetString(GL_RENDERER), glGetString(GL_VERSION));
+    PRINT("OpenGL vendor %s renderer %s version %s\n", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
 
     glDisable(GL_DEPTH_TEST); // More efficient if we just render it in order lol
     glDisable(GL_CULL_FACE);
@@ -70,11 +106,14 @@ void start(app_t *app) {
     glDisable(GL_STENCIL_TEST);
 
     // counter-clockwise definition. culling is useless in 2d tho
+    // Using triangles because the spec doesn't support GL_QUAD with glDrawArraysInstanced?
     float quad[] = {
         -1, -1,
-        1, -1,
-        1, 1,
-        -1, 1
+         1, -1,
+         1,  1,
+         1,  1,
+        -1,  1,
+        -1, -1
     };
 
     glGenBuffers(1, &app->quad_vbo);
@@ -85,6 +124,10 @@ void start(app_t *app) {
     init_ctx(app->quad_vbo, &app->master_ctx, MAX_BLITS);
     init_ctx(app->quad_vbo, &app->renderer, MAX_BLITS);
     init_fbo(&app->renderer, GFB_WIDTH, GFB_HEIGHT);
+
+    pthread_mutex_init(&app->rend_mtx, NULL);
+    app->is_logic_thread_running = 1;
+    pthread_create(&app->logic_thread, NULL, logic_thread, app);
 
     {
         app->master_ctx.num_blits = 1;
@@ -163,12 +206,18 @@ void start(app_t *app) {
 }
 
 void stop(app_t *app) {
+
     destroy_ctx(&app->renderer);
     destroy_ctx(&app->master_ctx);
     glDeleteTextures(1, &app->TMP_TEST_TEX);
     glDeleteBuffers(1, &app->quad_vbo);
     glDeleteProgram(app->default_shader);
 
+    app->is_logic_thread_running = 0;
+    pthread_join(app->logic_thread, NULL);
+    pthread_mutex_destroy(&app->rend_mtx);
+
+    flush_gl_errors();
     glfwDestroyWindow(app->win);
     glfwTerminate();
 }

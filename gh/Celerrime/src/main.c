@@ -36,7 +36,21 @@ int main() {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(app.su_tex_samp, 0);
 
+    uint32_t frame_num = 0; // tmp
+
     while (!glfwWindowShouldClose(app.win)) {
+        tick_fps_limiter(&app.limiter);
+
+        // tmp
+        if (frame_num++ > 240) {
+            GFB_WIDTH *= 0.9f;
+            GFB_HEIGHT *= 0.9f;
+            resize_fbo(&app.renderer, GFB_WIDTH, GFB_HEIGHT);
+
+            // isn't needed since the aspect ratio remains the same but good practice.
+            app.perspective = perspective(GFOV, GFB_WIDTH / GFB_HEIGHT, ZNEAR, ZFAR);
+        }
+
         flush_gl_errors();
 
         glViewport(0, 0, GFB_WIDTH, GFB_HEIGHT);
@@ -46,7 +60,6 @@ int main() {
         glUniformMatrix4fv(app.su_view_mat, 1, GL_FALSE, (const GLfloat *) &app.view_mat);
         glClearColor(1, 0, 0, 1);
         render(&app.renderer);
-
 
         glViewport(0, 0, app.win_width, app.win_height);
 
@@ -61,6 +74,5 @@ int main() {
     }
 
     stop(&app);
-    flush_gl_errors();
     return 0;
 }

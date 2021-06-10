@@ -12,6 +12,30 @@
 #   define BIG_CONSTANT(x) (x##LLU)
 #endif // !defined(_MSC_VER)
 
+#include "config.h"
+
+void init_fps_limiter(fps_limiter_t *limiter, uint64_t target_frametime) {
+    clock_gettime(GCLOCK_SRC, &limiter->last_tick);
+    limiter->target_frametime_nano = target_frametime;
+}
+
+void tick_fps_limiter(fps_limiter_t *limiter) {
+    struct timespec now;
+    clock_gettime(GCLOCK_SRC, &now);
+
+    uint64_t elapsed_time = (now.tv_sec - limiter->last_tick.tv_sec) * 1000000000UL + (now.tv_nsec - limiter->last_tick.tv_nsec);
+    if (elapsed_time < limiter->target_frametime_nano) {
+        struct timespec to_sleep;
+        to_sleep.tv_nsec = limiter->target_frametime_nano - elapsed_time;
+        to_sleep.tv_sec = to_sleep.tv_nsec / 1000000000L;
+        to_sleep.tv_nsec %= 1000000000L;
+
+        clock_nanosleep(GCLOCK_SRC, 0, &to_sleep, NULL);
+    }
+
+    limiter->last_tick = now;
+}
+
 uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
 {
     const uint64_t m = BIG_CONSTANT(0xc6a4a7935bd1e995);

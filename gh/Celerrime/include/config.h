@@ -7,8 +7,9 @@
 #ifndef GAMETEST_CONFIG_H
 #define GAMETEST_CONFIG_H
 
-#define GFB_WIDTH (128.0f)
-#define GFB_HEIGHT (128.0f)
+// declarations found in common.c
+extern float GFB_WIDTH;
+extern float GFB_HEIGHT;
 
 #define GFOV 90
 #define ZNEAR 0.1f
@@ -24,6 +25,9 @@
 // to an object. The player won't be pushed out this far so a collision would
 // continually be registered when touching or standing on geometry.
 #define COLLIDE_THRESHOLD 0.1
+
+#define GCLOCK_SRC CLOCK_MONOTONIC
+#define GPHYS_FPS 60
 
 #define M_STRIFY(name) #name
 

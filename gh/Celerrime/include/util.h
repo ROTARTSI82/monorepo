@@ -7,8 +7,6 @@
 #ifndef GAMETEST_UTIL_H
 #define GAMETEST_UTIL_H
 
-#include "common.h"
-
 #if defined(_MSC_VER) && (_MSC_VER < 1600)
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
@@ -17,6 +15,17 @@ typedef unsigned __int64 uint64_t;
 #else	// defined(_MSC_VER)
 #include <stdint.h>
 #endif // !defined(_MSC_VER)
+
+#include <time.h>
+
+typedef struct fps_limiter_t {
+    struct timespec last_tick;
+    uint64_t target_frametime_nano;
+} fps_limiter_t;
+
+void init_fps_limiter(fps_limiter_t *limiter, uint64_t target_frametime);
+
+void tick_fps_limiter(fps_limiter_t *limiter);
 
 // https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.h
 

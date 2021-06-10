@@ -120,7 +120,7 @@ void render(render_ctx_t *ctx) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(ctx->vao);
-    glDrawArraysInstanced(GL_QUADS, 0, 4, (GLsizei) ctx->num_blits);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, (GLsizei) ctx->num_blits);
 }
 
 void compile_and_check_shader(GLuint shader) {
@@ -137,14 +137,8 @@ void compile_and_check_shader(GLuint shader) {
 
 void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glGenFramebuffers(1, &ctx->framebuffer);
-    ctx->fbo_tex = 0;
-    resize_fbo(ctx, width, height);
-}
-
-void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
 
-    glDeleteTextures(1, &ctx->fbo_tex);
     glGenTextures(1, &ctx->fbo_tex);
     glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -154,6 +148,13 @@ void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx->fbo_tex, 0);
 
+    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
+}
+
+void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
+    glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
+    glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
 }
 

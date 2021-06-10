@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include "util.h"
 #include "config.h"
+#include "common.h"
 
 #include <errno.h>
 
