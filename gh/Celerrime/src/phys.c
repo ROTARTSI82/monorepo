@@ -98,65 +98,76 @@ uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) 
     return 1;
 }
 
-void handle_collisions(phys_obj_t *dynamic, phys_obj_t *static_objs, int num_static) {
-    for (int i = 0; i < num_static; i++) {
-        push_info_t push_info;
-        if (!collides_with(dynamic, static_objs + i, &push_info)) {
-            continue; // no collision to handle
-        }
-
-        vec2 delta = v2_sub(dynamic->translation, static_objs[i].translation);
-        FLOAT_T target_theta = atan2f(delta.y, delta.x);
-        if (target_theta < 0) {target_theta += PI * 2; }
-
-        vec2 v_1_1 = v2_add(&static_objs[i].transform->c0, &static_objs[i].transform->c1); // 1, 1
-        vec2 v_n1_1 = v2_sub(&static_objs[i].transform->c1, &static_objs[i].transform->c0); // -1, 1
-
-        // TODO: Optimize this fucking nightmare
-        FLOAT_T theta_1_1 = atan2f(v_1_1.y, v_1_1.x);
-        FLOAT_T theta_n1_1 = atan2f(v_n1_1.y, v_n1_1.x);
-        if (theta_1_1 < 0) {theta_1_1 += PI * 2;}
-        if (theta_n1_1 < 0) {theta_n1_1 += PI * 2;}
-
-        FLOAT_T theta_n1_n1 = PI + theta_1_1;
-        FLOAT_T theta_1_n1 = PI + theta_n1_1;
-        if (theta_n1_n1 > PI * 2) {theta_n1_n1 -= PI * 2;}
-        if (theta_1_n1 > PI * 2) {theta_1_n1 -= PI * 2;}
-
-        PRINT("(1,1) = %f, (-1,1) = %f, (-1,-1) = %f, (1,-1) = %f\n", theta_1_1, theta_n1_1, theta_n1_n1, theta_1_n1);
-
-        uint8_t axis;
-        float push_scalar;
-        if ((target_theta > theta_1_1 && target_theta < theta_n1_1) || (target_theta > theta_n1_n1 && target_theta < theta_1_n1)) { // y axis
-            push_scalar = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? push_info.axes[1].neg_push : push_info.axes[1].pos_push;
-            axis = 1;
-        } else { // x axis
-            push_scalar = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? push_info.axes[0].neg_push : push_info.axes[0].pos_push;
-            axis = 0;
-        }
-
-        // push_info.axes[axis].axis is a normalized unit vector!!
-        vec2 push = v2_mults(&push_info.axes[axis].axis, push_scalar);
-
-        if (!push_info.is_true_collision) {
-            // TODO: Handle "grounded" logic here!
-            continue;
-        }
-
-        v2_add_eq(dynamic->translation, &push); // push the dynamic object out of the wall.
-
-        // Don't check if (v2_dot(&push, &dynamic->vel) < 0); More efficient and possibly opens to door for some exploits
-
-        // Set push to the unit normal vector rotated 90deg counterclockwise
-        push.x = -push_info.axes[axis].axis.y;
-        push.y = push_info.axes[axis].axis.x;
-
-        vec2 new_vel = v2_mults(&push, v2_dot(&push, &dynamic->vel)); // TODO: Implement "bounciness" causing it to slightly overshoot?
-        vec2 delta_vel = v2_sub(&new_vel, &dynamic->vel); // this should point in the same direction as the normal.
-        dynamic->vel = new_vel;
-
-        dynamic->collide_callback(static_objs + i, &delta_vel, 0); // TODO: Null checks?
-        static_objs[i].collide_callback(dynamic, &delta_vel, 1);
+void handle_collision(dyn_phys_obj_t *dynamic, phys_obj_t *static_obj) {
+    push_info_t push_info;
+    // &dynamic->sup == (phys_obj_t *) dynamic
+    if (!collides_with(&dynamic->sup, static_obj, &push_info)) {
+        return;
     }
+
+    vec2 delta = v2_sub(dynamic->sup.translation, static_obj->translation);
+    FLOAT_T target_theta = atan2f(delta.y, delta.x);
+    if (target_theta < 0) {target_theta += PI * 2.0f; } // just add and fmodf?
+
+    vec2 v_1_1 = v2_add(&static_obj->transform->c0, &static_obj->transform->c1); // 1, 1
+    vec2 v_n1_1 = v2_sub(&static_obj->transform->c1, &static_obj->transform->c0); // -1, 1
+
+    // TODO: Optimize this fucking nightmare
+    FLOAT_T theta_1_1 = atan2f(v_1_1.y, v_1_1.x);
+    FLOAT_T theta_n1_1 = atan2f(v_n1_1.y, v_n1_1.x);
+
+    // we can get rid of the `if` by just adding PI * 2 and using fmodf
+    // if `if` becomes a performance issue.
+    if (theta_1_1 < 0) {theta_1_1 += PI * 2.0f;}
+    if (theta_n1_1 < 0) {theta_n1_1 += PI * 2.0f;}
+
+    FLOAT_T theta_n1_n1 = fmodf(PI + theta_1_1, PI * 2.0f);
+    FLOAT_T theta_1_n1 = fmodf(PI + theta_n1_1, PI * 2.0f);
+
+    PRINT("(1,1) = %f, (-1,1) = %f, (-1,-1) = %f, (1,-1) = %f\n", theta_1_1, theta_n1_1, theta_n1_n1, theta_1_n1);
+
+    uint8_t axis;
+    float push_scalar;
+    if ((target_theta > theta_1_1 && target_theta < theta_n1_1) || (target_theta > theta_n1_n1 && target_theta < theta_1_n1)) { // y axis
+        push_scalar = fabsf(push_info.axes[1].pos_push) > fabsf(push_info.axes[1].neg_push) ? push_info.axes[1].neg_push : push_info.axes[1].pos_push;
+        axis = 1;
+    } else { // x axis
+        push_scalar = fabsf(push_info.axes[0].pos_push) > fabsf(push_info.axes[0].neg_push) ? push_info.axes[0].neg_push : push_info.axes[0].pos_push;
+        axis = 0;
+    }
+
+    // push_info.axes[axis].axis is a normalized unit vector!!
+    vec2 push = v2_mults(&push_info.axes[axis].axis, push_scalar);
+
+    if (!push_info.is_true_collision) {
+        // TODO: Handle "grounded" logic here!
+        return;
+    }
+
+    v2_add_eq(dynamic->sup.translation, &push); // push the dynamic object out of the wall.
+
+    // Don't check if (v2_dot(&push, &dynamic->vel) < 0); possibly opens to door for some exploits
+
+    {
+        vec2 zero;
+        zero.x = 0;
+        zero.y = 0;
+
+        push = push_scalar > 0 ? push_info.axes[axis].axis : v2_sub(&zero, &push_info.axes[axis].axis);
+    } // or just normalize normally
+
+    // Set push to the unit normal vector rotated 90deg counterclockwise
+    FLOAT_T tmp_x = push.x;
+    push.x = -push.y;
+    push.y = tmp_x;
+
+    vec2 new_vel = v2_mults(&push, v2_dot(&push, &dynamic->vel));
+    vec2 delta_vel = v2_sub(&new_vel, &dynamic->vel); // this should point in the same direction as the normal.
+    v2_mults_eq(&delta_vel, dynamic->sup.bounciness * static_obj->bounciness + 1); // bounciness scales the additional bounce.
+    v2_add_eq(&dynamic->vel, &delta_vel);
+
+    // &dynamic->sup should be equal to dynamic
+    dynamic->sup.collide_callback(&dynamic->sup, static_obj, &delta_vel, 0); // TODO: Null checks?
+    static_obj->collide_callback(static_obj, &dynamic->sup, &delta_vel, 1);
 }
 

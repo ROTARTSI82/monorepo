@@ -11,6 +11,8 @@
 extern float GFB_WIDTH;
 extern float GFB_HEIGHT;
 
+#define GOPENGL_DEBUG_CONTEXT 1
+
 #define GFOV 90
 #define ZNEAR 0.1f
 #define ZFAR 100

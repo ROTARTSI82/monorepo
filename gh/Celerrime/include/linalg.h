@@ -34,6 +34,21 @@
  * long double = 0xc.90fdaa22168c235p-2L
  */
 
+#define PHI 0x1.9e377ap+0f
+/**
+ * float = 0x1.9e377ap+0f
+ * double = 0x1.9e3779b97f4a8p+0
+ * long double = 0xc.f1bbcdcbfa53e0bp-3L
+ */
+
+#define ROOT_2 0x1.6a09e6p+0f
+/**
+ * f = 0x1.6a09e6p+0f
+ * d = 0x1.6a09e667f3bcdp+0
+ * l = 0xb.504f333f9de6484p-3L
+ */
+
+
 // something something strict aliasing
 
 typedef struct vec2 {

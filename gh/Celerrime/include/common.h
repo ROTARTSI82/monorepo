@@ -19,7 +19,7 @@
 #include <pthread.h>
 
 // EXit IF
-#define EXIF(exp, msg) if (exp) { printf(msg); exit(1); }
+#define EXIF(exp, msg) if (exp) { PRINT(msg); exit(1); }
 
 // for easy disabling of print in release
 #define PRINT(...) printf(__VA_ARGS__)
@@ -28,7 +28,7 @@ typedef struct settings_t {
     uint32_t win_height;
     uint32_t win_width;
 
-    int fps_cap; // -1 = no limit, 0 = vsync
+    float fps_cap; // `fps_cap < 0` = no limit, `0 < fps_cap < 1` = vsync
 } settings_t;
 
 typedef struct logic_thread_data_t {
@@ -38,6 +38,7 @@ typedef struct logic_thread_data_t {
 typedef struct app_t {
     GLFWwindow *win;
     int win_width, win_height;
+    GLint gl_major, gl_minor, gl_ctx_flags;
     fps_limiter_t limiter;
 
     pthread_t logic_thread;

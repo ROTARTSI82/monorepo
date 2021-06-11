@@ -8,7 +8,7 @@ message("CXX Compiler = ${CMAKE_CXX_COMPILER} C Compiler = ${CMAKE_C_COMPILER}")
 
 add_executable(GameTest src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c src/util.c src/main_helper.c)
 
-set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual -Wconversion -Wfloat-equal -Wformat=2
+set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual -Wfloat-equal -Wformat=2
 -Wformat-nonliteral -Wformat-security -Winit-self -Winvalid-pch -Wmissing-declarations -Wmissing-include-dirs  -Wstrict-overflow=5
 -Wmultichar -Wnested-externs -Wold-style-definition -Wredundant-decls -Wformat-y2k -Wstrict-aliasing
 -Wmissing-noreturn -Wc++-compat -Walloca -Wdate-time -Wshift-overflow -Wunused-const-variable
@@ -23,6 +23,7 @@ set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual
 # -Wsign-conversion enabled by -Wconversion
 # -Wstrict-prototypes warns about func() because it wants func(void) and it's stupid
 # -Walloc-size-larger-than= and -Walloca-larger-than=
+# -Wconversion warns about stupid stuff.
 
 
 target_compile_options(GameTest PRIVATE ${WARNING_FLAGS})

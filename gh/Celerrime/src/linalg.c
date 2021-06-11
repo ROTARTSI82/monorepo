@@ -240,20 +240,20 @@ FLOAT_T degrees(FLOAT_T rad) {
 }
 
 void printv3(vec3 *vec) {
-    printf("[%f, %f, %f]", vec->x, vec->y, vec->z);
+    PRINT("[%f, %f, %f]", vec->x, vec->y, vec->z);
 }
 void printsm4(smat4 *mat) {
-    printf("[\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f]\n]",
+    PRINT("[\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f],\n\t[%f, %f, %f, %f]\n]",
            mat->c0.v4.x, mat->c1.v4.x, mat->c2.v4.x, mat->c3.v4.x,
            mat->c0.v4.y, mat->c1.v4.y, mat->c2.v4.y, mat->c3.v4.y,
            mat->c0.v4.z, mat->c1.v4.z, mat->c2.v4.z, mat->c3.v4.z,
            mat->c0.v4.w, mat->c1.v4.w, mat->c2.v4.w, mat->c3.v4.w);
 }
 void printsm2(smat2 *mat) {
-    printf("[\n\t[%f, %f],\n\t[%f, %f]\n]", mat->c0.x, mat->c1.x, mat->c0.y, mat->c1.y);
+    PRINT("[\n\t[%f, %f],\n\t[%f, %f]\n]", mat->c0.x, mat->c1.x, mat->c0.y, mat->c1.y);
 }
 void printv2(vec2 *vec) {
-    printf("[%f, %f]", vec->x, vec->y);
+    PRINT("[%f, %f]", vec->x, vec->y);
 }
 
 

@@ -17,6 +17,7 @@
         "common.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
-        "gl.h": "c"
+        "gl.h": "c",
+        "glew.h": "c"
     }
 }

@@ -1,17 +1,5 @@
 #include "main_helper.h"
 
-static void GLAPIENTRY gl_error_MessageCallback( GLenum source,
-                 GLenum type,
-                 GLuint id,
-                 GLenum severity,
-                 GLsizei length,
-                 const GLchar* message,
-                 const void* userParam )
-{
-  fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-            type, severity, message );
-}
 
 void glfw_error_callback(int code, const char* description)
 {
@@ -41,6 +29,8 @@ static void *logic_thread(void *args) {
     while (app->is_logic_thread_running) {
         tick_fps_limiter(&dat->limiter);
     }
+
+    return NULL;
 }
 
 void start(app_t *app) {
@@ -49,7 +39,7 @@ void start(app_t *app) {
     // TODO: Proper settings loader
     app->settings.win_width = 640;
     app->settings.win_height = 480;
-    app->settings.fps_cap = 24; // tmp
+    app->settings.fps_cap = 24.5; // tmp
 
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
     app->master_ctx.fbo_tex = 0;
@@ -61,9 +51,10 @@ void start(app_t *app) {
 
     glfwSetErrorCallback(glfw_error_callback);
     EXIF(!glfwInit(), "GLFW initialization failed!\n");
-    printf("GLFW compiled with %i.%i.%i, linked with %s\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString());
+    PRINT("GLFW compiled with %i.%i.%i, linked with %s\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString());
 
     // 3.3 is the minimum version we need (3.3 is required for glVertexAttribDivisor)
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GOPENGL_DEBUG_CONTEXT);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -73,16 +64,16 @@ void start(app_t *app) {
     EXIF(app->win == NULL,  "GLFW window creation failed\n")
     glfwMakeContextCurrent(app->win);
     glfwSetWindowUserPointer(app->win, app);
-    if (app->settings.fps_cap == 0) {
+    if (app->settings.fps_cap < 1 && app->settings.fps_cap > 0) {
         glfwSwapInterval(1);
     } else {
         glfwSwapInterval(0);
     }
 
-    if (app->settings.fps_cap <= 0) { // fps_cap is just going to be ignored
+    if (app->settings.fps_cap < 1) { // fps_cap is just going to be ignored in both vsync & unlimited
         init_fps_limiter(&app->limiter, 0);
     } else {
-        init_fps_limiter(&app->limiter, 1000000000UL / app->settings.fps_cap);
+        init_fps_limiter(&app->limiter, 1000000000 / app->settings.fps_cap);
     }
 
     glfwSetFramebufferSizeCallback(app->win, on_win_resize);
@@ -92,12 +83,28 @@ void start(app_t *app) {
 
     // we don't ever use non-standard stuff but this might increase compatability.
     glewExperimental = GL_TRUE;
-    EXIF(glewInit() != GLEW_OK, "GLEW initialization failed\n")
+    int glew_status = glewInit();
+    if (glew_status != GLEW_OK) {
+        PRINT("GLEW initialization failed: %s\n", glewGetErrorString(glew_status));
+        exit(1);
+    }
 
+    PRINT("GLEW %s initialized\n", glewGetString(GLEW_VERSION));
+
+    PRINT("OpenGL %s (GLSL %s) on %s (%s)\n", glGetString(GL_VERSION),
+          glGetString(GL_SHADING_LANGUAGE_VERSION), glGetString(GL_RENDERER), glGetString(GL_VENDOR));
+
+
+    glGetIntegerv(GL_MAJOR_VERSION, &app->gl_major);
+    glGetIntegerv(GL_MINOR_VERSION, &app->gl_minor);
+    glGetIntegerv(GL_CONTEXT_FLAGS, &app->gl_ctx_flags);
+
+    PRINT("OpenGL contex flags = %i\n", app->gl_ctx_flags);
+
+    // if (app->gl_ctx_flags & GL_CONTEXT_FLAG_DEBUG_BIT && app->gl_major >= 4 && app->gl_minor >= 3) {
     glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(gl_error_MessageCallback, 0);
-
-    PRINT("OpenGL vendor %s renderer %s version %s\n", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
+    glDebugMessageCallback(gl_error_MessageCallback, NULL);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
 
     glDisable(GL_DEPTH_TEST); // More efficient if we just render it in order lol
     glDisable(GL_CULL_FACE);

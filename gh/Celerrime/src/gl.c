@@ -13,6 +13,58 @@
 
 #include <zlib.h>
 
+
+#define MAKE_GLERRMSGCB_CASE(pref, val, store) case (pref##val):\
+(store) = (#val); break;
+
+void GLAPIENTRY gl_error_MessageCallback( GLenum source,
+                 GLenum type,
+                 GLuint id,
+                 GLenum severity,
+                 GLsizei length,
+                 const GLchar* message,
+                 const void* userParam )
+{
+    const char *type_str, *src_str, *sev_str;
+    switch (source) {
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, API, src_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, WINDOW_SYSTEM, src_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, SHADER_COMPILER, src_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, THIRD_PARTY, src_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, APPLICATION, src_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, OTHER, src_str)
+        default:
+            src_str = "UNKNOWN";
+    }
+
+    switch (type) {
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, ERROR, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, DEPRECATED_BEHAVIOR, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, UNDEFINED_BEHAVIOR, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PORTABILITY, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PERFORMANCE, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, MARKER, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PUSH_GROUP, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, POP_GROUP, type_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, OTHER, type_str)
+        default:
+            type_str = "UNKNOWN"; 
+    }
+
+    switch (severity) {
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, LOW, sev_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, MEDIUM, sev_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, HIGH, sev_str)
+        MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, NOTIFICATION, sev_str)
+        default:
+            sev_str = "UNKNOWN";
+    }
+
+    PRINT("%u [%s] [%s] [%s]: %s\n", id, src_str, sev_str, type_str, message);
+}
+
+#undef MAKE_GLERRMSGCB_CASE
+
 #define PROC_GL_ERROR_GEN_CASE(exp) case (exp):\
 PRINT("GLERROR: "#exp "\n"); break;
 
@@ -33,11 +85,21 @@ GLenum proc_gl_error() {
         default:
             PRINT("Unknown OpenGL Error was received!\n");
     }
-    return ret;
+
+    GLchar dbg_msg[1024]; // should be enough in most cases
+    GLenum src, type, severity;
+    GLuint id;
+    GLsizei len;
+    GLuint dbg_ret = glGetDebugMessageLog(1, 1024, &src, &type, &id, &severity, &len, dbg_msg);
+    if (dbg_ret) {
+        gl_error_MessageCallback(src, type, id, severity, len, dbg_msg, NULL);
+    }
+
+    return ret != GL_NO_ERROR || dbg_ret;
 }
 
 void flush_gl_errors() {
-    while (proc_gl_error() != GL_NO_ERROR);
+    while (proc_gl_error());
 }
 
 void init_ctx(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits) {
@@ -130,7 +192,7 @@ void compile_and_check_shader(GLuint shader) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     glGetShaderInfoLog(shader, 4096, NULL, infoLog);
     if (!success) {
-        printf("Error in shader %i: %s\n", shader, infoLog);
+        PRINT("Error in shader %i: %s\n", shader, infoLog);
         exit(1);
     }
 }
@@ -148,14 +210,14 @@ void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx->fbo_tex, 0);
 
-    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
+    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!\n");
 }
 
 void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
     glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!");
+    EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!\n");
 }
 
 void new_tex_from_file(const char *filename, GLuint *tex) {
@@ -181,7 +243,7 @@ void new_tex_from_file(const char *filename, GLuint *tex) {
         }
 
         tex_dat = malloc(dest_len);
-        if (uncompress(tex_dat, &dest_len, raw + 8, s - 8) != Z_OK) {
+        if (uncompress(tex_dat, &dest_len, raw + 8, (uLong) s - 8) != Z_OK) {
             PRINT("Uncompression of %s failed!\n", filename);
 
             free(tex_dat);

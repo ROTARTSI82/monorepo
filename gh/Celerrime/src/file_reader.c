@@ -32,8 +32,8 @@ void *full_read_file(const char *filename, long *size) {
         return NULL;
     }
 
-    void *ret = malloc((*size));
-    fread(ret, 1, (*size), fp);
+    void *ret = malloc((size_t) *size);
+    fread(ret, 1, (size_t) *size, fp);
     fclose(fp);
 
     return ret;
@@ -46,7 +46,7 @@ void overwrite_file(const char *filename, void *data, size_t len) {
 }
 
 
-#define DCMP_ABORT(cond, msg) if (cond) {printf("Error decompressing: "msg"\n"); *out_size = 0; goto abort; }
+#define DCMP_ABORT(cond, msg) if (cond) {PRINT("Error decompressing: "msg"\n"); *out_size = 0; goto abort; }
 
 typedef struct huffman_instruction_t {
     uint8_t type;
@@ -70,8 +70,6 @@ typedef struct dcmp_chunk_t {
 
 // 16 mb
 #define INTER_BUF_SIZE 16000000
-
-#define CHUNK_BUF_SIZE 1024
 
 void *decompress(void *src, size_t *out_size) {
     // TODO: I should probably just scrap this whole routine and go with representing the tree as an array
@@ -106,9 +104,9 @@ void *decompress(void *src, size_t *out_size) {
 
         DCMP_ABORT(compat_version != DCMP_COMPAT_VERSION, "Compat version mismatched! Decoder is not compatible.");
         if (micro_version > DCMP_MICRO_VERSION) {
-            printf("Decompression WARNING: File version is ahead of decoder version.\n");
+            PRINT("Decompression WARNING: File version is ahead of decoder version.\n");
         } else if (micro_version < DCMP_MICRO_VERSION) {
-            printf("Decompression WARNING: File version is behind decoder version.\n");
+            PRINT("Decompression WARNING: File version is behind decoder version.\n");
         }
     }
 

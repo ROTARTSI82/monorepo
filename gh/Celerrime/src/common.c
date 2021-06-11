@@ -6,8 +6,8 @@
 #include "common.h"
 #include "config.h"
 
-float GFB_WIDTH = 4096;
-float GFB_HEIGHT = 4096;
+float GFB_WIDTH = ROOT_2*512;
+float GFB_HEIGHT = 1*512;
 
 
 
