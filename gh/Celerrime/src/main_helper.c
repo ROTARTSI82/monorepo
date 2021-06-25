@@ -11,20 +11,22 @@ static void on_win_resize(GLFWwindow* window, int width, int height) {
     app->win_width = width;
     app->win_height = height;
 
-    if ((float) width / height > GFB_WIDTH / GFB_HEIGHT) {
+    if ((float) width / height > CEL_FB_WIDTH / CEL_FB_HEIGHT) {
         // case: width is too long
-        float wover = width / (height * GFB_WIDTH / GFB_HEIGHT);
-        app->orthographic = ortho(-wover, wover, -1, 1, ZNEAR, ZFAR);
+        float wover = width / (height * CEL_FB_WIDTH / CEL_FB_HEIGHT);
+        app->orthographic = ortho(-wover, wover, -1, 1, CEL_ZNEAR, CEL_ZFAR);
     } else {
-        float hover = height / (width / (GFB_WIDTH / GFB_HEIGHT));
-        app->orthographic = ortho(-1, 1, -hover, hover, ZNEAR, ZFAR);
+        float hover = height / (width / (CEL_FB_WIDTH / CEL_FB_HEIGHT));
+        app->orthographic = ortho(-1, 1, -hover, hover, CEL_ZNEAR, CEL_ZFAR);
     }
 }
 
 static void *logic_thread(void *args) {
     app_t *app = (app_t *) args;
     logic_thread_data_t *dat = &app->lt_dat;
-    init_fps_limiter(&dat->limiter, 1000000000UL / GPHYS_FPS);
+
+    dat->fps = CEL_PHYS_FPS;
+    init_fps_limiter(&dat->limiter, 1000000000UL / CEL_PHYS_FPS);
 
     while (app->is_logic_thread_running) {
         tick_fps_limiter(&dat->limiter);
@@ -34,24 +36,25 @@ static void *logic_thread(void *args) {
 }
 
 void start(app_t *app) {
-    PRINT("%s\n", APP_VERSION);
+    PRINT("%s\n", CEL_VERSION_VERBOSE);
 
     // TODO: Proper settings loader
     app->settings.win_width = 640;
     app->settings.win_height = 480;
-    app->settings.fps_cap = 24.5; // tmp
+    app->settings.fps_cap = 60; // tmp
 
     app->master_ctx.framebuffer = 0; // default framebuffer to actually draw on the screen
     app->master_ctx.fbo_tex = 0;
 
     // view matrix is not set
     
-    app->perspective = perspective(GFOV, GFB_WIDTH / GFB_HEIGHT, ZNEAR, ZFAR);
+    app->perspective = perspective(CEL_FOV, CEL_FB_WIDTH / CEL_FB_HEIGHT, CEL_ZNEAR, CEL_ZFAR);
 
 
     glfwSetErrorCallback(glfw_error_callback);
     EXIF(!glfwInit(), "GLFW initialization failed!\n");
-    PRINT("GLFW compiled with %i.%i.%i, linked with %s\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString());
+    PRINT("GLFW compiled with %i.%i.%i, linked with %s. Timer hz = %li\n", GLFW_VERSION_MAJOR,
+           GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString(), glfwGetTimerFrequency());
 
     // 3.3 is the minimum version we need (3.3 is required for glVertexAttribDivisor)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GOPENGL_DEBUG_CONTEXT);
@@ -59,21 +62,21 @@ void start(app_t *app) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS support
-    app->win = glfwCreateWindow(app->settings.win_width, app->settings.win_height, "Game Test", NULL, NULL);
+    app->win = glfwCreateWindow(app->settings.win_width, app->settings.win_height, CEL_VERSION_VERBOSE, NULL, NULL);
 
     EXIF(app->win == NULL,  "GLFW window creation failed\n")
     glfwMakeContextCurrent(app->win);
     glfwSetWindowUserPointer(app->win, app);
-    if (app->settings.fps_cap < 1 && app->settings.fps_cap > 0) {
+    if (app->settings.fps_cap < 0 && app->settings.fps_cap > -1) {
         glfwSwapInterval(1);
     } else {
         glfwSwapInterval(0);
     }
 
-    if (app->settings.fps_cap < 1) { // fps_cap is just going to be ignored in both vsync & unlimited
+    if (app->settings.fps_cap < 0) { // fps_cap is just going to be ignored in both vsync & unlimited
         init_fps_limiter(&app->limiter, 0);
     } else {
-        init_fps_limiter(&app->limiter, 1000000000 / app->settings.fps_cap);
+        init_fps_limiter(&app->limiter, 1000000000UL / app->settings.fps_cap);
     }
 
     glfwSetFramebufferSizeCallback(app->win, on_win_resize);
@@ -84,10 +87,7 @@ void start(app_t *app) {
     // we don't ever use non-standard stuff but this might increase compatability.
     glewExperimental = GL_TRUE;
     int glew_status = glewInit();
-    if (glew_status != GLEW_OK) {
-        PRINT("GLEW initialization failed: %s\n", glewGetErrorString(glew_status));
-        exit(1);
-    }
+    EXIF(glew_status != GLEW_OK, "GLEW initialization failed: %s\n", glewGetErrorString(glew_status));
 
     PRINT("GLEW %s initialized\n", glewGetString(GLEW_VERSION));
 
@@ -128,9 +128,9 @@ void start(app_t *app) {
     glBindBuffer(GL_ARRAY_BUFFER, app->quad_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
 
-    init_ctx(app->quad_vbo, &app->master_ctx, MAX_BLITS);
-    init_ctx(app->quad_vbo, &app->renderer, MAX_BLITS);
-    init_fbo(&app->renderer, GFB_WIDTH, GFB_HEIGHT);
+    init_ctx(app->quad_vbo, &app->master_ctx, CEL_MAX_BLITS);
+    init_ctx(app->quad_vbo, &app->renderer, CEL_MAX_BLITS);
+    init_fbo(&app->renderer, CEL_FB_WIDTH, CEL_FB_HEIGHT);
 
     pthread_mutex_init(&app->rend_mtx, NULL);
     app->is_logic_thread_running = 1;
@@ -148,11 +148,11 @@ void start(app_t *app) {
         app->master_ctx.local_array[0].sampling_extent.x = 1;
         app->master_ctx.local_array[0].sampling_extent.y = 1;
 
-        app->master_ctx.local_array[0].transform = *(const smat2 *) sm2_identity;
+        app->master_ctx.local_array[0].trans.form = *(const smat2 *) sm2_identity;
 
-        app->master_ctx.local_array[0].translate.x = 0;
-        app->master_ctx.local_array[0].translate.y = 0;
-        app->master_ctx.local_array[0].translate.z = -1;
+        app->master_ctx.local_array[0].trans.late.v3.x = 0;
+        app->master_ctx.local_array[0].trans.late.v3.y = 0;
+        app->master_ctx.local_array[0].trans.late.v3.z = -1;
     }
 
     long frag_size, vert_size;
@@ -189,25 +189,6 @@ void start(app_t *app) {
     app->su_tex_samp = glGetUniformLocation(app->default_shader, "tex");
 
     {
-//         glGenTextures(1, &app->TMP_TEST_TEX);
-//         glActiveTexture(GL_TEXTURE0);
-//         glBindTexture(GL_TEXTURE_2D, app->TMP_TEST_TEX);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-//         unsigned char *texdat = malloc(40*40*4);
-//         memset(texdat, 0x00, 20*40*4);
-//         unsigned char v = 0;
-//         for (unsigned char *i = texdat + 20*40*4; i < texdat + 40*40*4; i++) {
-//             *i = rand_table[v++];
-//         }
-// //        memset(texdat, 0x88, 40*40*4);
-//         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 40, 40, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdat);
-//         free(texdat);
-
-//         glGenerateMipmap(GL_TEXTURE_2D);
         new_tex_from_file("./res/out.rim", &app->TMP_TEST_TEX);
     }
 }

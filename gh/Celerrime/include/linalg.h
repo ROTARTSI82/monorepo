@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_LINALG_H
-#define GAMETEST_LINALG_H
+#ifndef CEL_LINALG_H
+#define CEL_LINALG_H
 
 #include <math.h>
 
@@ -160,4 +160,4 @@ smat4 perspective(FLOAT_T fovy, FLOAT_T aspect, FLOAT_T zNear, FLOAT_T zFar);
 smat4 ortho(FLOAT_T left, FLOAT_T right, FLOAT_T bottom, FLOAT_T top, FLOAT_T near, FLOAT_T far);
 
 
-#endif //GAMETEST_LINALG_H
+#endif //CEL_LINALG_H

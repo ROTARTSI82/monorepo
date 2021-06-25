@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_MAIN_HELPER_C
-#define GAMETEST_MAIN_HELPER_C
+#ifndef CEL_MAIN_HELPER_C
+#define CEL_MAIN_HELPER_C
 
 #include "common.h"
 #include "config.h"
@@ -16,4 +16,4 @@ void start(app_t *app);
 void stop(app_t *app);
 
 
-#endif //GAMETEST_MAIN_HELPER_C
+#endif //CEL_MAIN_HELPER_C

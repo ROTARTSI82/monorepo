@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_UTIL_H
-#define GAMETEST_UTIL_H
+#ifndef CEL_UTIL_H
+#define CEL_UTIL_H
 
 #if defined(_MSC_VER) && (_MSC_VER < 1600)
 typedef unsigned char uint8_t;
@@ -20,11 +20,11 @@ typedef unsigned __int64 uint64_t;
 
 typedef struct fps_limiter_t {
     struct timespec last_tick;
-    uint64_t target_frametime_nano;
+    uint64_t target_frametime;
 } fps_limiter_t;
 
 void init_fps_limiter(fps_limiter_t *limiter, uint64_t target_frametime);
-
+double timespec_to_sec(struct timespec *spec);
 void tick_fps_limiter(fps_limiter_t *limiter);
 
 // https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.h
@@ -68,4 +68,4 @@ uint8_t is_little_endian();
 
 
 
-#endif //GAMETEST_UTIL_H
+#endif //CEL_UTIL_H

@@ -4,10 +4,10 @@
 
 #pragma once
 
-#ifndef GAMETEST_PHYS_H
-#define GAMETEST_PHYS_H
+#ifndef CEL_PHYS_H
+#define CEL_PHYS_H
 
-#include "linalg.h"
+#include "gl.h"
 #include "stdint.h"
 
 struct phys_obj_t;
@@ -19,8 +19,7 @@ typedef struct phys_obj_t {
     // 2D translation, rotation, and scaling data can be easily retrieved:
     //    2x2 matrix in the top left contains the semi-major x and y axes of the square
     //    first two rows of last column contains the 2d translation
-    smat2 *transform;
-    vec2 *translation;
+    transform2d_t trans;
 
     void *data;
     void (*collide_callback)(struct phys_obj_t *me, struct phys_obj_t *other, vec2 *deltVel, uint8_t is_static);
@@ -57,4 +56,4 @@ typedef struct push_info_t {
 uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info);
 void handle_collision(dyn_phys_obj_t *dynamic, phys_obj_t *static_obj);
 
-#endif //GAMETEST_PHYS_H
+#endif //CEL_PHYS_H

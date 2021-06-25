@@ -19,38 +19,38 @@ uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) 
     out_info->is_true_collision = 1;
     vec2 possible_axes[4];
 
-    possible_axes[0] = dyn->transform->c0; // 0 = dyn's semi-major x axis
-    possible_axes[1] = dyn->transform->c1; // 1 = dyn's semi-major y axis
-    possible_axes[2] = stat->transform->c0; // 2 = stat's semi-major x axis
-    possible_axes[3] = stat->transform->c1; // 3 = stat's semi-major y axis
+    possible_axes[0] = dyn->trans.form.c0; // 0 = dyn's semi-major x axis
+    possible_axes[1] = dyn->trans.form.c1; // 1 = dyn's semi-major y axis
+    possible_axes[2] = stat->trans.form.c0; // 2 = stat's semi-major x axis
+    possible_axes[3] = stat->trans.form.c1; // 3 = stat's semi-major y axis
 
 
     vec2 vertices[8]; // [0, 3] = verts of dyn, [4, 7] = verts of stat
     {  // this can probably be optimized a ton
 
-        vertices[0] = v2_add(dyn->translation, &possible_axes[0]);
+        vertices[0] = v2_add(&dyn->trans.late.v2, &possible_axes[0]);
         v2_add_eq(&vertices[0], &possible_axes[1]);
 
-        vertices[1] = v2_add(dyn->translation, &possible_axes[0]);
+        vertices[1] = v2_add(&dyn->trans.late.v2, &possible_axes[0]);
         v2_sub_eq(&vertices[1], &possible_axes[1]);
 
-        vertices[2] = v2_sub(dyn->translation, &possible_axes[0]);
+        vertices[2] = v2_sub(&dyn->trans.late.v2, &possible_axes[0]);
         v2_add_eq(&vertices[2], &possible_axes[1]);
 
-        vertices[3] = v2_sub(dyn->translation, &possible_axes[0]);
+        vertices[3] = v2_sub(&dyn->trans.late.v2, &possible_axes[0]);
         v2_sub_eq(&vertices[3], &possible_axes[1]);
 
 
-        vertices[4] = v2_add(stat->translation, &possible_axes[2]);
+        vertices[4] = v2_add(&stat->trans.late.v2, &possible_axes[2]);
         v2_add_eq(&vertices[4], &possible_axes[3]);
 
-        vertices[5] = v2_add(stat->translation, &possible_axes[2]);
+        vertices[5] = v2_add(&stat->trans.late.v2, &possible_axes[2]);
         v2_sub_eq(&vertices[5], &possible_axes[3]);
 
-        vertices[6] = v2_sub(stat->translation, &possible_axes[2]);
+        vertices[6] = v2_sub(&stat->trans.late.v2, &possible_axes[2]);
         v2_add_eq(&vertices[6], &possible_axes[3]);
 
-        vertices[7] = v2_sub(stat->translation, &possible_axes[2]);
+        vertices[7] = v2_sub(&stat->trans.late.v2, &possible_axes[2]);
         v2_sub_eq(&vertices[7], &possible_axes[3]);
     }
 
@@ -79,13 +79,13 @@ uint8_t collides_with(phys_obj_t *dyn, phys_obj_t *stat, push_info_t *out_info) 
             s_min = fminf(s_min, v);
         }
 
-        // COLLIDE_THRESHOLD makes it harder for this to be true
-        if ((s_min - COLLIDE_THRESHOLD) > d_max || (s_max + COLLIDE_THRESHOLD) < d_min) { // only 2 cases where sections aren't overlapping
+        // CEL_COLLIDE_THRESHOLD makes it harder for this to be true
+        if ((s_min - CEL_COLLIDE_THRESHOLD) > d_max || (s_max + CEL_COLLIDE_THRESHOLD) < d_min) { // only 2 cases where sections aren't overlapping
             return 0;
         }
 
-        // s_min < d_max && s_max > d_min is a DeMorgan of the above condition. It is true if they are really colliding, even without COLLIDE_THRESHOLD
-        // This sets out_info to false if they are not really colliding and the above condition was only false because of COLLIDE_THRESHOLD.
+        // s_min < d_max && s_max > d_min is a DeMorgan of the above condition. It is true if they are really colliding, even without CEL_COLLIDE_THRESHOLD
+        // This sets out_info to false if they are not really colliding and the above condition was only false because of CEL_COLLIDE_THRESHOLD.
         out_info->is_true_collision &= s_min < d_max && s_max > d_min;
 
         if (i > 1) { // static axes
@@ -105,12 +105,12 @@ void handle_collision(dyn_phys_obj_t *dynamic, phys_obj_t *static_obj) {
         return;
     }
 
-    vec2 delta = v2_sub(dynamic->sup.translation, static_obj->translation);
+    vec2 delta = v2_sub(&dynamic->sup.trans.late.v2, &static_obj->trans.late.v2);
     FLOAT_T target_theta = atan2f(delta.y, delta.x);
     if (target_theta < 0) {target_theta += PI * 2.0f; } // just add and fmodf?
 
-    vec2 v_1_1 = v2_add(&static_obj->transform->c0, &static_obj->transform->c1); // 1, 1
-    vec2 v_n1_1 = v2_sub(&static_obj->transform->c1, &static_obj->transform->c0); // -1, 1
+    vec2 v_1_1 = v2_add(&static_obj->trans.form.c0, &static_obj->trans.form.c1); // 1, 1
+    vec2 v_n1_1 = v2_sub(&static_obj->trans.form.c1, &static_obj->trans.form.c0); // -1, 1
 
     // TODO: Optimize this fucking nightmare
     FLOAT_T theta_1_1 = atan2f(v_1_1.y, v_1_1.x);
@@ -144,7 +144,7 @@ void handle_collision(dyn_phys_obj_t *dynamic, phys_obj_t *static_obj) {
         return;
     }
 
-    v2_add_eq(dynamic->sup.translation, &push); // push the dynamic object out of the wall.
+    v2_add_eq(&dynamic->sup.trans.late.v2, &push); // push the dynamic object out of the wall.
 
     // Don't check if (v2_dot(&push, &dynamic->vel) < 0); possibly opens to door for some exploits
 

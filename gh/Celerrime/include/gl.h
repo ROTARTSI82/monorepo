@@ -4,13 +4,14 @@
 
 #pragma once
 
-#ifndef GAMETEST_GL_H
-#define GAMETEST_GL_H
+#ifndef CEL_GL_H
+#define CEL_GL_H
 
 #include "linalg.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <pthread.h>
 
 void GLAPIENTRY gl_error_MessageCallback( GLenum source,
                  GLenum type,
@@ -20,9 +21,13 @@ void GLAPIENTRY gl_error_MessageCallback( GLenum source,
                  const GLchar* message,
                  const void* userParam );
 
+typedef struct transform2d_t {
+    smat2 form; // trans form
+    union { vec3 v3; vec2 v2; } late; // trans late
+} transform2d_t;
+
 typedef struct draw_instance_t {
-    smat2 transform;
-    vec3 translate;
+    transform2d_t trans;
     float alpha_mult;
 
     vec2 sampling_bottom_left;
@@ -43,7 +48,7 @@ typedef struct render_ctx_t {
     GLuint vao;
 
     draw_instance_t *local_array;
-    uint8_t do_flush;
+    volatile uint8_t do_flush;
 } render_ctx_t;
 
 // MUST be called AFTER init_ctx()
@@ -52,6 +57,7 @@ void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height);
 
 void compile_and_check_shader(GLuint shader);
 
+void render_locked(render_ctx_t *ctx, pthread_mutex_t *data_mtx);
 void render(render_ctx_t *ctx);
 void init_ctx(GLuint global_vbo, render_ctx_t *ctx, unsigned max_blits);
 void destroy_ctx(render_ctx_t *ctx);
@@ -62,4 +68,4 @@ GLenum proc_gl_error();
 
 void flush_gl_errors();
 
-#endif //GAMETEST_GL_H
+#endif //CEL_GL_H

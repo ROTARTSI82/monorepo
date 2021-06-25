@@ -18,6 +18,7 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "gl.h": "c",
-        "glew.h": "c"
+        "glew.h": "c",
+        "glfw3.h": "c"
     }
 }

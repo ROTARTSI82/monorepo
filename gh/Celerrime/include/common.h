@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_COMMON_H
-#define GAMETEST_COMMON_H
+#ifndef CEL_COMMON_H
+#define CEL_COMMON_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 #include <pthread.h>
 
 // EXit IF
-#define EXIF(exp, msg) if (exp) { PRINT(msg); exit(1); }
+#define EXIF(exp, ...) if (exp) { PRINT(__VA_ARGS__); abort(); }
 
 // for easy disabling of print in release
 #define PRINT(...) printf(__VA_ARGS__)
@@ -28,11 +28,13 @@ typedef struct settings_t {
     uint32_t win_height;
     uint32_t win_width;
 
-    float fps_cap; // `fps_cap < 0` = no limit, `0 < fps_cap < 1` = vsync
+    float fps_cap; // `fps_cap < -1` = no limit, `-1 < fps_cap < 0` = vsync
 } settings_t;
 
 typedef struct logic_thread_data_t {
     fps_limiter_t limiter;
+    FLOAT_T fps;
+
 } logic_thread_data_t;
 
 typedef struct app_t {
@@ -67,4 +69,4 @@ typedef struct app_t {
 
 
 
-#endif //GAMETEST_COMMON_H
+#endif //CEL_COMMON_H

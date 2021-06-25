@@ -13,27 +13,43 @@
 #endif // !defined(_MSC_VER)
 
 #include "config.h"
+#include "common.h"
+
+#include <errno.h>
+#include <string.h>
+
+#include <unistd.h>
+#include <GLFW/glfw3.h>
 
 void init_fps_limiter(fps_limiter_t *limiter, uint64_t target_frametime) {
-    clock_gettime(GCLOCK_SRC, &limiter->last_tick);
-    limiter->target_frametime_nano = target_frametime;
+    limiter->target_frametime = target_frametime;
+    clock_gettime(CEL_CLOCK_SRC, &limiter->last_tick);
+}
+
+double timespec_to_sec(struct timespec *spec) {
+    return spec->tv_sec + spec->tv_nsec / 1000000000.0;
 }
 
 void tick_fps_limiter(fps_limiter_t *limiter) {
     struct timespec now;
-    clock_gettime(GCLOCK_SRC, &now);
+    clock_gettime(CEL_CLOCK_SRC, &now);
+    // PRINT("now = %lf\n", timespec_to_sec(&now));
 
     uint64_t elapsed_time = (now.tv_sec - limiter->last_tick.tv_sec) * 1000000000UL + (now.tv_nsec - limiter->last_tick.tv_nsec);
-    if (elapsed_time < limiter->target_frametime_nano) {
+    if (elapsed_time < limiter->target_frametime) {
         struct timespec to_sleep;
-        to_sleep.tv_nsec = limiter->target_frametime_nano - elapsed_time;
+        to_sleep.tv_nsec = limiter->target_frametime - elapsed_time;
         to_sleep.tv_sec = to_sleep.tv_nsec / 1000000000L;
         to_sleep.tv_nsec %= 1000000000L;
 
-        clock_nanosleep(GCLOCK_SRC, 0, &to_sleep, NULL);
-    }
+        clock_nanosleep(CEL_CLOCK_SRC, 0, &to_sleep, NULL);
 
-    limiter->last_tick = now;
+        limiter->last_tick.tv_nsec += limiter->target_frametime;
+        limiter->last_tick.tv_sec += limiter->last_tick.tv_nsec / 1000000000L;
+        limiter->last_tick.tv_nsec %= 1000000000L;
+    } else {
+        limiter->last_tick = now;
+    }
 }
 
 uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )

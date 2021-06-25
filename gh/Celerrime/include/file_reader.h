@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GAMETEST_FILE_READER_H
-#define GAMETEST_FILE_READER_H
+#ifndef CEL_FILE_READER_H
+#define CEL_FILE_READER_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -51,4 +51,4 @@ struct huffman_node_t {
 void *decompress(void *src, size_t *out_size);
 
 
-#endif //GAMETEST_FILE_READER_H
+#endif //CEL_FILE_READER_H

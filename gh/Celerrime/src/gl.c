@@ -170,19 +170,36 @@ void destroy_ctx(render_ctx_t *ctx) {
     free(ctx->local_array);
 }
 
-void render(render_ctx_t *ctx) {
-    if (ctx->do_flush) {
-        ctx->do_flush = 0;
-        glBindBuffer(GL_ARRAY_BUFFER, ctx->instance_vbo);
-        
-        // this might be expensive? maybe double buffer this asynchronously?
-        glBufferSubData(GL_ARRAY_BUFFER, 0, ctx->num_blits * sizeof(draw_instance_t), ctx->local_array);
-    }
+static inline void ctx_data_flush_helper(render_ctx_t *ctx) {
+    ctx->do_flush = 0;
+    glBindBuffer(GL_ARRAY_BUFFER, ctx->instance_vbo);
 
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ctx->num_blits * sizeof(draw_instance_t), ctx->local_array);
+}
+
+static inline void ctx_render_helper(render_ctx_t *ctx) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(ctx->vao);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, (GLsizei) ctx->num_blits);
+}
+
+void render(render_ctx_t *ctx) {
+    if (ctx->do_flush) {
+        ctx_data_flush_helper(ctx);
+    }
+
+    ctx_render_helper(ctx);
+}
+
+void render_locked(render_ctx_t *ctx, pthread_mutex_t *data_mtx) {
+    if (ctx->do_flush) {
+        pthread_mutex_lock(data_mtx); // error checking?
+        ctx_data_flush_helper(ctx);
+        pthread_mutex_unlock(data_mtx);
+    }
+
+    ctx_render_helper(ctx);
 }
 
 void compile_and_check_shader(GLuint shader) {
@@ -205,8 +222,9 @@ void init_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // glGenerateMipmap(GL_TEXTURE_2D);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx->fbo_tex, 0);
 
@@ -217,6 +235,7 @@ void resize_fbo(render_ctx_t *ctx, GLsizei width, GLsizei height) {
     glBindFramebuffer(GL_FRAMEBUFFER, ctx->framebuffer);
     glBindTexture(GL_TEXTURE_2D, ctx->fbo_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    // glGenerateMipmap(GL_TEXTURE_2D);
     EXIF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Incomplete framebuffer!\n");
 }
 
@@ -237,8 +256,8 @@ void new_tex_from_file(const char *filename, GLuint *tex) {
         height = ntohl(*(uint32_t *) (raw + 4));
 
         dest_len = width * height * 4;
-        if (dest_len > MAX_IMG_SIZE) {
-            PRINT("ERROR: Cannot load %s; image was over %i bytes!\n", filename, MAX_IMG_SIZE);
+        if (dest_len > CEL_MAX_IMG_SIZE) {
+            PRINT("ERROR: Cannot load %s; image was over %i bytes!\n", filename, CEL_MAX_IMG_SIZE);
             goto missing_texture;
         }
 
@@ -275,10 +294,10 @@ success:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_dat);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    // glGenerateMipmap(GL_TEXTURE_2D);
 
     free(tex_dat);
     free(raw);

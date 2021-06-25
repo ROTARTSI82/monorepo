@@ -27,8 +27,8 @@ void *full_read_file(const char *filename, long *size) {
     *size = ftell(fp);
     rewind(fp);
 
-    if (*size > MAX_FILE_SIZE) {
-        PRINT("Failed to open %s: File was over %d bytes!\n", filename, MAX_FILE_SIZE);
+    if (*size > CEL_MAX_FILE_SIZE) {
+        PRINT("Failed to open %s: File was over %d bytes!\n", filename, CEL_MAX_FILE_SIZE);
         return NULL;
     }
 
