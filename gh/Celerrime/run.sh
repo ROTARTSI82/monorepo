@@ -1,8 +1,8 @@
-# export CC=$(which gcc)
-# export CXX=$(which g++)
+export CC=$(which gcc)
+export CXX=$(which g++)
 
-export CC=$(which clang)
-export CXX=$(which clang++)
+# export CC=$(which clang)
+# export CXX=$(which clang++)
 
 echo $CC
 echo $CXX

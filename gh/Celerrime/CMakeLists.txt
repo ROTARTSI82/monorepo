@@ -1,48 +1,23 @@
 cmake_minimum_required(VERSION 3.16)
-project(Celerrime C)
 
-SET(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-message("CXX Compiler = ${CMAKE_CXX_COMPILER} C Compiler = ${CMAKE_C_COMPILER}")
+project(Celerrime LANGUAGES CXX)
 
-add_executable(Celerrime src/main.c src/linalg.c src/gl.c src/common.c src/file_reader.c src/phys.c src/util.c src/main_helper.c
-                         src/scripting/pymodule.c)
+file(GLOB_RECURSE CEL_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+add_executable(Celerrime ${CEL_SOURCES})
 
-set(WARNING_FLAGS -Wall -Wextra -Wpedantic -Wabi -Wbad-function-cast -Wcast-qual -Wfloat-equal -Wformat=2
--Wformat-nonliteral -Wformat-security -Winit-self -Winvalid-pch -Wmissing-declarations -Wmissing-include-dirs  -Wstrict-overflow=5
--Wmultichar -Wnested-externs -Wold-style-definition -Wredundant-decls -Wformat-y2k -Wstrict-aliasing
--Wmissing-noreturn -Wc++-compat -Walloca -Wdate-time -Wshift-overflow -Wunused-const-variable
--Wmissing-format-attribute -Wswitch-default -Wswitch-enum -Wundef -Wunused-macros -Wwrite-strings)
-# disabled:
-# -Wdouble-promotion (Warns when a float is implicity converted to a double)
-# -Wfloat-conversion is implicitly enabled by -Wconversion
-# -Wtraditional -Wtraditional-conversion
-# -Wunsuffixed-float-constants
-# -Wsystem-headers
-# -Wmissing-prototypes 
-# -Wsign-conversion enabled by -Wconversion
-# -Wstrict-prototypes warns about func() because it wants func(void) and it's stupid
-# -Walloc-size-larger-than= and -Walloca-larger-than=
-# -Wconversion warns about stupid stuff.
+target_compile_options(Celerrime PRIVATE -Wall -Wextra -Wpedantic -O3)
+target_link_options(Celerrime PRIVATE -Wall -Wextra -Wpedantic -O3)
 
-
-target_compile_options(Celerrime PRIVATE ${WARNING_FLAGS})
-target_link_options(Celerrime PRIVATE ${WARNING_FLAGS})
-
-option(USE_ASAN "Compile with google address sanitizer" ON)
-option(USE_O3 "Compile with -O3 (maximum optimization)" ON)
+option(USE_ASAN "Compile with address sanitizer" ON)
 option(USE_G3 "Compile with -g3 and -ggdb (debug symbols for gdb)" ON)
+
 
 if (USE_ASAN)
     target_compile_options(Celerrime PRIVATE -fsanitize=address -fno-omit-frame-pointer)
     target_link_options(Celerrime PRIVATE -fsanitize=address -fno-omit-frame-pointer)
-endif()
-
-if (USE_O3)
-    # -Ofast is prolly bad
-    target_compile_options(Celerrime PRIVATE -O3)
-    target_link_options(Celerrime PRIVATE -O3)
 endif()
 
 if (USE_G3)
@@ -77,4 +52,8 @@ target_link_libraries(Celerrime glfw ZLIB::ZLIB)
 target_link_libraries(Celerrime OpenGL::GL GLEW::GLEW ${OPENAL_LIBRARY} m pthread) # m being libmath
 target_link_libraries(Celerrime Python::Module Python::Python)
 
-target_include_directories(Celerrime PRIVATE ${OPENGL_INCLUDE_DIR} include src ${OPENAL_INCLUDE_DIR})
+add_subdirectory(dep/fmt)
+target_link_libraries(Celerrime fmt::fmt)
+
+target_include_directories(Celerrime PRIVATE ${OPENGL_INCLUDE_DIR} ${OPENAL_INCLUDE_DIR})
+target_include_directories(Celerrime PUBLIC include src)
