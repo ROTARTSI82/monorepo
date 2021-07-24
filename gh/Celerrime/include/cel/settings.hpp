@@ -15,6 +15,8 @@
 #define CEL_SETTINGS_HPP
 
 #include "cel/constants.hpp"
+#include "cel/eng/window.hpp"
+#include "cel/eng/strings.hpp"
 
 namespace cel {
 
@@ -23,25 +25,34 @@ namespace cel {
         automatic
     };
 
-    class settings_handler {
-    public:
-        bool save_on_destroy = false;
-
+    struct window_settings {
         gui_scale_mode scale_mode = gui_scale_mode::automatic;
         float_t manual_scale = 1;
 
         bool enforce_aspect = true;
-        float_t game_aspect = consts_for<float_t>::calc().root2;
+        float_t aspect = consts_for<float_t>::calc().root2;
+
+        int width = 1440, height = 900;
+    };
+
+    class settings_handler {
+    public:
+        bool save_on_destroy = false;
+
+        window_settings wins[static_cast<unsigned long>(window_types::size)];
 
         float_t fovy = 90;
         float_t tas_fps = 60;
 
-        settings_handler();
+        string_dictionary strs;
+
+        settings_handler(int argc, char **argv);
         ~settings_handler();
 
         settings_handler(const settings_handler &rhs) noexcept = default;
         settings_handler &operator=(const settings_handler &rhs) noexcept = default;
 
+        void load();
         void save();
     };
 }

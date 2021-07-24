@@ -40,8 +40,8 @@ namespace cel {
     };
 
     uint8_t *utf8_codepoint_encode(uint8_t *in, uint32_t codepoint) {
-
-    };
+        throw std::runtime_error("utf8_codepoint_encode is unimplemented");
+    }
 
     raw_stack::raw_stack(size_t size) {
         store = new uint8_t[size];
@@ -54,7 +54,7 @@ namespace cel {
 
     raw_stack::raw_stack(raw_stack &&rhs) noexcept {
         *this = std::move(rhs);
-    };
+    }
 
     raw_stack &raw_stack::operator=(raw_stack &&rhs) noexcept {
         if (this == &rhs) return *this;
@@ -64,6 +64,7 @@ namespace cel {
         
         rhs.store = nullptr;
         rhs.sp = nullptr;
-    };
+        return *this;
+    }
 
 }

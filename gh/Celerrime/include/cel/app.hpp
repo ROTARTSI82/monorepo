@@ -9,16 +9,23 @@
 #ifndef CEL_APP_HPP
 #define CEL_APP_HPP
 
-namespace cel {
-    class app {
-    public:
-        
+#include "cel/eng/window.hpp"
+#include "cel/settings.hpp"
 
-        app();
+namespace cel {
+    void init();
+    void quit();
+    class app {
+    private:
+        settings_handler settings;
+        window ctl_panel;
+
+    public:
+        app(int argc, char **argv);
         ~app();
 
-        void start();
-        void stop();
+        // finer control in the future?
+        void run();
     };
 }
 

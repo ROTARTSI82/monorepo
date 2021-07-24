@@ -22,6 +22,8 @@
 #include <fmt/chrono.h>
 
 #include "cel/constants.hpp"
+#include <cstdlib>
+#include <exception>
 
 namespace cel {
     enum class log_level : uint8_t {
@@ -31,7 +33,6 @@ namespace cel {
     std::string to_string(log_level lvl);
 
     struct log_record {
-
         log_record(log_level, const char *, unsigned, const char *);
 
         log_level lvl;
@@ -49,20 +50,26 @@ namespace cel {
     }
 }
 
+#define CEL_IGNORE(val) static_cast<void>(val);
+
 #if CEL_ENABLE_LOG
-#   define TRACE(...) ::cel::log({::cel::log_level::trace, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define DEBUG(...) ::cel::log({::cel::log_level::debug, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define INFO(...) ::cel::log({::cel::log_level::info, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define WARN(...) ::cel::log({::cel::log_level::warn, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define ERROR(...) ::cel::log({::cel::log_level::error, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define FATAL(...) ::cel::log({::cel::log_level::fatal, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_TRACE(...) ::cel::log({::cel::log_level::trace, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_DEBUG(...) ::cel::log({::cel::log_level::debug, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_INFO(...) ::cel::log({::cel::log_level::info, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_WARN(...) ::cel::log({::cel::log_level::warn, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_ERROR(...) ::cel::log({::cel::log_level::error, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_FATAL(...) ::cel::log({::cel::log_level::fatal, __FILE__, __LINE__, __func__}, __VA_ARGS__)
 #else
-#   define TRACE(msg, ...)
-#   define DEBUG(msg, ...)
-#   define INFO(msg, ...) 
-#   define WARN(msg, ...) 
-#   define ERROR(msg, ...)
-#   define FATAL(msg, ...)
+#   define CEL_TRACE(msg, ...)
+#   define CEL_DEBUG(msg, ...)
+#   define CEL_INFO(msg, ...) 
+#   define CEL_WARN(msg, ...) 
+#   define CEL_ERROR(msg, ...)
+#   define CEL_FATAL(msg, ...)
 #endif
+
+#define CEL_TERMIF(condition, ...) if (condition) { CEL_FATAL(__VA_ARGS__); std::terminate(); }
+#define CEL_EXITIF(condition, code, ...) if (condition) { CEL_FATAL(__VA_ARGS__); std::quick_exit(code); }
+
 
 #endif

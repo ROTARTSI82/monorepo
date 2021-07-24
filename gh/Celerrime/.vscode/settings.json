@@ -66,6 +66,10 @@
         "typeinfo": "cpp",
         "bit": "cpp",
         "forward_list": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "format": "cpp",
+        "any": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp"
     }
 }

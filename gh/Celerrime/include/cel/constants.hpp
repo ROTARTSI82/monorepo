@@ -13,6 +13,10 @@
 #include <iostream>
 
 #define CEL_ENABLE_LOG 1
+#define CEL_USE_OGL_DBG_CTX GLFW_TRUE
+
+
+#define UINT8_T static_cast<uint8_t>
 
 namespace cel {
     typedef float float_t;

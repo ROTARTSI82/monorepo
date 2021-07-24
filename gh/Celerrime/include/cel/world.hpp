@@ -1,5 +1,5 @@
 /**
- * @file gl.hpp
+ * @file world.hpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -11,17 +11,22 @@
 
 #pragma once
 
-#ifndef CEL_ENG_GL_HPP
-#define CEL_ENG_GL_HPP
+#ifndef CEL_WORLD_HPP
+#define CEL_WORLD_HPP
 
-#include <GL/glew.h>
 
 namespace cel {
-    class vertex_array {
-    private:
+
+    class game_obj {
 
     };
-    
+
+    class world {
+    private:
+
+    public:
+
+    };
 }
 
 #endif

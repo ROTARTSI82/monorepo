@@ -29,18 +29,11 @@ namespace cel {
         bool buttons[static_cast<unsigned long>(button_id::size)];
     };
 
-
-    class input_manager {
-    public:
-        virtual void poll() = 0;
-
-        virtual void initialize() = 0;
-        virtual void destroy() = 0;
-    };
-
+    class window;
+    
     class input_provider {
     public:
-        virtual input_frame next(uint64_t frame_num);
+        virtual input_frame next(uint64_t frame_num, window *win) = 0;
     };
 
 

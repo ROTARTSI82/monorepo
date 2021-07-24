@@ -19,6 +19,8 @@
 #include <cmath>
 
 namespace cel {
+    class identity_tag {};
+
     template <typename T>
     inline T radians(T deg) {
         return deg * consts_for<T>::calc().pi / 180;
@@ -28,6 +30,52 @@ namespace cel {
     inline T degrees(T rad) {
         return rad * 180 / consts_for<T>::calc().pi;
     }
+
+    template<typename T>
+    class generic_vec2;
+
+    template <typename T>
+    class generic_mat2 {
+    private:
+        typedef generic_vec2<T> vec_t;
+
+    public:
+        vec_t c0{}, c1{};
+
+        generic_mat2() = default;
+        explicit generic_mat2(const identity_tag tag) : c0(1, 0), c1(0, 1) { (void) tag; }
+        generic_mat2(const vec_t &c0, const vec_t &c1) : c0(c0), c1(c1) {};
+
+        generic_mat2(const generic_mat2 &rhs) noexcept = default;
+        generic_mat2 &operator=(const generic_mat2 &rhs) noexcept = default;
+
+        inline generic_mat2 operator*(const generic_mat2 &rhs) {
+            generic_mat2 ret;
+            ret.c0 = c0 * rhs;
+            ret.c1 = c1 * rhs;
+            return ret;
+        }
+
+        inline generic_mat2 &operator*=(const generic_mat2 &rhs) {
+            c0 *= rhs; c1 *= rhs; return *this;
+        }
+
+        static generic_mat2<T> transform(const generic_vec2<T> &scale, T theta) {
+            generic_mat2<T> ret{};
+
+            T cos = std::cos(theta);
+            T sin = std::sin(theta);
+            ret.c0.x = cos * scale.x;
+            ret.c0.y = sin * scale.x;
+
+            ret.c0.x = -sin * scale.y;
+            ret.c1.y = cos * scale.y;
+
+            return ret;
+        }
+
+
+    };
 
     template <typename T>
     class generic_vec2 {
@@ -56,21 +104,30 @@ namespace cel {
             return generic_vec2<T>(x / rhs, y / rhs);
         }
 
-        inline void operator+=(const generic_vec2<T> &rhs) noexcept {
-            x += rhs.x; y += rhs.y;
+        inline generic_vec2 &operator+=(const generic_vec2<T> &rhs) noexcept {
+            x += rhs.x; y += rhs.y; return *this;
         }
 
-        inline void operator-=(const generic_vec2<T> &rhs) noexcept {
-            x -= rhs.x; y -= rhs.y;
+        inline generic_vec2 &operator-=(const generic_vec2<T> &rhs) noexcept {
+            x -= rhs.x; y -= rhs.y; return *this;
         }
 
-        inline void operator*=(const T rhs) noexcept {
-            x *= rhs; y *= rhs;
+        inline generic_vec2 &operator*=(const T rhs) noexcept {
+            x *= rhs; y *= rhs; return *this;
         }
 
-        inline void operator/=(const T rhs) noexcept {
-            x /= rhs; y /= rhs;
+        inline generic_vec2 &operator/=(const T rhs) noexcept {
+            x /= rhs; y /= rhs; return *this;
         }
+
+        inline generic_vec2<T> operator*(const generic_mat2<T> &rhs) const noexcept {
+            generic_vec2<T> ret;
+            ret += rhs.c0 * x;
+            ret += rhs.c1 * y;
+            return ret;
+        }
+
+        inline generic_vec2 &operator*=(const generic_mat2<T> &rhs) noexcept { *this = *this * rhs; return *this; }
 
         // DOT PRODUCT!
         inline T operator*(const generic_vec2<T> &rhs) noexcept {
@@ -108,17 +165,15 @@ namespace cel {
     private:
         typedef generic_vec4<T> vec_t;
     public:
-        class identity {};
-
         // c for "column"
-        vec_t c0, c1, c2, c3;
+        vec_t c0{}, c1{}, c2{}, c3{};
 
         generic_mat4() = default;
-        explicit generic_mat4(const identity &id) : c0(1, 0, 0, 0), c1(0, 1, 0, 0), c2(0, 0, 1, 0), c3(0, 0, 0, 1) {};
-        generic_mat4(const vec_t &c0, const vec_t &c1, const vec_t &c2, const vec_t &c3) : c0(c0), c1(c1), c2(c2), c3(c3) {};
+        explicit generic_mat4(const identity_tag tag) : c0(1, 0, 0, 0), c1(0, 1, 0, 0), c2(0, 0, 1, 0), c3(0, 0, 0, 1) { (void) tag; }
+        generic_mat4(const vec_t &c0, const vec_t &c1, const vec_t &c2, const vec_t &c3) : c0(c0), c1(c1), c2(c2), c3(c3) {}
         generic_mat4(const generic_mat4<T> &rhs) noexcept = default;
 
-        inline generic_mat4<T> &operator=(const generic_mat4<T> &rhs) noexcept = default;
+        generic_mat4<T> &operator=(const generic_mat4<T> &rhs) noexcept = default;
 
         inline generic_mat4<T> operator*(const generic_mat4<T> &rhs) const noexcept {
             generic_mat4<T> ret;
@@ -129,8 +184,8 @@ namespace cel {
             return ret;
         }
 
-        inline void operator*=(const generic_mat4<T> &rhs) noexcept {
-            c0 *= rhs; c1 *= rhs; c2 *= rhs; c3 *= rhs;
+        inline generic_mat4 &operator*=(const generic_mat4<T> &rhs) noexcept {
+            c0 *= rhs; c1 *= rhs; c2 *= rhs; c3 *= rhs; return *this;
         }
 
         /**
@@ -169,7 +224,7 @@ namespace cel {
         }
 
         static generic_mat4<T> transform(const generic_vec3<T> &translate, const generic_vec2<T> &scale, T theta) {
-            generic_mat4<T> ret{identity{}};
+            generic_mat4<T> ret{identity_tag{}};
 
             T sin = std::sin(theta);
             T cos = std::cos(theta);
@@ -195,7 +250,7 @@ namespace cel {
         generic_vec4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {};
         generic_vec4(const generic_vec4<T> &rhs) noexcept = default;
 
-        inline generic_vec4<T> &operator=(const generic_vec4<T> &rhs) noexcept = default;
+        generic_vec4<T> &operator=(const generic_vec4<T> &rhs) noexcept = default;
 
         inline generic_vec4<T> operator+(const generic_vec4<T> &rhs) const noexcept {
             return generic_vec4<T>(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
@@ -205,8 +260,8 @@ namespace cel {
             return generic_vec4<T>(x * rhs, y * rhs, z * rhs, w * rhs);
         };
 
-        inline void operator+=(const generic_vec4<T> &rhs) noexcept {
-            x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w;
+        inline generic_vec4 &operator+=(const generic_vec4<T> &rhs) noexcept {
+            x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w; return *this;
         }
 
         // we transform this vector BY rhs.
@@ -219,12 +274,13 @@ namespace cel {
             return ret;
         };
 
-        inline void operator*=(const generic_mat4<T> &rhs) noexcept { *this = *this * rhs; }
+        inline generic_vec4 &operator*=(const generic_mat4<T> &rhs) noexcept { *this = *this * rhs; return *this; }
     };
 
     typedef generic_vec2<float_t> vec2;
     typedef generic_vec4<float_t> vec4;
     typedef generic_mat4<float_t> mat4;
+    typedef generic_mat2<float_t> mat2;
 }
 
 #endif
