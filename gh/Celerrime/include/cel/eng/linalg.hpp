@@ -80,6 +80,8 @@ namespace cel {
     template <typename T>
     class generic_vec2 {
     public:
+        typedef T underlying_type;
+
         T x, y;
 
         generic_vec2() : x(0), y(0) {};
@@ -130,8 +132,8 @@ namespace cel {
         inline generic_vec2 &operator*=(const generic_mat2<T> &rhs) noexcept { *this = *this * rhs; return *this; }
 
         // DOT PRODUCT!
-        inline T operator*(const generic_vec2<T> &rhs) noexcept {
-            return x * rhs.x + y * rhs.y;
+        static inline T dot(const generic_vec2<T> &lhs, const generic_vec2<T> &rhs) noexcept {
+            return lhs.x * rhs.x + lhs.y * rhs.y;
         }
 
         inline T magnitude() const {
@@ -149,6 +151,7 @@ namespace cel {
 
     template <typename T>
     class generic_vec3 {
+    public:
         T x, y, z;
         generic_vec3() : x(0), y(0), z(0) {};
         generic_vec3(T x, T y, T z) : x(x), y(y), z(z) {};
@@ -165,6 +168,8 @@ namespace cel {
     private:
         typedef generic_vec4<T> vec_t;
     public:
+        typedef T underlying_type;
+
         // c for "column"
         vec_t c0{}, c1{}, c2{}, c3{};
 
@@ -278,9 +283,15 @@ namespace cel {
     };
 
     typedef generic_vec2<float_t> vec2;
+    typedef generic_vec3<float_t> vec3;
     typedef generic_vec4<float_t> vec4;
     typedef generic_mat4<float_t> mat4;
     typedef generic_mat2<float_t> mat2;
+
+    typedef float_t gl_float;
+    typedef generic_mat2<gl_float> gl_mat2;
+    typedef generic_vec2<gl_float> gl_vec2;
+    typedef generic_vec3<gl_float> gl_vec3;
 }
 
 #endif

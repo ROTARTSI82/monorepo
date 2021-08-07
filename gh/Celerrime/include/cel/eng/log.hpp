@@ -27,10 +27,8 @@
 
 namespace cel {
     enum class log_level : uint8_t {
-        trace, debug, info, warn, error, fatal
+        trace, debug, info, warn, error, critical
     };
-
-    std::string to_string(log_level lvl);
 
     struct log_record {
         log_record(log_level, const char *, unsigned, const char *);
@@ -58,18 +56,18 @@ namespace cel {
 #   define CEL_INFO(...) ::cel::log({::cel::log_level::info, __FILE__, __LINE__, __func__}, __VA_ARGS__)
 #   define CEL_WARN(...) ::cel::log({::cel::log_level::warn, __FILE__, __LINE__, __func__}, __VA_ARGS__)
 #   define CEL_ERROR(...) ::cel::log({::cel::log_level::error, __FILE__, __LINE__, __func__}, __VA_ARGS__)
-#   define CEL_FATAL(...) ::cel::log({::cel::log_level::fatal, __FILE__, __LINE__, __func__}, __VA_ARGS__)
+#   define CEL_CRITICAL(...) ::cel::log({::cel::log_level::critical, __FILE__, __LINE__, __func__}, __VA_ARGS__)
 #else
 #   define CEL_TRACE(msg, ...)
 #   define CEL_DEBUG(msg, ...)
 #   define CEL_INFO(msg, ...) 
 #   define CEL_WARN(msg, ...) 
 #   define CEL_ERROR(msg, ...)
-#   define CEL_FATAL(msg, ...)
+#   define CEL_CRITICAL(msg, ...)
 #endif
 
-#define CEL_TERMIF(condition, ...) if (condition) { CEL_FATAL(__VA_ARGS__); std::terminate(); }
-#define CEL_EXITIF(condition, code, ...) if (condition) { CEL_FATAL(__VA_ARGS__); std::quick_exit(code); }
+#define CEL_TERMIF(condition, ...) if (condition) { CEL_CRITICAL(__VA_ARGS__); std::terminate(); }
+#define CEL_EXITIF(condition, code, ...) if (condition) { CEL_CRITICAL(__VA_ARGS__); std::quick_exit(code); }
 
 
 #endif

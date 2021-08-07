@@ -18,16 +18,14 @@ int main(int argc, char **argv) {
     }
 
 
-    for (int i = 0; i < 256; i++)
-        CEL_INFO("TESTING 123");
-
-
     std::cout << "test: " << persp.c2.w << std::endl;
     std::cout << "pi = " << cel::consts_for<float>::calc().pi << std::endl;
     std::cout << "rt2 = " << cel::consts_for<float>::calc().root2 << std::endl;
     
     cel::init();
-    cel::app app{argc, argv};
-    app.run();
+    { // scope is important. quit() should be called after ~app()
+        cel::app app{argc, argv};
+        app.run();
+    }
     cel::quit();
 }

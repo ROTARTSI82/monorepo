@@ -9,6 +9,7 @@
 #ifndef CEL_CONSTANTS_HPP
 #define CEL_CONSTANTS_HPP
 
+#include <GL/glew.h>
 #include <cmath>
 #include <iostream>
 
@@ -29,6 +30,8 @@ namespace cel {
     class consts_for {
     public:
         T pi, root2;
+
+        static GLenum gl_type_enum;
 
         static inline const consts_for<T> &calc() {
             static const consts_for<T> var = consts_for<T>();

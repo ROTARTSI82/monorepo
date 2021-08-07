@@ -18,7 +18,9 @@ namespace cel {
     class app {
     private:
         settings_handler settings;
-        window ctl_panel;
+        window ctl_panel; // the window MUST go first for the ogl context to be created.
+        
+        shader_pipeline default_shaders{};
 
     public:
         app(int argc, char **argv);

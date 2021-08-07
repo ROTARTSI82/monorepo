@@ -4,7 +4,9 @@
 
 namespace cel {
 
-    settings_handler::settings_handler(int argc, char **argv) {
+    settings_handler::settings_handler(int argc, char **argv) : locale("") {
+        std::locale::global(locale);
+        
         CEL_IGNORE(argc);
         CEL_IGNORE(argv);
         save_on_destroy = true;

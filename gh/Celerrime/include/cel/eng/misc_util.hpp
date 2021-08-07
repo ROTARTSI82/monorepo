@@ -15,8 +15,20 @@
 #define CEL_ENG_MISC_UTIL_HPP
 
 #include <cstdint>
+#include <stdexcept>
+#include <exception>
+#include <string>
 
 namespace cel {
+    /**
+     * @brief Tries to open and read an entire file into a string.
+     * 
+     * @param filepath File to open
+     * @return std::string String containing the binary contents of the file (unaltered)
+     * @throws std::system_error If file opening/reading fails.
+     */
+    std::string read_entire_file(const std::string &filepath);
+
     /**
      * @brief Decodes a varaible-width UTF-8 codepoint from a sequence of `char`s.
      *        One call will consume between 1 and 4 `char`s, and 
@@ -39,6 +51,7 @@ namespace cel {
 
     class raw_stack {
     private:
+        std::size_t capacity = 0;
         uint8_t *store = nullptr;
         uint8_t *sp = nullptr; // stack pointer
 
@@ -67,6 +80,56 @@ namespace cel {
 
         inline uint8_t *peek(unsigned back = 1) {
             return sp - back;
+        }
+
+        inline ptrdiff_t size() {
+            return sp - store;
+        }
+    };
+
+
+    template <typename T>
+    class checked_array {
+    private:
+        bool do_delete = false;
+        T *store;
+        size_t size;
+
+    public:
+
+        checked_array() = delete;
+        checked_array(T *arr, size_t size) : store(arr), size(size) {};
+        checked_array(size_t size) : do_delete(true), store(new T[size]), size(size) {};
+        ~checked_array() {
+            delete[] store;
+        }
+
+        // operator[] has no bounds checking, but at() does.
+        // operator+ has no bounds checking, but range() does.
+        inline T &operator[](size_t index) {
+            return store[index];
+        }
+
+        inline T &at(size_t index) {
+            if (index >= size) throw std::out_of_range("Checked array out of bounds");
+            return store[index];
+        }
+
+        /**
+         * @brief Checks bounds of accessing a range 
+         * 
+         * @throws std::out_of_range if the range goes out of bounds
+         * @param start Index of the first element to return
+         * @param range Number of elements in the range
+         * @return T* Pointer to the first element in the range
+         */
+        inline T *range(size_t start, unsigned span = 1) {
+            if ((start + span) > size) throw std::out_of_range("Checked array + out of bounds");
+            return store + start;
+        }
+
+        inline T *operator+(size_t size) {
+            return store + size;
         }
     };
 

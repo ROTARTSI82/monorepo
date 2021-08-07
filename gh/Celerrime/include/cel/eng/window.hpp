@@ -16,6 +16,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <mutex>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -27,32 +28,44 @@
 namespace cel {
 
     struct draw_instance {
-        vec2 sample_origin;
-        vec2 sample_extent;
-        vec2 sample_ntiles;
+        gl_mat2 transform;
+        gl_vec3 center;
+        gl_float alpha_mult;
 
-        mat2 transform;
-        vec2 center;
+        gl_vec2 sample_origin;
+        gl_vec2 sample_extent;
+        gl_vec2 sample_ntiles;
     };
 
     class draw_call {
     private:
         GLuint vbo;
-        vertex_array vao;
+        vertex_array vao{};
 
     public:
-        std::vector<draw_instance> instances;
+        draw_instance *instances; // NOTE: Using a static array instead of std::vector because the VBO must be static anyways.
+        unsigned num_blits = 0;
         bool do_flush = true;
+        std::mutex mtx;
 
-        void dispatch();
-    };
-    
-    class gui_widget {
-    public:
-        gui_widget *anchor = nullptr; // nullptr for window.
-        vec2 coords{}; // relative to anchor.
-        bool rebuild_required = false;
+        draw_call(size_t max_instances);
+        ~draw_call();
 
+        inline void flush() {
+            do_flush = false;
+            glBindBuffer(GL_COPY_WRITE_BUFFER, vbo);
+            glBufferSubData(GL_COPY_WRITE_BUFFER, 0, num_blits * sizeof(draw_instance), instances);
+        }
+
+        inline void flush_locked() {
+            std::scoped_lock lock(mtx);
+            flush();
+        }
+
+        inline void dispatch() {
+            vao.bind();
+            glDrawArraysInstanced(GL_TRIANGLES, 0, 6, num_blits);
+        }
     };
 
     enum class window_types : uint8_t {
@@ -62,7 +75,6 @@ namespace cel {
     };
 
     class settings_handler;
-
 
     class window {
     private:

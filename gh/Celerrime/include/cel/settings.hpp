@@ -39,6 +39,8 @@ namespace cel {
     public:
         bool save_on_destroy = false;
 
+        std::locale locale;
+
         window_settings wins[static_cast<unsigned long>(window_types::size)];
 
         float_t fovy = 90;
@@ -48,6 +50,8 @@ namespace cel {
 
         settings_handler(int argc, char **argv);
         ~settings_handler();
+
+        inline void reload_locale() const { std::locale::global(locale); };
 
         settings_handler(const settings_handler &rhs) noexcept = default;
         settings_handler &operator=(const settings_handler &rhs) noexcept = default;

@@ -1,8 +1,26 @@
 #include "cel/eng/misc_util.hpp"
 
+#include "cel/eng/log.hpp"
+
 #include <stdexcept>
+#include <fstream>
 
 namespace cel {
+
+    std::string read_entire_file(const std::string &filepath) {
+        if (std::ifstream in{filepath, std::ios::binary | std::ios::ate}) {
+            auto size = in.tellg();
+            std::string str;
+            str.resize(size);
+
+            in.seekg(0);
+            if (in.read(str.data(), size)) return str;
+            // if this ^ is false, execution will fall through and an exception is thrown.
+        }
+
+        CEL_CRITICAL("Failed to open and read: {}", filepath);
+        throw std::system_error{};
+    }
 
     // this should probably be implemented with simple chained if/else but whatever.
     uint32_t utf8_codepoint_decode(uint8_t **in) {
@@ -37,13 +55,13 @@ namespace cel {
             *in = p;
             return byte0;
         }
-    };
+    }
 
     uint8_t *utf8_codepoint_encode(uint8_t *in, uint32_t codepoint) {
         throw std::runtime_error("utf8_codepoint_encode is unimplemented");
     }
 
-    raw_stack::raw_stack(size_t size) {
+    raw_stack::raw_stack(size_t size) : capacity(size) {
         store = new uint8_t[size];
         sp = store;
     }
@@ -61,7 +79,9 @@ namespace cel {
         free(store);
         store = rhs.store;
         sp = rhs.sp;
+        capacity = rhs.capacity;
         
+        rhs.capacity = 0;
         rhs.store = nullptr;
         rhs.sp = nullptr;
         return *this;
