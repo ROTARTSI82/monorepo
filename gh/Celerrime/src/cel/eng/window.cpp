@@ -5,6 +5,9 @@
 
 namespace cel {
 
+
+    draw_instance::draw_instance(gl_mat2 t, gl_vec3 c, gl_float a, gl_vec2 o, gl_vec2 e, gl_vec2 n) : transform(t), center(c), alpha_mult(a), sample_origin(o), sample_extent(e), sample_ntiles(n) {}
+
     draw_call::draw_call(size_t max_instances) : instances(new draw_instance[max_instances]) {
         vao.bind_record();
 
@@ -78,7 +81,9 @@ namespace cel {
     }
 
     window::~window() {
-        CEL_TRACE("Destroy glfw win");
+        rectangle_vbo::destroy();
+        flush_gl_errors();
+        CEL_TRACE("glfwDestroyWindow()");
         glfwDestroyWindow(win);
     }
 

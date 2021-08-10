@@ -21,6 +21,7 @@ namespace cel {
         window ctl_panel; // the window MUST go first for the ogl context to be created.
         
         shader_pipeline default_shaders{};
+        shader_pipeline hd_shaders{};
 
     public:
         app(int argc, char **argv);

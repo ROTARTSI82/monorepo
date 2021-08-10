@@ -58,6 +58,10 @@ namespace cel {
 
         void load();
         void save();
+
+        inline std::string path_to(const std::string &file) {
+            return "./res/" + file;
+        }
     };
 }
 

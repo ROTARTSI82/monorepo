@@ -28,6 +28,9 @@
 namespace cel {
 
     struct draw_instance {
+        draw_instance() = default;
+        draw_instance(gl_mat2 trans, gl_vec3 cent, gl_float alpha, gl_vec2 sorigin, gl_vec2 sextent, gl_vec2 sntiles);
+
         gl_mat2 transform;
         gl_vec3 center;
         gl_float alpha_mult;
@@ -50,6 +53,7 @@ namespace cel {
 
         draw_call(size_t max_instances);
         ~draw_call();
+        CEL_DEL_CPY_OP_CTOR(draw_call)
 
         inline void flush() {
             do_flush = false;
@@ -86,20 +90,18 @@ namespace cel {
         input_provider *inp;
 
     public:
-
-        std::vector<draw_call> world_draws; // drawn with perspective.
-        std::vector<draw_call> gui_draws; // drawn with the orthographic projection.
-
         window(settings_handler *settings, window_types type);
         ~window();
-
-        window &operator=(const window &rhs) noexcept = delete;
-        window(const window &rhs) noexcept = delete;
+        CEL_DEL_CPY_OP_CTOR(window)
 
         void next();
         inline input_frame input_for(uint64_t frame_number) { return inp->next(frame_number, this); }
 
         inline bool running() { return !glfwWindowShouldClose(win); }
+
+        inline GLFWwindow *get_window() {
+            return win;
+        }
     };
 
 }

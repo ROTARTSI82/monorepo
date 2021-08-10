@@ -19,7 +19,8 @@
 #include <cmath>
 
 namespace cel {
-    class identity_tag {};
+    class identity_tag_t {};
+    extern identity_tag_t identity_tag;
 
     template <typename T>
     inline T radians(T deg) {
@@ -43,7 +44,7 @@ namespace cel {
         vec_t c0{}, c1{};
 
         generic_mat2() = default;
-        explicit generic_mat2(const identity_tag tag) : c0(1, 0), c1(0, 1) { (void) tag; }
+        explicit generic_mat2(const identity_tag_t tag) : c0(1, 0), c1(0, 1) { (void) tag; }
         generic_mat2(const vec_t &c0, const vec_t &c1) : c0(c0), c1(c1) {};
 
         generic_mat2(const generic_mat2 &rhs) noexcept = default;
@@ -68,7 +69,7 @@ namespace cel {
             ret.c0.x = cos * scale.x;
             ret.c0.y = sin * scale.x;
 
-            ret.c0.x = -sin * scale.y;
+            ret.c1.x = -sin * scale.y;
             ret.c1.y = cos * scale.y;
 
             return ret;
@@ -174,7 +175,7 @@ namespace cel {
         vec_t c0{}, c1{}, c2{}, c3{};
 
         generic_mat4() = default;
-        explicit generic_mat4(const identity_tag tag) : c0(1, 0, 0, 0), c1(0, 1, 0, 0), c2(0, 0, 1, 0), c3(0, 0, 0, 1) { (void) tag; }
+        explicit generic_mat4(const identity_tag_t tag) : c0(1, 0, 0, 0), c1(0, 1, 0, 0), c2(0, 0, 1, 0), c3(0, 0, 0, 1) { (void) tag; }
         generic_mat4(const vec_t &c0, const vec_t &c1, const vec_t &c2, const vec_t &c3) : c0(c0), c1(c1), c2(c2), c3(c3) {}
         generic_mat4(const generic_mat4<T> &rhs) noexcept = default;
 
@@ -229,7 +230,7 @@ namespace cel {
         }
 
         static generic_mat4<T> transform(const generic_vec3<T> &translate, const generic_vec2<T> &scale, T theta) {
-            generic_mat4<T> ret{identity_tag{}};
+            generic_mat4<T> ret{identity_tag};
 
             T sin = std::sin(theta);
             T cos = std::cos(theta);
@@ -292,6 +293,7 @@ namespace cel {
     typedef generic_mat2<gl_float> gl_mat2;
     typedef generic_vec2<gl_float> gl_vec2;
     typedef generic_vec3<gl_float> gl_vec3;
+    typedef generic_mat4<gl_float> gl_mat4;
 }
 
 #endif
