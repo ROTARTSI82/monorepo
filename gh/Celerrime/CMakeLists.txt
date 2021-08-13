@@ -45,5 +45,6 @@ target_link_libraries(Celerrime Python::Module Python::Python)
 add_subdirectory(dep/fmt)
 target_link_libraries(Celerrime fmt::fmt)
 
-target_include_directories(Celerrime PRIVATE ${OPENGL_INCLUDE_DIR} ${OPENAL_INCLUDE_DIR} dep)
+target_include_directories(Celerrime PRIVATE ${OPENGL_INCLUDE_DIR} ${OPENAL_INCLUDE_DIR} dep dep/imgui)
 target_include_directories(Celerrime PUBLIC include src)
+target_precompile_headers(Celerrime PUBLIC <GL/glew.h> <GLFW/glfw3.h> <fmt/format.h> <fmt/chrono.h> <cel/constants.hpp> <cel/eng/log.hpp> <cel/eng/misc_util.hpp> <cel/eng/pmr_list.hpp>)

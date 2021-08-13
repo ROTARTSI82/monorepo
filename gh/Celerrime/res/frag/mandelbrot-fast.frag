@@ -8,19 +8,20 @@ in float alpha_mult_io;
 flat in vec2 sample_extent_io;
 flat in vec2 sample_bl_io;
 
-#define MAX_MAGN 2
+#define MAX_MAGN 4
 #define MAX_ITER 1000
 
 void main() {
     vec2 orig = sample_bl_io + mod(tex_co, sample_extent_io);
     vec2 current = vec2(0, 0);
+    vec2 tmp = vec2(0, 0);
     uint iter = 0;
 
-    while (length(current) < MAX_MAGN && iter < MAX_ITER) {
+    while (current.x + current.y < MAX_MAGN && iter < MAX_ITER) {
         // float tmp = current.x * current.x - current.y * current.y + orig.x;
         // current.y = 2 * current.x * current.y + orig.y;
         // current.x = tmp;
-
+        
         current = vec2(current.x * current.x - current.y * current.y, 2 * current.x * current.y) + orig;
         iter++;
     }

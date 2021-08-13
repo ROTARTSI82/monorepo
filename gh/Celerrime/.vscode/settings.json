@@ -70,6 +70,8 @@
         "format": "cpp",
         "any": "cpp",
         "typeindex": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "valarray": "cpp",
+        "*.inc": "cpp"
     }
 }

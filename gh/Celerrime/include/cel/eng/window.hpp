@@ -17,6 +17,7 @@
 #include <cstdint>
 #include <vector>
 #include <mutex>
+#include <memory>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -48,22 +49,14 @@ namespace cel {
     public:
         draw_instance *instances; // NOTE: Using a static array instead of std::vector because the VBO must be static anyways.
         unsigned num_blits = 0;
-        bool do_flush = true;
-        std::mutex mtx;
 
         draw_call(size_t max_instances);
         ~draw_call();
         CEL_DEL_CPY_OP_CTOR(draw_call)
 
-        inline void flush() {
-            do_flush = false;
+        inline void upload() {
             glBindBuffer(GL_COPY_WRITE_BUFFER, vbo);
             glBufferSubData(GL_COPY_WRITE_BUFFER, 0, num_blits * sizeof(draw_instance), instances);
-        }
-
-        inline void flush_locked() {
-            std::scoped_lock lock(mtx);
-            flush();
         }
 
         inline void dispatch() {
@@ -72,34 +65,25 @@ namespace cel {
         }
     };
 
-    enum class window_types : uint8_t {
-        control,
-        game,
-        size
-    };
 
     class settings_handler;
 
     class window {
     private:
         GLFWwindow *win;
-
         settings_handler *settings;
-        window_types type;
-
-        input_provider *inp;
+        std::unique_ptr<input_provider> inp;
 
     public:
-        window(settings_handler *settings, window_types type);
+        window(settings_handler *settings);
         ~window();
         CEL_DEL_CPY_OP_CTOR(window)
 
-        void next();
-        inline input_frame input_for(uint64_t frame_number) { return inp->next(frame_number, this); }
+        inline input_frame input_for(uint64_t frame_number) { return inp->next(frame_number, win); }
 
         inline bool running() { return !glfwWindowShouldClose(win); }
 
-        inline GLFWwindow *get_window() {
+        inline GLFWwindow *get_handle() {
             return win;
         }
     };

@@ -19,12 +19,10 @@
 
 #define UINT8_T static_cast<uint8_t>
 
+#define CEL_VERSION __DATE__ " " __TIME__
+
 namespace cel {
     typedef float float_t;
-
-    constexpr auto extra_sprintf_space = 128;
-    constexpr auto log_strftime_size = 32;
-    constexpr auto log_strftime_fmt = "";
 
     template <typename T>
     class consts_for {

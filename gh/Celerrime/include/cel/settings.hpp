@@ -25,23 +25,19 @@ namespace cel {
         automatic
     };
 
-    struct window_settings {
-        gui_scale_mode scale_mode = gui_scale_mode::automatic;
-        float_t manual_scale = 1;
-
-        bool enforce_aspect = true;
-        float_t aspect = consts_for<float_t>::calc().root2;
-
-        int width = 1440, height = 900;
-    };
-
     class settings_handler {
     public:
         bool save_on_destroy = false;
 
         std::locale locale;
 
-        window_settings wins[static_cast<unsigned long>(window_types::size)];
+        gui_scale_mode scale_mode = gui_scale_mode::automatic;
+        float_t manual_scale = 1;
+
+        bool enforce_aspect = true;
+        float_t aspect = consts_for<float_t>::calc().root2;
+
+        int win_width = 1440, win_height = 900;
 
         float_t fovy = 90;
         float_t tas_fps = 60;
@@ -59,7 +55,7 @@ namespace cel {
         void load();
         void save();
 
-        inline std::string path_to(const std::string &file) {
+        inline std::string res_path(const std::string &file, bool essential = false) {
             return "./res/" + file;
         }
     };

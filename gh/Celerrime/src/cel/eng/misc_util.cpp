@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include <fstream>
+#include <thread>
 
 namespace cel {
 
@@ -19,7 +20,7 @@ namespace cel {
         }
 
         CEL_CRITICAL("Failed to open and read: {}", filepath);
-        throw std::system_error{};
+        throw std::runtime_error{"Failed to read file"};
     }
 
     // this should probably be implemented with simple chained if/else but whatever.
@@ -59,6 +60,23 @@ namespace cel {
 
     uint8_t *utf8_codepoint_encode(uint8_t *in, uint32_t codepoint) {
         throw std::runtime_error("utf8_codepoint_encode is unimplemented");
+    }
+
+    fps_limiter::fps_limiter(float target) : target_frametime_nano(1000000000 / target), target_fps(target) {};
+
+    void fps_limiter::tick() {
+        auto now = std::chrono::steady_clock::now();
+        auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(now - prev_tick).count();
+
+        if (diff <  target_frametime_nano) {
+            std::this_thread::sleep_for(std::chrono::nanoseconds(target_frametime_nano - diff));
+            prev_tick += std::chrono::nanoseconds(target_frametime_nano);
+            fps = target_fps;
+        } else {
+            fps = 1000000000.0f / diff;
+            prev_tick = now;
+        }
+
     }
 
     raw_stack::raw_stack(size_t size) : capacity(size) {

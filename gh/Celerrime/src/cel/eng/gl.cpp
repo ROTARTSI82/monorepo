@@ -20,7 +20,7 @@ namespace cel {
     rectangle_vbo::rectangle_vbo() {
         CEL_TRACE("Init rectangle_vbo");
 
-        gl_float data[] = {
+        float data[] = {
             -1, -1,
              1, -1,
              1,  1,
@@ -45,7 +45,7 @@ namespace cel {
         glDeleteProgram(id);
     }
 
-    shader::shader(GLenum type, const std::string &source) : id(glCreateShader(type)) {
+    shader::shader(GLenum type, const std::string &source, bool essential) : id(glCreateShader(type)) {
         const char *c_str = source.c_str();
         glShaderSource(id, 1, &c_str, nullptr); // nullptr signals null-terminated strings.
         glCompileShader(id);
@@ -54,12 +54,14 @@ namespace cel {
         glGetShaderiv(id, GL_COMPILE_STATUS, &success);
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
 
-        GLchar *msg = new GLchar[len];
-        glGetShaderInfoLog(id, len, NULL, msg);
-        CEL_INFO("{} shader {}: {}", type, id, msg);
-        delete[] msg;
+        if (len) {
+            GLchar *msg = new GLchar[len];
+            glGetShaderInfoLog(id, len, NULL, msg);
+            CEL_INFO("{} shader {}: {}", type, id, msg);
+            delete[] msg;
+        }
 
-        if (!success) throw std::runtime_error{"Failed to compile shader"};
+        if (essential && !success) throw std::runtime_error{"Failed to compile shader"};
     }
 
     shader::~shader() {
@@ -73,7 +75,7 @@ namespace cel {
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     }
 
-    texture::texture(const std::string &filepath, GLenum format) {
+    texture::texture(const std::string &filepath, bool essential, GLenum format) {
         generate();
         
         int x, y, n;
@@ -86,7 +88,7 @@ namespace cel {
                                               {0x00, 0x00, 0xff}, {0xff, 0xff, 0xff}};
             glTexImage2D(GL_TEXTURE_2D, 0, format, 2, 2, 0, GL_RGB, GL_UNSIGNED_BYTE, placeholder);
 
-            throw std::system_error{};
+            if (essential) throw std::runtime_error{"Failed to load texture"};
         }
 
         GLenum pix_fmt;

@@ -16,6 +16,8 @@
 
 #include <string>
 
+#include "cel/constants.hpp"
+
 namespace cel {
     class settings_handler;
 
@@ -24,7 +26,7 @@ namespace cel {
         string_dictionary() = default;
         string_dictionary(settings_handler *settings);
 
-        std::string window_titles[2] = {"Celerrime control panel", "Celerrime"};
+        std::string win_title = "Celerrime " CEL_VERSION;
     };
 }
 

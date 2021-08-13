@@ -16,11 +16,26 @@
 
 #include "cel/constants.hpp"
 
+
+// #include <glm/vec3.hpp> // glm::vec3
+// #include <glm/vec4.hpp> // glm::vec4
+// #include <glm/mat4x4.hpp> // glm::mat4
+// #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
+// #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
+// #include <glm/ext/scalar_constants.hpp> // glm::pi
+// #include <glm/gtx/string_cast.hpp> // glm::to_string
+
+
 #include <cmath>
 
 namespace cel {
+
     class identity_tag_t {};
     extern identity_tag_t identity_tag;
+
+
+    // glm::mat2 mat2_transform(glm::vec2 scale, float_t theta);
+    // glm::mat4 mat4_transform(const glm::vec3 &translate, glm::vec2 scale, float_t theta);
 
     template <typename T>
     inline T radians(T deg) {
@@ -74,7 +89,6 @@ namespace cel {
 
             return ret;
         }
-
 
     };
 
@@ -145,8 +159,18 @@ namespace cel {
             return *this / magnitude();
         }
 
-        inline void normalize_in_place() {
-            *this /= magnitude();
+        inline generic_vec2 &normalize_in_place() {
+            return *this /= magnitude(); // TODO: This produces (NaN, NaN) on (0, 0). Is that the behaviour i want?
+        }
+
+        inline generic_vec2 clamp_magn(T max) {
+            T magn = magnitude();
+            return magn > max ? *this * max / magn : *this;
+        }
+
+        inline generic_vec2 &clamp_magn_in_place(T max) {
+            T magn = magnitude();
+            return magn > max ? *this *= max / magn : *this; // TODO: Optimize this. this operation is performance critical.
         }
     };
 
@@ -156,7 +180,12 @@ namespace cel {
         T x, y, z;
         generic_vec3() : x(0), y(0), z(0) {};
         generic_vec3(T x, T y, T z) : x(x), y(y), z(z) {};
+        generic_vec3(const generic_vec2<T> &in, T v) : x(in.x), y(in.y), z(v) {};
         generic_vec3(const generic_vec3<T> &rhs) noexcept = default;
+
+        inline generic_vec3 operator*(T rhs) {
+            return {x * rhs, y * rhs, z * rhs};
+        }
 
         generic_vec3<T> &operator=(const generic_vec3<T> &rhs) noexcept = default;
     };
@@ -199,7 +228,7 @@ namespace cel {
          * https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
          * @param fovy Vertical FOV in DEGREES
          */
-        static generic_mat4<T> perspective(float_t fovy, float_t aspect, float_t zNear, float_t zFar) {
+        static constexpr generic_mat4<T> perspective(float_t fovy, float_t aspect, float_t zNear, float_t zFar) {
             //EXIF(aspect == 0, "aspect ratio can't be 0")
             //EXIF(zFar == zNear, "Near and far clipping planes must be distinct")
 
@@ -216,7 +245,7 @@ namespace cel {
         }
 
         // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
-        static generic_mat4<T> ortho(float_t left, float_t right, float_t bottom, float_t top, float_t zNear, float_t zFar) {
+        static constexpr generic_mat4<T> ortho(float_t left, float_t right, float_t bottom, float_t top, float_t zNear, float_t zFar) {
             generic_mat4<T> ret;
 
             ret.c0.x = 2 / (right - left);
@@ -229,7 +258,7 @@ namespace cel {
             return ret;
         }
 
-        static generic_mat4<T> transform(const generic_vec3<T> &translate, const generic_vec2<T> &scale, T theta) {
+        static constexpr generic_mat4<T> transform(const generic_vec3<T> &translate, const generic_vec2<T> &scale, T theta) {
             generic_mat4<T> ret{identity_tag};
 
             T sin = std::sin(theta);
@@ -294,6 +323,11 @@ namespace cel {
     typedef generic_vec2<gl_float> gl_vec2;
     typedef generic_vec3<gl_float> gl_vec3;
     typedef generic_mat4<gl_float> gl_mat4;
+
+    std::string to_string(const gl_mat4 &operand);
+    std::string to_string(const vec4 &operand);
+    std::string to_string(const vec3 &operand);
+    std::string to_string(const vec2 &operand);
 }
 
 #endif

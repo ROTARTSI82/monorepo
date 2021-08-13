@@ -25,7 +25,7 @@ namespace cel {
      * 
      * @param filepath File to open
      * @return std::string String containing the binary contents of the file (unaltered)
-     * @throws std::system_error If file opening/reading fails.
+     * @throws std::runtime_error If file opening/reading fails.
      */
     std::string read_entire_file(const std::string &filepath);
 
@@ -48,6 +48,20 @@ namespace cel {
      * @return uint8_t* Points to the byte AFTER the last byte that was encoded.
      */
     uint8_t *utf8_codepoint_encode(uint8_t *in, uint32_t codepoint);
+
+    class fps_limiter {
+    private:
+        std::chrono::steady_clock::time_point prev_tick;
+        uint64_t target_frametime_nano = 1000000000 / 60;
+        float fps, target_fps = 60;
+    public:
+        fps_limiter() = default;
+        fps_limiter(float target);
+        void tick();
+
+        inline void set_target_fps(float nval) { target_frametime_nano = 1000000000 / nval; target_fps = nval; }
+        inline float get_fps() { return fps; };
+    };
 
     class raw_stack {
     private:

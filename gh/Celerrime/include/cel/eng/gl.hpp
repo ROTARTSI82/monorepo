@@ -71,12 +71,13 @@ namespace cel {
     public:
         /**
          * @brief Construct a new shader object
-         * @throws std::runtime_error if shader compilation fails.
+         * @throws std::runtime_error if shader compilation fails and this shader is marked essential.
          * 
          * @param type Shader type: can be GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, or GL_COMPUTE_SHADER. Refer to glCreateShader()
          * @param source GLSL source code for the shader.
+         * @param essential If true, an exception is thrown if the shader can't be compiled.
          */
-        shader(GLenum type, const std::string &source);
+        shader(GLenum type, const std::string &source, bool essential = false);
         ~shader();
         CEL_DEL_CPY_OP_CTOR(shader)
 
@@ -117,13 +118,12 @@ namespace cel {
 
         /**
          * @brief Construct a new texture object from an image file
-         * @throws std::system_error if the texture cannot be loaded from the file. In this case,
-         *                           the texture is a 2 px by 2 px placeholder: (red,  green), 
-         *                                                                      (blue, white)
+         * @throws std::runtime_error if the texture cannot be loaded from the file and is marked essential.
          * @param filepath File to load texture from
+         * @param essential If true, an exception is thrown if the texture can't be loaded.
          * @param format The desired internalFormat of the texture (see glTexImage2D)
          */
-        texture(const std::string &filepath, GLenum format = GL_RGBA);
+        texture(const std::string &filepath, bool essential = false, GLenum format = GL_RGBA);
         ~texture();
         CEL_DEL_CPY_OP_CTOR(texture)
 

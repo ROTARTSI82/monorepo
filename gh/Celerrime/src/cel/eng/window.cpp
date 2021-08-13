@@ -5,6 +5,56 @@
 
 namespace cel {
 
+    #define CEL_MAKE_GLERRMSGCB_CASE(pref, val, store) case (pref##val):\
+(store) = (#val); break;
+
+    void GLAPIENTRY gl_error_callback( GLenum source,
+                    GLenum type,
+                    GLuint id,
+                    GLenum severity,
+                    GLsizei length,
+                    const GLchar* message,
+                    const void* userParam ) {
+
+        if (source == GL_DEBUG_SOURCE_API && severity == GL_DEBUG_SEVERITY_NOTIFICATION && type == GL_DEBUG_TYPE_OTHER) return;
+        const char *type_str, *src_str, *sev_str;
+        switch (source) {
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, API, src_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, WINDOW_SYSTEM, src_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, SHADER_COMPILER, src_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, THIRD_PARTY, src_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, APPLICATION, src_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, OTHER, src_str)
+            default:
+                src_str = "UNKNOWN";
+        }
+
+        switch (type) {
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, ERROR, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, DEPRECATED_BEHAVIOR, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, UNDEFINED_BEHAVIOR, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PORTABILITY, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PERFORMANCE, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, MARKER, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, PUSH_GROUP, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, POP_GROUP, type_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_TYPE_, OTHER, type_str)
+            default:
+                type_str = "UNKNOWN"; 
+        }
+
+        switch (severity) {
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, LOW, sev_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, MEDIUM, sev_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, HIGH, sev_str)
+            CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SEVERITY_, NOTIFICATION, sev_str)
+            default:
+                sev_str = "UNKNOWN";
+        }
+
+        CEL_WARN("OpenGL Error {} [{}] [{}] [{}]: {}", id, src_str, sev_str, type_str, message);
+    }
+
 
     draw_instance::draw_instance(gl_mat2 t, gl_vec3 c, gl_float a, gl_vec2 o, gl_vec2 e, gl_vec2 n) : transform(t), center(c), alpha_mult(a), sample_origin(o), sample_extent(e), sample_ntiles(n) {}
 
@@ -12,7 +62,7 @@ namespace cel {
         vao.bind_record();
 
         glBindBuffer(GL_ARRAY_BUFFER, rectangle_vbo::get());
-        vao.vertexAttribPointer(0, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, 2 * sizeof(gl_float), 0); // vertex vec2
+        vao.vertexAttribPointer(0, 2, consts_for<float>::gl_type_enum, GL_FALSE, sizeof(gl_vec2), 0); // vertex vec2
         vao.enableVertexAttribArray(0);
 
 
@@ -25,18 +75,18 @@ namespace cel {
         vao.vertexAttribPointer(2, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 2));
 
         // 3d translation
-        vao.vertexAttribPointer(3, 3, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 4));
+        vao.vertexAttribPointer(3, 3, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(offsetof(draw_instance, center)));
         // alpha multiplier
-        vao.vertexAttribPointer(4, 1, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 7));
+        vao.vertexAttribPointer(4, 1, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(offsetof(draw_instance, alpha_mult)));
 
         // vec 2 for bottom left corner of sampling rect
-        vao.vertexAttribPointer(5, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 8));
+        vao.vertexAttribPointer(5, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(offsetof(draw_instance, sample_origin)));
 
         // vec 2 for extent of sampling rect (width, height)
-        vao.vertexAttribPointer(6, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 10));
+        vao.vertexAttribPointer(6, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(offsetof(draw_instance, sample_extent)));
 
         // vec 2 for the number of times we should tile in x and y
-        vao.vertexAttribPointer(7, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(sizeof(gl_float) * 12));
+        vao.vertexAttribPointer(7, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(draw_instance), reinterpret_cast<const GLvoid *>(offsetof(draw_instance, sample_ntiles)));
 
         vao.enableVertexAttribArray(1);
         vao.enableVertexAttribArray(2);
@@ -62,22 +112,39 @@ namespace cel {
         delete[] instances;
     }
 
-    window::window(settings_handler *settings, window_types type) : settings(settings), type(type) {
+    window::window(settings_handler *settings) : settings(settings), inp(std::make_unique<hacky_input_provider>()) {
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, CEL_USE_OGL_DBG_CTX);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS support
-        win = glfwCreateWindow(settings->wins[static_cast<uint8_t>(type)].width, settings->wins[static_cast<uint8_t>(type)].height, 
-                               settings->strs.window_titles[static_cast<uint8_t>(type)].c_str(), NULL, NULL);
+        win = glfwCreateWindow(settings->win_width, settings->win_height, 
+                               settings->strs.win_title.c_str(), NULL, NULL);
         
-        CEL_EXITIF(!win, 1, "Window creation failed for type {}", type);
+        CEL_THROWIF(!win, "Window creation failed");
         glfwMakeContextCurrent(win);
-
+        glfwSwapInterval(1);
 
         glewExperimental = GL_TRUE;
         int glew_status = glewInit();
-        CEL_EXITIF(glew_status != GLEW_OK, 1, "GLEW init failed for window type {}: {}", static_cast<int>(type), glewGetErrorString(glew_status));
+        CEL_THROWIF(glew_status != GLEW_OK, "GLEW init failed: {}", glewGetErrorString(glew_status));
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(gl_error_callback, NULL);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+
+        glEnable(GL_DEPTH_TEST);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        //glDisable(GL_STENCIL_TEST);
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
+        // glActiveTexture(GL_TEXTURE0);
+
     }
 
     window::~window() {
@@ -85,9 +152,5 @@ namespace cel {
         flush_gl_errors();
         CEL_TRACE("glfwDestroyWindow()");
         glfwDestroyWindow(win);
-    }
-
-    void window::next() {
-        glfwSwapBuffers(win);
     }
 }

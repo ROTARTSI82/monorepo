@@ -11,21 +11,39 @@
 
 #include "cel/eng/window.hpp"
 #include "cel/settings.hpp"
+#include "cel/game/imgui_menus.hpp"
+#include "cel/eng/misc_util.hpp"
+#include "cel/world.hpp"
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 namespace cel {
     void init();
     void quit();
-    class app {
-    private:
-        settings_handler settings;
-        window ctl_panel; // the window MUST go first for the ogl context to be created.
-        
-        shader_pipeline default_shaders{};
-        shader_pipeline hd_shaders{};
 
+    class app {
     public:
+        settings_handler settings;
+        window win; // the window MUST go first for the ogl context to be created.
+        imgui_menu menus;
+        fps_limiter render_timer{};
+
+        fps_limiter logic_timer{};
+        world world;
+        std::condition_variable logic_convar;
+        std::mutex frame_mtx, frames_due_mtx;
+        uint64_t frame_no = 0, logic_frames_due = 0;
+        std::atomic_bool logic_running = true;
+        std::thread logic_thread; // after all the data for logic_thread is initialized!
+
+
         app(int argc, char **argv);
         ~app();
+
+        inline window &get_window() { return win; }
 
         // finer control in the future?
         void run();

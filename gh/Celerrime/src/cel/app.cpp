@@ -5,6 +5,9 @@
 #include "cel/eng/gl.hpp"
 
 #include <fmt/format.h>
+#include <chrono>
+
+#include "cel/game/mandelbrot_layer.hpp"
 
 namespace cel {
     static void glfw_error_callback(int code, const char* description) {
@@ -13,7 +16,7 @@ namespace cel {
 
     void init() {
         glfwSetErrorCallback(glfw_error_callback);
-        CEL_EXITIF(!glfwInit(), 1, "GLFW Initialization failed!");
+        CEL_THROWIF(!glfwInit(), "GLFW Initialization failed!", "GLFW Initialization failed!");
 
         CEL_INFO("GLFW compiled {}.{}.{}, linked {}. Timer hz = {}", GLFW_VERSION_MAJOR, 
                  GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString(), glfwGetTimerFrequency());
@@ -24,105 +27,113 @@ namespace cel {
         glfwTerminate();
     }
 
-    app::app(int argc, char **argv) : settings(argc, argv), ctl_panel(&settings, window_types::control) {
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glfwSwapInterval(1);
+    static void run_logic(app &parent) {
+        CEL_TRACE("Enter run logic");
+        while (parent.logic_running) {
+            parent.logic_timer.tick();
 
-        shader frag{GL_FRAGMENT_SHADER, read_entire_file(settings.path_to("frag/mandelbrot-fast.frag"))};
-        shader vert{GL_VERTEX_SHADER, read_entire_file(settings.path_to("vert/mandelbrot.vert"))};
+            {
+                std::unique_lock lg(parent.frames_due_mtx);
+                parent.logic_convar.wait(lg, [&]() -> bool { return parent.logic_frames_due > 0; });
+                parent.logic_frames_due--;
+            }
 
-        default_shaders.attach(frag.get_id());
-        default_shaders.attach(vert.get_id()); 
-        default_shaders.link();
+            {
+                std::lock_guard lg(parent.frame_mtx);
+                parent.world.tick(parent.win.input_for(parent.frame_no));
+                parent.frame_no++;
+            }
+        }
 
-        shader hd_frag{GL_FRAGMENT_SHADER, read_entire_file(settings.path_to("frag/mandelbrot.frag"))};
-        hd_shaders.attach(hd_frag.get_id());
-        hd_shaders.attach(vert.get_id());
-        hd_shaders.link();
+        CEL_TRACE("Exit run logic");
+    }
+
+
+    app::app(int argc, char **argv) : settings(argc, argv), win(&settings), menus(this), world(this), logic_thread(run_logic, std::ref(*this)) {
+        
     }
 
     app::~app() {
         CEL_TRACE("~app()");
+
+        logic_running = false;
+        logic_frames_due = 10;
+        logic_convar.notify_all();
+
+        if (logic_thread.joinable()) logic_thread.join();
+        else logic_thread.detach();
     }
 
     void app::run() {
-        bool use_hd = false;
+        float target_fps = 60.0f;
+        float logic_target_fps = 60.0f;
+        bool paused = false;
+        logic_frames_due = std::numeric_limits<uint64_t>::max();
+        logic_convar.notify_one();
 
-        uint64_t frame = 0;
-        draw_call test{4096};
+        world.layers.emplace_back(world.get_layer<game::mandelbrot_layer>());
+        
+        while (win.running()) {
+            render_timer.tick();
 
-        // test.instances[0] = draw_instance{gl_mat2::transform({15, 5}, consts_for<gl_float>::calc().pi), {0, 0, -5}, 1, {0, 0}, {1, 0.5}, {3, 1}};
-        test.instances[0] = draw_instance{gl_mat2::transform({3.5, 2}, consts_for<gl_float>::calc().pi), {0, 0, -5}, 1, {-2.5, -1}, {3.5, 2}, {1, 1}};
-        test.num_blits = 1;
-        test.flush_locked();
-
-        auto proj_su = default_shaders.get_uniform("projection_mat");
-        auto view_su = default_shaders.get_uniform("view_mat");
-        // auto text_su = default_shaders.get_uniform("tex");
-
-        glActiveTexture(GL_TEXTURE0);
-        // texture test_tex{settings.path_to("test.jpg")};
-
-        auto persp = gl_mat4::perspective(90, 1440.0f / 900, 0.1, 100);
-
-        #define M_STRIFY(x) #x
-        #define PRINT_MAT(v) fmt::print( M_STRIFY(v) " = [{:.6f}, {:.6f}, {:.6f}, {:.6f}]\n\t[{:.6f}, {:.6f}, {:.6f}, {:.6f}]\n\t[{:.6f}, {:.6f}, {:.6f}, {:.6f}]\n\t[{:.6f}, {:.6f}, {:.6f}, {:.6f}]\n", v.c0.x, v.c1.x, v.c2.x, v.c3.x, \
-                    v.c0.y, v.c1.y, v.c2.y, v.c3.y, v.c0.z, v.c1.z, v.c2.z, v.c3.z, v.c0.w, v.c1.w, v.c2.w, v.c3.w);
-
-        #define PRINT_MAT2(v) fmt::print( M_STRIFY(v) " = [{:.6f}, {:.6f}]\n\t[{:.6f}, {:.6f}]\n", v.c0.x, v.c1.x, v.c0.y, v.c1.y);
-
-        gl_mat4 view{identity_tag};
-
-        PRINT_MAT(view);
-        PRINT_MAT(persp);
-
-        PRINT_MAT2(test.instances[0].transform);
-
-        while (ctl_panel.running()) {
             int w, h;
-            glfwGetFramebufferSize(ctl_panel.get_window(), &w, &h);
+            glfwGetFramebufferSize(win.get_handle(), &w, &h);
             glViewport(0, 0, w, h);
+            
             glClearColor(1, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-            // view *= gl_mat4::transform({-0.1, 0, 0}, {1, 1}, 0);
+            menus.new_frame();
 
-            if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_A) == GLFW_PRESS) {
-                view *= gl_mat4::transform({0, 0, 0}, {1.025, 1.025}, 0);
-            } else if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_S) == GLFW_PRESS) {
-                view *= gl_mat4::transform({0, 0, 0}, {0.975, 0.975}, 0);
+            ImGui::Begin("Debug app::run()");
+            ImGui::Text("io.WantCaptureKeyboard = %i, io.WantCaptureMouse = %i", ImGui::GetIO().WantCaptureKeyboard, ImGui::GetIO().WantCaptureMouse);
+            ImGui::Text("Frame: %lu", frame_no);
+            ImGui::SameLine();
+            paused = !logic_frames_due;
+            if (ImGui::Checkbox("Logic Paused", &paused)) {
+                logic_frames_due = paused ? 0 : std::numeric_limits<uint64_t>::max();
+                logic_convar.notify_one();
             }
 
-            if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-                view *= gl_mat4::transform({0.125, 0, 0}, {1, 1}, 0);
-            } else if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-                view *= gl_mat4::transform({-0.125, 0, 0}, {1, 1}, 0);
+            ImGui::Text("Render Thread FPS: %f", render_timer.get_fps());
+            ImGui::Text("Logic Thread FPS: %f", logic_timer.get_fps());
+
+            if (ImGui::SliderFloat("fps", &target_fps, 1.0f, 100.0f, "Target FPS (Render): %f")) {
+                render_timer.set_target_fps(target_fps);
+            }
+            if (ImGui::SliderFloat("fps##logic", &logic_target_fps, 1.0f, 100.0f, "Target FPS (Logic): %f")) {
+                logic_timer.set_target_fps(logic_target_fps);
             }
 
-            if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_UP) == GLFW_PRESS) {
-                view *= gl_mat4::transform({0, -0.125, 0}, {1, 1}, 0);
-            } else if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-                view *= gl_mat4::transform({0, 0.125, 0}, {1, 1}, 0);
+            uint64_t min = 0, max = 60;
+            ImGui::SliderScalar("frames", ImGuiDataType_U64, &logic_frames_due, &min, &max, "Frames Due: %i");
+            if (ImGui::Button("Notify Condition Variable")) logic_convar.notify_one();
+
+            ImGui::Separator();
+
+            ImGui::Text("Layers");
+            for (const auto &l : world.layers) {
+                ImGui::Text(typeid(*l.get()).name());
             }
 
-            if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_F) == GLFW_PRESS) {
-                use_hd = false;
-            } else if (glfwGetKey(ctl_panel.get_window(), GLFW_KEY_H) == GLFW_PRESS) {
-                // use_hd = true;
+            if (ImGui::Button("Pop Layer")) world.layers.pop_back();
+            ImGui::SameLine();
+            if (ImGui::Button("Push Layer")) { 
+                world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
+                world.layers.emplace_back(world.get_layer<game::mandelbrot_layer>());
             }
 
-            // test_tex.bind();
-            (use_hd ? hd_shaders : default_shaders).use();
-            // glUniform1i(text_su, 0);
-            glUniformMatrix4fv(proj_su, 1, GL_FALSE, (const GLfloat *) &persp);
-            glUniformMatrix4fv(view_su, 1, GL_FALSE, (const GLfloat *) &view);
-            test.dispatch();
+            ImGui::End();
 
-            ctl_panel.next();
-            frame++;
+            {
+                std::lock_guard lg(frame_mtx);
+                world.draw();
+            }
+
+            menus.draw();
+
+            glfwSwapBuffers(win.get_handle());
             glfwPollEvents();
-
             flush_gl_errors();
         }
     }
