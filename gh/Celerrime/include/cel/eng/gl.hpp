@@ -43,26 +43,13 @@ namespace cel {
         inline void bind() { glBindVertexArray(vao); }
     };
 
-    class rectangle_vbo {
-    private:
-        GLuint vbo;
-        rectangle_vbo();
-        ~rectangle_vbo();
-        CEL_DEL_CPY_OP_CTOR(rectangle_vbo)
-
-        inline static rectangle_vbo *value() {
-            static thread_local rectangle_vbo *val = new rectangle_vbo;
-            return val;
-        }
-
+    class quad_vbo {
     public:
-        inline static GLuint get() {
-            return value()->vbo;
-        }
+        GLuint value;
 
-        inline static void destroy() {
-            delete value();
-        }
+        quad_vbo();
+        ~quad_vbo();
+        CEL_DEL_CPY_OP_CTOR(quad_vbo)
     };
 
     class shader {

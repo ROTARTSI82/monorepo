@@ -11,7 +11,7 @@ namespace cel {
         CEL_IGNORE(argv);
         save_on_destroy = true;
 
-        strs = std::move(string_dictionary{this});
+        strs = string_dictionary{this};
     }
 
     settings_handler::~settings_handler() {

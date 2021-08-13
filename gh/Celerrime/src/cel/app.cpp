@@ -113,7 +113,7 @@ namespace cel {
 
             ImGui::Text("Layers");
             for (const auto &l : world.layers) {
-                ImGui::Text(typeid(*l.get()).name());
+                ImGui::Text("%s", typeid(*l.get()).name());
             }
 
             if (ImGui::Button("Pop Layer")) world.layers.pop_back();

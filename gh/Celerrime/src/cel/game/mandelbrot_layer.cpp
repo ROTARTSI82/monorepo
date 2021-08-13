@@ -4,9 +4,9 @@
 #include <cel/app.hpp>
 
 namespace cel::game {
-    mandelbrot_layer::mandelbrot_layer(world &w) {
+    mandelbrot_layer::mandelbrot_layer(world &w) : test(4096, w.app->qvbo) {
         shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.app->settings.res_path("frag/mandelbrot-fast.frag"))};
-        shader vert{GL_VERTEX_SHADER, read_entire_file(w.app->settings.res_path("vert/mandelbrot.vert"))};
+        shader vert{GL_VERTEX_SHADER, read_entire_file(w.app->settings.res_path("vert/default.vert"))};
 
         shaders.attach(frag.get_id());
         shaders.attach(vert.get_id()); 

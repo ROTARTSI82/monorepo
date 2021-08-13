@@ -56,6 +56,7 @@ namespace cel {
         void save();
 
         inline std::string res_path(const std::string &file, bool essential = false) {
+            (void) essential;
             return "./res/" + file;
         }
     };

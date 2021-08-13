@@ -28,6 +28,7 @@ namespace cel {
     public:
         settings_handler settings;
         window win; // the window MUST go first for the ogl context to be created.
+        quad_vbo qvbo{};
         imgui_menu menus;
         fps_limiter render_timer{};
 

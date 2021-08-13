@@ -50,7 +50,7 @@ namespace cel {
         draw_instance *instances; // NOTE: Using a static array instead of std::vector because the VBO must be static anyways.
         unsigned num_blits = 0;
 
-        draw_call(size_t max_instances);
+        draw_call(size_t max_instances, const quad_vbo &qvbo);
         ~draw_call();
         CEL_DEL_CPY_OP_CTOR(draw_call)
 

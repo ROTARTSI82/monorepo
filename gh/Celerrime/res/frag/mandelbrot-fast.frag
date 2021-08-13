@@ -18,10 +18,6 @@ void main() {
     uint iter = 0;
 
     while (current.x + current.y < MAX_MAGN && iter < MAX_ITER) {
-        // float tmp = current.x * current.x - current.y * current.y + orig.x;
-        // current.y = 2 * current.x * current.y + orig.y;
-        // current.x = tmp;
-        
         current = vec2(current.x * current.x - current.y * current.y, 2 * current.x * current.y) + orig;
         iter++;
     }

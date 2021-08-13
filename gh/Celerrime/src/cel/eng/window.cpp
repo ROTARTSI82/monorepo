@@ -15,6 +15,8 @@ namespace cel {
                     GLsizei length,
                     const GLchar* message,
                     const void* userParam ) {
+        CEL_IGNORE(length);
+        CEL_IGNORE(userParam);
 
         if (source == GL_DEBUG_SOURCE_API && severity == GL_DEBUG_SEVERITY_NOTIFICATION && type == GL_DEBUG_TYPE_OTHER) return;
         const char *type_str, *src_str, *sev_str;
@@ -58,10 +60,10 @@ namespace cel {
 
     draw_instance::draw_instance(gl_mat2 t, gl_vec3 c, gl_float a, gl_vec2 o, gl_vec2 e, gl_vec2 n) : transform(t), center(c), alpha_mult(a), sample_origin(o), sample_extent(e), sample_ntiles(n) {}
 
-    draw_call::draw_call(size_t max_instances) : instances(new draw_instance[max_instances]) {
+    draw_call::draw_call(size_t max_instances, const quad_vbo &qvbo) : instances(new draw_instance[max_instances]) {
         vao.bind_record();
 
-        glBindBuffer(GL_ARRAY_BUFFER, rectangle_vbo::get());
+        glBindBuffer(GL_ARRAY_BUFFER, qvbo.value);
         vao.vertexAttribPointer(0, 2, consts_for<float>::gl_type_enum, GL_FALSE, sizeof(gl_vec2), 0); // vertex vec2
         vao.enableVertexAttribArray(0);
 
@@ -148,7 +150,6 @@ namespace cel {
     }
 
     window::~window() {
-        rectangle_vbo::destroy();
         flush_gl_errors();
         CEL_TRACE("glfwDestroyWindow()");
         glfwDestroyWindow(win);

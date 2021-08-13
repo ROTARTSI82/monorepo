@@ -17,8 +17,8 @@ namespace cel {
         glDeleteVertexArrays(1, &vao);
     }
 
-    rectangle_vbo::rectangle_vbo() {
-        CEL_TRACE("Init rectangle_vbo");
+    quad_vbo::quad_vbo() {
+        CEL_TRACE("Init quad_vbo");
 
         float data[] = {
             -1, -1,
@@ -29,14 +29,14 @@ namespace cel {
             -1, -1
         };
 
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glGenBuffers(1, &value);
+        glBindBuffer(GL_ARRAY_BUFFER, value);
         glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     }
 
-    rectangle_vbo::~rectangle_vbo() {
-        CEL_TRACE("Destroy rectangle_vbo");
-        glDeleteBuffers(1, &vbo);
+    quad_vbo::~quad_vbo() {
+        CEL_TRACE("Destroy quad_vbo");
+        glDeleteBuffers(1, &value);
     }
 
     shader_pipeline::shader_pipeline() : id(glCreateProgram()) {}

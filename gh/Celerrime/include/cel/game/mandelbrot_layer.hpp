@@ -25,7 +25,7 @@ namespace cel::game {
 
         gl_mat4 view_mat{identity_tag};
         gl_mat4 proj_mat = mat4::perspective(90.0, 1440.0 / 900, 0.1, 100.0);
-        draw_call test{4096};
+        draw_call test;
 
         GLint proj_su, view_su;
 
