@@ -66,8 +66,4 @@ namespace cel {
 #   define CEL_CRITICAL(msg, ...)
 #endif
 
-#define CEL_FIRST_ARG(N, ...) N
-#define CEL_THROWIF(condition, ...) if (condition) { CEL_CRITICAL(__VA_ARGS__); throw std::runtime_error{CEL_FIRST_ARG(__VA_ARGS__)}; }
-
-
 #endif

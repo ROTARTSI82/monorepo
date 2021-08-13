@@ -45,16 +45,16 @@ namespace cel {
         virtual void draw() = 0; // dispatch draw calls
     };
 
-    class app;
-    class world {
+    class app_t;
+    class world_t {
     public:
-        app *app;
+        app_t *parent;
         std::vector<std::shared_ptr<layer>> layers;
         std::unordered_map<std::type_index, std::shared_ptr<layer>> layer_cache;
-        player player;
+        player_t player;
 
-        world(::cel::app *);
-        ~world();
+        world_t(::cel::app_t *);
+        ~world_t();
 
         void tick(const input_frame &inp);
         void draw();

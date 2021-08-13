@@ -59,14 +59,16 @@ namespace cel {
     }
 
     uint8_t *utf8_codepoint_encode(uint8_t *in, uint32_t codepoint) {
+        CEL_IGNORE(in);
+        CEL_IGNORE(codepoint);
         throw std::runtime_error("utf8_codepoint_encode is unimplemented");
     }
 
-    fps_limiter::fps_limiter(float target) : target_frametime_nano(1000000000 / target), target_fps(target) {};
+    fps_limiter::fps_limiter(float target) : target_frametime_nano(1000000000 / target), target_fps(target) {}
 
     void fps_limiter::tick() {
         auto now = std::chrono::steady_clock::now();
-        auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(now - prev_tick).count();
+        auto diff = std::chrono::duration_cast<std::chrono::duration<uint64_t, std::nano>>(now - prev_tick).count();
 
         if (diff <  target_frametime_nano) {
             std::this_thread::sleep_for(std::chrono::nanoseconds(target_frametime_nano - diff));

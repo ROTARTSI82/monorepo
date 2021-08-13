@@ -24,7 +24,7 @@ namespace cel {
     void init();
     void quit();
 
-    class app {
+    class app_t {
     public:
         settings_handler settings;
         window win; // the window MUST go first for the ogl context to be created.
@@ -33,7 +33,7 @@ namespace cel {
         fps_limiter render_timer{};
 
         fps_limiter logic_timer{};
-        world world;
+        world_t world;
         std::condition_variable logic_convar;
         std::mutex frame_mtx, frames_due_mtx;
         uint64_t frame_no = 0, logic_frames_due = 0;
@@ -41,8 +41,8 @@ namespace cel {
         std::thread logic_thread; // after all the data for logic_thread is initialized!
 
 
-        app(int argc, char **argv);
-        ~app();
+        app_t(int argc, char **argv);
+        ~app_t();
 
         inline window &get_window() { return win; }
 

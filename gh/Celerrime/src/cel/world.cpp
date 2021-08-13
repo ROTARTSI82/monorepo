@@ -3,19 +3,19 @@
 #include "cel/app.hpp"
 
 namespace cel {
-    world::world(::cel::app *a) : app(a) {}
+    world_t::world_t(::cel::app_t *a) : parent(a) {}
 
-    world::~world() {
+    world_t::~world_t() {
 
     }
 
-    void world::tick(const input_frame &inp) {
+    void world_t::tick(const input_frame &inp) {
         for (const auto &layer : layers) {
             layer->tick(inp);
         }
     }
 
-    void world::draw() {
+    void world_t::draw() {
         // Is it better to interleave or seperate upload() and draw() ?
         // Does it even matter? when are the calls actually dispatched? glfwSwapBuffers()?
         for (const auto &layer : layers)

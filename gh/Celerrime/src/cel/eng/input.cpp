@@ -22,6 +22,7 @@ namespace cel {
     hacky_input_provider::~hacky_input_provider() = default;
 
     input_frame hacky_input_provider::next(uint64_t frame, GLFWwindow *win) {
+        (void) frame;
         input_frame ret = {};
         if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS) ret.direction.y += 1;
         if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS) ret.direction.y -= 1;

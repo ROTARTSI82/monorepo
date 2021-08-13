@@ -64,7 +64,7 @@ namespace cel {
         vao.bind_record();
 
         glBindBuffer(GL_ARRAY_BUFFER, qvbo.value);
-        vao.vertexAttribPointer(0, 2, consts_for<float>::gl_type_enum, GL_FALSE, sizeof(gl_vec2), 0); // vertex vec2
+        vao.vertexAttribPointer(0, 2, consts_for<gl_float>::gl_type_enum, GL_FALSE, sizeof(gl_vec2), 0); // vertex vec2
         vao.enableVertexAttribArray(0);
 
 
@@ -123,13 +123,22 @@ namespace cel {
         win = glfwCreateWindow(settings->win_width, settings->win_height, 
                                settings->strs.win_title.c_str(), NULL, NULL);
         
-        CEL_THROWIF(!win, "Window creation failed");
+        if (!win) {
+            constexpr const char *msg = "Window creation failed!";
+            CEL_CRITICAL(msg);
+            throw std::runtime_error{msg};
+        }
+
         glfwMakeContextCurrent(win);
         glfwSwapInterval(1);
 
         glewExperimental = GL_TRUE;
         int glew_status = glewInit();
-        CEL_THROWIF(glew_status != GLEW_OK, "GLEW init failed: {}", glewGetErrorString(glew_status));
+        if (glew_status != GLEW_OK) { 
+            const std::string msg = fmt::format("GLEW init failed: {}", glewGetErrorString(glew_status));
+            CEL_CRITICAL(msg.c_str());
+            throw std::runtime_error{msg};
+        }
 
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(gl_error_callback, NULL);

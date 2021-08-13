@@ -6,6 +6,7 @@
 
 #include <fmt/format.h>
 #include <chrono>
+#include <imgui/imgui.h>
 
 #include "cel/game/mandelbrot_layer.hpp"
 
@@ -16,7 +17,11 @@ namespace cel {
 
     void init() {
         glfwSetErrorCallback(glfw_error_callback);
-        CEL_THROWIF(!glfwInit(), "GLFW Initialization failed!", "GLFW Initialization failed!");
+        if (!glfwInit()) {
+            constexpr const char *msg = "GLFW Initialization failed!";
+            CEL_CRITICAL(msg);
+            throw std::runtime_error{msg};
+        }
 
         CEL_INFO("GLFW compiled {}.{}.{}, linked {}. Timer hz = {}", GLFW_VERSION_MAJOR, 
                  GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString(), glfwGetTimerFrequency());
@@ -27,7 +32,7 @@ namespace cel {
         glfwTerminate();
     }
 
-    static void run_logic(app &parent) {
+    static void run_logic(app_t &parent) {
         CEL_TRACE("Enter run logic");
         while (parent.logic_running) {
             parent.logic_timer.tick();
@@ -49,11 +54,11 @@ namespace cel {
     }
 
 
-    app::app(int argc, char **argv) : settings(argc, argv), win(&settings), menus(this), world(this), logic_thread(run_logic, std::ref(*this)) {
+    app_t::app_t(int argc, char **argv) : settings(argc, argv), win(&settings), menus(this), world(this), logic_thread(run_logic, std::ref(*this)) {
         
     }
 
-    app::~app() {
+    app_t::~app_t() {
         CEL_TRACE("~app()");
 
         logic_running = false;
@@ -64,7 +69,7 @@ namespace cel {
         else logic_thread.detach();
     }
 
-    void app::run() {
+    void app_t::run() {
         float target_fps = 60.0f;
         float logic_target_fps = 60.0f;
         bool paused = false;

@@ -1,18 +1,13 @@
 #include "cel/game/imgui_menus.hpp"
 
-#include "imgui/imgui.cpp"
-#include "imgui/imgui_demo.cpp"
-#include "imgui/imgui_draw.cpp"
-#include "imgui/imgui_tables.cpp"
-#include "imgui/imgui_widgets.cpp"
-
-#include <imgui/backends/imgui_impl_glfw.cpp>
-#include <imgui/backends/imgui_impl_opengl3.cpp>
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
 
 #include "cel/app.hpp"
 
 namespace cel {
-    imgui_menu::imgui_menu(app *a) : parent(a) {
+    imgui_menu::imgui_menu(app_t *a) : parent(a) {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();

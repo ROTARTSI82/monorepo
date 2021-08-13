@@ -15,7 +15,7 @@
 #define CEL_GAME_PLAYER_HPP
 
 namespace cel {
-    class player {
+    class player_t {
     public:
         
     };

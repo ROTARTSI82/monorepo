@@ -16,22 +16,20 @@
 
 #include <GL/glew.h>
 
-#include <imgui/imgui.h>
-
 #include <GLFW/glfw3.h>
 
 namespace cel {
-    class app;
+    class app_t;
 
     class imgui_menu {
     public:
-        imgui_menu(app *parent);
+        imgui_menu(app_t *parent);
         ~imgui_menu();
 
         void new_frame();
         void draw();
     private:
-        app *parent;
+        app_t *parent;
         bool show_demo = true;
         
         void debug_tools();

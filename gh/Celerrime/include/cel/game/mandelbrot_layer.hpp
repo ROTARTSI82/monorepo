@@ -30,7 +30,7 @@ namespace cel::game {
         GLint proj_su, view_su;
 
     public:
-        mandelbrot_layer(world &w);
+        mandelbrot_layer(world_t &w);
         virtual ~mandelbrot_layer() = default;
 
         void tick(const input_frame &input) override;

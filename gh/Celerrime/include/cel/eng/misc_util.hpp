@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <exception>
 #include <string>
+#include <chrono>
 
 namespace cel {
     /**

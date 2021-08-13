@@ -35,7 +35,7 @@ namespace cel {
         float_t manual_scale = 1;
 
         bool enforce_aspect = true;
-        float_t aspect = consts_for<float_t>::calc().root2;
+        float_t aspect = consts_for<float_t>::root2();
 
         int win_width = 1440, win_height = 900;
 

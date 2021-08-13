@@ -39,12 +39,12 @@ namespace cel {
 
     template <typename T>
     inline T radians(T deg) {
-        return deg * consts_for<T>::calc().pi / 180;
+        return deg * consts_for<T>::pi() / 180;
     }
 
     template <typename T>
     inline T degrees(T rad) {
-        return rad * 180 / consts_for<T>::calc().pi;
+        return rad * 180 / consts_for<T>::pi();
     }
 
     template<typename T>

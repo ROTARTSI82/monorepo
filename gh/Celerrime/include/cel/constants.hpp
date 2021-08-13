@@ -27,22 +27,19 @@ namespace cel {
     template <typename T>
     class consts_for {
     public:
-        T pi, root2;
-
-        static GLenum gl_type_enum;
-
-        static inline const consts_for<T> &calc() {
-            static const consts_for<T> var = consts_for<T>();
-            return var;
+        static constexpr T pi() {
+            return std::acos((T) -1);
         }
 
-    private:
-        consts_for() noexcept {
-            std::cout << "new calculated_constants was constructed" << std::endl;
-            pi = std::acos((T) (-1));
-            root2 = std::sqrt((T) 2);
+        static constexpr T root2() {
+            return std::sqrt((T) 2);
         }
+
+        static constexpr GLenum gl_type_enum = 0; // definitions in constants.cpp
     };
+
+    template<>
+    constexpr GLenum consts_for<float>::gl_type_enum = GL_FLOAT;
 }
 
 #endif
