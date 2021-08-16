@@ -8,7 +8,7 @@
             "name": "GameTest gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Celerrime",
+            "program": "${workspaceFolder}/build/celerrime",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

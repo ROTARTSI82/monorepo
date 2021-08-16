@@ -1,6 +1,6 @@
 #include "cel/eng/window.hpp"
 
-#include "cel/settings.hpp"
+#include "cel/app.hpp"
 #include "cel/eng/log.hpp"
 
 namespace cel {
@@ -18,7 +18,7 @@ namespace cel {
         CEL_IGNORE(length);
         CEL_IGNORE(userParam);
 
-        if (source == GL_DEBUG_SOURCE_API && severity == GL_DEBUG_SEVERITY_NOTIFICATION && type == GL_DEBUG_TYPE_OTHER) return;
+        if (source == GL_DEBUG_SOURCE_API && (severity == GL_DEBUG_SEVERITY_NOTIFICATION || severity == GL_DEBUG_SEVERITY_LOW) && type == GL_DEBUG_TYPE_OTHER) return;
         const char *type_str, *src_str, *sev_str;
         switch (source) {
             CEL_MAKE_GLERRMSGCB_CASE(GL_DEBUG_SOURCE_, API, src_str)
@@ -114,14 +114,16 @@ namespace cel {
         delete[] instances;
     }
 
-    window::window(settings_handler *settings) : settings(settings), inp(std::make_unique<hacky_input_provider>()) {
+
+    window::window(app_t *app) : app(app), inp(std::make_unique<hacky_input_provider>()) {
+
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, CEL_USE_OGL_DBG_CTX);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // macOS support
-        win = glfwCreateWindow(settings->win_width, settings->win_height, 
-                               settings->strs.win_title.c_str(), NULL, NULL);
+        win = glfwCreateWindow(app->opt.win_width, app->opt.win_height, 
+                               app->opt.txt("win_title").c_str(), NULL, NULL);
         
         if (!win) {
             constexpr const char *msg = "Window creation failed!";
@@ -140,9 +142,12 @@ namespace cel {
             throw std::runtime_error{msg};
         }
 
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(gl_error_callback, NULL);
-        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+
+        if (glDebugMessageCallback) { // janky method to check for support. might become an error if it is replaced with a macro/actual function instead of a function pointer
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallback(gl_error_callback, NULL);
+            glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+        }
 
         glEnable(GL_DEPTH_TEST);
 

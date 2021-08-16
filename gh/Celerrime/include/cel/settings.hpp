@@ -16,7 +16,9 @@
 
 #include "cel/constants.hpp"
 #include "cel/eng/window.hpp"
-#include "cel/eng/strings.hpp"
+
+#include <unordered_map>
+#include <functional>
 
 namespace cel {
 
@@ -38,11 +40,14 @@ namespace cel {
         float_t aspect = consts_for<float_t>::root2();
 
         int win_width = 1440, win_height = 900;
+        std::function<generic_vec2<GLsizei>(int window_w, int window_h)> fb_size_resolver = [](int w, int h) -> generic_vec2<GLsizei> {
+            return {1440, 900};
+        };
 
         float_t fovy = 90;
         float_t tas_fps = 60;
 
-        string_dictionary strs;
+        std::unordered_map<std::string, std::string> strs;
 
         settings_handler(int argc, char **argv);
         ~settings_handler();
@@ -55,10 +60,9 @@ namespace cel {
         void load();
         void save();
 
-        inline std::string res_path(const std::string &file, bool essential = false) {
-            (void) essential;
-            return "./res/" + file;
-        }
+        std::string res_path(const std::string &file, bool essential = false);
+
+        std::string txt(const std::string &key);
     };
 }
 

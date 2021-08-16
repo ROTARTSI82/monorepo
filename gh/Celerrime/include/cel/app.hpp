@@ -26,9 +26,15 @@ namespace cel {
 
     class app_t {
     public:
-        settings_handler settings;
+        settings_handler opt;
+        gl_mat4 ortho_proj;
         window win; // the window MUST go first for the ogl context to be created.
+        framebuffer indirect_target{2, 2}; // placeholder. Is assigned in call to framebuffer_size_callback
+        shader_pipeline default_shaders{};
+        GLint su_proj;
+
         quad_vbo qvbo{};
+        draw_call fullscreen_quad;
         imgui_menu menus;
         fps_limiter render_timer{};
 

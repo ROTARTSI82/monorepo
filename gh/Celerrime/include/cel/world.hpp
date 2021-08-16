@@ -56,8 +56,22 @@ namespace cel {
         world_t(::cel::app_t *);
         ~world_t();
 
-        void tick(const input_frame &inp);
-        void draw();
+
+        inline void tick(const input_frame &inp) {
+            for (const auto &layer : layers) {
+                layer->tick(inp);
+        }
+        };
+
+        inline void upload() {
+            for (const auto &layer : layers)
+                layer->upload(); // glBufferSubData()
+        };
+
+        inline void draw() {
+            for (const auto &layer : layers)
+                layer->draw(); // glDrawArraysInstanced()
+        };
 
         template <typename T>
         std::shared_ptr<layer> get_layer() {

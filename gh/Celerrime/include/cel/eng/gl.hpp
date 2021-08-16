@@ -124,6 +124,8 @@ namespace cel {
         texture tex;
 
     public:
+        GLsizei width, height;
+
         framebuffer() = delete;
 
         /**

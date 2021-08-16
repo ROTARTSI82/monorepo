@@ -46,6 +46,8 @@ namespace cel {
     }
 
     shader::shader(GLenum type, const std::string &source, bool essential) : id(glCreateShader(type)) {
+        // CEL_INFO("Shader {} = {}", id, source);
+
         const char *c_str = source.c_str();
         glShaderSource(id, 1, &c_str, nullptr); // nullptr signals null-terminated strings.
         glCompileShader(id);
@@ -112,7 +114,7 @@ namespace cel {
         glDeleteTextures(1, &id);
     }
 
-    framebuffer::framebuffer(GLsizei width, GLsizei height, GLenum format) : tex{width, height, format} {
+    framebuffer::framebuffer(GLsizei width, GLsizei height, GLenum format) : tex{width, height, format}, width(width), height(height) {
         glGenFramebuffers(1, &id);
         glBindFramebuffer(GL_FRAMEBUFFER, id);
 
@@ -132,10 +134,14 @@ namespace cel {
 
     framebuffer::~framebuffer() {
         CEL_TRACE("~framebuffer()");
+        glDeleteRenderbuffers(1, &rbo);
         glDeleteFramebuffers(1, &id);
     }
 
-    void framebuffer::resize(GLsizei width, GLsizei height, GLenum format) {
+    void framebuffer::resize(GLsizei iwidth, GLsizei iheight, GLenum format) {
+        width = iwidth;
+        height = iheight;
+
         glBindFramebuffer(GL_FRAMEBUFFER, id);
         tex.bind();
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);

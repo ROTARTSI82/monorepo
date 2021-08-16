@@ -66,16 +66,16 @@ namespace cel {
     };
 
 
-    class settings_handler;
+    class app_t;
 
     class window {
     private:
         GLFWwindow *win;
-        settings_handler *settings;
+        app_t *app;
         std::unique_ptr<input_provider> inp;
 
     public:
-        window(settings_handler *settings);
+        window(app_t *settings);
         ~window();
         CEL_DEL_CPY_OP_CTOR(window)
 

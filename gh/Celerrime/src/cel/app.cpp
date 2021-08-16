@@ -32,6 +32,28 @@ namespace cel {
         glfwTerminate();
     }
 
+    static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+        app_t *app = reinterpret_cast<app_t *>(glfwGetWindowUserPointer(window));
+
+        // TODO: should i really be storing this directly into the settings?
+        app->opt.win_width = width;
+        app->opt.win_height = height;
+
+        auto resolution = app->opt.fb_size_resolver(width, height);
+        app->indirect_target.resize(resolution.x, resolution.y);
+
+        if (!app->opt.enforce_aspect) return;
+
+        if (static_cast<float>(width) / height > app->opt.aspect) {
+            // case: width is too long
+            float wover = width / (height * app->opt.aspect);
+            app->ortho_proj = gl_mat4::ortho(-wover, wover, -1, 1, cel::znear, cel::zfar);
+        } else {
+            float hover = height / (width / app->opt.aspect);
+            app->ortho_proj = gl_mat4::ortho(-1, 1, -hover, hover, cel::znear, cel::zfar);
+        }
+    }
+
     static void run_logic(app_t &parent) {
         CEL_TRACE("Enter run logic");
         while (parent.logic_running) {
@@ -53,9 +75,29 @@ namespace cel {
         CEL_TRACE("Exit run logic");
     }
 
+    app_t::app_t(int argc, char **argv) : opt(argc, argv), win(this), fullscreen_quad(1, qvbo), menus(this), world(this), logic_thread(run_logic, std::ref(*this)) {
+        glfwSetWindowUserPointer(win.get_handle(), this);
+        glfwSetFramebufferSizeCallback(win.get_handle(), framebuffer_size_callback);
 
-    app_t::app_t(int argc, char **argv) : settings(argc, argv), win(&settings), menus(this), world(this), logic_thread(run_logic, std::ref(*this)) {
-        
+        // This is a very confusing and counter-intuative place to initialize the projection matrix but eh
+        ortho_proj = gl_mat4::ortho(-1, 1, -1, 1, cel::znear, cel::zfar);
+        framebuffer_size_callback(win.get_handle(), opt.win_width, opt.win_height); // initialize ortho_proj and indirect_target accordingly
+
+        shader vert{GL_VERTEX_SHADER, read_entire_file(opt.res_path("vert/default.vert"))};
+        shader frag{GL_FRAGMENT_SHADER, read_entire_file(opt.res_path("frag/default.frag"))};
+        default_shaders.attach(vert.get_id());
+        default_shaders.attach(frag.get_id());
+        default_shaders.link();
+
+        default_shaders.use();
+        su_proj = default_shaders.get_uniform("projection_mat");
+        glUniform1i(default_shaders.get_uniform("tex"), 0);
+        gl_mat4 ident{identity_tag};
+        glUniformMatrix4fv(default_shaders.get_uniform("view_mat"), 1, GL_FALSE, (const GLfloat *) &ident);
+
+        fullscreen_quad.instances[0] = draw_instance{gl_mat2{identity_tag}, {0, 0, -0.5}, 1.0f, {0, 0}, {1, 1}, {1, 1}};
+        fullscreen_quad.num_blits = 1;
+        fullscreen_quad.upload();
     }
 
     app_t::~app_t() {
@@ -77,18 +119,36 @@ namespace cel {
         logic_convar.notify_one();
 
         world.layers.emplace_back(world.get_layer<game::mandelbrot_layer>());
+        layer *selected = nullptr;
         
         while (win.running()) {
             render_timer.tick();
 
-            int w, h;
-            glfwGetFramebufferSize(win.get_handle(), &w, &h);
-            glViewport(0, 0, w, h);
-            
+            menus.new_frame();
+
+            indirect_target.bind();
+            // CEL_TRACE("targ = {}, {}", indirect_target.width, indirect_target.height);
+            glViewport(0, 0, indirect_target.width, indirect_target.height);
+            glClearColor(0, 1, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+            {
+                std::lock_guard lg(frame_mtx);
+                world.upload();
+            }
+            world.draw();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            // CEL_TRACE("win = {}, {}", opt.win_width, opt.win_height);
+            glViewport(0, 0, opt.win_width, opt.win_height); // these properties get updated by a callback
             glClearColor(1, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-            menus.new_frame();
+            glActiveTexture(GL_TEXTURE0);
+            indirect_target.bind_texture();
+            default_shaders.use();
+            glUniformMatrix4fv(su_proj, 1, GL_FALSE, (const GLfloat *) &ortho_proj);
+            fullscreen_quad.dispatch();
 
             ImGui::Begin("Debug app::run()");
             ImGui::Text("io.WantCaptureKeyboard = %i, io.WantCaptureMouse = %i", ImGui::GetIO().WantCaptureKeyboard, ImGui::GetIO().WantCaptureMouse);
@@ -116,10 +176,17 @@ namespace cel {
 
             ImGui::Separator();
 
-            ImGui::Text("Layers");
-            for (const auto &l : world.layers) {
-                ImGui::Text("%s", typeid(*l.get()).name());
+            ImGui::BeginListBox("Layers");
+            for (std::size_t i = 0; i < world.layers.size(); i++) {
+                const auto &l = world.layers.at(i);
+
+                if (ImGui::Selectable(fmt::format("{}##{}", typeid(*l.get()).name(), i).c_str(), selected == l.get())) {
+                    selected = l.get();
+                }
             }
+            ImGui::EndListBox();
+
+            ImGui::Text("Selected: %i", reinterpret_cast<uint64_t>(selected));
 
             if (ImGui::Button("Pop Layer")) world.layers.pop_back();
             ImGui::SameLine();
@@ -129,11 +196,6 @@ namespace cel {
             }
 
             ImGui::End();
-
-            {
-                std::lock_guard lg(frame_mtx);
-                world.draw();
-            }
 
             menus.draw();
 

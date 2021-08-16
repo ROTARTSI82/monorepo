@@ -1,11 +1,11 @@
-// This fragment shader is no longer boring.
+// This fragment shader is no longer boring
 #version 330 core
 
 layout(location = 0) out vec4 diffuse_color;
 
 uniform sampler2D tex;
 
-in vec2 tex_co; // this variable name is now pretty misleading lol.
+in vec2 tex_co; // this variable name is now pretty misleading lol
 in float alpha_mult_io;
 
 flat in vec2 sample_extent_io;
