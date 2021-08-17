@@ -22,7 +22,7 @@ namespace cel {
     enum class button_id : uint8_t {
         w, a, s, d,
         open_inventory,
-
+        jump,
         zoom_in,
         zoom_out,
         size

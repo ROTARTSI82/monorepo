@@ -30,8 +30,9 @@ namespace cel {
         if (glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS) ret.direction.x -= 1;
         ret.direction.clamp_magn_in_place(1);
 
-        ret.buttons[(int) button_id::zoom_in] = glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS;
+        ret.buttons[(int) button_id::jump] = glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS;
         ret.buttons[(int) button_id::zoom_out] = glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS;
+        ret.buttons[(int) button_id::zoom_in] = ret.buttons[(int) button_id::jump];
         return ret;
     }
 }

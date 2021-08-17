@@ -8,7 +8,7 @@
 #include <chrono>
 #include <imgui/imgui.h>
 
-#include "cel/game/dbg/phys_test.hpp"
+#include "cel/game/dbg/tgrs.hpp"
 
 namespace cel {
     static void glfw_error_callback(int code, const char* description) {
@@ -129,7 +129,7 @@ namespace cel {
         logic_frames_due = std::numeric_limits<uint64_t>::max();
         logic_convar.notify_one();
 
-        world.layers.emplace_back(world.get_layer<dbg::physics_test_layer>());
+        world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
         layer *selected = nullptr;
         
         while (win.running()) {
@@ -205,7 +205,7 @@ namespace cel {
             ImGui::SameLine();
             if (ImGui::Button("Push Layer")) { 
                 world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
-                world.layers.emplace_back(world.get_layer<dbg::physics_test_layer>());
+                world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
             }
 
             ImGui::End();
