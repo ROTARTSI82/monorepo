@@ -42,6 +42,7 @@ namespace cel {
 
         virtual void tick(const input_frame &input) = 0; // tick entities
         virtual void upload() = 0; // upload instance vbos to the gpu
+        virtual void enqueue_render() = 0;
         virtual void draw() = 0; // dispatch draw calls
     };
 
@@ -72,6 +73,11 @@ namespace cel {
             for (const auto &layer : layers)
                 layer->draw(); // glDrawArraysInstanced()
         };
+
+        inline void enqueue_render() {
+            for (const auto &layer : layers)
+                layer->enqueue_render();
+        }
 
         template <typename T>
         std::shared_ptr<layer> get_layer() {

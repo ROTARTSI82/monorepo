@@ -11,14 +11,14 @@
 
 #pragma once
 
-#ifndef CEL_GAME_MANDELBROT_LAYER_HPP
-#define CEL_GAME_MANDELBROT_LAYER_HPP
+#ifndef CEL_GAME_DBG_MANDELBROT_LAYER_HPP
+#define CEL_GAME_DBG_MANDELBROT_LAYER_HPP
 
 #include <cel/eng/gl.hpp>
 #include "cel/world.hpp"
 #include "cel/eng/window.hpp"
 
-namespace cel::game {
+namespace cel::dbg {
     class mandelbrot_layer : public layer {
     private:
         shader_pipeline shaders;
@@ -36,6 +36,7 @@ namespace cel::game {
         void tick(const input_frame &input) override;
         void upload() override;
         void draw() override;
+        void enqueue_render() override;
     };
 }
 

@@ -152,7 +152,7 @@ namespace cel {
         }
 
         inline T magnitude() const {
-            return std::sqrt(x * x + y * y);
+            return std::hypot(x, y);
         }
 
         inline generic_vec2<T> normalized() const {

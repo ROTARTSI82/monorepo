@@ -5,6 +5,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
+#include <errno.h>
+#include <cfenv>
+
 namespace cel {
     identity_tag_t identity_tag{};
 
@@ -161,5 +164,24 @@ namespace cel {
         while((err = glGetError()) != GL_NO_ERROR) {
             CEL_ERROR("OpenGL Error {}", err);
         }
+
+        if (errno && errno != 11) {
+            CEL_ERROR("ERRNO {}: {}", errno, strerror(errno));
+            errno = 0;
+        }
+
+        if (std::fetestexcept(FE_DIVBYZERO))
+            CEL_ERROR("Floating point divide by 0 reported!");
+        // if (std::fetestexcept(FE_INEXACT))
+        //     CEL_TRACE("Float inexact result");
+        // if (std::fetestexcept(FE_INVALID))
+        //     CEL_ERROR("Invalid floating point result (e.g. NaN) reported!");
+        if (std::fetestexcept(FE_OVERFLOW))
+            CEL_ERROR("Floating point overflow reported (Inf)");
+        if (std::fetestexcept(FE_UNDERFLOW)) 
+            CEL_ERROR("Floating point underflow reported (-Inf)");
+        
+        std::feclearexcept(FE_ALL_EXCEPT);
+
     }
 }

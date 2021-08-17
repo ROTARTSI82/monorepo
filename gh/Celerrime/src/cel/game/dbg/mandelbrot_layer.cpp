@@ -1,4 +1,4 @@
-#include "cel/game/mandelbrot_layer.hpp"
+#include "cel/game/dbg/mandelbrot_layer.hpp"
 
 #include <cel/eng/misc_util.hpp>
 #include <cel/app.hpp>
@@ -6,7 +6,7 @@
 #include <imgui/imgui.h>
 #include <fmt/format.h>
 
-namespace cel::game {
+namespace cel::dbg {
     mandelbrot_layer::mandelbrot_layer(world_t &w) : test(4096, w.parent->qvbo) {
         shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.parent->opt.res_path("frag/mandelbrot-fast.frag"))};
         shader vert{GL_VERTEX_SHADER, read_entire_file(w.parent->opt.res_path("vert/default.vert"))};
@@ -33,7 +33,9 @@ namespace cel::game {
         view_mat *= gl_mat4::transform({inp.direction * -0.125, 0}, sc, 0);
     }
 
-    void mandelbrot_layer::upload() {}
+    void mandelbrot_layer::upload() {
+        test.upload();
+    }
 
     void mandelbrot_layer::draw() {
         shaders.use();
@@ -44,6 +46,11 @@ namespace cel::game {
         ImGui::Begin((fmt::format("mandelbrot_layer@{:#016x}", reinterpret_cast<uint64_t>(this))).c_str());
         ImGui::Text("View Matrix: %s", to_string(view_mat).c_str());
         ImGui::Text("Proj Matrix: %s", to_string(proj_mat).c_str());
+        ImGui::SliderFloat("Depth", &test.instances[0].center.z, -10, 10);
         ImGui::End();
+    }
+
+    void mandelbrot_layer::enqueue_render() {
+        
     }
 }

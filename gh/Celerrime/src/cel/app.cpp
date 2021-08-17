@@ -8,7 +8,7 @@
 #include <chrono>
 #include <imgui/imgui.h>
 
-#include "cel/game/mandelbrot_layer.hpp"
+#include "cel/game/dbg/phys_test.hpp"
 
 namespace cel {
     static void glfw_error_callback(int code, const char* description) {
@@ -39,19 +39,29 @@ namespace cel {
         app->opt.win_width = width;
         app->opt.win_height = height;
 
-        auto resolution = app->opt.fb_size_resolver(width, height);
-        app->indirect_target.resize(resolution.x, resolution.y);
+        if (!app->opt.enforce_aspect) {
+            auto resolution = app->opt.fb_size_resolver(width, height);
+            app->indirect_target.resize(resolution.x, resolution.y);
+            return;
+        }
 
-        if (!app->opt.enforce_aspect) return;
-
+        generic_vec2<GLsizei> resolution;
         if (static_cast<float>(width) / height > app->opt.aspect) {
             // case: width is too long
-            float wover = width / (height * app->opt.aspect);
+            float target_width = (height * app->opt.aspect);
+            float wover = width / target_width;
             app->ortho_proj = gl_mat4::ortho(-wover, wover, -1, 1, cel::znear, cel::zfar);
+
+            resolution = app->opt.fb_size_resolver((int) target_width, height);
         } else {
-            float hover = height / (width / app->opt.aspect);
+            float target_height = (width / app->opt.aspect);
+            float hover = height / target_height;
             app->ortho_proj = gl_mat4::ortho(-1, 1, -hover, hover, cel::znear, cel::zfar);
+
+            resolution = app->opt.fb_size_resolver(width, (int) target_height);
         }
+
+        app->indirect_target.resize(resolution.x, resolution.y);
     }
 
     static void run_logic(app_t &parent) {
@@ -68,6 +78,7 @@ namespace cel {
             {
                 std::lock_guard lg(parent.frame_mtx);
                 parent.world.tick(parent.win.input_for(parent.frame_no));
+                parent.world.enqueue_render();
                 parent.frame_no++;
             }
         }
@@ -118,7 +129,7 @@ namespace cel {
         logic_frames_due = std::numeric_limits<uint64_t>::max();
         logic_convar.notify_one();
 
-        world.layers.emplace_back(world.get_layer<game::mandelbrot_layer>());
+        world.layers.emplace_back(world.get_layer<dbg::physics_test_layer>());
         layer *selected = nullptr;
         
         while (win.running()) {
@@ -129,19 +140,20 @@ namespace cel {
             indirect_target.bind();
             // CEL_TRACE("targ = {}, {}", indirect_target.width, indirect_target.height);
             glViewport(0, 0, indirect_target.width, indirect_target.height);
-            glClearColor(0, 1, 0, 1);
+            glClearColor(0.5, 0.5, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             {
                 std::lock_guard lg(frame_mtx);
                 world.upload();
             }
+
             world.draw();
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             // CEL_TRACE("win = {}, {}", opt.win_width, opt.win_height);
             glViewport(0, 0, opt.win_width, opt.win_height); // these properties get updated by a callback
-            glClearColor(1, 0, 0, 1);
+            glClearColor(0, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             glActiveTexture(GL_TEXTURE0);
@@ -176,23 +188,24 @@ namespace cel {
 
             ImGui::Separator();
 
-            ImGui::BeginListBox("Layers");
-            for (std::size_t i = 0; i < world.layers.size(); i++) {
-                const auto &l = world.layers.at(i);
+            if (ImGui::BeginListBox("Layers")) {
+                for (std::size_t i = 0; i < world.layers.size(); i++) {
+                    const auto &l = world.layers.at(i);
 
-                if (ImGui::Selectable(fmt::format("{}##{}", typeid(*l.get()).name(), i).c_str(), selected == l.get())) {
-                    selected = l.get();
+                    if (ImGui::Selectable(fmt::format("{}##{}", typeid(*l.get()).name(), i).c_str(), selected == l.get())) {
+                        selected = l.get();
+                    }
                 }
+                ImGui::EndListBox();
             }
-            ImGui::EndListBox();
 
-            ImGui::Text("Selected: %i", reinterpret_cast<uint64_t>(selected));
+            ImGui::Text("Selected: %lu", reinterpret_cast<uint64_t>(selected));
 
             if (ImGui::Button("Pop Layer")) world.layers.pop_back();
             ImGui::SameLine();
             if (ImGui::Button("Push Layer")) { 
                 world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
-                world.layers.emplace_back(world.get_layer<game::mandelbrot_layer>());
+                world.layers.emplace_back(world.get_layer<dbg::physics_test_layer>());
             }
 
             ImGui::End();

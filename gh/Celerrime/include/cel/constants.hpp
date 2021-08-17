@@ -25,6 +25,8 @@ namespace cel {
     constexpr float znear = 0.1f;
     constexpr float zfar = 100.0f;
 
+    constexpr float grounded_threshold = 0.1f;
+
     typedef float float_t;
 
     template <typename T>

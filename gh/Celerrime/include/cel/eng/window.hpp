@@ -41,6 +41,8 @@ namespace cel {
         gl_vec2 sample_ntiles;
     };
 
+    void draw_line(draw_instance &inst, vec2 a, vec2 b, float depth, float semi_width = 0.1f);
+
     class draw_call {
     private:
         GLuint vbo;

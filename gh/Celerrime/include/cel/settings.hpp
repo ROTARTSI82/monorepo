@@ -40,8 +40,8 @@ namespace cel {
         float_t aspect = consts_for<float_t>::root2();
 
         int win_width = 1440, win_height = 900;
-        std::function<generic_vec2<GLsizei>(int window_w, int window_h)> fb_size_resolver = [](int w, int h) -> generic_vec2<GLsizei> {
-            return {1440, 900};
+        std::function<generic_vec2<GLsizei>(int viewport_w, int viewport_h)> fb_size_resolver = [](int w, int h) -> generic_vec2<GLsizei> {
+            return {w, h};
         };
 
         float_t fovy = 90;

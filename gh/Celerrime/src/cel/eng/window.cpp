@@ -60,6 +60,12 @@ namespace cel {
 
     draw_instance::draw_instance(gl_mat2 t, gl_vec3 c, gl_float a, gl_vec2 o, gl_vec2 e, gl_vec2 n) : transform(t), center(c), alpha_mult(a), sample_origin(o), sample_extent(e), sample_ntiles(n) {}
 
+    void draw_line(draw_instance &inst, vec2 a, vec2 b, float depth, float semi_width) {
+        inst.center = vec3{(a + b) / 2, depth};
+        const auto diff = b - a;
+        inst.transform = gl_mat2::transform({diff.magnitude() / 2, semi_width}, std::atan2(diff.y, diff.x));
+    }
+
     draw_call::draw_call(size_t max_instances, const quad_vbo &qvbo) : instances(new draw_instance[max_instances]) {
         vao.bind_record();
 
