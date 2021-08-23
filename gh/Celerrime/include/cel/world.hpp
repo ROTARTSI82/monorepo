@@ -52,6 +52,7 @@ namespace cel {
         app_t *parent;
         std::vector<std::shared_ptr<layer>> layers;
         std::unordered_map<std::type_index, std::shared_ptr<layer>> layer_cache;
+        input_frame prev_inp{};
         player_t player;
 
         world_t(::cel::app_t *);
@@ -59,9 +60,9 @@ namespace cel {
 
 
         inline void tick(const input_frame &inp) {
-            for (const auto &layer : layers) {
+            for (const auto &layer : layers)
                 layer->tick(inp);
-        }
+            prev_inp = inp;
         };
 
         inline void upload() {

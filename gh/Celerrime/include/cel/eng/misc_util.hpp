@@ -106,17 +106,38 @@ namespace cel {
     template <typename T>
     class checked_array {
     private:
-        bool do_delete = false;
         T *store;
         size_t size;
+        bool do_delete = false;
 
     public:
 
         checked_array() = delete;
         checked_array(T *arr, size_t size) : store(arr), size(size) {};
-        checked_array(size_t size) : do_delete(true), store(new T[size]), size(size) {};
+        checked_array(size_t size) : store(new T[size]), size(size), do_delete(true) {};
         ~checked_array() {
-            delete[] store;
+            if (do_delete) delete[] store;
+        }
+
+        checked_array(const checked_array &) = delete;
+        checked_array &operator=(const checked_array &) = delete;
+
+        checked_array(checked_array &&rhs) noexcept {
+            *this = std::move(rhs);
+        }
+
+        checked_array &operator=(checked_array &&rhs) noexcept {
+            if (this == &rhs) return *this;
+            
+            store = rhs.store;
+            size = rhs.size;
+            do_delete = rhs.do_delete;
+
+            rhs.do_delete = false;
+            rhs.size = 0;
+            rhs.store = nullptr;
+
+            return *this;
         }
 
         // operator[] has no bounds checking, but at() does.

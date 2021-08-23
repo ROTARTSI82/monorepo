@@ -11,7 +11,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "")
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "")
 
-# set(GLEW_USE_STATIC_LIBS ON CACHE BOOL "")
+set(GLEW_USE_STATIC_LIBS ON CACHE BOOL "")
 
 option(USE_ASAN "Compile with address sanitizer" OFF)
 option(USE_G3 "Compile with -g3 and -ggdb (debug symbols for gdb)" ON)

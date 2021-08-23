@@ -10,7 +10,7 @@
 #include <random>
 
 namespace cel::dbg {
-    tgrs_layer::tgrs_layer(world_t &w) : draw_info(4096, w.parent->qvbo), sq_tex{w.parent->opt.res_path("dbg/test.png")} {
+    tgrs_layer::tgrs_layer(world_t &w) : parent(w), draw_info(4096, w.parent->qvbo), sq_tex{w.parent->opt.res_path("dbg/test.png")} {
         shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.parent->opt.res_path("frag/default.frag"))};
         shader vert{GL_VERTEX_SHADER, read_entire_file(w.parent->opt.res_path("vert/default.vert"))};
 
@@ -61,48 +61,84 @@ namespace cel::dbg {
     }
 
     void tgrs_layer::tick(const input_frame &inp) {
-        if (inp.buttons[(int) button_id::jump] && grounded) {
-            vel_y -= 10;
-        }
-
-        player.center += vec2{inp.direction.x * 5, vel_y};
-        vel_y += 0.3;
+        // vel.clamp_magn_in_place(5);
+        vel.x = std::max(std::min(vel.x, 5.0f), -5.0f);
+        player.center += vel;
+        
+        vel += vec2{0, 0.3}; // gravity
+        bool apply_friction = inp.direction.magnitude() < 0.25;
 
         grounded = false;
+        float mark = -999999;
         for (const auto &box : lvl_platforms[level]) {
             auto [ push, status ] = player.collide_direction(box);
-            if (status & (1<<1)) {
-                player.center += push;
-                if (push.y > std::numeric_limits<float>::epsilon() || push.y < -std::numeric_limits<float>::epsilon()) {
-                    vel_y = 0;
+            if (status) { 
+                vec2 candidate = push.normalized();
+                float d = vec2::dot(candidate, vec2{0, -1});
+                if (d > mark) {
+                    ground_normal = candidate;
+                    mark = d;
+                }
+
+                grounded = true;
+                if (true) {
+                    vec2 target = candidate * vec2::dot(candidate, vel);
+                    vec2 diff = target - vel;
+                    vel += diff * 0.1;
                 }
             }
 
-            grounded |= push.y < -std::numeric_limits<float>::epsilon();
+            if (status & (1<<1)) {
+                player.center += push;
+                vec2 rot = vec2{-push.y, push.x}.normalized(); // rotate 90deg counterclockwise
+                vel = rot * vec2::dot(vel, rot);
+            }
         }
 
-        player.center.x = std::max(std::min(player.center.x, 800.0f - 10), 10.0f);
+        if (inp.buttons[(int) button_id::jump] && grounded && !parent.prev_inp.buttons[(int) button_id::jump]) {
+            CEL_TRACE("JMP norm = {}", to_string(ground_normal));
+            jump_frames = 30;
+            jmp_norm = ground_normal;
+            vel += ground_normal * 3;
+        } else if (!inp.buttons[(int) button_id::jump]) {
+            jump_frames = 0;
+        } else if (--jump_frames > 0) {
+            vel += jmp_norm;
+            jmp_norm *= 0.9;
+        }
+
+        vel.x += inp.direction.x;
+
+
+        if (player.center.x < 10.0f) {
+            player.center.x = 10;
+            vel.x = 0;
+        } else if (player.center.x > 790) {
+            player.center.x = 790;
+            vel.x = 0;
+        }
+
         if (player.center.y - 10 < 0) {
             player.center.y = 11;
-            vel_y = 0;
+            vel = vec2{1, 0} * vec2::dot(vel, vec2{1, 0});
         }
 
         for (const auto &box : lvl_spikes[level]) {
             if (player.collides_with(box)) {
                 player.center = {40, 60};
-                vel_y = 0;
+                vel = {0, 0};
             }
         }
 
         if (player.collides_with(finish)) {
             load_map(++level);
             player.center = {40, 60};
-            vel_y = 0;
+            vel = {0, 0};
         }
 
          if (player.center.y > 600) {
             player.center = {40, 60};
-            vel_y = 0;
+            vel = {0, 0};
         }
 
     }
@@ -124,8 +160,5 @@ namespace cel::dbg {
         glActiveTexture(GL_TEXTURE0);
         sq_tex.bind();
         draw_info.dispatch();
-
-        ImGui::Begin((fmt::format("tgrs_layer@{:#016x}", reinterpret_cast<uint64_t>(this))).c_str());
-        ImGui::End();
     }
 }

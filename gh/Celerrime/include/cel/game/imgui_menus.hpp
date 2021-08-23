@@ -30,7 +30,7 @@ namespace cel {
         void draw();
     private:
         app_t *parent;
-        bool show_demo = true;
+        bool show_demo = false;
         
         void debug_tools();
     };

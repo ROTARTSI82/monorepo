@@ -22,6 +22,7 @@
 namespace cel::dbg {
     class tgrs_layer : public layer {
     private:
+        world_t &parent;
         shader_pipeline shaders;
 
         draw_call draw_info;
@@ -56,8 +57,9 @@ namespace cel::dbg {
         };
 
         aligned_rect_collider player{{40, 60}, {10, 10}}, finish{{}, {25, 50}};
-
+        vec2 vel, ground_normal, jmp_norm;
         float vel_y = 0;
+        int jump_frames = 0;
         uint8_t grounded = false, level = 0;
 
 

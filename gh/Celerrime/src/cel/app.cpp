@@ -125,7 +125,7 @@ namespace cel {
     void app_t::run() {
         float target_fps = 60.0f;
         float logic_target_fps = 60.0f;
-        bool paused = false;
+        bool paused = false, menu_open = true;
         logic_frames_due = std::numeric_limits<uint64_t>::max();
         logic_convar.notify_one();
 
@@ -162,53 +162,55 @@ namespace cel {
             glUniformMatrix4fv(su_proj, 1, GL_FALSE, (const GLfloat *) &ortho_proj);
             fullscreen_quad.dispatch();
 
-            ImGui::Begin("Debug app::run()");
-            ImGui::Text("io.WantCaptureKeyboard = %i, io.WantCaptureMouse = %i", ImGui::GetIO().WantCaptureKeyboard, ImGui::GetIO().WantCaptureMouse);
-            ImGui::Text("Frame: %lu", frame_no);
-            ImGui::SameLine();
-            paused = !logic_frames_due;
-            if (ImGui::Checkbox("Logic Paused", &paused)) {
-                logic_frames_due = paused ? 0 : std::numeric_limits<uint64_t>::max();
-                logic_convar.notify_one();
-            }
-
-            ImGui::Text("Render Thread FPS: %f", render_timer.get_fps());
-            ImGui::Text("Logic Thread FPS: %f", logic_timer.get_fps());
-
-            if (ImGui::SliderFloat("fps", &target_fps, 1.0f, 100.0f, "Target FPS (Render): %f")) {
-                render_timer.set_target_fps(target_fps);
-            }
-            if (ImGui::SliderFloat("fps##logic", &logic_target_fps, 1.0f, 100.0f, "Target FPS (Logic): %f")) {
-                logic_timer.set_target_fps(logic_target_fps);
-            }
-
-            uint64_t min = 0, max = 60;
-            ImGui::SliderScalar("frames", ImGuiDataType_U64, &logic_frames_due, &min, &max, "Frames Due: %i");
-            if (ImGui::Button("Notify Condition Variable")) logic_convar.notify_one();
-
-            ImGui::Separator();
-
-            if (ImGui::BeginListBox("Layers")) {
-                for (std::size_t i = 0; i < world.layers.size(); i++) {
-                    const auto &l = world.layers.at(i);
-
-                    if (ImGui::Selectable(fmt::format("{}##{}", typeid(*l.get()).name(), i).c_str(), selected == l.get())) {
-                        selected = l.get();
-                    }
+            if (menu_open) {
+                ImGui::Begin("Debug app::run()", &menu_open);
+                ImGui::Text("io.WantCaptureKeyboard = %i, io.WantCaptureMouse = %i", ImGui::GetIO().WantCaptureKeyboard, ImGui::GetIO().WantCaptureMouse);
+                ImGui::Text("Frame: %lu", frame_no);
+                ImGui::SameLine();
+                paused = !logic_frames_due;
+                if (ImGui::Checkbox("Logic Paused", &paused)) {
+                    logic_frames_due = paused ? 0 : std::numeric_limits<uint64_t>::max();
+                    logic_convar.notify_one();
                 }
-                ImGui::EndListBox();
+
+                ImGui::Text("Render Thread FPS: %f", render_timer.get_fps());
+                ImGui::Text("Logic Thread FPS: %f", logic_timer.get_fps());
+
+                if (ImGui::SliderFloat("fps", &target_fps, 1.0f, 100.0f, "Target FPS (Render): %f")) {
+                    render_timer.set_target_fps(target_fps);
+                }
+                if (ImGui::SliderFloat("fps##logic", &logic_target_fps, 1.0f, 100.0f, "Target FPS (Logic): %f")) {
+                    logic_timer.set_target_fps(logic_target_fps);
+                }
+
+                uint64_t min = 0, max = 60;
+                ImGui::SliderScalar("frames", ImGuiDataType_U64, &logic_frames_due, &min, &max, "Frames Due: %i");
+                if (ImGui::Button("Notify Condition Variable")) logic_convar.notify_one();
+
+                ImGui::Separator();
+
+                if (ImGui::BeginListBox("Layers")) {
+                    for (std::size_t i = 0; i < world.layers.size(); i++) {
+                        const auto &l = world.layers.at(i);
+
+                        if (ImGui::Selectable(fmt::format("{}##{}", typeid(*l.get()).name(), i).c_str(), selected == l.get())) {
+                            selected = l.get();
+                        }
+                    }
+                    ImGui::EndListBox();
+                }
+
+                ImGui::Text("Selected: %lu", reinterpret_cast<uint64_t>(selected));
+
+                if (ImGui::Button("Pop Layer")) world.layers.pop_back();
+                ImGui::SameLine();
+                if (ImGui::Button("Push Layer")) { 
+                    world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
+                    world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
+                }
+
+                ImGui::End();
             }
-
-            ImGui::Text("Selected: %lu", reinterpret_cast<uint64_t>(selected));
-
-            if (ImGui::Button("Pop Layer")) world.layers.pop_back();
-            ImGui::SameLine();
-            if (ImGui::Button("Push Layer")) { 
-                world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
-                world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
-            }
-
-            ImGui::End();
 
             menus.draw();
 
