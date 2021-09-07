@@ -72,6 +72,7 @@ namespace cel::scr {
         ne, eq, lt, gt, le, ge, // not equal, equals, less than, greater than, less than or equal to, greater than or equal to. all take [type]
 
         ind_cfunc, cfunc,
+        clear_locals, clear_globals, clear_ops, 
 
         EXT_DBG_outp, // output the top value of the operand stack literally. takes [type]
         size
@@ -119,8 +120,8 @@ namespace cel::scr {
             *reinterpret_cast<T *>(&operands.at(s)) = *reinterpret_cast<const T *>(v);
         }
 
-        template <typename T, typename B>
-        inline void push_op_val(const B v) {
+        template <typename T>
+        inline void push_op_val(const T v) {
             auto s = operands.size();
             operands.resize(s + sizeof(T));
             *reinterpret_cast<T *>(&operands.at(s)) = *reinterpret_cast<const T *>(&v);

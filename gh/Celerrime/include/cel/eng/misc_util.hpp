@@ -64,6 +64,42 @@ namespace cel {
         inline float get_fps() { return fps; };
     };
 
+    template <typename T>
+    class counting_ref {
+    private:
+        T *value;
+    public:
+        counting_ref(const T *v) : value(const_cast<T *>(v)) {
+            if (value) value->inc_ref();
+        }
+
+        virtual ~counting_ref() {
+            if (value) value->dec_ref();
+        }
+
+        counting_ref(const counting_ref &rhs) : value(rhs.value) {
+            if (value) value->inc_ref();
+        }
+
+        counting_ref(counting_ref &&rhs) : value(rhs.value) {
+            rhs.value = nullptr;
+        }
+
+        counting_ref &operator=(const counting_ref &rhs) {
+            value = rhs.value;
+            if (value) value->inc_ref();
+        }
+
+        counting_ref &operator=(counting_ref &&rhs) {
+            value = rhs.value;
+            rhs.value = nullptr;
+        }
+
+        inline T *operator->() {
+            return value;
+        };
+    };
+
     class raw_stack {
     private:
         std::size_t capacity = 0;

@@ -16,6 +16,10 @@
 
 #include <GL/glew.h>
 #include <string>
+#include <unordered_set>
+#include <iostream>
+
+#include "cel/eng/misc_util.hpp"
 
 #define CEL_DEL_CPY_OP_CTOR(name) name &operator=(const name &rhs) noexcept = delete; name(const name &rhs) noexcept = delete;
 
@@ -86,7 +90,7 @@ namespace cel {
     };
 
     class texture {
-    private:
+    protected:
         GLuint id;
 
         inline void generate() {
@@ -98,6 +102,8 @@ namespace cel {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         }
+
+        void load(const std::string &filepath, bool essential, GLenum format) const;
 
     public:
         texture() = delete;
@@ -115,8 +121,78 @@ namespace cel {
         CEL_DEL_CPY_OP_CTOR(texture)
 
         inline void bind() { glBindTexture(GL_TEXTURE_2D, id); }
-        inline GLuint get_id() { return id; }
+        inline GLuint get_id() const { return id; }
     };
+
+    class tracked_texture;
+}
+
+namespace std {
+
+    template<> 
+    struct hash<cel::tracked_texture> {
+        std::size_t operator()(const cel::tracked_texture &s) const noexcept;
+    };
+}
+
+namespace cel {
+
+    class settings_handler;
+    class tracked_texture : public texture {
+    private:
+        GLenum format; // why do i have to store this >:[
+        std::unordered_set<tracked_texture> *store;
+        std::string name;
+        int ref_count = 0;
+        bool essential;
+
+    public:
+
+        tracked_texture() = delete;
+        tracked_texture(const std::string &fp, std::unordered_set<tracked_texture> *st, settings_handler *opt, bool essential = false, GLenum format = GL_RGBA);
+
+        inline bool operator==(const tracked_texture &rhs) const noexcept {
+            return id == rhs.id;
+        };
+
+        CEL_DEL_CPY_OP_CTOR(tracked_texture);
+
+        void reload(settings_handler *opt) const;
+
+        inline void inc_ref() {
+            ++ref_count;
+        }
+
+        inline void dec_ref() {
+            if (--ref_count <= 0) { 
+                std::cout << "DESTROY TRACKED TEXTURE" << std::endl;
+                store->erase(*this); 
+            }
+        }
+
+        inline int get_ref() const {
+            return ref_count;
+        }
+    };
+
+    class texture_manager {
+    private:
+        std::unordered_set<tracked_texture> textures;
+        settings_handler *opt;
+
+    public:
+        texture_manager() = delete;
+        texture_manager(settings_handler *opt);
+
+        CEL_DEL_CPY_OP_CTOR(texture_manager);
+
+        counting_ref<tracked_texture> new_tex(const std::string &name, bool essential = false, GLenum format = GL_RGBA);
+
+        void reload_all();
+        void cycle_gc();
+    };
+
+    typedef counting_ref<tracked_texture> texture_ref;
 
     class framebuffer {
     private:

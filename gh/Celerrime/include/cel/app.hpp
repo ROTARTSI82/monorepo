@@ -33,6 +33,8 @@ namespace cel {
         shader_pipeline default_shaders{};
         GLint su_proj;
 
+        texture_manager tex_pool{&opt};
+
         quad_vbo qvbo{};
         draw_call fullscreen_quad;
         imgui_menu menus;

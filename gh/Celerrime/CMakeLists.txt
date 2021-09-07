@@ -57,9 +57,9 @@ add_subdirectory(dep/glfw)
 # find_package(Python 3 REQUIRED COMPONENTS Development)
 # target_link_libraries(Celerrime Python::Module Python::Python)
 
-# find_package(OpenAL REQUIRED)
-# target_link_libraries(Celerrime ${OPENAL_LIBRARY})
-# target_include_directories(Celerrime PRIVATE ${OPENAL_INCLUDE_DIR})
+find_package(OpenAL REQUIRED)
+target_link_libraries(cel ${OPENAL_LIBRARY})
+target_include_directories(cel PRIVATE ${OPENAL_INCLUDE_DIR})
 
 target_link_libraries(cel glfw Threads::Threads)
 target_link_libraries(cel OpenGL::GL GLEW::GLEW)

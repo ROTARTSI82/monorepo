@@ -23,7 +23,7 @@ namespace cel {
             throw std::runtime_error{msg};
         }
 
-        CEL_INFO("GLFW compiled {}.{}.{}, linked {}. Timer hz = {}", GLFW_VERSION_MAJOR, 
+        CEL_INFO("GLFW compiled {}.{}.{}, linked {}. Timer hz = {}", GLFW_VERSION_MAJOR,
                  GLFW_VERSION_MINOR, GLFW_VERSION_REVISION, glfwGetVersionString(), glfwGetTimerFrequency());
     }
 
@@ -131,7 +131,7 @@ namespace cel {
 
         world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
         layer *selected = nullptr;
-        
+
         while (win.running()) {
             render_timer.tick();
 
@@ -204,7 +204,7 @@ namespace cel {
 
                 if (ImGui::Button("Pop Layer")) world.layers.pop_back();
                 ImGui::SameLine();
-                if (ImGui::Button("Push Layer")) { 
+                if (ImGui::Button("Push Layer")) {
                     world.clear_layer_cache(); // prevent get_layer() from returning a pointer to the same layer
                     world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
                 }

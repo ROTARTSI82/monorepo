@@ -16,7 +16,11 @@ int main(int argc, char **argv) {
     t.pc = reinterpret_cast<uint8_t *>(dat.data());
     t.frames.emplace_back(nullptr, 0);
 
-    while (t.single_cycle());
+    try {
+        while (t.single_cycle());
+    } catch (const std::exception &e) {
+        CEL_CRITICAL("EXCEPTION: {}", e.what());
+    }
 
     cel::init();
     { // scope is important. quit() should be called after ~app()

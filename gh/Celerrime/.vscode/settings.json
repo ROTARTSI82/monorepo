@@ -73,6 +73,7 @@
         "variant": "cpp",
         "valarray": "cpp",
         "*.inc": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "unordered_set": "cpp"
     }
 }

@@ -72,19 +72,17 @@
 
 #define CEL_BOOL_OP(op, name) template <typename T> \
     static void name(thread &t) { \
-        T *lhs = reinterpret_cast<T *>(&t.operands.at(t.operands.size() - 2 * sizeof(T))); \
-        T *rhs = reinterpret_cast<T *>(&t.operands.at(t.operands.size() - sizeof(T))); \
-        *lhs = (*lhs != 0) op (*rhs != 0); \
-        t.operands.resize(t.operands.size() - sizeof(T)); \
+        T rhs = t.pop_op<T>(); \
+        T lhs = t.pop_op<T>(); \
+        t.push_op_val<uint8_t>((lhs != 0) op (rhs != 0)); \
     }
 
 
 #define CEL_CMP_OP(op, name) template <typename T> \
     static void name(thread &t) { \
-        T *lhs = reinterpret_cast<T *>(&t.operands.at(t.operands.size() - 2 * sizeof(T))); \
-        T *rhs = reinterpret_cast<T *>(&t.operands.at(t.operands.size() - sizeof(T))); \
-        *lhs = (*lhs) op (*rhs); \
-        t.operands.resize(t.operands.size() - sizeof(T)); \
+        T rhs = t.pop_op<T>(); \
+        T lhs = t.pop_op<T>(); \
+        t.push_op_val<uint8_t>(lhs op rhs); \
     }
 
 #define CEL_FORWARD_BRANCH(ins_name) case opcode_t::ins_name: CEL_BRANCH_ON_TYPE(ins_name ## _impl); break;
@@ -188,8 +186,7 @@ namespace cel::scr {
 
     template <typename T>
     static void bool_not_impl(thread &t) {
-        T *operand = reinterpret_cast<T *>(&t.operands.at(t.operands.size() - sizeof(T)));
-        *operand = !static_cast<bool>(*operand);
+        t.push_op_val<bool>(!t.pop_op<T>());
     }
 
     template <typename T>
@@ -304,7 +301,7 @@ namespace cel::scr {
             push_op<uint8_t *>(&locals.at(frames.back().lbp));
             break;
         case opcode_t::get_lsp:
-            push_op_val<uint8_t *, uint8_t *>((&operands.back()) + 1);
+            push_op_val<uint8_t *>((&operands.back()) + 1);
             break;
         case opcode_t::mod_lsp:
             locals.resize(locals.size() + pop_op<int16_t>());

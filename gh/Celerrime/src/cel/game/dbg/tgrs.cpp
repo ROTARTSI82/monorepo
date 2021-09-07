@@ -10,7 +10,7 @@
 #include <random>
 
 namespace cel::dbg {
-    tgrs_layer::tgrs_layer(world_t &w) : parent(w), draw_info(4096, w.parent->qvbo), sq_tex{w.parent->opt.res_path("dbg/test.png")} {
+    tgrs_layer::tgrs_layer(world_t &w) : parent(w), draw_info(4096, w.parent->qvbo), sq_tex{w.parent->tex_pool.new_tex("dbg/test.png")} {
         shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.parent->opt.res_path("frag/default.frag"))};
         shader vert{GL_VERTEX_SHADER, read_entire_file(w.parent->opt.res_path("vert/default.vert"))};
 
@@ -158,7 +158,7 @@ namespace cel::dbg {
         shaders.use();
 
         glActiveTexture(GL_TEXTURE0);
-        sq_tex.bind();
+        sq_tex->bind();
         draw_info.dispatch();
     }
 }

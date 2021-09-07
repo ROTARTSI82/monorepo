@@ -27,7 +27,7 @@ namespace cel::dbg {
 
         draw_call draw_info;
 
-        texture sq_tex;
+        texture_ref sq_tex;
 
         std::vector<vec2> lvl_finishes = {{700, 300},
                                           {700, 300},

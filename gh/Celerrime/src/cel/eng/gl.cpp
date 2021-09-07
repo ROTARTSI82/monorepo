@@ -1,5 +1,6 @@
 #include "cel/eng/gl.hpp"
 #include "cel/eng/log.hpp"
+#include "cel/settings.hpp"
 #include "cel/eng/linalg.hpp" // REQUIRED! identity_tag is defined here.
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -74,15 +75,7 @@ namespace cel {
         glDeleteShader(id);
     }
 
-    texture::texture(GLsizei width, GLsizei height, GLenum format) {
-        generate();
-
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    }
-
-    texture::texture(const std::string &filepath, bool essential, GLenum format) {
-        generate();
-        
+    void texture::load(const std::string &filepath, bool essential, GLenum format) const {
         int x, y, n;
         unsigned char *data = stbi_load(filepath.c_str(), &x, &y, &n, 0);
         if (!data || !x || !y || !n) { 
@@ -90,10 +83,11 @@ namespace cel {
             if (data) stbi_image_free(data);
 
             unsigned char placeholder[][3] = {{0xff, 0x00, 0x00}, {0x00, 0xff, 0x00},
-                                              {0x00, 0x00, 0xff}, {0xff, 0xff, 0xff}};
+                                            {0x00, 0x00, 0xff}, {0xff, 0xff, 0xff}};
             glTexImage2D(GL_TEXTURE_2D, 0, format, 2, 2, 0, GL_RGB, GL_UNSIGNED_BYTE, placeholder);
 
             if (essential) throw std::runtime_error{"Failed to load texture"};
+            return;
         }
 
         GLenum pix_fmt;
@@ -110,6 +104,17 @@ namespace cel {
 
         glTexImage2D(GL_TEXTURE_2D, 0, format, x, y, 0, pix_fmt, GL_UNSIGNED_BYTE, data);
         stbi_image_free(data);
+    }
+
+    texture::texture(GLsizei width, GLsizei height, GLenum format) {
+        generate();
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
+
+    texture::texture(const std::string &filepath, bool essential, GLenum format) {
+        generate();
+        load(filepath, essential, format);
     }
 
     texture::~texture() {
@@ -184,4 +189,42 @@ namespace cel {
         std::feclearexcept(FE_ALL_EXCEPT);
 
     }
+
+
+    tracked_texture::tracked_texture(const std::string &fp, std::unordered_set<tracked_texture> *st, settings_handler *opt, bool essential, GLenum format) : 
+            texture(opt->res_path(fp), essential, format), store(st), format(format), essential(essential) {}
+    
+    void tracked_texture::reload(settings_handler *opt) const {
+        load(opt->res_path(name), essential, format);
+    }
+
+    texture_manager::texture_manager(settings_handler *opt) : opt(opt) {}
+
+    counting_ref<tracked_texture> texture_manager::new_tex(const std::string &name, bool essential, GLenum format) {
+        auto res = textures.emplace(name, &textures, opt, essential, format);
+        if (!res.second) {
+            CEL_WARN("texture_manager::new_tex({}, {}, {}) is returning an existing texture?", name, essential, format);
+        }
+
+        return counting_ref<tracked_texture>(&(*res.first));
+    }
+
+    void texture_manager::reload_all() {
+        for (const auto &i : textures) {
+            i.reload(opt);
+        }
+    }
+
+    void texture_manager::cycle_gc() {
+        for (auto it = textures.begin(); it != textures.end();) {
+            if (it->get_ref())
+                ++it;
+            else
+                it = textures.erase(it);
+        }
+    }
 }
+
+std::size_t std::hash<cel::tracked_texture>::operator()(const cel::tracked_texture &s) const noexcept {
+    return s.get_id();
+};
