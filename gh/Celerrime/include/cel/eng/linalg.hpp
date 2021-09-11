@@ -47,6 +47,11 @@ namespace cel {
         return rad * 180 / consts_for<T>::pi();
     }
 
+    template <typename T>
+    inline T lerp(T a, T b, float t) {
+        return a + (b + (a * -1)) * t;
+    }
+
     template<typename T>
     class generic_vec2;
 
@@ -200,6 +205,8 @@ namespace cel {
     public:
         typedef T underlying_type;
 
+        static generic_mat4<T> ident;
+
         // c for "column"
         vec_t c0{}, c1{}, c2{}, c3{};
 
@@ -275,6 +282,9 @@ namespace cel {
             return ret;
         };
     };
+
+    template <typename T>
+    generic_mat4<T> generic_mat4<T>::ident{identity_tag};
 
     template <typename T>
     class generic_vec4 {

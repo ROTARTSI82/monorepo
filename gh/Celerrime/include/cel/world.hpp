@@ -40,10 +40,10 @@ namespace cel {
 
         virtual ~layer() = default;
 
-        virtual void tick(const input_frame &input) = 0; // tick entities
-        virtual void upload() = 0; // upload instance vbos to the gpu
-        virtual void enqueue_render() = 0;
-        virtual void draw() = 0; // dispatch draw calls
+        virtual void tick(const input_frame &input) { (void) input; }; // tick entities
+        virtual void upload() {}; // upload instance vbos to the gpu
+        virtual void enqueue_render() {}; // load the local_array of draw_instances
+        virtual void draw() {}; // dispatch draw calls
     };
 
     class app_t;

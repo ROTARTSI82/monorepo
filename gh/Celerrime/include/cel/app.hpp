@@ -31,7 +31,7 @@ namespace cel {
         window win; // the window MUST go first for the ogl context to be created.
         framebuffer indirect_target{2, 2}; // placeholder. Is assigned in call to framebuffer_size_callback
         shader_pipeline default_shaders{};
-        GLint su_proj;
+        GLint su_proj, su_view, su_tex;
 
         texture_manager tex_pool{&opt};
 

@@ -20,10 +20,10 @@ namespace cel::dbg {
 
         shaders.use();
         gl_mat4 view_mat = mat4::transform({-400, -300, -300}, {1, 1}, 0);
-        view_mat = mat4{identity_tag};
-        view_mat = mat4::transform({0, 0, -1}, {1, 1}, 0);
-        gl_mat4 proj_mat = mat4::perspective(90.0, 4.0 / 3, 0.1, 100.0);
-        proj_mat = mat4::ortho(0, 800, 600, 0, 0.1, 100);
+        view_mat *= gl_mat4{{1, 0, 0, 0}, {0, -1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+        // view_mat = mat4::transform({0, 0, -1}, {1, 1}, 0);
+        gl_mat4 proj_mat = mat4::perspective(90.0f, 800.0f / 600, 0.1, 350.0f);
+        // proj_mat = mat4::ortho(0, 800, 600, 0, 0.1, 100);
 
         glUniform1i(shaders.get_uniform("tex"), 0);
         glUniformMatrix4fv(shaders.get_uniform("projection_mat"), 1, GL_FALSE, (const GLfloat *) &proj_mat);

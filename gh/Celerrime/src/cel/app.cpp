@@ -9,6 +9,7 @@
 #include <imgui/imgui.h>
 
 #include "cel/game/dbg/tgrs.hpp"
+#include "cel/game/etc/hanoi.hpp"
 
 namespace cel {
     static void glfw_error_callback(int code, const char* description) {
@@ -102,9 +103,8 @@ namespace cel {
 
         default_shaders.use();
         su_proj = default_shaders.get_uniform("projection_mat");
-        glUniform1i(default_shaders.get_uniform("tex"), 0);
-        gl_mat4 ident{identity_tag};
-        glUniformMatrix4fv(default_shaders.get_uniform("view_mat"), 1, GL_FALSE, (const GLfloat *) &ident);
+        su_view = default_shaders.get_uniform("view_mat");
+        su_tex = default_shaders.get_uniform("tex");
 
         fullscreen_quad.instances[0] = draw_instance{gl_mat2{identity_tag}, {0, 0, -0.5}, 1.0f, {0, 0}, {1, 1}, {1, 1}};
         fullscreen_quad.num_blits = 1;
@@ -129,7 +129,7 @@ namespace cel {
         logic_frames_due = std::numeric_limits<uint64_t>::max();
         logic_convar.notify_one();
 
-        world.layers.emplace_back(world.get_layer<dbg::tgrs_layer>());
+        world.layers.emplace_back(world.get_layer<etc::hanoi_layer>());
         layer *selected = nullptr;
 
         while (win.running()) {
@@ -160,6 +160,8 @@ namespace cel {
             indirect_target.bind_texture();
             default_shaders.use();
             glUniformMatrix4fv(su_proj, 1, GL_FALSE, (const GLfloat *) &ortho_proj);
+            glUniformMatrix4fv(su_view, 1, GL_FALSE, (const GLfloat *) &gl_mat4::ident);
+            glUniform1i(su_tex, 0);
             fullscreen_quad.dispatch();
 
             if (menu_open) {
