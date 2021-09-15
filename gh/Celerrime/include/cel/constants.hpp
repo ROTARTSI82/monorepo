@@ -30,7 +30,18 @@ namespace cel {
     typedef float float_t;
 
     template <typename T>
-    class consts_for {
+    class _gl_type_consts {
+    public:
+        static constexpr GLenum gl_type_enum = 0; // definitions in gl.cpp
+    };
+
+    template <> class _gl_type_consts<float> {
+    public:
+        static constexpr GLenum gl_type_enum = GL_FLOAT;
+    };
+
+    template <typename T>
+    class consts_for : public _gl_type_consts<T> {
     public:
         static constexpr T pi() {
             return std::acos((T) -1);
@@ -39,12 +50,7 @@ namespace cel {
         static constexpr T root2() {
             return std::sqrt((T) 2);
         }
-
-        static constexpr GLenum gl_type_enum = 0; // definitions in constants.cpp
     };
-
-    template<>
-    constexpr GLenum consts_for<float>::gl_type_enum = GL_FLOAT;
 }
 
 #endif

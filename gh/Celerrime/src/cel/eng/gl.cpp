@@ -170,10 +170,10 @@ namespace cel {
             CEL_ERROR("OpenGL Error {}", err);
         }
 
-        if (errno && errno != 11) {
-            CEL_ERROR("ERRNO {}: {}", errno, strerror(errno));
-            errno = 0;
-        }
+        // if (errno && errno != 11) {
+        //     CEL_ERROR("ERRNO {}: {}", errno, strerror(errno));
+        //     errno = 0;
+        // }
 
         if (std::fetestexcept(FE_DIVBYZERO))
             CEL_ERROR("Floating point divide by 0 reported!");

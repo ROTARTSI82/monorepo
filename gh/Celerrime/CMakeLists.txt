@@ -6,6 +6,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 add_compile_options(-Og)
 add_link_options(-Og)
 
+if (CEL_MINGW_MODE)
+    add_compile_definitions(GLEW_STATIC)
+    add_compile_options(-static-libgcc -static-libstdc++ -static)
+    add_link_options(-static-libgcc -static-libstdc++ -static)
+endif()
+
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "")
@@ -45,7 +51,6 @@ add_library(cel STATIC ${CEL_SOURCES} ${CEL_IMGUI_SOURCES} ${CEL_IMGUI_BACKENDS}
 target_compile_options(cel PRIVATE -Wall -Wextra -Wpedantic)
 target_link_options(cel PRIVATE -Wall -Wextra -Wpedantic)
 
-find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
 
@@ -61,8 +66,20 @@ find_package(OpenAL REQUIRED)
 target_link_libraries(cel ${OPENAL_LIBRARY})
 target_include_directories(cel PRIVATE ${OPENAL_INCLUDE_DIR})
 
-target_link_libraries(cel glfw Threads::Threads)
-target_link_libraries(cel OpenGL::GL GLEW::GLEW)
+target_link_libraries(cel glfw Threads::Threads OpenGL::GL)
+
+
+if (CEL_MINGW_MODE)
+    target_link_directories(cel PRIVATE /usr/x86_64-w64-mingw32/lib)
+    target_link_libraries(cel /usr/x86_64-w64-mingw32/lib/libglew32.a
+                        /usr/x86_64-w64-mingw32/lib/libopengl32.a
+                        /usr/x86_64-w64-mingw32/lib/libimm32.a)
+    target_include_directories(cel PRIVATE /usr/x86_64-w64-mingw32/include)
+else ()
+    find_package(GLEW REQUIRED)
+    message("-- GLEW Libraries = ${GLEW_LIBRARIES}")
+    target_link_libraries(cel GLEW::GLEW)
+endif ()
 
 add_subdirectory(dep/fmt)
 target_link_libraries(cel fmt::fmt)
