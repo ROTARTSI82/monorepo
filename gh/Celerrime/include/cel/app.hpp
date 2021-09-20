@@ -14,6 +14,7 @@
 #include "cel/game/imgui_menus.hpp"
 #include "cel/eng/misc_util.hpp"
 #include "cel/world.hpp"
+#include "cel/eng/audio.hpp"
 
 #include <thread>
 #include <mutex>
@@ -27,6 +28,8 @@ namespace cel {
     class app_t {
     public:
         settings_handler opt;
+        audio_engine snd{&opt};
+
         gl_mat4 ortho_proj;
         window win; // the window MUST go first for the ogl context to be created.
         framebuffer indirect_target{2, 2}; // placeholder. Is assigned in call to framebuffer_size_callback

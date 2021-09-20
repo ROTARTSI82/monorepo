@@ -20,6 +20,7 @@
 #include <string>
 #include <chrono>
 
+#define CEL_DEL_CPY_OP_CTOR(name) name &operator=(const name &rhs) noexcept = delete; name(const name &rhs) noexcept = delete;
 namespace cel {
     /**
      * @brief Tries to open and read an entire file into a string.
@@ -67,8 +68,10 @@ namespace cel {
     template <typename T>
     class counting_ref {
     private:
-        T *value;
+        T *value = nullptr;
     public:
+        counting_ref() = default;
+
         counting_ref(const T *v) : value(const_cast<T *>(v)) {
             if (value) value->inc_ref();
         }
@@ -88,11 +91,17 @@ namespace cel {
         counting_ref &operator=(const counting_ref &rhs) {
             value = rhs.value;
             if (value) value->inc_ref();
+            return *this;
         }
 
         counting_ref &operator=(counting_ref &&rhs) {
             value = rhs.value;
             rhs.value = nullptr;
+            return *this;
+        }
+
+        inline T *get() {
+            return value;
         }
 
         inline T *operator->() {

@@ -21,8 +21,6 @@
 
 #include "cel/eng/misc_util.hpp"
 
-#define CEL_DEL_CPY_OP_CTOR(name) name &operator=(const name &rhs) noexcept = delete; name(const name &rhs) noexcept = delete;
-
 namespace cel {
     class vertex_array {
     private:

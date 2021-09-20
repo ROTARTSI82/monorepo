@@ -6,10 +6,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 add_compile_options(-Og)
 add_link_options(-Og)
 
+# TODO: Add release mode that enables link flag -s to shrink exe size
+
+add_compile_definitions(GLEW_STATIC)
+
 if (CEL_MINGW_MODE)
-    add_compile_definitions(GLEW_STATIC)
-    add_compile_options(-static-libgcc -static-libstdc++ -static)
-    add_link_options(-static-libgcc -static-libstdc++ -static)
+    add_compile_options(-static-libgcc -static-libstdc++)
+    add_link_options(-static-libgcc -static-libstdc++)
+    add_compile_options(-s)
+    add_link_options(-s)
 endif()
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
@@ -19,7 +24,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "")
 
 set(GLEW_USE_STATIC_LIBS ON CACHE BOOL "")
 
-option(USE_ASAN "Compile with address sanitizer" OFF)
+option(USE_ASAN "Compile with address sanitizer" ON)
 option(USE_G3 "Compile with -g3 and -ggdb (debug symbols for gdb)" ON)
 
 if (USE_G3)
@@ -53,6 +58,7 @@ target_link_options(cel PRIVATE -Wall -Wextra -Wpedantic)
 
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
+message("Threads = ${CMAKE_THREAD_LIBS_INIT}")
 
 add_subdirectory(dep/glfw)
 
@@ -74,6 +80,7 @@ if (CEL_MINGW_MODE)
     target_link_libraries(cel /usr/x86_64-w64-mingw32/lib/libglew32.a
                         /usr/x86_64-w64-mingw32/lib/libopengl32.a
                         /usr/x86_64-w64-mingw32/lib/libimm32.a)
+    target_link_libraries(cel -static winpthread)
     target_include_directories(cel PRIVATE /usr/x86_64-w64-mingw32/include)
 else ()
     find_package(GLEW REQUIRED)

@@ -17,6 +17,7 @@
 #include <cel/eng/gl.hpp>
 #include "cel/world.hpp"
 #include "cel/eng/window.hpp"
+#include "cel/eng/audio.hpp"
 
 namespace cel::etc {
 
@@ -37,6 +38,8 @@ namespace cel::etc {
         texture_ref tex;
         draw_call call;
         world_t *wrld;
+
+        al_file_buf_ref mb300;
 
         std::vector<move_record> solution;
         int solution_iterator = -1;

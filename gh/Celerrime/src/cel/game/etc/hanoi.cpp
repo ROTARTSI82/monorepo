@@ -17,6 +17,27 @@ namespace cel::etc {
         call.instances[1] = draw_instance{gl_mat2::transform({10, 500}, 0), vec3{0, 0, -2}, 1, vec2{0, 0}, vec2{1, 1}, vec2{2, 3}};
         call.instances[2] = draw_instance{gl_mat2::transform({10, 500}, 0), vec3{500, 0, -2}, 1, vec2{0, 0}, vec2{1, 1}, vec2{2, 3}};
         load_disks(5);
+
+        {
+            flush_al_error("pre thing");
+            auto src = w.parent->snd.music.borrow_one();
+            flush_al_error("borrow");
+            mb300 = w.parent->snd.new_file_buf("dbg/300MB.ogg");
+            flush_al_error("new buf");
+            src->enqueue_buf(mb300.get());
+            // src->bind_buf(mb300.get());
+            // flush_al_error("bind");
+            // src->set_gain(1.0f);
+            // flush_al_error("gain");
+            // src->set_pitch(1.0f);
+            // flush_al_error("pitch");
+            // src->set_vel({0, 0, 0}); flush_al_error("vel");
+            // src->set_pos({0, 0, 0}); flush_al_error("pos");
+            // src->set_looping(false); flush_al_error("loop");
+            src->play();
+            flush_al_error("play");
+        }
+        wrld->parent->snd.cycle_gc();
     }
 
     void hanoi_layer::load_disks(int n) {

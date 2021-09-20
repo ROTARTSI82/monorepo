@@ -49,6 +49,8 @@ namespace cel {
 
         std::unordered_map<std::string, std::string> strs;
 
+        int music_pool_size = 8;
+
         settings_handler(int argc, char **argv);
         ~settings_handler();
 
