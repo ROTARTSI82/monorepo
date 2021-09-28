@@ -15,6 +15,7 @@
 #define CSC_VARINT_HPP
 
 #include <cstdint>
+#include <string>
 
 namespace csc {
     // @param in Pointer to the byte to start reading from.
@@ -30,6 +31,8 @@ namespace csc {
 
     // @return A pointer to the byte AFTER the last byte written
     int8_t *writeVarLong(int64_t value, int8_t *out);
+
+    std::string readString(int8_t **in);
 
     void varIntSanityCheck();
 }

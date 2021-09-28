@@ -23,7 +23,7 @@ namespace csc {
         int32_t bitOffset = 0;
         int8_t currentByte = 0;
         do {
-            if (bitOffset == 35) throw std::runtime_error("VarInt is too big");
+            // if (bitOffset == 35) throw std::runtime_error("VarInt is too big");
 
             currentByte = *((*in)++);
             value |= arith_shl32(currentByte & 0b01111111, bitOffset);
@@ -39,7 +39,7 @@ namespace csc {
         int32_t bitOffset = 0;
         int8_t currentByte = 0;
         do {
-            if (bitOffset == 70) throw std::runtime_error("VarLong is too big");
+            // if (bitOffset == 70) throw std::runtime_error("VarLong is too big");
 
             currentByte = *((*in)++);
             value |= arith_shl64(currentByte & 0b01111111, bitOffset);
@@ -76,6 +76,12 @@ namespace csc {
         }
     }
 
+    std::string readString(int8_t **in) {
+        int len = readVarInt(in);
+        std::string ret{(char *) *in, static_cast<std::string::size_type>(len)};
+        *in += len;
+        return ret;
+    }
 
 
 

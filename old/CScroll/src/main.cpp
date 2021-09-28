@@ -3,11 +3,13 @@
 #include "csc/varint.hpp"
 
 int main() {
-    csc::varIntSanityCheck();
-    return 0;
+    // csc::varIntSanityCheck();
+    // return 0;
     csc::TcpServer serv{"127.0.0.1", "25565"};
     while (true) {
         serv.tickAccept();
-        serv.tickClients(3);
+        for (int i = 0; i < serv.numClients(); i++) {
+            serv.tickClient(i);
+        }
     }
 }
