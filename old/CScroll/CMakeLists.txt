@@ -10,11 +10,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(dep/fmt)
 
+find_package(ZLIB REQUIRED)
+
 file(GLOB_RECURSE CSC_SOURCES ${PROJECT_SOURCE_DIR}/src/csc/*.cpp)
 add_library(csc STATIC ${CSC_SOURCES})
 add_executable(cscroll src/main.cpp)
 
-target_link_libraries(cscroll PRIVATE csc)
+target_link_libraries(cscroll csc ZLIB::ZLIB)
 target_link_libraries(csc PUBLIC fmt)
 
 target_include_directories(cscroll PRIVATE src)

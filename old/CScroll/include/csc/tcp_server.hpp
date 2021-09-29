@@ -31,6 +31,9 @@ namespace csc {
     enum class HandshakePid : uint8_t { handshaking = 0x00, legacyServerPing = 0xFE };
     enum class CliBoundStatusPid : uint8_t { response = 0x00, pong = 0x01 };
     enum class ServBoundStatusPid : uint8_t { request = 0x00, ping = 0x01 };
+    enum class ServBoundLoginPid : uint8_t { loginStart = 0x00, encryptionResponse = 0x01, pluginResponse = 0x02 };
+    enum class CliBoundLoginPid : uint8_t { disconnect = 0x00, encryptionRequest = 0x01, loginSuccess = 0x02, setCompression = 0x03, pluginRequest = 0x04 };
+
 
     struct ClientData {
         int sock;
@@ -40,23 +43,37 @@ namespace csc {
     };
 
     struct HandlingInfo {
-        int8_t *dat, *origPacket;
+        int8_t *dat;
         int id;
-        int len, rsize;
+        int len;
         int cliRef;
     };
 
 
-    class CliBoundPacketFactory {
+    class PacketFactory {
     private:
         int8_t *store;
-        unsigned capacity;
         uint8_t headroom;
 
     public:
-        CliBoundPacketFactory() = delete;
-        CliBoundPacketFactory(int id, unsigned size);
-        ~CliBoundPacketFactory();
+        PacketFactory() = delete;
+        PacketFactory(int id, unsigned size);
+        ~PacketFactory();
+
+        inline int8_t *get();
+
+        std::pair<int8_t *, unsigned> construct(int newsize);
+    };
+
+    class CompressedPacketFactory {
+    private:
+        int8_t *store;
+        uint8_t headroom;
+
+    public:
+        CompressedPacketFactory() = delete;
+        CompressedPacketFactory(int id, unsigned size);
+        ~CompressedPacketFactory();
 
         inline int8_t *get();
 

@@ -10,15 +10,19 @@
 
 #include <fstream>
 
+#include <zlib.h>
 #include "csc/varint.hpp"
 
 #define TRY_NEXT it = it->ai_next; continue;
 #define TRY_SYSCALL(expr, onfail) if (expr == -1) {CEL_ERROR(#expr " failed: {}", strerror(errno)); onfail}
 
+
+#define COMPRESSION_THRESHOLD 512
+
 namespace csc {
 
     TcpServer::TcpServer(const char *ip, const char *port) {
-        bool do_reuseaddr = false;
+        bool do_reuseaddr = true;
         constexpr int listen_backlog = 16;
 
         addrinfo hints{};
@@ -100,14 +104,14 @@ namespace csc {
 
         HandlingInfo hand{};
 
-        hand.rsize = recv(clients[cliRef].sock, buf, recv_buf_size, 0);
-        if (hand.rsize == -1) {
+        int rsize = recv(clients[cliRef].sock, buf, recv_buf_size, 0);
+        if (rsize == -1) {
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 CEL_ERROR("recv() failed: {}", strerror(errno));
                 dropConnection(cliRef);
             }
             return; // no data to handle
-        } else if (hand.rsize == 0) {
+        } else if (rsize == 0) {
             // handle shutdown!
             CEL_ERROR("Empty packet");
             dropConnection(cliRef);
@@ -116,32 +120,41 @@ namespace csc {
 
         // handle packet recieve
         CEL_INFO("New Packet");
-        for (int i = 0; i < hand.rsize; i++) {
+        for (int i = 0; i < rsize; i++) {
             CEL_INFO("\t{:#0x}", reinterpret_cast<unsigned char *>(buf)[i]);
         }
 
         int8_t *toDel = nullptr; // deleting nullptr has no effect
 
-        hand.origPacket = buf;
         hand.cliRef = cliRef;
         hand.dat = buf;
         hand.len = readVarInt(&hand.dat); // Total length of packet, excluding this field
-        if ((buf + hand.rsize) - hand.dat != hand.len) { 
-            CEL_ERROR("Incomplete packet recieved! Expected {} bytes but got {}", hand.len, (buf + hand.rsize) - hand.dat);
+        if ((buf + rsize) - hand.dat != hand.len) { 
+            CEL_ERROR("Incomplete packet recieved! Expected {} bytes but got {}", hand.len, (buf + rsize) - hand.dat);
             // dropConnection(cliRef);
         } else {
-            CEL_ERROR("Incomplete packet recieved! Expected {} bytes but got {}", hand.len, (buf + hand.rsize) - hand.dat);
+            CEL_DEBUG("got {} of {} bytes", hand.len, (buf + rsize) - hand.dat);
         }
 
         if (clients[cliRef].compressed) {
             CEL_ERROR("Cannot handle compressed packets yet");
             int dataLength = readVarInt(&hand.dat);
-            toDel = new int8_t[dataLength];
+            if (dataLength > 0) {
+                toDel = new int8_t[dataLength];
 
-            // TODO zlib decompress from bIt into ret here
+                // TODO zlib decompress from bIt into ret here
+                uLong actualLen = dataLength;
+                if (uncompress((Bytef *) toDel, &actualLen, (Bytef *) hand.dat, dataLength) != Z_OK) {
+                    CEL_ERROR("Deflate failed! Dropping packet");
+                    delete[] toDel;
+                    return;
+                }
 
-            hand.dat = toDel;
-            hand.len = dataLength;
+                if (actualLen != dataLength) CEL_ERROR("Deflate error: Expected {} but got {} bytes", dataLength, actualLen);
+
+                hand.dat = toDel;
+                hand.len = dataLength; // this is different. :/ sure to cause a bug later
+            }
         }
 
         hand.id = readVarInt(&hand.dat);
@@ -152,12 +165,18 @@ namespace csc {
         case ClientState::handshake:
             handleHandshake(hand);
             break;
-        case ClientState::status:
+        case ClientState::status: {
+            if (hand.id == (int) ServBoundStatusPid::ping) {
+                CEL_WARN("PING");
+                TRY_SYSCALL(send(clients[cliRef].sock, buf, rsize, 0), dropConnection(cliRef);); // resend the same thing back lol
+                break;
+            }
             handleStatus(hand);
             break;
+        }
         case ClientState::login:
-            // handleLogin(bIt);
-            // break;
+            handleLogin(hand);
+            break;
 
         case ClientState::play:
             // playHandler.handle(bIt);
@@ -217,7 +236,7 @@ namespace csc {
     "},"
     "\"favicon\": \"data:image/png;base64,<data>\" } ";
 
-            CliBoundPacketFactory fac{(int) CliBoundStatusPid::response, static_cast<unsigned>(5 + response.size())};
+            PacketFactory fac{(int) CliBoundStatusPid::response, static_cast<unsigned>(5 + response.size())};
             int8_t *it = fac.get();
             it = writeVarInt(response.size(), it);
             memcpy(it, response.data(), response.size());
@@ -225,19 +244,10 @@ namespace csc {
             TRY_SYSCALL(send(clients[info.cliRef].sock, ptr, size, 0), 
                         dropConnection(info.cliRef););
 
-            std::ofstream outp("dump.bin", std::ios::binary);
-            outp.write((char *) ptr, size);
-
             CEL_INFO("Packet len = {}", readVarInt(&ptr));
             CEL_INFO("Packet id = {:#0x}", readVarInt(&ptr));
             CEL_INFO("String len = {} (real={})", readVarInt(&ptr), response.size());
 
-            break;
-        }
-        case ServBoundStatusPid::ping: {
-            CEL_INFO("PING {}", readVarLong(&info.dat));
-            TRY_SYSCALL(send(clients[info.cliRef].sock, info.origPacket, info.rsize, 0), 
-                        dropConnection(info.cliRef););
             break;
         }
 
@@ -247,46 +257,149 @@ namespace csc {
         }
     }
 
-    CliBoundPacketFactory::CliBoundPacketFactory(int id, unsigned size) : capacity(size + 10) {
-        store = new int8_t[capacity]; // + 10 for 2 var ints: packet id and packet size
+    inline void TcpServer::handleLogin(HandlingInfo &info) {
+        switch (static_cast<ServBoundLoginPid>(info.id)) {
+        case (ServBoundLoginPid::loginStart): {
+            std::string playerName = readString(&info.dat);
+            CEL_DEBUG("{} log in", playerName);
+            // normally, you'd go through some encryption stuff, but that's bullshit.
+            // just using offline mode rn
+
+            PacketFactory ecFac((int) CliBoundLoginPid::setCompression, 5);
+            auto it = writeVarInt(COMPRESSION_THRESHOLD, ecFac.get());
+            auto [ ecPtr, ecSize ] = ecFac.construct(it - ecFac.get());
+            TRY_SYSCALL(send(clients[info.cliRef].sock, ecPtr, ecSize, 0), 
+                        dropConnection(info.cliRef););
+
+            CompressedPacketFactory fac((int) CliBoundLoginPid::loginSuccess, playerName.size() + 21);
+            reinterpret_cast<size_t *>(fac.get())[0] = std::hash<std::string>()(playerName);
+            reinterpret_cast<size_t *>(fac.get())[1] = std::hash<std::string>()(playerName); // too lazy to implement proper uuidv3
+            it = fac.get() + 16;
+            it = writeVarInt(playerName.size(), it);
+            memcpy(it, playerName.data(), playerName.size());
+
+            auto [ ptr, sendSize ] = fac.construct(it - fac.get() + playerName.size());
+            TRY_SYSCALL(send(clients[info.cliRef].sock, ptr, sendSize, 0), 
+                        dropConnection(info.cliRef););
+
+            CEL_INFO("Packet Len = {} (ss={}), Data Len = {}, pack id = {}", readVarInt(&ptr), sendSize, readVarInt(&ptr), readVarInt(&ptr));
+        
+            clients[info.cliRef].state = ClientState::play;
+            
+            CEL_INFO("Login success sent");
+            break;
+        }
+        default:
+            CEL_ERROR("Invalid login packet");
+            dropConnection(info.cliRef);
+        }
+    }
+
+    PacketFactory::PacketFactory(int id, unsigned size) {
+        store = new int8_t[size + 10]; // + 10 for 2 var ints: packet id and packet size
         auto end = writeVarInt(id, store);
         auto idSize = end - store;
-
-        for (int i = 0; i < idSize; i++)
-            CEL_INFO("PacketID[{}] = {:#0x}", i, store[i]);
 
         headroom = 10 - idSize;
 
         // copy it over
         for (int i = 1; i <= idSize; i++)
             store[10 - i] = store[idSize - i];
-
-        for (int i = 0; i < size + 10; i++)
-            CEL_INFO("{} = {:#0x}", i, store[i]);
     }
-    CliBoundPacketFactory::~CliBoundPacketFactory() {
+    PacketFactory::~PacketFactory() {
         delete[] store;
     }
 
-    inline int8_t *CliBoundPacketFactory::get() {
+    inline int8_t *PacketFactory::get() {
         return store + 10;
     }
 
-    std::pair<int8_t *, unsigned> CliBoundPacketFactory::construct(int newsize) {
+    std::pair<int8_t *, unsigned> PacketFactory::construct(int newsize) {
         newsize += 10 - headroom; // account for packet id
         auto end = writeVarInt(newsize, store);
         auto size = end - store;
 
-        for (int i = 0; i < size; i++)
-            CEL_INFO("PacketSize[{}] = {:#0x}", i, store[i]);
+        for (int i = 1; i <= size; i++)
+            store[headroom - i] = store[size - i];
+
+        CEL_INFO("construct() = {}, {}", headroom - size, size + newsize);
+        return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + newsize);
+    }
+
+
+
+    CompressedPacketFactory::CompressedPacketFactory(int id, unsigned size) {
+        store = new int8_t[size + 15]; // + 5 for 1 var int: packet id
+        auto end = writeVarInt(id, store);
+        auto idSize = end - store;
+
+        headroom = 15 - idSize;
+
+        // copy it over
+        for (int i = 1; i <= idSize; i++)
+            store[15 - i] = store[idSize - i];
+    }
+    CompressedPacketFactory::~CompressedPacketFactory() {
+        delete[] store;
+    }
+
+    inline int8_t *CompressedPacketFactory::get() {
+        return store + 15;
+    }
+
+    std::pair<int8_t *, unsigned> CompressedPacketFactory::construct(int newsize) {
+        if (newsize > COMPRESSION_THRESHOLD || true) {
+            CEL_INFO("Packet is being compressed");
+            int8_t *compressed = new int8_t[newsize + 5];
+            uLong cmpSize = newsize + 5;
+            auto dataLen = newsize + (15 - headroom);
+            if (compress2((Bytef *) compressed, &cmpSize, (Bytef *) store + headroom, dataLen, Z_DEFAULT_COMPRESSION) != Z_OK) {
+                CEL_ERROR("zlib compression fail!");
+                delete[] compressed;
+                return std::make_pair(store, 0U); // dummy payload
+            }
+
+            memcpy(store + 10, compressed, cmpSize);
+            delete[] compressed;
+
+            // write the Data Length and copy it up to the 10th byte
+            auto end = writeVarInt(dataLen, store);
+            auto size = end - store;
+            for (int i = 1; i <= size; i++)
+                store[10 - i] = store[size - i];
+
+            headroom = 10 - size;
+            end = writeVarInt(size + dataLen, store); // total packet length
+            auto plenSize = end - store;
+            for (int i = 1; i <= plenSize; i++)
+                store[headroom - i] = store[plenSize - i];
+
+            return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + plenSize + cmpSize);
+        }
+
+        CEL_INFO("Packet is NOT compressed");
+
+        // here, headroom is the index of the begin
+        CEL_INFO("packet id at {}", headroom);
+        store[headroom - 1] = 0; // data length is 0
+        headroom--;
+
+        // write packet size and shift it over
+        // (15 - headroom) is the size of the packet id
+        auto end = writeVarInt(newsize + (15 - headroom), store);
+        auto size = end - store;
+
+        // for (int i = 0; i < size + 1; i++)
+        //     CEL_INFO("WrittenVarInt[{}] = {:#0x}", i, store[i]);
 
         for (int i = 1; i <= size; i++)
             store[headroom - i] = store[size - i];
 
-        for (int i = 0; i < capacity; i++)
-            CEL_INFO("{} = {:#0x}", i, store[i]);
+        // for (int i = 0; i < newsize; i++)
+        //     CEL_INFO("FinalPacket[{}] = {:#0x}", i, store[i]);
 
-        CEL_INFO("construct() = {}, {}", headroom - size, size + newsize);
-        return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + newsize);
+        // CEL_INFO("hr - size = {}", headroom - size);
+
+        return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + newsize + (15 - headroom));
     }
 }
