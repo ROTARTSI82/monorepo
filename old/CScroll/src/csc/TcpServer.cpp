@@ -1,28 +1,38 @@
-#include "csc/tcp_server.hpp"
-#include "csc/log.hpp"
+#include "csc/TcpServer.hpp"
 
 #include <cerrno>
 #include <cstring>
 
-#include <stdexcept>
 #include <unistd.h>
 #include <fcntl.h>
 
+#include <stdexcept>
 #include <fstream>
 
 #include <zlib.h>
+
 #include "csc/varint.hpp"
+#include "csc/misc_defs.hpp"
+#include "csc/log.hpp"
 
 #define TRY_NEXT it = it->ai_next; continue;
 #define TRY_SYSCALL(expr, onfail) if (expr == -1) {CEL_ERROR(#expr " failed: {}", strerror(errno)); onfail}
 
+#define SYSCALL_SEND dbg_send
 
-#define COMPRESSION_THRESHOLD 512
+
+static ssize_t dbg_send(int sock, const void *buf, size_t len, int flags) {
+    CEL_DEBUG("New outbound packet");
+    for (int i = 0; i < len; i++)
+        CEL_DEBUG("\t{:#0x}", reinterpret_cast<const uint8_t *>(buf)[i]);
+
+    return send(sock, buf, len, flags);
+};
 
 namespace csc {
 
     TcpServer::TcpServer(const char *ip, const char *port) {
-        bool do_reuseaddr = true;
+        int do_reuseaddr = true;
         constexpr int listen_backlog = 16;
 
         addrinfo hints{};
@@ -168,7 +178,7 @@ namespace csc {
         case ClientState::status: {
             if (hand.id == (int) ServBoundStatusPid::ping) {
                 CEL_WARN("PING");
-                TRY_SYSCALL(send(clients[cliRef].sock, buf, rsize, 0), dropConnection(cliRef);); // resend the same thing back lol
+                TRY_SYSCALL(SYSCALL_SEND(clients[cliRef].sock, buf, rsize, 0), dropConnection(cliRef);); // resend the same thing back lol
                 break;
             }
             handleStatus(hand);
@@ -236,17 +246,13 @@ namespace csc {
     "},"
     "\"favicon\": \"data:image/png;base64,<data>\" } ";
 
-            PacketFactory fac{(int) CliBoundStatusPid::response, static_cast<unsigned>(5 + response.size())};
+            auto fac = HIC.newPacketFactory((int) CliBoundStatusPid::response, static_cast<unsigned>(5 + response.size()));
             int8_t *it = fac.get();
             it = writeVarInt(response.size(), it);
             memcpy(it, response.data(), response.size());
             auto [ptr, size] = fac.construct(it - fac.get() + response.size());
-            TRY_SYSCALL(send(clients[info.cliRef].sock, ptr, size, 0), 
+            TRY_SYSCALL(SYSCALL_SEND(clients[info.cliRef].sock, ptr, size, 0), 
                         dropConnection(info.cliRef););
-
-            CEL_INFO("Packet len = {}", readVarInt(&ptr));
-            CEL_INFO("Packet id = {:#0x}", readVarInt(&ptr));
-            CEL_INFO("String len = {} (real={})", readVarInt(&ptr), response.size());
 
             break;
         }
@@ -261,145 +267,127 @@ namespace csc {
         switch (static_cast<ServBoundLoginPid>(info.id)) {
         case (ServBoundLoginPid::loginStart): {
             std::string playerName = readString(&info.dat);
-            CEL_DEBUG("{} log in", playerName);
+            CEL_WARN("{} log in", playerName);
+
             // normally, you'd go through some encryption stuff, but that's bullshit.
             // just using offline mode rn
 
-            PacketFactory ecFac((int) CliBoundLoginPid::setCompression, 5);
-            auto it = writeVarInt(COMPRESSION_THRESHOLD, ecFac.get());
-            auto [ ecPtr, ecSize ] = ecFac.construct(it - ecFac.get());
-            TRY_SYSCALL(send(clients[info.cliRef].sock, ecPtr, ecSize, 0), 
-                        dropConnection(info.cliRef););
+            // auto ecFac = HIC.newPacketFactory((int) CliBoundLoginPid::setCompression, 5);
+            // auto it = writeVarInt(COMPRESSION_THRESHOLD, ecFac.get());
+            // auto [ ecPtr, ecSize ] = ecFac.construct(it - ecFac.get());
+            // TRY_SYSCALL(SYSCALL_SEND(clients[info.cliRef].sock, ecPtr, ecSize, 0), 
+            //             dropConnection(info.cliRef););
 
-            CompressedPacketFactory fac((int) CliBoundLoginPid::loginSuccess, playerName.size() + 21);
+            // HIC.compressed = true;
+
+            auto fac = HIC.newPacketFactory((int) CliBoundLoginPid::loginSuccess, playerName.size() + 21);
             reinterpret_cast<size_t *>(fac.get())[0] = std::hash<std::string>()(playerName);
-            reinterpret_cast<size_t *>(fac.get())[1] = std::hash<std::string>()(playerName); // too lazy to implement proper uuidv3
-            it = fac.get() + 16;
+            reinterpret_cast<size_t *>(fac.get())[1] = std::hash<std::string>()("OfflinePlayer:" + playerName); // too lazy to implement proper uuidv3
+            auto it = fac.get() + 16;
             it = writeVarInt(playerName.size(), it);
             memcpy(it, playerName.data(), playerName.size());
 
             auto [ ptr, sendSize ] = fac.construct(it - fac.get() + playerName.size());
-            TRY_SYSCALL(send(clients[info.cliRef].sock, ptr, sendSize, 0), 
+            TRY_SYSCALL(SYSCALL_SEND(clients[info.cliRef].sock, ptr, sendSize, 0), 
                         dropConnection(info.cliRef););
-
-            CEL_INFO("Packet Len = {} (ss={}), Data Len = {}, pack id = {}", readVarInt(&ptr), sendSize, readVarInt(&ptr), readVarInt(&ptr));
         
             clients[info.cliRef].state = ClientState::play;
             
             CEL_INFO("Login success sent");
+
+            // next, send "Join Game"
+            // *plugin stuff*
+            // "Server Difficulty"
+            // "Player Abilities"
+            // "Held Item Change"
+            // "Entity Properties"
+            // *bugged packet?*
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Entity Head Look"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Entity Head Look"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data" No. 139
+
+            // Cli -> Serv: "Client Settings"
+            // *cli -> serv paper plugin stuff*
+
+            // "Update Light" No. 145
+            // "Chunk Data"
+
+            // "Entity Metadata" No. 149
+
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+
+            // "Entity Head Look" No. 170
+
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+            // "Update Light"
+            // "Chunk Data"
+
+            // "Time Update" No. 188
+
+            // "Update Light" & "Chunk Data" x 10
+
+            // "Block Change" No. 230
+            // some more light & chunk updates
+            // "Block Change" No. 252
+            // ...
+            // "Block Change" No. 274
+            // ...
+            // "Entity Head Look" No. 294
+            // "Entity Head Look" No. 318
+            // "Entity Head Look" No. 360, No. 382 
+            // "Block Change" No. 404
+            // "Entity Head Look" No. 426 No. 448
+
+            // Cli -> Serv: "Teleport Confirm" No. 454? But "Player Position And Look" was not sent?
+            // Cli -> Serv: "Player Position and Rotation" No. 456
+
+            // no 537: Block Change
+            // no 558 & 560: Block Change, no. 562: "Entity Position"
+
+            // Cli -> Serv: Player Position and Rotation No. 614
+
             break;
         }
         default:
             CEL_ERROR("Invalid login packet");
             dropConnection(info.cliRef);
         }
-    }
-
-    PacketFactory::PacketFactory(int id, unsigned size) {
-        store = new int8_t[size + 10]; // + 10 for 2 var ints: packet id and packet size
-        auto end = writeVarInt(id, store);
-        auto idSize = end - store;
-
-        headroom = 10 - idSize;
-
-        // copy it over
-        for (int i = 1; i <= idSize; i++)
-            store[10 - i] = store[idSize - i];
-    }
-    PacketFactory::~PacketFactory() {
-        delete[] store;
-    }
-
-    inline int8_t *PacketFactory::get() {
-        return store + 10;
-    }
-
-    std::pair<int8_t *, unsigned> PacketFactory::construct(int newsize) {
-        newsize += 10 - headroom; // account for packet id
-        auto end = writeVarInt(newsize, store);
-        auto size = end - store;
-
-        for (int i = 1; i <= size; i++)
-            store[headroom - i] = store[size - i];
-
-        CEL_INFO("construct() = {}, {}", headroom - size, size + newsize);
-        return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + newsize);
-    }
-
-
-
-    CompressedPacketFactory::CompressedPacketFactory(int id, unsigned size) {
-        store = new int8_t[size + 15]; // + 5 for 1 var int: packet id
-        auto end = writeVarInt(id, store);
-        auto idSize = end - store;
-
-        headroom = 15 - idSize;
-
-        // copy it over
-        for (int i = 1; i <= idSize; i++)
-            store[15 - i] = store[idSize - i];
-    }
-    CompressedPacketFactory::~CompressedPacketFactory() {
-        delete[] store;
-    }
-
-    inline int8_t *CompressedPacketFactory::get() {
-        return store + 15;
-    }
-
-    std::pair<int8_t *, unsigned> CompressedPacketFactory::construct(int newsize) {
-        if (newsize > COMPRESSION_THRESHOLD || true) {
-            CEL_INFO("Packet is being compressed");
-            int8_t *compressed = new int8_t[newsize + 5];
-            uLong cmpSize = newsize + 5;
-            auto dataLen = newsize + (15 - headroom);
-            if (compress2((Bytef *) compressed, &cmpSize, (Bytef *) store + headroom, dataLen, Z_DEFAULT_COMPRESSION) != Z_OK) {
-                CEL_ERROR("zlib compression fail!");
-                delete[] compressed;
-                return std::make_pair(store, 0U); // dummy payload
-            }
-
-            memcpy(store + 10, compressed, cmpSize);
-            delete[] compressed;
-
-            // write the Data Length and copy it up to the 10th byte
-            auto end = writeVarInt(dataLen, store);
-            auto size = end - store;
-            for (int i = 1; i <= size; i++)
-                store[10 - i] = store[size - i];
-
-            headroom = 10 - size;
-            end = writeVarInt(size + dataLen, store); // total packet length
-            auto plenSize = end - store;
-            for (int i = 1; i <= plenSize; i++)
-                store[headroom - i] = store[plenSize - i];
-
-            return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + plenSize + cmpSize);
-        }
-
-        CEL_INFO("Packet is NOT compressed");
-
-        // here, headroom is the index of the begin
-        CEL_INFO("packet id at {}", headroom);
-        store[headroom - 1] = 0; // data length is 0
-        headroom--;
-
-        // write packet size and shift it over
-        // (15 - headroom) is the size of the packet id
-        auto end = writeVarInt(newsize + (15 - headroom), store);
-        auto size = end - store;
-
-        // for (int i = 0; i < size + 1; i++)
-        //     CEL_INFO("WrittenVarInt[{}] = {:#0x}", i, store[i]);
-
-        for (int i = 1; i <= size; i++)
-            store[headroom - i] = store[size - i];
-
-        // for (int i = 0; i < newsize; i++)
-        //     CEL_INFO("FinalPacket[{}] = {:#0x}", i, store[i]);
-
-        // CEL_INFO("hr - size = {}", headroom - size);
-
-        return std::make_pair<int8_t *, unsigned>(store + headroom - size, size + newsize + (15 - headroom));
     }
 }

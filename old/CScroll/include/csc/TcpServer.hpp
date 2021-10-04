@@ -20,7 +20,10 @@
 
 #include <vector>
 #include <string>
-#include <tuple>
+
+#include "csc/PacketFactory.hpp"
+
+#define HIC clients[info.cliRef]
 
 namespace csc {
 
@@ -29,17 +32,17 @@ namespace csc {
     };
 
     enum class HandshakePid : uint8_t { handshaking = 0x00, legacyServerPing = 0xFE };
-    enum class CliBoundStatusPid : uint8_t { response = 0x00, pong = 0x01 };
     enum class ServBoundStatusPid : uint8_t { request = 0x00, ping = 0x01 };
+    enum class CliBoundStatusPid : uint8_t { response = 0x00, pong = 0x01 };
     enum class ServBoundLoginPid : uint8_t { loginStart = 0x00, encryptionResponse = 0x01, pluginResponse = 0x02 };
     enum class CliBoundLoginPid : uint8_t { disconnect = 0x00, encryptionRequest = 0x01, loginSuccess = 0x02, setCompression = 0x03, pluginRequest = 0x04 };
 
+    enum class ServBoundPlayPid : uint8_t {
 
-    struct ClientData {
-        int sock;
+    };
 
-        ClientState state = ClientState::handshake;
-        bool compressed = false;
+    enum class CliBoundPlayPid : uint8_t {
+        joinGame = 0x26, 
     };
 
     struct HandlingInfo {
@@ -49,35 +52,18 @@ namespace csc {
         int cliRef;
     };
 
+    struct ClientData;
 
-    class PacketFactory {
-    private:
-        int8_t *store;
-        uint8_t headroom;
+    struct ClientData {
+        int sock;
 
-    public:
-        PacketFactory() = delete;
-        PacketFactory(int id, unsigned size);
-        ~PacketFactory();
+        ClientState state = ClientState::handshake;
+        bool compressed = false;
 
-        inline int8_t *get();
+        inline VariantPacketFactory newPacketFactory(int id, unsigned size) {
+            return compressed ? VariantPacketFactory{CompressedPacketFactory{id, size}} : VariantPacketFactory{PacketFactory{id, size}};
+        };
 
-        std::pair<int8_t *, unsigned> construct(int newsize);
-    };
-
-    class CompressedPacketFactory {
-    private:
-        int8_t *store;
-        uint8_t headroom;
-
-    public:
-        CompressedPacketFactory() = delete;
-        CompressedPacketFactory(int id, unsigned size);
-        ~CompressedPacketFactory();
-
-        inline int8_t *get();
-
-        std::pair<int8_t *, unsigned> construct(int newsize);
     };
 
     class TcpServer {
@@ -103,8 +89,6 @@ namespace csc {
 
         TcpServer(const TcpServer &rhs) = delete;
         TcpServer &operator=(const TcpServer &rhs) = delete;
-
-
     };
 }
 

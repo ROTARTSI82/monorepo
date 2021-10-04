@@ -16,6 +16,8 @@
 
 #include <cstdint>
 
+#define COMPRESSION_THRESHOLD 512
+
 namespace csc {
     enum class Gamemode : uint8_t {
         survival = 0,
