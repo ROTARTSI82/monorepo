@@ -192,6 +192,10 @@ namespace cel {
             return {x * rhs, y * rhs, z * rhs};
         }
 
+        inline generic_vec3 operator+(const generic_vec3 &rhs) {
+            return {x + rhs.x, y + rhs.y, z + rhs.z};
+        }
+
         generic_vec3<T> &operator=(const generic_vec3<T> &rhs) noexcept = default;
     };
 
@@ -339,5 +343,19 @@ namespace cel {
     std::string to_string(const vec3 &operand);
     std::string to_string(const vec2 &operand);
 }
+
+#include <fmt/format.h>
+template<>
+struct fmt::formatter<cel::vec2>
+{
+    template<typename ParseContext>
+    inline constexpr auto parse(ParseContext& ctx) { return ctx.begin(); }
+
+    template<typename FormatContext>
+    inline auto format(cel::vec2 const& number, FormatContext& ctx) {
+        return fmt::format_to(ctx.out(), "[{}, {}]", number.x, number.y);
+    }
+};
+
 
 #endif

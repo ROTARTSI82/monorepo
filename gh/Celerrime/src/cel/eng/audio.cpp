@@ -244,8 +244,8 @@ namespace cel {
         music.cycle_gc();
     }
 
-    al_file_buf_ref audio_engine::new_file_buf(const std::string &filename, bool essential) {
-        return al_file_buf_ref{*(file_bufs.emplace(new al_file_buf{this, filename, essential}).first)};
+    sound_ref audio_engine::sound_from_file(const std::string &filename, bool essential) {
+        return sound_ref{*(file_bufs.emplace(new al_file_buf{this, filename, essential}).first)};
     }
 
     void audio_engine::set_output_device(const ALCchar *dev_name) {

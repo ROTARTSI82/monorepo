@@ -10,9 +10,9 @@
 #include <random>
 
 namespace cel::dbg {
-    tgrs_layer::tgrs_layer(world_t &w) : parent(w), draw_info(4096, w.parent->qvbo), sq_tex{w.parent->tex_pool.new_tex("dbg/test.png")} {
-        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.parent->opt.res_path("frag/default.frag"))};
-        shader vert{GL_VERTEX_SHADER, read_entire_file(w.parent->opt.res_path("vert/default.vert"))};
+    tgrs_layer::tgrs_layer(world_t &w) : parent(w), draw_info(4096, w.app->qvbo), sq_tex{w.app->tex_pool.new_tex("dbg/test.png")} {
+        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.app->opt.res_path("frag/default.frag"))};
+        shader vert{GL_VERTEX_SHADER, read_entire_file(w.app->opt.res_path("vert/default.vert"))};
 
         shaders.attach(frag.get_id());
         shaders.attach(vert.get_id()); 

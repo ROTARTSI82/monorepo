@@ -49,7 +49,7 @@ namespace cel {
     class app_t;
     class world_t {
     public:
-        app_t *parent;
+        app_t *app;
         std::vector<std::shared_ptr<layer>> layers;
         std::unordered_map<std::type_index, std::shared_ptr<layer>> layer_cache;
         input_frame prev_inp{};

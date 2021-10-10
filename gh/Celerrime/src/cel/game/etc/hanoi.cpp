@@ -11,7 +11,7 @@
 namespace cel::etc {
 
 
-    hanoi_layer::hanoi_layer(world_t &w) : call(4096, w.parent->qvbo), wrld(&w), tex(w.parent->tex_pool.new_tex("dbg/test.png")) {
+    hanoi_layer::hanoi_layer(world_t &w) : call(4096, w.app->qvbo), wrld(&w), tex(w.app->tex_pool.new_tex("dbg/test.png")) {
         call.num_blits = 3 + 5;
         call.instances[0] = draw_instance{gl_mat2::transform({10, 500}, 0), vec3{-500, 0, -2}, 1, vec2{0, 0}, vec2{1, 1}, vec2{2, 3}};
         call.instances[1] = draw_instance{gl_mat2::transform({10, 500}, 0), vec3{0, 0, -2}, 1, vec2{0, 0}, vec2{1, 1}, vec2{2, 3}};
@@ -20,9 +20,9 @@ namespace cel::etc {
 
         {
             flush_al_error("pre thing");
-            auto src = w.parent->snd.music.borrow_one();
+            auto src = w.app->snd.music.borrow_one();
             flush_al_error("borrow");
-            mb300 = w.parent->snd.new_file_buf("dbg/300MB.ogg");
+            mb300 = w.app->snd.sound_from_file("dbg/300MB.ogg");
             flush_al_error("new buf");
             src->enqueue_buf(mb300.get());
             // src->bind_buf(mb300.get());
@@ -37,7 +37,7 @@ namespace cel::etc {
             src->play();
             flush_al_error("play");
         }
-        wrld->parent->snd.cycle_gc();
+        wrld->app->snd.cycle_gc();
     }
 
     void hanoi_layer::load_disks(int n) {
@@ -112,12 +112,12 @@ namespace cel::etc {
     }
 
     void hanoi_layer::draw() {
-        wrld->parent->default_shaders.use();
+        wrld->app->default_shaders.use();
         static const gl_mat4 proj = gl_mat4::ortho(-1000, 1000, -1000, 1000, 0.1, 100);
         glActiveTexture(GL_TEXTURE0);
-        glUniformMatrix4fv(wrld->parent->su_proj, 1, GL_FALSE, (const GLfloat *) &proj);
-        glUniformMatrix4fv(wrld->parent->su_view, 1, GL_FALSE, (const GLfloat *) &gl_mat4::ident);
-        glUniform1i(wrld->parent->su_tex, 0);
+        glUniformMatrix4fv(wrld->app->su_proj, 1, GL_FALSE, (const GLfloat *) &proj);
+        glUniformMatrix4fv(wrld->app->su_view, 1, GL_FALSE, (const GLfloat *) &gl_mat4::ident);
+        glUniform1i(wrld->app->su_tex, 0);
         tex->bind();
         call.dispatch();
 

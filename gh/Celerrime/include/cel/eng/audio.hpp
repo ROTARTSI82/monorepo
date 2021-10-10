@@ -79,8 +79,8 @@ namespace cel {
         inline bool operator==(const al_file_buf &rhs) const noexcept { return id == rhs.id; }
     };
 
-    typedef counting_ref<tracked_al_buf> al_buf_ref;
-    typedef counting_ref<al_file_buf> al_file_buf_ref;
+    // typedef counting_ref<tracked_al_buf> al_buf_ref;
+    typedef counting_ref<al_file_buf> sound_ref;
 
     class source_pool;
     class tracked_source {
@@ -183,7 +183,7 @@ namespace cel {
         ~audio_engine();
 
         void cycle_gc();
-        al_file_buf_ref new_file_buf(const std::string &filename, bool essential = false);
+        sound_ref sound_from_file(const std::string &filename, bool essential = false);
         void reload_file_bufs(); // for if the options filepaths change. NOTE: This does NOT recreate the buffer. It merely calls alBufferData()
 
         void set_output_device(const ALCchar *dev);

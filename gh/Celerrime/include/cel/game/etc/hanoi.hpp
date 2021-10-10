@@ -39,7 +39,7 @@ namespace cel::etc {
         draw_call call;
         world_t *wrld;
 
-        al_file_buf_ref mb300;
+        sound_ref mb300;
 
         std::vector<move_record> solution;
         int solution_iterator = -1;

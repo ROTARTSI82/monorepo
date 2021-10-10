@@ -7,9 +7,9 @@
 #include <fmt/format.h>
 
 namespace cel::dbg {
-    mandelbrot_layer::mandelbrot_layer(world_t &w) : test(4096, w.parent->qvbo) {
-        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.parent->opt.res_path("frag/mandelbrot-fast.frag"))};
-        shader vert{GL_VERTEX_SHADER, read_entire_file(w.parent->opt.res_path("vert/default.vert"))};
+    mandelbrot_layer::mandelbrot_layer(world_t &w) : test(4096, w.app->qvbo) {
+        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.app->opt.res_path("frag/mandelbrot-fast.frag"))};
+        shader vert{GL_VERTEX_SHADER, read_entire_file(w.app->opt.res_path("vert/default.vert"))};
 
         shaders.attach(frag.get_id());
         shaders.attach(vert.get_id()); 
