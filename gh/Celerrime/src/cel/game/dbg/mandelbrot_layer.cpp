@@ -8,14 +8,15 @@
 
 namespace cel::dbg {
     mandelbrot_layer::mandelbrot_layer(world_t &w) : test(4096, w.app->qvbo) {
-        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.app->opt.res_path("frag/mandelbrot-fast.frag"))};
+        shader frag{GL_FRAGMENT_SHADER, read_entire_file(w.app->opt.res_path("frag/newton_fractal.frag"))};
         shader vert{GL_VERTEX_SHADER, read_entire_file(w.app->opt.res_path("vert/default.vert"))};
 
         shaders.attach(frag.get_id());
         shaders.attach(vert.get_id()); 
         shaders.link();
 
-        test.instances[0] = draw_instance{gl_mat2::transform({3.5, 2}, consts_for<float>::pi()), {0, 0, -5}, 1, {-2.5, -1}, {3.5, 2}, {1, 1}};
+        // test.instances[0] = draw_instance{gl_mat2::transform({3.5, 2}, consts_for<float>::pi()), {0, 0, -5}, 1, {-2.5, -1}, {3.5, 2}, {1, 1}};
+        test.instances[0] = draw_instance{gl_mat2::transform({3.5, 2}, consts_for<float>::pi()), {0, 0, -5}, 1, {-5, -5}, {10, 10}, {1, 1}};
         test.num_blits = 1;
         test.upload();
 

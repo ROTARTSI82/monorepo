@@ -52,7 +52,10 @@ namespace cel::etc {
 
         ImGui::Begin("Rocket");
 
-        if (ImGui::Button("Reset")) {
+        int btn_count;
+        const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &btn_count);
+
+        if (ImGui::Button("Reset") || buttons[5]) {
             rocket = rocket_t{};
         }
         

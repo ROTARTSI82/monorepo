@@ -9,6 +9,7 @@
 #include <imgui/imgui.h>
 
 #include "cel/game/dbg/tgrs.hpp"
+#include "cel/game/dbg/mandelbrot_layer.hpp"
 #include "cel/game/etc/seesaw_rocket.hpp"
 
 namespace cel {
@@ -129,7 +130,7 @@ namespace cel {
         logic_frames_due = std::numeric_limits<uint64_t>::max();
         logic_convar.notify_one();
 
-        world.layers.emplace_back(world.get_layer<etc::ssrocket_layer>());
+        world.layers.emplace_back(world.get_layer<dbg::mandelbrot_layer>());
         layer *selected = nullptr;
 
         while (win.running()) {

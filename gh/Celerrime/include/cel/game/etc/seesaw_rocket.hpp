@@ -11,8 +11,8 @@
 
 #pragma once
 
-#ifndef CEL_GAME_ETC_HANOI_HPP
-#define CEL_GAME_ETC_HANOI_HPP
+#ifndef CEL_GAME_ETC_SS_ROCKET_HPP
+#define CEL_GAME_ETC_SS_ROCKET_HPP
 
 #include <cel/eng/gl.hpp>
 #include "cel/world.hpp"
