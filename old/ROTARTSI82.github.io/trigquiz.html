@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Trig Quiz: Unit Circle" />
+    <meta property="og:site_name" content="Trig Quiz: Unit Circle" />
+    <meta property="og:description" content="A rip-off of Ms. Lieberman's Basic Unit Circle Practice. Very fun to speedrun." />
+    <meta property="og:url" content="https://rotartsi82.github.io/VirtualBell/trigquiz.html" />
+    <!-- <meta property="og:image" content="" /> -->
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Trig Quiz</title>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        .main-div {
+            margin: 2rem auto auto auto;
+            padding: 2rem 10rem;
+            max-width: 75rem;
+            max-height: 100rem;
+            background-color: lightgray;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+
+        button {
+            width: 90%;
+            margin: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .options {
+            text-align: center;
+        }
+
+        .header {
+            font-size: 1.5rem;
+        }
+
+        .qcontainer {
+            text-align: left;
+        }
+
+        #correct, #incorrect {
+            margin-top: 2rem;
+            border-radius: 1rem;
+            display: none;
+        }
+
+        #correct { background-color: green; }
+        #incorrect { background-color: red; }
+
+        #willshow {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        #willshow>div {
+            margin: 2rem;
+            padding: 1rem;
+            background-color: aliceblue;
+            font-size: 1.125rem;
+            text-align: left;
+        }
+
+        #willshow>div>div {
+            text-align: center;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div class="main-div">
+        <h1>Trig Quiz</h1>
+
+        <div class="row header willhide">
+            <div class="col-9 qcontainer">
+                <span id="question">\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]</span>
+            </div>
+            <div class="col">
+                Question <span id="qnumber">1</span> of 25
+            </div>
+        </div>
+
+        <hr>
+        <div class="options willhide">
+            <button id='a' class="btn btn-primary">\[\sqrt{3}\over 2\]</button>
+            <button id='b' class="btn btn-primary">option b</button>
+            <button id='c' class="btn btn-primary">option c</button>
+            <button id='d' class="btn btn-primary">option d</button>
+        </div>
+
+        <div class="row header">
+            <div class="col">
+                Accuracy: <span id="cor">0</span>/<span id="seen">0</span> (<span id="acc">100</span>%)
+            </div>
+            <div class="col">
+                Time: <span id="time">---</span>
+            </div>
+        </div>
+
+        <div id="correct">
+            <h2>Correct!</h2>
+        </div>
+        <div id="incorrect">
+            <h2>Incorrect!</h2>
+        </div>
+
+        <div id="willshow">
+            <h3>Congrats! Here's your report: </h3>
+            <div class="report-q">
+                Question
+                <div class="options">
+                    <div>a</div>
+                    <div>b</div>
+                    <div>c</div>
+                    <div>d</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <button id="dbg">dbg</button> -->
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        let totalQuestions = 25; 
+
+        function rand(lo, hi) {
+            return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+        }
+
+        function rchoice(arr) {
+            return arr[rand(0, arr.length - 1)];
+        }
+
+        function neg(v) {
+            return `-{${v}}`;
+        }
+
+        function set(elem, val) {
+            MathJax.typesetClear([elem]);
+            elem.innerHTML =  val;
+            MathJax.typesetPromise([elem]);
+        }
+
+        // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+        function shuffle(array) {
+            let currentIndex = array.length,  randomIndex;
+
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+        }
+
+        let numSeen = 0;
+        let numCorrect = 0;
+        let start = new Date();
+        let clockDisp = document.getElementById('time');
+
+        let clock = setInterval(function() {
+            let ms = new Date() - start;
+            let min = Math.floor(ms / (1000 * 60));
+            if (min > 0) ms %= min * 1000 * 60;
+            let sec = Math.floor(ms / 1000);
+
+            clockDisp.innerHTML = `${min}:${sec < 10 ? "0" + sec.toString() : sec}`;
+        }, 1000);
+
+        let question = document.getElementById('question');
+        let qnumber = document.getElementById('qnumber');
+        let options = [document.getElementById('a'), document.getElementById('b'), document.getElementById('c'), document.getElementById('d')]
+        let incDisp = document.getElementById("incorrect");
+        let corDisp = document.getElementById("correct");
+        let corCount = document.getElementById("cor");
+        let seenCount = document.getElementById("seen");
+        let accDisp = document.getElementById("acc");
+
+
+        let quadrantalSolutions = ["0", "undefined", "-1", "1"];
+        let quadrantals = [
+            ["0", "2\\pi", "-2\\pi"],
+            ["\\pi\\over2", "-{{3\\pi}\\over2}"],
+            ["\\pi", "-\\pi"],
+            ["{3\\pi}\\over2", "-{\\pi\\over2}"]
+        ];
+
+        let quadAns = [
+            [1, 0, 1],
+            [0, 1, 1],
+            [-1, 0, 1],
+            [0, -1, 1]
+        ];
+
+        let trigFuncs = ["\\sin", "\\cos", "\\csc", "\\sec", "\\tan", "\\cot"];
+        let recipMapping = [2, 3, 0, 1, 5, 4];
+
+        let trigRatios = [ // xyh
+            [1,2], [0,2], [2,1], [2,0], [1,0], [0,1]
+        ];
+
+        let refs = ["\\pi\\over6", "\\pi\\over4", "\\pi\\over3"];
+
+        let posQuadrants = [
+            refs,
+            ["{5\\pi}\\over6", "{3\\pi}\\over4", "{2\\pi}\\over3"],
+            ["{7\\pi}\\over6", "{5\\pi}\\over4", "{4\\pi}\\over3"],
+            ["{11\\pi}\\over6", "{7\\pi}\\over4", "{5\\pi}\\over3"],
+        ];
+
+        let negQuadrants = []
+        for (let i = posQuadrants.length - 1; i >= 0; i--) {
+            let toPush = [];
+            for (let v = 0; v < posQuadrants[i].length; v++)
+                toPush.push(`-{${posQuadrants[i][v]}}`);
+            negQuadrants.push(toPush);
+        }
+
+        let answerSets = {
+            "sin(pi/3)": ["\\sqrt{3}\\over2"],
+            "cos(pi/3)": ["1\\over2"],
+            "sec(pi/3)": ["2"],
+            "csc(pi/3)": ["2\\sqrt{3}\\over3", "2\\over\\sqrt{3}"],
+            "tan(pi/3)": ["\\sqrt{3}"],
+            "cot(pi/3)": ["1\\over\\sqrt{3}", "\\sqrt{3}\\over3"],
+            "sincos(pi/4)": ["\\sqrt{2}\\over2", "1\\over\\sqrt{2}"],
+            "seccsc(pi/4)": ["\\sqrt{2}"],
+            "tancot(pi/4)": ["1"],
+        };
+
+        let answerKey = [
+            [
+                "cos(pi/3)", "sin(pi/3)", "sec(pi/3)", "csc(pi/3)", "cot(pi/3)", "tan(pi/3)" // index into these arrays with trigFunc index
+            ], // pi/6
+            [
+                "sincos(pi/4)", "sincos(pi/4)", "seccsc(pi/4)", "seccsc(pi/4)", "tancot(pi/4)", "tancot(pi/4)"
+            ], // pi/4
+            [
+                "sin(pi/3)", "cos(pi/3)", "csc(pi/3)", "sec(pi/3)", "tan(pi/3)", "cot(pi/3)"
+            ], // pi/3
+        ];
+
+
+        function finish() {
+            let hide = document.querySelectorAll(".willhide");
+            for (let h in hide) {
+                hide[h].style.display = "none";
+            }
+        }
+
+        function onIncorrect() {
+            incDisp.style.display = "block";
+            setTimeout(function() {
+                incDisp.style.display = "none";
+                generateQuestion();
+                corCount.innerHTML = numCorrect;
+                seenCount.innerHTML = ++numSeen;
+                accDisp.innerHTML = `${(numCorrect * 100 / numSeen).toFixed(2)}`;
+
+                if (numSeen >= totalQuestions) {
+                    clearInterval(clock);
+                    finish();
+                    return;
+                }
+
+                qnumber.innerHTML = numSeen + 1;
+            }, 1000);
+        }
+
+        function onCorrect() {
+            corDisp.style.display = "block";
+            setTimeout(function() {
+                corDisp.style.display = "none";
+                generateQuestion();
+                corCount.innerHTML = ++numCorrect;
+                seenCount.innerHTML = ++numSeen;
+                accDisp.innerHTML = `${(numCorrect * 100 / numSeen).toFixed(2)}`;
+
+                if (numSeen >= totalQuestions) {
+                    clearInterval(clock);
+                    finish();
+                    return;
+                }
+
+                qnumber.innerHTML = numSeen + 1;
+            }, 1000);
+        }
+
+        function generateQuestion() {
+
+            let func = rand(0, trigFuncs.length - 1);
+            let funcStr = trigFuncs[func];
+
+            let isQuadrantal = rand(1, 4) == 1; // 25% chance of quadrantal
+            if (isQuadrantal) {
+                let which = rand(0, 3);
+                let ang = rand(1, quadrantals[which].length - 1);
+                let angStr = quadrantals[which][ang];
+
+                let correctIndex;
+                let choices = shuffle(quadrantalSolutions);
+
+                let denom = quadAns[which][trigRatios[func][1]];
+                let num = quadAns[which][trigRatios[func][0]];
+
+                let solu = num/denom;
+                // alert(`${num}/${denom} = ${solu}`)
+
+                for (let i = 0; i < options.length; i++) {
+                    let isCorrect = (choices[i] == ((denom == 0) ? "undefined" : solu));
+
+                    options[i].onclick = onIncorrect;
+                    if (isCorrect) {
+                        correctIndex = i;
+                        options[i].onclick = onCorrect;
+                    }
+
+                    set(options[i], `\\[${choices[i] + (isCorrect ? "" /* "\\checkmark" */ : "")}\\]`);
+                }
+
+                set(question, `\\[${funcStr}\\left(${angStr}\\right)\\]`);
+            } else {
+                function getCorrectAnswer(a, f) {
+                    return rchoice(answerSets[answerKey[a][f]]);
+                }
+
+                let refAng = rand(0, refs.length - 1);
+                let refStr = refs[refAng];
+                let correctAns = getCorrectAnswer(refAng, func);
+                let trickCandidates = [];
+
+                let quadrant = rand(0, 3);
+                let angleStr = (rchoice([true, false]) ? posQuadrants : negQuadrants)[quadrant][refAng];
+
+                let isNeg = (quadrant == 1 && func != 0 && func != 2)
+                            || (quadrant == 2 && func != 4 && func != 5)
+                            || (quadrant == 3 && func != 1 && func != 3);
+            
+                if (isNeg) {
+                    trickCandidates.push(getCorrectAnswer(refAng, func));
+                    correctAns = `-{${correctAns}}`;
+                } else {
+                    trickCandidates.push(`-{${getCorrectAnswer(refAng, func)}}`);
+                }
+
+                trickCandidates.push(getCorrectAnswer(refAng, recipMapping[func]));
+                trickCandidates.push(`-{${getCorrectAnswer(refAng, recipMapping[func])}}`);
+
+                if (refAng == 0 || refAng == 1) {
+                    let otherRef = (refAng == 0) ? 1 : 0;
+                    trickCandidates.push(getCorrectAnswer(otherRef, recipMapping[func]));
+                    trickCandidates.push(neg(getCorrectAnswer(otherRef, recipMapping[func])));
+
+                    trickCandidates.push(getCorrectAnswer(otherRef, func));
+                    trickCandidates.push(neg(getCorrectAnswer(otherRef, func)));
+                }
+
+                trickCandidates = shuffle([...new Set(trickCandidates)]); // remove duplicates
+                if (trickCandidates.length < 3) {
+                    alert("ERROR: not enough trick candidates");
+                }
+
+                let choices = [correctAns];
+                for (let i = 0; i < 3; i++) {
+                    choices.push(trickCandidates[i]);
+                }
+                choices = shuffle(choices);
+
+
+                
+                set(question, `\\[${funcStr}\\left(${angleStr}\\right)\\]`);
+                
+                for (let i = 0; i < options.length; i++) {
+                    let isCorrect = (choices[i] == correctAns);
+                    options[i].onclick = onIncorrect;
+                    if (isCorrect) {
+                        // correctIndex = i;
+                        options[i].onclick = onCorrect;
+                    }
+                    set(options[i], `\\[${choices[i] + (isCorrect ? "" /* "\\checkmark" */ : "")}\\]`);
+                }
+            }
+        }
+
+        generateQuestion();
+        // document.getElementById('dbg').onclick = function() {
+        //     generateQuestion();
+        // }
+    </script>
+  </body>
+</html>
