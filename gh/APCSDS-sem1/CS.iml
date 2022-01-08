@@ -13,7 +13,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Solitaire (2)" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/StacksPractice" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/BinTreeLab" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Heaps" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
