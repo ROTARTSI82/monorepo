@@ -1,3 +1,4 @@
+package BinarySearchTreeStudentFolder;
 import java.util.*;
 
 /**
@@ -38,7 +39,8 @@ public class TreeUtil
      */
     public static Object leftmost(TreeNode t)
     {
-        return t.getLeft() == null ? t.getValue() : leftmost(t.getLeft());
+        if (t == null) return null;
+        if (t.getLeft() == null) return t.getValue(); else return leftmost(t.getLeft());
     }
 
     /**
@@ -49,7 +51,8 @@ public class TreeUtil
      */
     public static Object rightmost(TreeNode t)
     {
-        return t.getRight() == null ? t.getValue() : rightmost(t.getRight());
+        if (t == null) return null;
+        if (t.getRight() == null) return t.getValue(); else return rightmost(t.getRight());
     }
 
     /**
@@ -59,7 +62,8 @@ public class TreeUtil
      */
     public static int maxDepth(TreeNode t)
     {
-        return t == null ? -1 : 1 + Math.max(maxDepth(t.getRight()), maxDepth(t.getLeft()));
+        if (t == null) return -1; 
+        else return 1 + Math.max(maxDepth(t.getRight()), maxDepth(t.getLeft()));
     }
 
     /**
@@ -83,7 +87,8 @@ public class TreeUtil
      */
     public static int countNodes(TreeNode t)
     {
-        return t == null ? 0 : 1 + countNodes(t.getLeft()) + countNodes(t.getRight());
+        if (t == null) return 0;
+        else return 1 + countNodes(t.getLeft()) + countNodes(t.getRight());
     }
     /**
      * Counts the leaf nodes in a tree
@@ -92,8 +97,9 @@ public class TreeUtil
      */
     public static int countLeaves(TreeNode t)
     {
-        return t == null ? 0 : t.getLeft() == null && t.getRight() == null ? 1 : 
-                countLeaves(t.getLeft()) + countLeaves(t.getRight());
+        if (t == null) return 0;
+        else if (t.getLeft() == null && t.getRight() == null) return 1;
+        return countLeaves(t.getLeft()) + countLeaves(t.getRight());
     }
     /**
      * Visits nodes in a tree in pre-order with a TreeDisplay
@@ -137,20 +143,19 @@ public class TreeUtil
      * representing null values to denote leaf nodes.
      * @param t Tree to flatten
      * @param list List to add the elements into
-     * @return Passes back what was passed into list (which has now been modified)
      */
-    public static List<String> fillList(TreeNode t, List<String> list)
+    public static void fillList(TreeNode t, List<String> list)
     {
         if (t == null)
         {
             list.add("$");
-            return list;
         }
-
-        list.add(t.getValue().toString());
-        fillList(t.getLeft(), list);
-        fillList(t.getRight(), list);
-        return list;
+        else
+        {
+            list.add(t.getValue().toString());
+            fillList(t.getLeft(), list);
+            fillList(t.getRight(), list);
+        }
     }
     /**
      * saveTree uses the FileUtil utility class to save the tree rooted at t
@@ -161,7 +166,9 @@ public class TreeUtil
      */
     public static void saveTree(String fileName, TreeNode t)
     {
-        FileUtil.saveFile(fileName, fillList(t, new LinkedList<>()).iterator());
+        LinkedList<String> list = new LinkedList<>();
+        fillList(t, list);
+        FileUtil.saveFile(fileName, list.iterator());
     }
     /**
      * buildTree takes in an iterator which will iterate through a valid description of
@@ -234,8 +241,10 @@ public class TreeUtil
         else 
         {
             System.out.printf("Does '%s' describe it [Y/n]? ", t.getValue().toString());
-            twentyQuestionsRound(getUserInput().equals("Y") ? t.getLeft() : t.getRight(), display,
-                                 questionsLeft - 1);
+            if (getUserInput().equals("Y"))
+                twentyQuestionsRound(t.getLeft(), display, questionsLeft - 1);
+            else
+                twentyQuestionsRound(t.getRight(), display, questionsLeft - 1);
         }
     }
     /** 
@@ -266,7 +275,8 @@ public class TreeUtil
      */
     public static TreeNode copy(TreeNode t)
     {
-        return t == null ? null : new TreeNode(t.getValue(), copy(t.getLeft()), copy(t.getRight()));
+        if (t == null) return null;
+        return new TreeNode(t.getValue(), copy(t.getLeft()), copy(t.getRight()));
     }
 
     /**
@@ -373,8 +383,9 @@ public class TreeUtil
             return decodingTree.getValue().toString();
         }
 
-        return decodeSingle(cipherText.substring(0, 1).equals("-") ? decodingTree.getRight() : 
-                decodingTree.getLeft(), cipherText.substring(1), d);
+        if (cipherText.substring(0, 1).equals("-"))
+            return decodeSingle(decodingTree.getRight(), cipherText.substring(1), d);
+        else return decodeSingle(decodingTree.getLeft(), cipherText.substring(1), d);
     }
 
     /**

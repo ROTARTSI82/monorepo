@@ -1,3 +1,5 @@
+package BinarySearchTreeStudentFolder;
+
 import java.io.*;
 import java.util.*;
 

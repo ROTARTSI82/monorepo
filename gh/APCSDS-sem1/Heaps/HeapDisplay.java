@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,6 +15,9 @@ public class HeapDisplay extends TreeDisplay
     {
         TreeNode root = heapArrayToTree(heapArray, heapSize);
         displayTree(root);
+        try { Thread.sleep(1000); } catch(Exception e) {}
+
+        System.out.println(Arrays.deepToString(heapArray));
     }
     
     /**

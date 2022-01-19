@@ -1,3 +1,5 @@
+package BinarySearchTreeStudentFolder;
+
 /**
  * a collection of static methods for operating on binary search trees
  * @author Grant Yang
@@ -56,6 +58,7 @@ public abstract class BSTUtilities
     //               (and no new TreeNodes have been created)
     private static TreeNode deleteNode(TreeNode t, TreeDisplay display)
     {
+        if (t == null) return null;
         TreeNode selected = t.getRight();
         if (selected == null) return t.getLeft(); // shortcut; only 1 child
         while (selected.getLeft() != null) selected = selected.getLeft();
@@ -78,7 +81,7 @@ public abstract class BSTUtilities
      */
     public static TreeNode delete(TreeNode t, Comparable x, TreeDisplay display)
     {
-        if (t == null) new TreeNode(x);
+        if (t == null) return null;
         int cmp = x.compareTo(t.getValue());
         if (cmp == 0) 
             return deleteNode(t, display);

@@ -1,6 +1,13 @@
 /**
- * HeapUtils contains a collection of static methods
- * to manipulate heaps
+ * HeapUtils contains the following collection of static methods
+ * to manipulate heaps and sort arrays using heap sort:
+ *
+ * public static <T> void swap(T[] arr, int ind1, int ind2)
+ * public static void heapify(Comparable[] heap, int index, int heapSize)
+ * public static void buildHeap(Comparable[] heap, int heapSize)
+ * public static Comparable remove(Comparable[] heap, int heapSize)
+ * public static Comparable[] insert(Comparable[] heap, Comparable item, int heapSize)
+ * public static void heapSort(Comparable[] arr, int heapSize)
  *
  * @author Grant Yang
  * @version 2022.01.08
@@ -28,14 +35,13 @@ public class HeapUtils
     }
 
     /**
-     * If the left and right subtrees of the node at `index` satisfy the max-heap property,
-     * heapify heapifies the heap by recursively swapping parents with their children
-     * until the entire subtree rooted at `index` satisfies the max-heap property.
-     * If the element at `index` is less than one of its children, it is
-     * swapped with its largest child. Then, heapify is recursively called on that child
-     * to bubble the value down into the correct spot
+     * heapify() rearranges elements until the entire subtree rooted at `index`
+     * satisfies the max-heap property by recursively swapping parents with their children.
+     * If the element at `index` is less than one of its children, it is swapped with its
+     * largest child. Then, heapify() is recursively called on that child to bubble the value
+     * down into the correct spot.
      * This function has a time complexity of O(log(n)), with n being the number of elements
-     * in the heap
+     * in the heap.
      * @precondition heapSize < heap.length and 0 < index <= heapSize.
      *               The left and right subtrees of the node at index satisfy the max-heap property
      * @postcondition The value at index has been bubbled down to its proper spot
@@ -58,10 +64,13 @@ public class HeapUtils
                 swap(heap, index * 2, index);
         }
         else if (heap[index * 2].compareTo(heap[index]) > 0
-                    || heap[index * 2 + 1].compareTo(heap[index]) > 0)
+                || heap[index * 2 + 1].compareTo(heap[index]) > 0)
         {
-            int maxChild = heap[index * 2 + 1].compareTo(heap[index * 2]) > 0 ? index * 2 + 1
-                                                                              : index * 2;
+            int maxChild;
+            if (heap[index * 2 + 1].compareTo(heap[index * 2]) > 0)
+                maxChild = index * 2 + 1;
+            else
+                maxChild = index * 2;
             swap(heap, index, maxChild);
             heapify(heap, maxChild, heapSize);
         }
@@ -70,6 +79,10 @@ public class HeapUtils
     /**
      * buildHeap() builds a heap by calling heapify() on all non-leaf nodes
      * from the deepest nodes to the shallowest until it gets to the root.
+     * Thus, it arranges all subtrees into a max-heap starting at the bottom
+     * before calling heapify() on a parent so that heapify()'s precondition is met.
+     * Eventually, it is able to call heapify() on the root and make the entire
+     * range into a heap.
      * This function has a time complexity of O(n log(n)), with n being the number
      * of elements in the heap
      * @precondition heapSize < heap.length
@@ -90,8 +103,8 @@ public class HeapUtils
 
     /**
      * remove() removes the root node of a heap by swapping it with the last
-     * element in the heap and bubbling the new value down using heapify(), swapping it with
-     * its children until it is greater than all of its children.
+     * element in the heap and bubbling the new value in the root down using heapify(),
+     * swapping it with its children until it is greater than all of its children.
      * This operation has a time complexity of O(log n),
      * with n being the number of elements in the heap.
      * @precondition heapSize < heap.length
@@ -109,7 +122,7 @@ public class HeapUtils
      * @param heapSize The size of the heap, which specifies the range of values considered to be
      *                  part of the heap. Elements with indices outside the range of [1, heapSize]
      *                  will not be modified.
-     * @return
+     * @return Returns the value of the element that was removed from the heap
      */
     public static Comparable remove(Comparable[] heap, int heapSize)
     {
@@ -123,9 +136,11 @@ public class HeapUtils
      * at the bottom of the heap and bubbling it up until its
      * parent is greater than it. Note that this method creates
      * a copy of the heap and returns it, and that the array that
-     * was passed in is NOT modified
-     * This operation takes a time complexity of O(log(n)), with n being the number
-     * of elements in the heap.
+     * was passed in is NOT modified!
+     * In theory, this operation should take a time complexity of O(log(n)),
+     * with n being the number of elements in the heap. However, due to the need
+     * to copy all elements into a new array, it takes O(n) with n being
+     * the number of elements in the array.
      * @precondition heapSize < heap.length
      *               Elements with indices in the range of [1, heapSize] form a
      *               level-order traversal of a max-heap.
@@ -166,7 +181,10 @@ public class HeapUtils
     }
 
     /**
-     * heapSort() sorts part of an array in ascending order using a heap.
+     * heapSort() sorts an array in ascending order using a heap.
+     * It arranges the values in [1, heapSize] into a heap and repeatedly calls
+     * remove() until the heap is emptied, resulting in a sorted array.
+     * In practice, heapSize SHOULD be equal to one less than the size of the array.
      * This function has a time complexity of O(n log(n)), with n being the number
      * of elements that must be sorted.
      * @precondition heapSize < arr.length

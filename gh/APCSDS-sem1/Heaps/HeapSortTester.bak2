@@ -8,18 +8,6 @@
 public class HeapSortTester
 {
 
-    private static void printHeap(Comparable[] arr)
-    {
-        System.out.println("-----------------------------------");
-        System.out.print("|");
-        for(int i = 0; i < arr.length; i++)
-        {
-            System.out.print(arr[i] + "|");
-        }
-        System.out.println();
-        System.out.println("-----------------------------------");
-        System.out.println("\n\n\n");
-    }
     /**
      * runs a randomly generated array through HeapUtils methods to test
      * 
@@ -30,13 +18,17 @@ public class HeapSortTester
                 
         Comparable[] arr = new Comparable[12];
         HeapDisplay unsorted = new HeapDisplay();
-        HeapUtils util = new HeapUtils( );
         System.out.println("This is the initial array ");
-        for (int i = 0; i < arr.length; i++)
+        System.out.println("-----------------------------------");
+        System.out.print("|");
+        for(int i = 1; i < 12; i++)
         {
-            arr[i] = (int) (Math.random() * 100);
+            arr[i] = (int)(Math.random( )* 100) + 1;
+            System.out.print(arr[i] + "|");
         }
-        printHeap(arr);
+        HeapUtils util = new HeapUtils(arr, 11);
+        System.out.println();
+        System.out.println("-----------------------------------");
         System.out.println();
         unsorted.displayHeap(arr,11);
         System.out.println("Unsorted array displayed. Now constructing heap...");
@@ -48,8 +40,7 @@ public class HeapSortTester
         {
             //ignore
         }
-        util.heapSort(arr, 11);
-
+        util.heapSort();
         HeapDisplay sorted = new HeapDisplay();
         sorted.displayHeap(arr, 11);
         int insert = (int)(Math.random( )* 100) + 1;
@@ -62,11 +53,9 @@ public class HeapSortTester
         {
             //ignore
         }
-        printHeap(arr);
-
-        arr = util.insert(arr, insert, 11);
+        arr = util.insert(insert);
         boolean inserted = false;
-        for(int i = 0; i <= 12; i++)
+        for(int i = 1; i <= 12; i++)
         {
             if(arr[i].equals(insert))
                 inserted = true;
@@ -78,8 +67,6 @@ public class HeapSortTester
         HeapDisplay insertUnsorted = new HeapDisplay();
         insertUnsorted.displayHeap(arr,12);
         System.out.println(insert + " has been inserted. Now removing the root node from heap...");
-        printHeap(arr);
-
         try
         {
             Thread.sleep(100);
@@ -88,7 +75,7 @@ public class HeapSortTester
         {
             //ignore
         }
-        util.remove(arr, 12);
+        util.remove();
         System.out.println("The root node has been removed. Now, heapsort will be called.");
         try
         {
@@ -98,20 +85,18 @@ public class HeapSortTester
         {
             //ignore
         }
-        printHeap(arr);
-
-        util.heapSort(arr, 11);
+        util.heapSort();
         HeapDisplay insertSorted = new HeapDisplay();
         insertSorted.displayHeap(arr, 11);
         System.out.println("This is the sorted array using a max heap");
         System.out.println("-----------------------------------");
         System.out.print("|");
-        for(int i = 0; i <= 12; i++)
+        for(int i = 1; i < 12; i++)
         {
             System.out.print(arr[i] + "|");
             if(i > 1 && arr[i].compareTo(arr[i - 1]) < 0)
             {
-                throw new RuntimeException("Items are not sorted in order from least to greatest");
+              throw new RuntimeException("Items are not sorted in order from least to greatest");
             }
         }
         System.out.println();

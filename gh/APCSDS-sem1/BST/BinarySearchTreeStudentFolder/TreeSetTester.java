@@ -1,10 +1,12 @@
+package BinarySearchTreeStudentFolder;
+
 import java.util.*;
 
 public class TreeSetTester
 {
 	private static final boolean DEBUG = true;
-	private static final int MAX_VALUE = 100;
-	private static final int NUMBER_OF_ELEMENTS = 50;
+	private static final int MAX_VALUE = 512;
+	private static final int NUMBER_OF_ELEMENTS = 510;
 
 	public static void main(String[] args)
 	{

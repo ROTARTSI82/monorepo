@@ -16,10 +16,12 @@ import java.util.*;
  * TreeDisplay display = new TreeDisplay();
  * display.displayTree(someTree);
  * display.visit(someNode);
- * 
+ *
  * @author DaveF
  * @author RichardP
- * @version 102613
+ * @author Gloria Zhu
+ * @author Aimee Wang
+ * @version 11/16/18
  *
  */
 public class TreeDisplay extends JComponent
@@ -37,15 +39,14 @@ public class TreeDisplay extends JComponent
 	private Set<TreeNode> visited = new HashSet<TreeNode>();
 
 	//number of milliseconds to pause when visiting a node
-	private int delay = 50;
-	
-	//private BinaryTreeTester tester;
+	private int delay = 500;
+
 
 	//creates a frame with a new TreeDisplay component.
 	//(constructor returns the TreeDisplay component--not the frame).
-    public TreeDisplay()
-    {
-        //tester = null;
+
+	public TreeDisplay()
+	{
 		//create surrounding frame
 		JFrame frame = new JFrame("Tree Display");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,6 +67,7 @@ public class TreeDisplay extends JComponent
 			}
 		};
 		timer.schedule(task, 0, 1000);
+
 	}
 
 	//tells the frame the default size of the tree
@@ -75,8 +77,8 @@ public class TreeDisplay extends JComponent
 	}
 
 	//called whenever the TreeDisplay must be drawn on the screen
-    public void paint(Graphics g)
-    {
+	public void paint(Graphics g)
+	{
 		Graphics2D g2 = (Graphics2D)g;
 		Dimension d = getSize();
 
@@ -84,35 +86,36 @@ public class TreeDisplay extends JComponent
 		g2.setPaint(Color.white);
 		g2.fill(new Rectangle2D.Double(0, 0, d.width, d.height));
 
-        int depth = TreeUtil.maxDepth(root);
+		int depth = TreeUtil.maxDepth(root);
+		// System.out.printf("MD(%s) = %d\n", root.toString(), depth);
 
-        if (depth == 0)
-        	//no tree to draw
-        	return;
+		if (depth == -1)
+			//no tree to draw
+			return;
 
 		//hack to avoid division by zero, if only one level in tree
-        if (depth == 1)
-        	depth = 2;
+		if (depth == 0)
+			depth = 1;
 
 		//compute the size of the text
-       	FontMetrics font = g2.getFontMetrics();
-        int leftPad = font.stringWidth(
-			TreeUtil.leftmost(root) + "") / 2;
-        int rightPad = font.stringWidth(
-			TreeUtil.rightmost(root) + "") / 2;
-        int textHeight = font.getHeight();
+		FontMetrics font = g2.getFontMetrics();
+		int leftPad = font.stringWidth(
+				TreeUtil.leftmost(root) + "") / 2;
+		int rightPad = font.stringWidth(
+				TreeUtil.rightmost(root) + "") / 2;
+		int textHeight = font.getHeight();
 
 		//draw the actual tree
-        drawTree(g2, root, leftPad + ARC_PAD,
-        			d.width - rightPad - ARC_PAD,
-        			textHeight / 2 + ARC_PAD,
-        			(d.height - textHeight - 2 * ARC_PAD) / (depth - 1));
-    }
+		drawTree(g2, root, leftPad + ARC_PAD,
+				d.width - rightPad - ARC_PAD,
+				textHeight / 2 + ARC_PAD,
+				(d.height - textHeight - 2 * ARC_PAD) / (depth));
+	}
 
 	//draws the tree, starting from the given node, in the region with x values ranging
 	//from minX to maxX, with y value beginning at y, and next level at y + yIncr.
-    private void drawTree(Graphics2D g2, TreeNode t, int minX, int maxX, int y, int yIncr)
-    {
+	private void drawTree(Graphics2D g2, TreeNode t, int minX, int maxX, int y, int yIncr)
+	{
 		//skip if empty
 		if (t == null)
 			return;
@@ -142,8 +145,8 @@ public class TreeDisplay extends JComponent
 
 		//draw the box around the node
 		Rectangle2D.Double box = new Rectangle2D.Double(
-			x - textWidth / 2 - ARC_PAD, y - textHeight / 2 - ARC_PAD,
-			textWidth + 2 * ARC_PAD, textHeight + 2 * ARC_PAD);//, ARC_PAD, ARC_PAD);
+				x - textWidth / 2 - ARC_PAD, y - textHeight / 2 - ARC_PAD,
+				textWidth + 2 * ARC_PAD, textHeight + 2 * ARC_PAD);//, ARC_PAD, ARC_PAD);
 		Color c;
 		//color depends on whether we haven't visited, are visiting, or have visited.
 		if (t == visiting)
@@ -165,25 +168,25 @@ public class TreeDisplay extends JComponent
 		drawTree(g2, t.getLeft(), minX, x, nextY, yIncr);
 		drawTree(g2, t.getRight(), x, maxX, nextY, yIncr);
 	}
-    /**
-     * displayTree tells the component to switch to displaying the given tree
-     * @param root is the root of the tree to display
-     * postcondition: the component displays the tree defined by root
-     */
-    public void displayTree(TreeNode root)
-    {
-		this.root = root;
+	/**
+	 * displayTree tells the component to switch to displaying the given tree
+	 * @param rt is the root of the tree to display
+	 * postcondition: the component displays the tree defined by root
+	 */
+	public void displayTree(TreeNode rt)
+	{
+		this.root = rt;
 
 		//signal that the display needs to be redrawn
 		repaint();
 	}
-    /**
-     * visit changes the background color of the node given in the parameter to yellow,
-     * lighting up the node to indicate we are visiting it.
-     * @param t the node to light up
-     * postcondition: the background color on the display for the selected node is changed to 
-     *                yellow
-     */
+	/**
+	 * visit changes the background color of the node given in the parameter to yellow,
+	 * lighting up the node to indicate we are visiting it.
+	 * @param t the node to light up
+	 * postcondition: the background color on the display for the selected node is changed to
+	 *                yellow
+	 */
 	public void visit(TreeNode t)
 	{
 		//if we've already visited it, we assume this is a new traversal,
@@ -208,8 +211,6 @@ public class TreeDisplay extends JComponent
 			e.printStackTrace();
 		}
 		// check to see if the tester is present
-		//if(tester != null)
-		    //tester.sendValue(t.getValue());
 	}
 
 	//change the length of time in milliseconds
@@ -218,9 +219,7 @@ public class TreeDisplay extends JComponent
 	{
 		this.delay = delay;
 	}
-	
-	/*public void setTester(BinaryTreeTester tester)
-	{
-	    this.tester = tester;
-	}*/
+
+
+
 }

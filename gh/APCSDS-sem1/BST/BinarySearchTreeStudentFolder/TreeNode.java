@@ -1,3 +1,5 @@
+package BinarySearchTreeStudentFolder;
+
 /**
  * A node within a binary tree
  * @author Grant Yang

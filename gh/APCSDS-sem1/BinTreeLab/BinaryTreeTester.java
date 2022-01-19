@@ -29,7 +29,7 @@ public class BinaryTreeTester
         display.setTester (this);
         display.displayTree (t);
 
-        if (util.maxDepth (t) == randomDepth) System.out.println ("maxDepth works");
+        if (util.maxDepth (t) == randomDepth - 1) System.out.println ("maxDepth works");
         else System.out.println ("maxDepth no work");
         TreeNode copyTree = t;
         if (util.sameShape (copyTree, t)) System.out.println ("SameShape works");
@@ -284,7 +284,7 @@ public class BinaryTreeTester
     public static void main (String [] args)
     {
         BinaryTreeTester richard = new BinaryTreeTester();
-        // richard.test();
+         richard.test();
         TreeUtil.twentyQuestions();
     }
 }

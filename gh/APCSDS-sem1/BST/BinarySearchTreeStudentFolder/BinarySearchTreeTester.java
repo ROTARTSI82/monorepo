@@ -4,6 +4,8 @@
  * @author Anu Datar with inputs from Sorjo Baneerjee (class of 2016)
  * @version 1/14/15
  */
+package BinarySearchTreeStudentFolder;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
