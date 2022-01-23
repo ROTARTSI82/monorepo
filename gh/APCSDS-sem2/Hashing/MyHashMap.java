@@ -10,7 +10,10 @@ import java.util.*;
 public class MyHashMap<K, V> implements Map<K, V>
 {
     private static final int NUM_BUCKETS = 5;
-    private ListNode<MapEntry<K, V>>[] buckets;
+
+    // this was originally `ListNode` but I assume List is correct
+    private List<MapEntry<K, V>>[] buckets;
+
     private int size;
 
     /**
@@ -48,7 +51,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     @Override
     public boolean containsKey(Object key)
     {
-
+        return false;
 
 
 
@@ -58,7 +61,7 @@ public class MyHashMap<K, V> implements Map<K, V>
 
     public boolean containsValue(Object value)
     {
-
+        return false;
 
 
 
@@ -69,7 +72,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     public V get(Object key)
     {
 
-
+        return null;
 
 
     }
@@ -78,7 +81,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     public V put(K key, V value)
     {
 
-
+        return null;
 
 
 
@@ -88,7 +91,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     public V remove(Object key)
     {
 
-
+        return null;
 
 
     }
@@ -115,7 +118,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     public Set<K> keySet()
     {
 
-
+        return null;
 
     }
 
@@ -123,7 +126,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     public Collection<V> values()
     {
 
-
+        return null;
 
 
     }
@@ -133,7 +136,7 @@ public class MyHashMap<K, V> implements Map<K, V>
     {
 
 
-
+        return null;
 
     }
 }

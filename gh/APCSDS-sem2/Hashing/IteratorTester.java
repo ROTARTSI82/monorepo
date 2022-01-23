@@ -34,8 +34,9 @@ public class IteratorTester {
                     }
                 }
                 catch (Exception e) {
-                    throw new RuntimeException("There's something wrong with "
-                        + "hasNext(). FIX IT.");
+                    System.err.println("There's something wrong with "
+                            + "hasNext(). FIX IT.");
+                    throw e;
                 }
             }
             else if (n == 1) { //next() and hasNext()
