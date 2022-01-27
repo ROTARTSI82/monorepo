@@ -64,7 +64,7 @@ public class WordGame
      */
     public void jotto()
     {
-        int n = 3;
+        int n = 2;
         text = "";
 
         for (;;)
@@ -76,12 +76,12 @@ public class WordGame
             String guess = "";
 
             int guessNum = 1;
-            while (!guess.equals(secret) && guessNum <= n)
+            while (!guess.equals(secret))
             {
                 display.setText(text);
                 guess = display.getGuess();
 
-                if (guess.equals("pass"))
+                if (guess.equals("pass") && !secret.equals("pass"))
                 {
                     guessNum = 1;
                     text += "OK! The word was " + secret + "\nNow guess my new "

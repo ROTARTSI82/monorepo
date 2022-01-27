@@ -1,6 +1,5 @@
 *.zip
 JavaTown/
-.idea/
 .vscode/
 out/
 *.class
