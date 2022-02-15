@@ -9,7 +9,7 @@ class Object {
 public:
     virtual bool is_true(VM *ctx) const { return false; };
 
-    virtual std::string to_string(VM *ctx) const = 0;
+    virtual std::string to_string(VM *ctx) const { return typeid(this).name(); };
 };
 
 class ExpressionNode {
@@ -21,6 +21,17 @@ public:
 class JumpAddr : public Object {
 public:
     virtual uint8_t *mutate(VM *ctx, uint8_t *pc) const = 0;
+};
+
+class RelativeJump : public JumpAddr {
+public:
+    int64_t diff;
+
+    RelativeJump(int64_t diff) : diff(diff) {}
+
+    uint8_t *mutate(VM *ctx, uint8_t *pc) const override {
+        return pc + diff;
+    }
 };
 
 class String : public Object {
