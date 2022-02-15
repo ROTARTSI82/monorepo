@@ -6,11 +6,29 @@
 int main() {
     VM vm;
 
-    vm.op_stack.emplace_back(std::make_unique<ValueNode>(std::make_shared<CNumber<uint64_t>>(2)));
     vm.op_stack.emplace_back(std::make_unique<ValueNode>(std::make_shared<CNumber<double>>(8)));
 
-    OpCode ins[] = {OpCode::LE, OpCode::ABORT};
+    OpCode ins[100];
     vm.pc = (uint8_t *) ins;
+
+    // todo: 
+
+/*
+
+op stack: [arg to factorial]
+
+dup
+new_int
+1
+
+le
+jmp_if RETURN_1
+
+
+RETURN_1:
+
+
+*/
 
     vm.exec();
 

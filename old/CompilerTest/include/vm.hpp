@@ -22,8 +22,9 @@ enum class OpCode : uint8_t {
 
     CALL,
     RET,
-    
-    NEW_DOUBLE,
+
+    NEW_DOUBLE, NEW_UNSIGNED, NEW_INT, POP,
+    INT_TO_JUMP
 };
 
 

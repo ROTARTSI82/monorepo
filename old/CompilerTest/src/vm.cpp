@@ -30,11 +30,14 @@ void VM::exec() {
             pc = callstack.back().restore;
             callstack.pop_back();
             break;
-        case OpCode::JMP_IF:
-            if (pop()->evaluate(this)->is_true(this)) {
         case OpCode::JMP:
+            pc = std::dynamic_pointer_cast<JumpAddr>(pop()->evaluate(this))->mutate(this, pc);
+            break;
+        case OpCode::JMP_IF:
+            if (pop()->evaluate(this)->is_true(this))
                 pc = std::dynamic_pointer_cast<JumpAddr>(pop()->evaluate(this))->mutate(this, pc);
-            }
+            else
+                pop();
             break;
         case OpCode::GT:
             push(std::make_unique<GTNode>(pop(), pop()));
@@ -48,11 +51,25 @@ void VM::exec() {
         case OpCode::GE:
             push(std::make_unique<GENode>(pop(), pop()));
             break;
+        
+        case OpCode::POP:
+            pop();
+            break;
 
         case OpCode::NEW_DOUBLE:
             push(std::make_unique<ValueNode>(std::make_shared<CNumber<double>>(*reinterpret_cast<double *>(pc))));
             pc += 8;
             break;
+        case OpCode::NEW_UNSIGNED:
+            push(std::make_unique<ValueNode>(std::make_shared<CNumber<uint64_t>>(*reinterpret_cast<uint64_t *>(pc))));
+            pc += 8;
+            break;
+        case OpCode::NEW_INT:
+            push(std::make_unique<ValueNode>(std::make_shared<CNumber<int64_t>>(*reinterpret_cast<int64_t *>(pc))));
+            pc += 8;
+            break;
+        case OpCode::INT_TO_JUMP:
+            push(std::make_unique<ValueNode>(std::make_shared<RelativeJump>(std::dynamic_pointer_cast<GenericCNum>(pop()->evaluate(this))->ival())));
         }
     }
 }
