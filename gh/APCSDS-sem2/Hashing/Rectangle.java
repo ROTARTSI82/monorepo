@@ -11,9 +11,9 @@ public class Rectangle
     private final int width;
 
     /**
-     *
-     * @param len
-     * @param w
+     * Constructs a new rectangle with specific dimensions
+     * @param len Length of rectangle
+     * @param w Width of rectangle
      */
     public Rectangle(int len, int w)
     {
@@ -22,8 +22,8 @@ public class Rectangle
     }
 
     /**
-     *
-     * @return
+     * Getter method for the length
+     * @return Length of the rectangle
      */
     public int getLength()
     {
@@ -31,8 +31,8 @@ public class Rectangle
     }
 
     /**
-     *
-     * @return
+     * Getter method for the width
+     * @return Width of the rectangle
      */
     public int getWidth()
     {
@@ -40,8 +40,8 @@ public class Rectangle
     }
 
     /**
-     *
-     * @return
+     * Converts the rectangle to a human-readable string
+     * @return A string in the format of "<length>x<width>"
      */
     public String toString()
     {
@@ -49,9 +49,10 @@ public class Rectangle
     }
 
     /**
-     *
-     * @param rhs
-     * @return
+     * Checks if this this rectangle is equal to another object
+     * @param rhs Object to compare against
+     * @return True if `this` and `rhs` are rectangles with the
+     *         same dimensions, false otherwise.
      */
     @Override
     public boolean equals(Object rhs)
@@ -61,13 +62,14 @@ public class Rectangle
     }
 
     /**
-     *
-     * @return
+     * Hashes this rectangle to a 32-bit hash code in O(1)
+     * @return Hash code for this rectangle, to be used by HashMap/HashSet
+     *         containers.
      */
     @Override
     public int hashCode()
     {
-        return 0x8125bf11 ^ (length << 8) ^ width ^ (length + width) << 16 ^ (length * width) << 24;
+        return 0x8125bf11 ^ (length << 15) ^ width;
     }
 
 }

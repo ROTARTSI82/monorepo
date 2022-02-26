@@ -21,9 +21,9 @@ public class MyHashMap<K, V> implements Map<K, V>
      */
     public MyHashMap()
     {
-
-
-
+        buckets = new List[NUM_BUCKETS];
+        for (int i = 0; i < NUM_BUCKETS; i++)
+            buckets[i] = new ArrayList<MapEntry<K, V>>();
     }
     
     /**
@@ -51,49 +51,66 @@ public class MyHashMap<K, V> implements Map<K, V>
     @Override
     public boolean containsKey(Object key)
     {
+        List<MapEntry<K, V>> bucket = buckets[toBucketIndex(key)];
+        for (MapEntry<K, V> entry : bucket)
+            if (entry.getKey().equals(key))
+                return true;
         return false;
-
-
-
-
     }
 
 
     public boolean containsValue(Object value)
     {
+        for (List<MapEntry<K, V>> bucket : buckets)
+            for (MapEntry<K, V> entry : bucket)
+                if (entry.getValue().equals(value)) 
+                    return true;
         return false;
-
-
-
-
     }
 
 
     public V get(Object key)
     {
-
+        List<MapEntry<K, V>> bucket = buckets[toBucketIndex(key)];
+        for (MapEntry<K, V> entry : bucket)
+            if (entry.getKey().equals(key))
+                return entry.getValue();
         return null;
-
-
     }
 
 
     public V put(K key, V value)
     {
-
+        List<MapEntry<K, V>> bucket = buckets[toBucketIndex(key)];
+        for (MapEntry<K, V> entry : bucket)
+            if (entry.getKey().equals(key))
+            {
+                V ret = entry.getValue();
+                entry.setValue(value);
+                return ret;
+            }
+        
+        bucket.add(new MapEntry<K, V>(key, value));
+        size++;
         return null;
-
-
-
     }
 
 
     public V remove(Object key)
     {
+        Iterator<MapEntry<K, V>> it = buckets[toBucketIndex(key)].iterator();
+        while (it.hasNext()) 
+        {
+            MapEntry<K, V> next = it.next();
+            if (next.getKey().equals(key))
+            {
+                it.remove();
+                size--;
+                return next.getValue();
+            }
+        }
 
         return null;
-
-
     }
 
 
@@ -110,33 +127,37 @@ public class MyHashMap<K, V> implements Map<K, V>
     {
         for (int i = 0; i < NUM_BUCKETS; i++)
         {
-            buckets[i] = null;
+            buckets[i] = new ArrayList<MapEntry<K, V>>();
         }
     }
 
 
     public Set<K> keySet()
     {
-
-        return null;
-
+        Set<K> ret = new HashSet<K>();
+        for (List<MapEntry<K, V>> bucket : buckets)
+            for (MapEntry<K, V> entry : bucket)
+                ret.add(entry.getKey());
+        return ret;
     }
 
 
     public Collection<V> values()
     {
-
-        return null;
-
-
+        Collection<V> ret = new ArrayList<V>();
+        for (List<MapEntry<K, V>> bucket : buckets)
+            for (MapEntry<K, V> entry : bucket)
+                ret.add(entry.getValue());
+        return ret;
     }
 
     @Override
     public Set<java.util.Map.Entry<K, V>> entrySet()
     {
-
-
-        return null;
-
+        Set<java.util.Map.Entry<K, V>> ret = new HashSet<java.util.Map.Entry<K, V>>();
+        for (List<MapEntry<K, V>> bucket : buckets)
+            for (MapEntry<K, V> entry : bucket)
+                ret.add(entry);
+        return ret;
     }
 }

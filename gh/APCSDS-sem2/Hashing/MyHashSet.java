@@ -156,7 +156,7 @@ public class MyHashSet<E>
         @Override
         public E next()
         {
-            while (!currIt.hasNext())
+            while (!currIt.hasNext() && nextBucket < buckets.length)
                 currIt = buckets[nextBucket++].iterator();
             return currIt.next();
         }
