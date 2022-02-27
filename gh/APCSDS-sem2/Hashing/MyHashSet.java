@@ -98,7 +98,10 @@ public class MyHashSet<E>
         // but the following code is just way cooler
 
         Iterator<E> it = buckets[toBucketIndex(obj)].iterator();
-        while (!it.next().equals(obj));
+        while (!it.next().equals(obj))
+        {
+            it = it;
+        }
         it.remove();
 
         size--;

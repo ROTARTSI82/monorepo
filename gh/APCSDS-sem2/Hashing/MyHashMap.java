@@ -2,8 +2,8 @@ import java.util.*;
 /**
  * MyHashMap acts like a map.
  * 
- * @author  
- * @version 
+ * @author  Grant Yang
+ * @version  2022.02.26
  * @param <K>   the type of key
  * @param <V>   the type of value
  */

@@ -84,6 +84,7 @@ public class Sorter
      * @precondition 0 < nextIndex < a.length
      * @postcondition The subarray a[0..nextIndex+1] is sorted in ascending order
      * @param a Array insert in
+     * @param nextIndex The index to insert into sorted portion to the left
      */
     public void insert(Comparable[] a, int nextIndex)
     {
@@ -101,6 +102,7 @@ public class Sorter
      * repeatedly inserting the next element in the unsorted
      * portion by moving it left until it's in the correct spot.
      * @postcondition The array is sorted in ascending order
+     * @param a Array to sort
      */
     public void insertionSort(Comparable[] a)
     {
@@ -113,6 +115,7 @@ public class Sorter
      * It recursively mergeSorts() the two halves of the array and
      * merges the sorted halves together in O(n)
      * @postcondition a is sorted in ascending order
+     * @param a Array to sort
      */
     public void mergesort(Comparable[] a)
     {
@@ -125,6 +128,9 @@ public class Sorter
      * of the first elements of the two sorted halves into the new merged array.
      * @precondition 0 <= lowIndex < a.length AND lowIndex <= highIndex < a.length
      * @postcondition the subarray a[lowIndex..highIndex+1] is sorted in ascending order
+     * @param a array to sort
+     * @param lowIndex Inclusive lower index of the subarray to sort
+     * @param highIndex Inclusive higher index of the subarray to sort
      */
     private void mergesortHelp(Comparable[] a, int lowIndex, int highIndex)
     {   
@@ -168,7 +174,7 @@ public class Sorter
         for (int i = lowIndex; i <= highIndex; i++)
         {
             if (right > highIndex ||
-                (left <= midIndex && copy[left].compareTo(copy[right]) < 0))
+                    (left <= midIndex && copy[left].compareTo(copy[right]) < 0))
             {
                 a[i] = copy[left];
                 left++;
@@ -202,14 +208,18 @@ public class Sorter
      * Method: quicksortHelp()
      * Usage: quicksortHelp(a, low, high)
      * ------------------------------------------
-     * Quick soritng is a recursive sorting algorithm that sets a pivot point (lowIndex in this case)
-     * and calls partition which rough sort: puts every element less than pivot left of pivot, and every element bigger than pivot right of pivot
+     * Quick soritng is a recursive sorting algorithm that sets a pivot point
+     * (lowIndex in this case)
+     * and calls partition which rough sort: puts every element less than pivot left of pivot,
+     * and every element bigger than pivot right of pivot
      * then quicksortHelp is called on the sections left & right of the pivot point
      * 
      * Base case: section of the array given by low & highIndex has 1 element (high <= low), 
      *         which is "sorted" by definition, therefore nothing is done to it
-     * Recursive reduction: the element at lowIndex is sorted as the pivot using partition() and the index where it lands is returned.
-     *         The array is then divided from (low,pivot-1) & (pivot+1,high) because index pivot is already sorted 
+     * Recursive reduction: the element at lowIndex is sorted as the pivot using partition() and
+     * the index where it lands is returned.
+     *         The array is then divided from (low,pivot-1) & (pivot+1,high) because index pivot is
+     *         already sorted
      *         and quicksortHelp is used again on sections left & right of the pivot element
      * 
      * Postcondition: a[lowIndex] to a[highIndex] are in increasing order
