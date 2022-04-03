@@ -23,6 +23,9 @@ import java.util.ArrayList;
  * <code>Grid</code> provides an interface for a two-dimensional, grid-like
  * environment containing arbitrary objects. <br />
  * This interface is testable on the AP CS A and AB exams.
+ * @author Unknown
+ * @param <E> Type of the objects this grid contains
+ * @version 2022.04.03
  */
 public interface Grid<E>
 {

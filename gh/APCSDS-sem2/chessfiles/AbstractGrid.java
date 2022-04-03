@@ -20,9 +20,18 @@ import java.util.ArrayList;
  * <code>AbstractGrid</code> contains the methods that are common to grid
  * implementations. <br />
  * The implementation of this class is testable on the AP CS AB exam.
+ * @author Cay Horstmann
+ * @param <E> The type the grid contains
+ * @version 2022.04.03
  */
 public abstract class AbstractGrid<E> implements Grid<E>
 {
+    /**
+     * Gets the neighbors of a location
+     * @param loc a location in this grid
+     * @return Gets a list of elements adjacent to a location, relying on
+     *         getOccupiedAdjacentLocations
+     */
     public ArrayList<E> getNeighbors(Location loc)
     {
         ArrayList<E> neighbors = new ArrayList<E>();
@@ -31,6 +40,11 @@ public abstract class AbstractGrid<E> implements Grid<E>
         return neighbors;
     }
 
+    /**
+     *
+     * @param loc a location in this grid
+     * @return Valid adjacent locations
+     */
     public ArrayList<Location> getValidAdjacentLocations(Location loc)
     {
         ArrayList<Location> locs = new ArrayList<Location>();
@@ -46,6 +60,11 @@ public abstract class AbstractGrid<E> implements Grid<E>
         return locs;
     }
 
+    /**
+     * Gets all empty adjacent locations
+     * @param loc a location in this grid
+     * @return An array of locations
+     */
     public ArrayList<Location> getEmptyAdjacentLocations(Location loc)
     {
         ArrayList<Location> locs = new ArrayList<Location>();
@@ -57,6 +76,11 @@ public abstract class AbstractGrid<E> implements Grid<E>
         return locs;
     }
 
+    /**
+     * Gets non-empty adjacent locations
+     * @param loc a location in this grid
+     * @return An array of Locations
+     */
     public ArrayList<Location> getOccupiedAdjacentLocations(Location loc)
     {
         ArrayList<Location> locs = new ArrayList<Location>();
@@ -74,15 +98,15 @@ public abstract class AbstractGrid<E> implements Grid<E>
      * necessarily in any particular order), in the format {loc=obj, loc=obj,
      * ...}
      */
-        public String toString()
+    public String toString()
+    {
+        StringBuilder s = new StringBuilder("{");
+        for (Location loc : getOccupiedLocations())
         {
-            String s = "{";
-            for (Location loc : getOccupiedLocations())
-            {
-                if (s.length() > 1)
-                    s += ", ";
-                s += loc + "=" + get(loc);
-            }
-            return s + "}";
+            if (s.length() > 1)
+                s.append(", ");
+            s.append(loc).append("=").append(get(loc));
         }
+        return s + "}";
+    }
 }

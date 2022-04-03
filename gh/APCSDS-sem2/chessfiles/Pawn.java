@@ -1,19 +1,33 @@
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A pawn from the hit game Chess (En Passant DLC must be purchased separately)
+ * @version 2022.04.03
+ * @author Grant Yang
+ */
 public class Pawn extends Piece
 {
+    /**
+     * Constructions a new pawn
+     * @param c Color of the pawn, either Color.WHITE or Color.BLACK
+     */
     public Pawn(Color c)
     {
         super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_pawn.gif", 1);
     }
 
+    /**
+     * Gets a list of valid destinations for this pawn
+     * @return A list of locations
+     */
     @Override
     public ArrayList<Location> destinations()
     {
         ArrayList<Location> ret = new ArrayList<Location>();
 
-        Location targ = new Location(getLocation().getRow() + (getColor().equals(Color.WHITE) ? -1 : 1), getLocation().getCol());
+        Location targ = new Location(getLocation().getRow() +
+                (getColor().equals(Color.WHITE) ? -1 : 1), getLocation().getCol());
         if (getBoard().isValid(targ) && getBoard().get(targ) == null)
         {
             ret.add(targ);

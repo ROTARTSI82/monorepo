@@ -1,7 +1,9 @@
 import java.util.*;
-public class IteratorTester {
+public class IteratorTester
+{
     private static final boolean DEBUG = true;
-    public static void main(String args[]) {
+    public static void main(String[] args)
+    {
         System.out.println("Ensure that the HashSetTester runs correctly before using this.");
         Set<Integer> real = new HashSet<Integer>();
         MyHashSet<Integer> fake = new MyHashSet<Integer>();
@@ -9,7 +11,8 @@ public class IteratorTester {
         Iterator realIt;
         Iterator fakeIt;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++)
+        {
             int value = random(100);
             if(real.contains(value) || fake.contains(value))
             {
@@ -26,20 +29,25 @@ public class IteratorTester {
             fakeIt = fake.iterator();
 
             int n = random(3);
-            if (n == 0) { //hasNext() only
-                try {
-                    while (realIt.hasNext()) {
+            if (n == 0)
+            { //hasNext() only
+                try
+                {
+                    while (realIt.hasNext())
+                    {
                         realIt.next();
                         fakeIt.next();
                     }
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     System.err.println("There's something wrong with "
                             + "hasNext(). FIX IT.");
                     throw e;
                 }
             }
-            else if (n == 1) { //next() and hasNext()
+            else if (n == 1)
+            { //next() and hasNext()
                 Set<Integer> realSet = new HashSet<Integer>();
                 while (realIt.hasNext())
                     realSet.add((Integer)realIt.next());
@@ -54,13 +62,16 @@ public class IteratorTester {
                     throw new RuntimeException("next() returns the wrong "
                         + "set of numbers");
             }
-            else if (n == 3) { //remove() and hasNext()
-                while (realIt.hasNext()) {
+            else if (n == 3)
+            { //remove() and hasNext()
+                while (realIt.hasNext())
+                {
                     int r1 = (Integer)realIt.next();
                     int r2 = (Integer)fakeIt.next();
 
                     int remove = random(2);
-                    if (remove == 0) {
+                    if (remove == 0)
+                    {
                         debug("removing " + r1 + "/" + r2);
                         realIt.remove();
                         fakeIt.remove();
@@ -81,12 +92,14 @@ public class IteratorTester {
         System.out.println("Congratulations! Your iterator works.");
     }
 
-    private static void debug(String s) {
+    private static void debug(String s)
+    {
         if (DEBUG)
             System.out.println(s);
     }
 
-    private static int random(int n) {
+    private static int random(int n)
+    {
         return (int)(n * Math.random());
     }
 }

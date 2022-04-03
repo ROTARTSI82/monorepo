@@ -1,13 +1,26 @@
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Knight piece in chess
+ * @author Grant Yang
+ * @version 2022.04.03
+ */
 public class Knight extends Piece
 {
+    /**
+     * Makes a new knight
+     * @param c Color of the knight, either Color.WHITE or Color.BLACK
+     */
     public Knight(Color c)
     {
         super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_knight.gif", 3);
     }
 
+    /**
+     * Gets a list of valid destinations to move to
+     * @return A list of locations
+     */
     @Override
     public ArrayList<Location> destinations()
     {

@@ -23,6 +23,9 @@ import java.util.ArrayList;
  * A <code>BoundedGrid</code> is a rectangular grid with a finite number of
  * rows and columns. <br />
  * The implementation of this class is testable on the AP CS AB exam.
+ * @author Unknown
+ * @param <E> Type of the objects this grid contains
+ * @version 2022.04.03
  */
 public class BoundedGrid<E> extends AbstractGrid<E>
 {

@@ -1,13 +1,26 @@
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A king, the most important piece in a game of chess
+ * @author Grant Yang
+ * @version 2022.04.03
+ */
 public class King extends Piece
 {
+    /**
+     * Constructs a new king
+     * @param c Color of king, either Color.WHITE or Color.BLACK
+     */
     public King(Color c)
     {
         super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_king.gif", 1000);
     }
 
+    /**
+     * Gets a list of possible destinations for this king
+     * @return An array of all locations this king can move to
+     */
     public ArrayList<Location> destinations()
     {
         ArrayList<Location> ret = new ArrayList<>();

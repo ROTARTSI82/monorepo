@@ -1,6 +1,11 @@
 import java.awt.*;
 import java.util.*;
 
+/**
+ * An abstract Piece in a chess game (e.g. pawn, rook, queen, etc)
+ * @author Grant Yang
+ * @version 2022.04.03
+ */
 public abstract class Piece
 {
     //the board this piece is on
@@ -18,7 +23,12 @@ public abstract class Piece
     //the approximate value of this piece in a game of chess
     private int value;
 
-    //constructs a new Piece with the given attributes.
+    /**
+     * constructs a new Piece with the given attributes
+     * @param col Color, either Color.WHITE or Color.BLACK
+     * @param fileName File of the image to use for the piece
+     * @param val Point value of the piece in pawns
+     */
     public Piece(Color col, String fileName, int val)
     {
         color = col;
@@ -26,31 +36,46 @@ public abstract class Piece
         value = val;
     }
 
-    //returns the board this piece is on
+    /**
+     * returns the board this piece is on
+     * @return The board object this piece is on
+     */
     public Board getBoard()
     {
         return board;
     }
 
-    //returns the location of this piece on the board
+    /**
+     * returns the location of this piece on the board
+     * @return The Location of this piece
+     */
     public Location getLocation()
     {
         return location;
     }
 
-    //returns the color of this piece
+    /**
+     * returns the color of this piece
+     * @return Color of the piece
+     */
     public Color getColor()
     {
         return color;
     }
 
-    //returns the name of the file used to display this piece
+    /**
+     * returns the name of the file used to display this piece
+     * @return The path of the file used for the image
+     */
     public String getImageFileName()
     {
         return imageFileName;
     }
 
-    //returns a number representing the relative value of this piece
+    /**
+     * returns a number representing the relative value of this piece
+     * @return Value of this piece in pawns
+     */
     public int getValue()
     {
         return value;
@@ -126,14 +151,31 @@ public abstract class Piece
         board.put(location, this);
     }
 
+    /**
+     * Checks if a location is a valid destination for the piece
+     * @param dest Location to check
+     * @return True if it is a valid Location on the board that is
+     *         either empty or contains a piece of the opposite color.
+     */
     public boolean isValidDestination(Location dest)
     {
         return board.isValid(dest) &&
                (board.get(dest) == null || !board.get(dest).getColor().equals(color));
     }
 
+    /**
+     * Function for getting the valid destination Locations
+     * for the valid moves of this piece
+     * @return An array of the possible destinations
+     */
     public abstract ArrayList<Location> destinations();
 
+    /**
+     * Sweeps in a direction, adding all contiguous locations in that direction
+     * to the array
+     * @param dests Array to add the locations
+     * @param direction Direction to cast a ray in, a constant from the Location class.
+     */
     public void sweep(ArrayList<Location> dests, int direction)
     {
         for (Location cur = getLocation().getAdjacentLocation(direction);

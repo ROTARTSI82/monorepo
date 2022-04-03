@@ -9,6 +9,7 @@ import java.util.Set;
  * @author joelmanning
  * Tester for the Hashing lab. There are no user serviceable parts inside.
  * Changing anything will void your warranty.
+ * @version 2022.04.03
  */
 public class HashMapTester
 {
@@ -73,13 +74,15 @@ public class HashMapTester
                     throw new RuntimeException("remove(" + integer
                             + ") returned " + fakeRect + " and should return "
                             + realRect);
-            } else {
+            }
+            else
+            {
                 debug("get(" + integer + ")");
                 Rectangle realRect = real.get(integer);
                 Rectangle fakeRect = real.get(integer);
                 if (fakeRect != realRect)
-                    throw new RuntimeException("get(" + integer + ") returned " + fakeRect + " and should return "
-                            + realRect);
+                    throw new RuntimeException("get(" + integer + ") returned " + fakeRect +
+                            " and should return " + realRect);
             }
 
             int realInt = real.size();

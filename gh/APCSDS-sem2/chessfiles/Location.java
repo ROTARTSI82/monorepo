@@ -22,6 +22,8 @@
  * A <code>Location</code> object represents the row and column of a location
  * in a two-dimensional grid. <br />
  * The API of this class is testable on the AP CS A and AB exams.
+ * @author Unknown
+ * @version 2022.04.03
  */
 public class Location implements Comparable
 {

@@ -1,31 +1,49 @@
 import java.awt.*;
 import java.util.*;
 
-// Represesents a rectangular game board, containing Piece objects.
+/**
+ * Represents a rectangular game board, containing Piece objects.
+ * @author Grant Yang
+ * @author Unknown
+ * @version 2022.04.03
+ */
 public class Board extends BoundedGrid<Piece>
 {
     private boolean isWhiteTurn;
 
-    // Constructs a new Board with the given dimensions
+    /**
+     * Constructs a new Board with the given dimensions
+     */
     public Board()
     {
         super(8, 8);
     }
 
+    /**
+     * Sets whose turn it is
+     * @param turn True if it's whites turn, false for black
+     */
     public void setIsWhiteTurn(boolean turn)
     {
         isWhiteTurn = turn;
     }
 
+    /**
+     * Make a move on the board
+     * @param move Which piece to move and where to move it to
+     */
     public void executeMove(Move move)
     {
         move.getPiece().moveTo(move.getDestination());
-//        get(move.getSource()).moveTo(move.getDestination());
     }
 
-    // Precondition:  move has already been made on the board
-    // Postcondition: piece has moved back to its source,
-    //                and any captured piece is returned to its location
+    /**
+     * Unmake a move on the board
+     * Precondition:  move has already been made on the board
+     * Postcondition: piece has moved back to its source,
+     *                and any captured piece is returned to its location
+     * @param move Move that was just made with executeMove()
+     */
     public void undoMove(Move move)
     {
         Piece piece = move.getPiece();
@@ -39,6 +57,11 @@ public class Board extends BoundedGrid<Piece>
             victim.putSelfInGrid(piece.getBoard(), dest);
     }
 
+    /**
+     * Get a list of all possible moves
+     * @param color The side to move. Either Color.WHITE or Color.BLACK
+     * @return A list of all pseudo-legal moves
+     */
     public ArrayList<Move> allMoves(Color color)
     {
         ArrayList<Move> ret = new ArrayList<Move>();
@@ -56,6 +79,12 @@ public class Board extends BoundedGrid<Piece>
         return ret;
     }
 
+    /**
+     * Load a partial fen onto the board
+     * @param fen The first part of a forsyth-edwards notation string,
+     *            omitting side to move, castling rights, en passant targets,
+     *            halfmove and fullmove counters, etc.
+     */
     public void loadFen(String fen)
     {
         int cur = 63;
@@ -99,6 +128,12 @@ public class Board extends BoundedGrid<Piece>
         }
     }
 
+    /**
+     * Construct a partial fen from the board state
+     * @return A forsyth-edwards notation string containing only
+     *         board state and side to move, omitting en passant targets,
+     *         castling rights, halfmove/fullmove counters, etc.
+     */
     public String getFen()
     {
         int inRow = 0;
