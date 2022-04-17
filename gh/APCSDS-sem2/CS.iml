@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Hashing" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Sorting" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/chessfiles" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/foobar" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

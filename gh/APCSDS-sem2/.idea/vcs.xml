@@ -2,5 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chessfiles/Scacus" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chessfiles/Scacus/dep/Fairy-Stockfish" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chessfiles/Scacus/dep/Stockfish" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chessfiles/Scacus/dep/lc0" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chessfiles/Scacus/dep/lc0/libs/lczero-common" vcs="Git" />
   </component>
 </project>
