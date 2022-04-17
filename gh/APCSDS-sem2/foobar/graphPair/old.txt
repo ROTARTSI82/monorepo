@@ -1,0 +1,25 @@
+    
+        /* while (avail.size() > 1) {
+            int min = -1;
+            int mv = 999999;
+            
+            for (int i : avail)
+                if (conOf[i] < mv) { min = i; mv = conOf[i]; }
+            
+            int min2 = -1;
+            mv = 9999999;
+            for (int i = 0; i < list.length; i++) {
+                if (i == min || !mat[min][i] || !avail.contains(i)) continue;
+                
+                if (conOf[i] < mv) { min2 = i; mv = conOf[i]; }
+            }
+            
+            avail.remove(avail.indexOf(min));
+            // Remove the min and keep going
+            // IDEA: Instead, move it to the end of the queue
+            if (min2 == -1) continue;
+            
+            avail.remove(avail.indexOf(min2));
+            
+            paired += 2;
+        } */
