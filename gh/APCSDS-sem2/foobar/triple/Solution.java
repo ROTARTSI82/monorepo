@@ -1,3 +1,5 @@
+package triple;
+
 public class Solution {
     
     private static int nDivide(int[] l, int ind) {

@@ -1,3 +1,5 @@
+package dfs;
+
 public class Solution {
     private final int explored[][];
     private final int map[][];

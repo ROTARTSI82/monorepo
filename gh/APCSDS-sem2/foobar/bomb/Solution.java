@@ -1,3 +1,5 @@
+package bomb;
+
 import java.math.BigInteger;
 public class Solution {
     
