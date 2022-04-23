@@ -1,5 +1,7 @@
 package nebula;
 
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -9,6 +11,7 @@ public class Main {
         System.out.println("4=" + Solution.solution(new boolean[][]{{true, false, true},
                 {false, true, false},
                 {true, false, true}}));
+
 
         System.out.println("------------------------------");
 
@@ -26,5 +29,21 @@ public class Main {
                 {true, true, false, false, false, false, true, true, true, false},
                 {true, true, false, false, false, false, false, false, false, true},
                 {false, true, false, false, false, false, true, true, false, false}}));
+
+//        Random rand = new Random();
+//        for (int i = 0; i < 4096; i++) {
+//            System.out.println("------------------------------");
+//
+//            int w = 3 + rand.nextInt(48);
+//            int h = 3 + rand.nextInt(7);
+//
+//            boolean[][] inp = new boolean[h][w];
+//            for (int r = 0; r < h; r++)
+//                for (int c = 0; c < w; c++)
+//                    inp[r][c] = rand.nextBoolean();
+//
+//            System.out.printf("w=%d, h=%d\n", w, h);
+//            System.out.println(Solution.solution(inp));
+//        }
     }
 }

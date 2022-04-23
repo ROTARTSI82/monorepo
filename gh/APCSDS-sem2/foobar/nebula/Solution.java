@@ -5,17 +5,13 @@ import java.util.HashMap;
 
 public class Solution {
 
-    private static class RowCache {
-        public HashMap<Long, Integer> cache = new HashMap<>();
-    }
-
     private final boolean[][] expectedOut;
     private final long[] current;
-    private final RowCache[] cache;
+    private final HashMap<Long, Integer> cache = new HashMap<>();
     private final int nCols;
     private final int maxInd;
 
-    public int numIters = 0;
+    public int numIters = 0; // DBG
 
     public Solution(boolean[][] g) {
         this.expectedOut = g;
@@ -26,16 +22,12 @@ public class Solution {
 
         current = new long[g.length + 1];
         Arrays.fill(current, 0);
-
-        cache = new RowCache[g.length + 1];
-        for (int i = 0; i < g.length + 1; i++)
-            cache[i] = new RowCache();
     }
 
     public int solve(int ind) {
-        numIters++;
+        numIters++; // DBG
 
-        if (ind == maxInd)
+        if (ind >= maxInd)
             return 1;
 
         int r = ind / nCols;
@@ -46,16 +38,18 @@ public class Solution {
         long key = current[r] & ~dreamMask; // this is what the point of damascus
         if (r > 0) {
             key |= current[r - 1] & dreamMask;
-            key |= (current[r - 1] & (1L << (c-1))) << (52-c);
+            if (c > 0) {
+                key |= (current[r - 1] & (1L << (c - 1))) << (52 - c);
+            }
         }
 
         key |= ((long) ind) << 53;
 
-        Integer cHit = cache[r].cache.get(key);
+        Integer cHit = cache.get(key);
         if (cHit != null) return cHit;
 
         int ret = 0;
-        current[r] &= ~(1L << c);
+        current[r] |= 1L << c;
         for (long i = 0; i < 2; i++) {
             if (r > 0 && c > 0) {
                 long ident = (current[r-1] >> (c-1)) & 0b11;
@@ -70,19 +64,31 @@ public class Solution {
                 ret += solve(ind + 1);
             }
 
-            current[r] |= 1L << c; // set to true for 2nd iteration
+            current[r] &= ~(1L << c); // set to false for 2nd iteration
         }
 
-        cache[r].cache.put(key, ret);
+        cache.put(key, ret);
 
         return ret;
     }
 
     public static int solution(boolean[][] g) {
-        Solution sol = new Solution(g);
-        int ret = sol.solve(0);
-//        System.out.println("Solved in " + sol.numIters + " its");
-        return ret;
+
+        if (g[0].length > g.length) {
+            // transpose g so that left to right is shorter.
+            // this is so that solve() recognizes when something doesn't work
+            // quicker, as once solve() selects a value for a cell it has to
+            // loop through the entire row to get to the next row to see if the values
+            // it selected worked
+
+            boolean[][] tmp = g;
+            g = new boolean[tmp[0].length][tmp.length];
+            for (int r = 0; r < g.length; r++)
+                for (int c = 0; c < g[0].length; c++)
+                    g[r][c] = tmp[c][r];
+        }
+
+        return new Solution(g).solve(0);
     }
 }
 
