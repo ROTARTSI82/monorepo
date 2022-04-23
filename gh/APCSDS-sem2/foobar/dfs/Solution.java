@@ -27,10 +27,9 @@ public class Solution {
                 } else if (canRM) {
                     dfs(r, c, false); // sets cache
                 }
-            } 
+            }
             
             return 1 + cache[exploreLevel - 1][r][c];
-            
         }
         
         return 40*40;
@@ -63,7 +62,8 @@ public class Solution {
         return ret;
     }
     
-    public static int solution(int[][] map) {
+    public static int solution(int[][] map)
+    {
         return new Solution(map).dfs(0, 0, true);
     }
 }
