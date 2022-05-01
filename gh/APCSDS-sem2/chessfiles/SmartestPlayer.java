@@ -5,7 +5,7 @@ import java.awt.*;
  * @author Grant Yang
  * @version 2022.04.03
  */
-public class SmartestPlayer extends SmarterPlayer
+public class SmartestPlayer extends SmartPlayer
 {
     /**
      * Constructs a new SmartestPlayer

@@ -50,9 +50,14 @@ public class UCIEngine extends Player
         Scanner scan = new Scanner(proc.getInputStream());
 
         String s = "";
-        while (s.indexOf("bestmove") != 0)
+        while (s.indexOf("bestmove") != 0 && scan.hasNext())
         {
-            s = scan.nextLine();
+            try {
+                s = scan.nextLine();
+                System.out.println(s);
+            } catch (Exception e) {
+                // ignore
+            }
         }
         System.out.println(s);
 

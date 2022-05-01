@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * A player that allows the user to select a move using the GUI
@@ -33,10 +34,37 @@ public class HumanPlayer extends Player
     public Move nextMove()
     {
         ArrayList<Move> moves = getBoard().allMoves(getColor());
+        rmIllegalMoves(moves.iterator(), getBoard(),
+                getColor() == Color.WHITE ? Color.BLACK : Color.WHITE);
+
         Move m = display.selectMove();
         for (Move leg : moves)
-            if (leg.equals(m))
-                return m;
+            if (leg.getDestination().equals(m.getDestination()) &&
+                    leg.getPiece().getLocation().equals(m.getPiece().getLocation()))
+                return leg;
         return nextMove();
+    }
+
+    /**
+     * Filters out all illegal moves from a container
+     * @param it Iterator into the container from which
+     *           illegal moves should be removed
+     * @param board The current state of the board
+     * @param color The opposing color to the side currently making moves
+     */
+    public static void rmIllegalMoves(Iterator<Move> it, Board board, Color color)
+    {
+        while (it.hasNext())
+        {
+            Move test = it.next();
+            board.executeMove(test);
+            for (Move i : board.allMoves(color))
+                if (board.get(i.getDestination()) instanceof King)
+                {
+                    it.remove();
+                    break;
+                }
+            board.undoMove(test);
+        }
     }
 }

@@ -34,7 +34,30 @@ public class Board extends BoundedGrid<Piece>
      */
     public void executeMove(Move move)
     {
-        move.getPiece().moveTo(move.getDestination());
+        if (move instanceof Promotion promotion)
+        {
+            try
+            {
+                promotion.getType().getConstructor(new Class[]{Color.class})
+                        .newInstance(move.getPiece().getColor())
+                        .putSelfInGrid(this, move.getDestination());
+
+                System.out.println("Promotion!");
+
+                move.getPiece().removeSelfFromGrid();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            move.getPiece().moveTo(move.getDestination());
+
+            if (move instanceof Castling castling)
+                executeMove(castling.getRookMove());
+        }
     }
 
     /**
@@ -51,10 +74,24 @@ public class Board extends BoundedGrid<Piece>
         Location dest = move.getDestination();
         Piece victim = move.getVictim();
 
-        piece.moveTo(source);
+        if (move instanceof Promotion)
+        {
+            piece.putSelfInGrid(this, source);
+            remove(dest);
 
-        if (victim != null)
-            victim.putSelfInGrid(piece.getBoard(), dest);
+            if (victim != null)
+                victim.putSelfInGrid(piece.getBoard(), dest);
+        }
+        else
+        {
+            piece.moveTo(source);
+
+            if (victim != null)
+                victim.putSelfInGrid(piece.getBoard(), dest);
+
+            if (move instanceof Castling castling)
+                undoMove(castling.getRookMove());
+        }
     }
 
     /**
@@ -72,7 +109,43 @@ public class Board extends BoundedGrid<Piece>
                 Piece p = get(new Location(r, c));
                 if (p != null && p.getColor().equals(color))
                     for (Location d : p.destinations())
-                        ret.add(new Move(p, d));
+                    {
+                        if (p instanceof Pawn && (d.getRow() == 0 || d.getRow() == 7))
+                            ret.add(new Promotion(p, d, Queen.class));
+                        else
+                            ret.add(new Move(p, d));
+                    }
+
+                if (p instanceof King)
+                {
+                    int KSDIR = Location.EAST;
+                    int QSDIR = Location.WEST;
+
+                    Location dook_ks = p.getLocation().getAdjacentLocation(KSDIR);
+                    Location dook_qs = p.getLocation().getAdjacentLocation(QSDIR);
+
+                    Location king_ks = dook_ks.getAdjacentLocation(KSDIR);
+                    Location king_qs = dook_qs.getAdjacentLocation(QSDIR);
+
+                    ArrayList<Location> ks = new ArrayList<>();
+                    ArrayList<Location> qs = new ArrayList<>();
+                    p.sweep(ks, KSDIR);
+                    p.sweep(qs, QSDIR);
+
+                    Location nook_qs = king_qs.getAdjacentLocation(QSDIR).getAdjacentLocation(QSDIR);
+                    Location nook_ks = king_ks.getAdjacentLocation(KSDIR);
+
+                    if (qs.size() == 3 && isValid(nook_qs) &&
+                            get(nook_qs) instanceof Rook rook && rook.getColor() == p.getColor())
+                    {
+                        ret.add(new Castling(p, king_qs, new Move(get(nook_qs), dook_qs)));
+                    }
+                    if (ks.size() == 2 && isValid(nook_ks) &&
+                            get(nook_ks) instanceof Rook rook && rook.getColor() == p.getColor())
+                    {
+                        ret.add(new Castling(p, king_ks, new Move(get(nook_ks), dook_ks)));
+                    }
+                }
             }
         }
 

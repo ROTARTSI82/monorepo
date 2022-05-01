@@ -12,7 +12,7 @@ public class Queen extends Piece
      * Constructs a new Queen
      * @param c Side of the queen, either Color.BLACK or Color.WHITE
      */
-    Queen(Color c)
+    public Queen(Color c)
     {
         super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_queen.gif", 9);
     }
