@@ -13,7 +13,7 @@ public class Bishop extends Piece
      * Is also used in Queen class.
      */
     public static final int[] SWEEPS = {Location.NORTHEAST, Location.NORTHWEST, Location.SOUTHEAST,
-            Location.SOUTHWEST};
+                                        Location.SOUTHWEST};
 
     /**
      * Make a new black or white bishop
@@ -21,7 +21,7 @@ public class Bishop extends Piece
      */
     Bishop(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_bishop.gif", 3);
+         super(c, "_bishop.gif", 3);
     }
 
     /**

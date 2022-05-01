@@ -32,7 +32,9 @@ public abstract class Piece
     public Piece(Color col, String fileName, int val)
     {
         color = col;
-        imageFileName = fileName;
+        if (col.equals(Color.WHITE))
+            imageFileName = "white" + fileName;
+        else imageFileName = "black" + fileName;
         value = val;
     }
 

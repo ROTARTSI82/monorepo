@@ -52,10 +52,13 @@ public class UCIEngine extends Player
         String s = "";
         while (s.indexOf("bestmove") != 0 && scan.hasNext())
         {
-            try {
+            try
+            {
                 s = scan.nextLine();
                 System.out.println(s);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 // ignore
             }
         }

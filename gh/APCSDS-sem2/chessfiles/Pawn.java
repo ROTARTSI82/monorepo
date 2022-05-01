@@ -14,7 +14,7 @@ public class Pawn extends Piece
      */
     public Pawn(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_pawn.gif", 1);
+        super(c, "_pawn.gif", 1);
     }
 
     /**
@@ -26,8 +26,12 @@ public class Pawn extends Piece
     {
         ArrayList<Location> ret = new ArrayList<Location>();
 
-        Location targ = new Location(getLocation().getRow() +
-                (getColor().equals(Color.WHITE) ? -1 : 1), getLocation().getCol());
+        int off;
+        if (getColor().equals(Color.WHITE))
+            off = -1;
+        else off = 1;
+        Location targ = new Location(getLocation().getRow() + off, getLocation().getCol());
+
         if (getBoard().isValid(targ) && getBoard().get(targ) == null)
         {
             ret.add(targ);

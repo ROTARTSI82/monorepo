@@ -34,8 +34,10 @@ public class HumanPlayer extends Player
     public Move nextMove()
     {
         ArrayList<Move> moves = getBoard().allMoves(getColor());
-        rmIllegalMoves(moves.iterator(), getBoard(),
-                getColor() == Color.WHITE ? Color.BLACK : Color.WHITE);
+        
+        if (getColor().equals(Color.WHITE))
+            rmIllegalMoves(moves.iterator(), getBoard(), Color.BLACK);
+        else rmIllegalMoves(moves.iterator(), getBoard(), Color.WHITE);
 
         Move m = display.selectMove();
         for (Move leg : moves)

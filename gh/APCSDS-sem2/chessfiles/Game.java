@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -25,17 +24,17 @@ public class Game
     {
         int sel = -1;
         Scanner scan = new Scanner(System.in);
-        while (sel < 0 || sel > 5)
+        while (sel < 0 || sel > 6)
         {
-            System.out.println("""
-                    Select opponent:
-                    \t0) Stockfish
-                    \t1) C++ Engine (Scacus)
-                    \t2) Human Player
-                    \t3) Random Player
-                    \t4) Smart Player (depth=0)
-                    \t5) Smarter Player (depth=1)
-                    \t6) Smartest Player (depth=5)""");
+            System.out.println(
+                    "Select opponent:\n"+
+                    "\t0) Stockfish\n"+
+                    "\t1) C++ Engine (Scacus)\n"+
+                    "\t2) Human Player\n"+
+                    "\t3) Random Player\n"+
+                    "\t4) Smart Player (depth=0)\n"+
+                    "\t5) Smarter Player (depth=1)\n"+
+                    "\t6) Smartest Player (depth=5)\n");
             System.out.print("Enter you selection [0-6]: ");
             try
             {
@@ -49,8 +48,8 @@ public class Game
         }
 
         Board board = new Board();
-//        board.loadFen("rnbkqbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBKQBNR");
-        board.loadFen("r3k2r/pppppppp/8/8/1nbq1bn1/8/PPPPPPPP/RNBQKBNR");
+        board.loadFen("rnbkqbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBKQBNR");
+//        board.loadFen("r3k2r/pppppppp/8/8/1nbq1bn1/8/PPPPPPPP/RNBQKBNR");
 
         System.out.println("FEN: " + board.getFen());
 
@@ -58,13 +57,13 @@ public class Game
 
         Player white = new HumanPlayer(board, "You", Color.WHITE, display);
         Player black = new Player[]{
-                new UCIEngine(board, "stockfish", Color.BLACK),
-                new UCIEngine(board, "./Scacus/build/Scacus", Color.BLACK),
-                new HumanPlayer(board, "Black", Color.BLACK, display),
-                new RandomPlayer(board, "Random - Black", Color.BLACK),
-                new SmartPlayer(board, "SmartPlayer (d=0) - Black", Color.BLACK),
-                new SmarterPlayer(board, "SmarterPlayer (d=1) - Black", Color.BLACK),
-                new SmartestPlayer(board, "SmartestPlayer (d=5) - Black", Color.BLACK),
+            new UCIEngine(board, "stockfish", Color.BLACK),
+            new UCIEngine(board, "./Scacus/build/Scacus", Color.BLACK),
+            new HumanPlayer(board, "Black", Color.BLACK, display),
+            new RandomPlayer(board, "Random - Black", Color.BLACK),
+            new SmartPlayer(board, "SmartPlayer (d=0) - Black", Color.BLACK),
+            new SmarterPlayer(board, "SmarterPlayer (d=1) - Black", Color.BLACK),
+            new SmartestPlayer(board, "SmartestPlayer (d=5) - Black", Color.BLACK),
         }[sel];
 
         display.showBoard();
@@ -94,7 +93,11 @@ public class Game
 
 
         boolean inCheck = false;
-        ArrayList<Move> moves = board.allMoves(player.getColor() == Color.WHITE ? Color.BLACK : Color.WHITE);
+        ArrayList<Move> moves;
+        if (player.getColor().equals(Color.WHITE))
+            moves = board.allMoves(Color.BLACK);
+        else moves = board.allMoves(Color.WHITE);
+
         for (Move i : board.allMoves(player.getColor()))
         {
             if (board.get(i.getDestination()) instanceof King)
@@ -111,12 +114,21 @@ public class Game
         gameOver |= moves.isEmpty();
         if (gameOver)
         {
-            System.out.println(inCheck ? "CHECKMATE" : "STALEMATE!");
             if (inCheck)
-                display.setTitle("Game Over - " +
-                        (player.getColor() == Color.WHITE ? "White" : "Black") + " wins!");
+            {
+                String winner;
+                if (player.getColor().equals(Color.WHITE))
+                    winner = "White";
+                else winner = "Black";
+
+                System.out.println("CHECKMATE");
+                display.setTitle("Game Over - " + winner + " wins!");
+            }
             else
+            {
+                System.out.println("STALEMATE!");
                 display.setTitle("Game Over - Draw");
+            }
         }
 
         display.showBoard();
@@ -142,9 +154,9 @@ public class Game
      */
     public static void play(Board board, BoardDisplay display, Player white, Player black)
     {
-        for (turn = true; nextTurn(board, display, turn ? white : black); turn ^= true)
-        {
-            // do nothing
-        }
+        Player next = white;
+        for (turn = true; nextTurn(board, display, next); turn ^= true)
+            if (turn) next = black;
+            else next = white;
     }
 }

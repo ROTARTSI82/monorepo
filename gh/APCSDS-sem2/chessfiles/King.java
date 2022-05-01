@@ -14,7 +14,7 @@ public class King extends Piece
      */
     public King(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_king.gif", 1000);
+        super(c, "_king.gif", 1000);
     }
 
     /**
@@ -23,7 +23,7 @@ public class King extends Piece
      */
     public ArrayList<Location> destinations()
     {
-        ArrayList<Location> ret = new ArrayList<>();
+        ArrayList<Location> ret = new ArrayList<Location>();
         Location o = getLocation();
         int r = o.getRow() - 1;
         int c = o.getCol() - 1;

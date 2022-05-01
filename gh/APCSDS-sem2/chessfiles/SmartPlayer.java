@@ -46,8 +46,10 @@ public class SmartPlayer extends Player
             for (int c = 0; c < 8; c++)
             {
                 Piece p = getBoard().get(new Location(r, c));
-                if (p != null)
-                    acc += (p.getColor().equals(col) ? 1 : -1) * p.getValue();
+                if (p != null && p.getColor().equals(col))
+                    acc += p.getValue();
+                else if (p != null)
+                    acc -= p.getValue();
             }
         return acc;
     }
@@ -67,10 +69,15 @@ public class SmartPlayer extends Player
      */
     private int search(int alpha, int beta, boolean isWhite, int depth)
     {
-        if (depth <= 0)
-            return score(isWhite ? Color.WHITE : Color.BLACK);
+        if (depth <= 0 && isWhite)
+            return score(Color.WHITE);
+        else if (depth <= 0)
+            return score(Color.BLACK);
 
-        ArrayList<Move> moves = getBoard().allMoves(isWhite ? Color.WHITE : Color.BLACK);
+        ArrayList<Move> moves;
+        if (isWhite)
+            moves = getBoard().allMoves(Color.WHITE);
+        else moves = getBoard().allMoves(Color.BLACK);
 
         int val = Integer.MIN_VALUE + 8;
 

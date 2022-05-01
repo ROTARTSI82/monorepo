@@ -14,7 +14,7 @@ public class Queen extends Piece
      */
     public Queen(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_queen.gif", 9);
+        super(c, "_queen.gif", 9);
     }
 
     /**

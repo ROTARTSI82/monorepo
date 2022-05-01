@@ -13,7 +13,7 @@ public class Rook extends Piece
      * Also used in Queen class
      */
     public static final int[] SWEEPS = {Location.NORTH, Location.SOUTH,
-            Location.WEST, Location.EAST};
+                                        Location.WEST, Location.EAST};
 
     /**
      * Constructs a new Rook
@@ -21,7 +21,7 @@ public class Rook extends Piece
      */
     Rook(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_rook.gif", 5);
+        super(c,  "_rook.gif", 5);
     }
 
     /**

@@ -29,7 +29,7 @@ import java.util.ArrayList;
  */
 public class BoundedGrid<E> extends AbstractGrid<E>
 {
-    private Object[][] occupantArray; // the array storing the grid elements
+    private final Object[][] occupantArray; // the array storing the grid elements
 
     /**
      * Constructs an empty bounded grid with the given dimensions.
@@ -46,11 +46,19 @@ public class BoundedGrid<E> extends AbstractGrid<E>
         occupantArray = new Object[rows][cols];
     }
 
+    /**
+     * Getter method for the number of rows in the grid.
+     * @return The number of rows
+     */
     public int getNumRows()
     {
         return occupantArray.length;
     }
 
+    /**
+     * Getter method for the number of columns in the grid.
+     * @return The number of columns
+     */
     public int getNumCols()
     {
         // Note: according to the constructor precondition, numRows() > 0, so
@@ -58,12 +66,23 @@ public class BoundedGrid<E> extends AbstractGrid<E>
         return occupantArray[0].length;
     }
 
+    /**
+     * Checks that a Location is valid and in-bounds
+     * to the grid in O(1)
+     * @param loc Location to verify
+     * @return true if the location is on the grid, false otherwise
+     */
     public boolean isValid(Location loc)
     {
         return 0 <= loc.getRow() && loc.getRow() < getNumRows()
                 && 0 <= loc.getCol() && loc.getCol() < getNumCols();
     }
 
+    /**
+     * Builds a list of non-null locations in O(n) with n
+     * being the number of unique locations within the grid.
+     * @return A list of occupied Location objects in this grid
+     */
     public ArrayList<Location> getOccupiedLocations()
     {
         ArrayList<Location> theLocations = new ArrayList<Location>();
@@ -83,6 +102,13 @@ public class BoundedGrid<E> extends AbstractGrid<E>
         return theLocations;
     }
 
+    /**
+     * Retrieves a value at a specific location in the grid in O(1)
+     * @precondition loc is a valid Location
+     * @throws RuntimeException if preconditions are not met
+     * @param loc Location to query the value of
+     * @return The value stored at the location, null if there is none.
+     */
     public E get(Location loc)
     {
         if (!isValid(loc))
@@ -91,6 +117,15 @@ public class BoundedGrid<E> extends AbstractGrid<E>
         return (E) occupantArray[loc.getRow()][loc.getCol()]; // unavoidable warning
     }
 
+    /**
+     * Puts an item into the grid at the specified location in O(1)
+     * @precondition The location specified is valid
+     * @throws RuntimeException if preconditions are not met
+     * @postcondition The grid would contain obj at the specified location
+     * @param loc Location to put the object at
+     * @param obj The value to put at the location
+     * @return The previous value at that location, null if there was none.
+     */
     public E put(Location loc, E obj)
     {
         if (!isValid(loc))
@@ -105,6 +140,13 @@ public class BoundedGrid<E> extends AbstractGrid<E>
         return oldOccupant;
     }
 
+    /**
+     * Removes an object from the grid at a specified location in O(1)
+     * @precondition The location specified is valid
+     * @throws RuntimeException if preconditions are not met
+     * @param loc Location to clear
+     * @return The value of the previous value at loc, null if there was none.
+     */
     public E remove(Location loc)
     {
         if (!isValid(loc))

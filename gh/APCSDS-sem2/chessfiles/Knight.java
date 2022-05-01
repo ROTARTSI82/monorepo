@@ -14,7 +14,7 @@ public class Knight extends Piece
      */
     public Knight(Color c)
     {
-        super(c, (c.equals(Color.WHITE) ? "white" : "black") + "_knight.gif", 3);
+        super(c, "_knight.gif", 3);
     }
 
     /**
@@ -24,7 +24,7 @@ public class Knight extends Piece
     @Override
     public ArrayList<Location> destinations()
     {
-        ArrayList<Location> ret = new ArrayList<>();
+        ArrayList<Location> ret = new ArrayList<Location>();
         Location o = getLocation();
         int r = o.getRow() - 2;
         int c = o.getCol() - 2;

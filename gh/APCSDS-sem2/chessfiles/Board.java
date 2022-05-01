@@ -34,15 +34,14 @@ public class Board extends BoundedGrid<Piece>
      */
     public void executeMove(Move move)
     {
-        if (move instanceof Promotion promotion)
+        if (move instanceof Promotion)
         {
+            Promotion promotion = (Promotion) move;
             try
             {
                 promotion.getType().getConstructor(new Class[]{Color.class})
                         .newInstance(move.getPiece().getColor())
                         .putSelfInGrid(this, move.getDestination());
-
-                System.out.println("Promotion!");
 
                 move.getPiece().removeSelfFromGrid();
             }
@@ -55,8 +54,11 @@ public class Board extends BoundedGrid<Piece>
         {
             move.getPiece().moveTo(move.getDestination());
 
-            if (move instanceof Castling castling)
+            if (move instanceof Castling)
+            {
+                Castling castling = (Castling) move;
                 executeMove(castling.getRookMove());
+            }
         }
     }
 
@@ -89,8 +91,11 @@ public class Board extends BoundedGrid<Piece>
             if (victim != null)
                 victim.putSelfInGrid(piece.getBoard(), dest);
 
-            if (move instanceof Castling castling)
+            if (move instanceof Castling)
+            {
+                Castling castling = (Castling) move;
                 undoMove(castling.getRookMove());
+            }
         }
     }
 
@@ -118,32 +123,35 @@ public class Board extends BoundedGrid<Piece>
 
                 if (p instanceof King)
                 {
-                    int KSDIR = Location.EAST;
-                    int QSDIR = Location.WEST;
+                    int ksdir = Location.EAST;
+                    int qsdir = Location.WEST;
 
-                    Location dook_ks = p.getLocation().getAdjacentLocation(KSDIR);
-                    Location dook_qs = p.getLocation().getAdjacentLocation(QSDIR);
+                    Location dookKs = p.getLocation().getAdjacentLocation(ksdir);
+                    Location dookQs = p.getLocation().getAdjacentLocation(qsdir);
 
-                    Location king_ks = dook_ks.getAdjacentLocation(KSDIR);
-                    Location king_qs = dook_qs.getAdjacentLocation(QSDIR);
+                    Location kingKs = dookKs.getAdjacentLocation(ksdir);
+                    Location kingQs = dookQs.getAdjacentLocation(qsdir);
 
-                    ArrayList<Location> ks = new ArrayList<>();
-                    ArrayList<Location> qs = new ArrayList<>();
-                    p.sweep(ks, KSDIR);
-                    p.sweep(qs, QSDIR);
+                    ArrayList<Location> ks = new ArrayList<Location>();
+                    ArrayList<Location> qs = new ArrayList<Location>();
+                    p.sweep(ks, ksdir);
+                    p.sweep(qs, qsdir);
 
-                    Location nook_qs = king_qs.getAdjacentLocation(QSDIR).getAdjacentLocation(QSDIR);
-                    Location nook_ks = king_ks.getAdjacentLocation(KSDIR);
+                    Location nookQs = kingQs.getAdjacentLocation(qsdir)
+                                             .getAdjacentLocation(qsdir);
+                    Location nookKs = kingKs.getAdjacentLocation(ksdir);
 
-                    if (qs.size() == 3 && isValid(nook_qs) &&
-                            get(nook_qs) instanceof Rook rook && rook.getColor() == p.getColor())
+                    if (qs.size() == 3 && isValid(nookQs) && get(nookQs) instanceof Rook)
                     {
-                        ret.add(new Castling(p, king_qs, new Move(get(nook_qs), dook_qs)));
+                        Rook rook = (Rook) get(nookKs);
+                        if (rook.getColor() == p.getColor())
+                            ret.add(new Castling(p, kingQs, new Move(get(nookQs), dookQs)));
                     }
-                    if (ks.size() == 2 && isValid(nook_ks) &&
-                            get(nook_ks) instanceof Rook rook && rook.getColor() == p.getColor())
+                    if (ks.size() == 2 && isValid(nookKs) && get(nookKs) instanceof Rook)
                     {
-                        ret.add(new Castling(p, king_ks, new Move(get(nook_ks), dook_ks)));
+                        Rook rook = (Rook) get(nookKs);
+                        if (rook.getColor() == p.getColor())
+                            ret.add(new Castling(p, kingKs, new Move(get(nookKs), dookKs)));
                     }
                 }
             }
@@ -169,33 +177,29 @@ public class Board extends BoundedGrid<Piece>
                 continue;
             }
 
-            Color col = c >= 'a' ? Color.WHITE : Color.BLACK;
-            if (c >= 'a') c -= 32;
+            Color col;
+            if (c >= 'a')
+            {
+                c -= 32;
+                col = Color.WHITE;
+            }
+            else col = Color.BLACK;
 
             Location l = new Location(cur / 8, cur % 8);
-            switch (c)
-            {
-                case 'K':
-                    new King(col).putSelfInGrid(this, l);
-                    break;
-                case 'Q':
-                    new Queen(col).putSelfInGrid(this, l);
-                    break;
-                case 'N':
-                    new Knight(col).putSelfInGrid(this, l);
-                    break;
-                case 'B':
-                    new Bishop(col).putSelfInGrid(this, l);
-                    break;
-                case 'R':
-                    new Rook(col).putSelfInGrid(this, l);
-                    break;
-                case 'P':
-                    new Pawn(col).putSelfInGrid(this, l);
-                    break;
-                default:
-                    continue;
-            }
+            if (c == 'K')
+                new King(col).putSelfInGrid(this, l);
+            else if (c == 'Q')
+                new Queen(col).putSelfInGrid(this, l);
+            else if (c == 'N')
+                new Knight(col).putSelfInGrid(this, l);
+            else if (c == 'B')
+                new Bishop(col).putSelfInGrid(this, l);
+            else if (c == 'R')
+                new Rook(col).putSelfInGrid(this, l);
+            else if (c == 'P')
+                new Pawn(col).putSelfInGrid(this, l);
+            else
+                continue;
 
             cur--;
         }
@@ -224,7 +228,12 @@ public class Board extends BoundedGrid<Piece>
                         inRow = 0;
                     }
                     Piece p = get(l);
-                    char offset = p.getColor().equals(Color.WHITE) ? '\00' : '\40';
+
+                    char offset;
+                    if (p.getColor().equals(Color.WHITE))
+                        offset = '\00';
+                    else offset = '\40';
+
                     if (p instanceof Rook)
                         b.append((char) ('R' + offset));
                     else if (p instanceof King)
@@ -254,7 +263,10 @@ public class Board extends BoundedGrid<Piece>
         }
 
         b.append(' ');
-        b.append(isWhiteTurn ? 'w' : 'b');
+
+        if (isWhiteTurn)
+            b.append('w');
+        else b.append('b');
 
         return b.toString();
     }
