@@ -36,6 +36,6 @@ impl Token {
 
 impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-        write!(f, "Token<{}>[\"{}\"]", self.token_type, self.string)
+        write!(f, "{}[\"{}\"]", self.token_type, self.string)
     }
 }

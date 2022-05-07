@@ -6,8 +6,8 @@ mod token;
 use document::*;
 use scanner::Scanner;
 use std::fs;
+use std::io::Error;
 use std::io::ErrorKind::Other;
-use std::io::{Error, ErrorKind};
 
 fn main() -> Result<(), Error> {
     if std::env::args().len() < 2 {
@@ -42,7 +42,7 @@ fn main() -> Result<(), Error> {
                 false
             }
         })
-        .map(|x| LinguisticFeatures::from_file(x.path()).map(|x| (x.accumulate(&weights), x)))
+        .map(|x| LinguisticFeatures::from_file(x.path()))
         .filter(|x| match x {
             Err(e) => {
                 eprintln!("Failed to load database element: {}", e);
@@ -50,23 +50,24 @@ fn main() -> Result<(), Error> {
             }
             v => {
                 let v = v.as_ref().unwrap();
-                println!("Loaded: {:#?} = {}\n", v.1, v.0);
+                println!("Loaded: {:#?}\n", v);
                 true
             }
         })
         .map(|x| x.unwrap())
-        .collect::<Vec<(f64, LinguisticFeatures)>>();
+        .collect::<Vec<LinguisticFeatures>>();
 
     for result in std::env::args()
         .skip(1)
-        .map(|x| -> Result<f64, Error> {
+        .map(|x| -> Result<LinguisticFeatures, Error> {
             let doc = Document::new(Scanner::new(Box::new(fs::File::open(&x)?)));
-            let feats = doc.get_features();
-            let id = feats.accumulate(&weights);
 
             println!("\n\n{:-^1$}", x, 100);
-            println!("Trying to identify: {:#?} = {}\n", feats, id);
-            Ok(id)
+
+            let feats = doc.get_features();
+            // println!("Trying to identify: {:#?} = {}\n", feats, doc);
+            println!("Trying to identify: {:#?}\n", feats);
+            Ok(feats)
         })
         .filter(|x| match x {
             Err(e) => {
@@ -81,19 +82,16 @@ fn main() -> Result<(), Error> {
             let best = database
                 .iter()
                 .map(|ret| {
-                    let diff = ret.0 - id;
+                    let err = ret.rmse(&id, &weights);
 
-                    println!("Candidate {: <30} delta={}", ret.1.get_name(), diff);
+                    println!("Candidate {: <30} delta={}", ret.get_name(), err);
 
-                    (&ret.1, ret.0, diff.abs())
+                    (ret, err)
                 })
-                .reduce(|a, b| if a.2 < b.2 { a } else { b })
+                .reduce(|a, b| if a.1 < b.1 { a } else { b })
                 .ok_or_else(|| Error::new(Other, "reduce() failed??"))?;
 
-            println!(
-                "\nBEST MATCH: {:#?} = {} (delta={})",
-                best.0, best.1, best.2
-            );
+            println!("\nBEST MATCH: {:#?} (delta={})", best.0, best.1,);
             Ok(())
         })
     {

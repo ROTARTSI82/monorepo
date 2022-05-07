@@ -5,3 +5,8 @@ out/
 *.jar
 */.DS_Store
 .DS_Store
+*.ctxt
+*.d
+*/target
+cmake-build-debug
+*.o

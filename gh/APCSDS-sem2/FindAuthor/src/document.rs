@@ -17,11 +17,7 @@ pub struct Document {
 #[derive(Debug)]
 pub struct LinguisticFeatures {
     name: String,
-    avg_word_len: f64,
-    type_token: f64,     // number of unique words / total words
-    hapax_legomana: f64, // number of words appearing only once / total words
-    words_per_sent: f64,
-    sent_complexity: f64, // average number of phrases per sentence
+    vec: [f64; 5],
 }
 
 impl Document {
@@ -73,13 +69,23 @@ impl Document {
         }
 
         let words = words as f64;
+
+        println!("Characters: {}", chars);
+        println!("Words: {}", words);
+        println!("Phrases: {}", phrases);
+        println!("Sentences: {}", self.internal.borrow().len());
+        println!("Unique Words: {}", wordcount.len());
+        println!("One-Off Words: {}", one_off_words);
+
         LinguisticFeatures {
             name: "UNKNOWN".to_string(),
-            avg_word_len: chars as f64 / words,
-            type_token: wordcount.len() as f64 / words,
-            hapax_legomana: one_off_words as f64 / words,
-            words_per_sent: words as f64 / self.internal.borrow().len() as f64,
-            sent_complexity: phrases as f64 / self.internal.borrow().len() as f64,
+            vec: [
+                chars as f64 / words,
+                wordcount.len() as f64 / words,
+                one_off_words as f64 / words,
+                words as f64 / self.internal.borrow().len() as f64,
+                phrases as f64 / self.internal.borrow().len() as f64,
+            ],
         }
     }
 }
@@ -89,31 +95,31 @@ impl LinguisticFeatures {
         &self.name
     }
     pub fn avg_word_len(&self) -> f64 {
-        self.avg_word_len
+        self.vec[0]
     }
     pub fn type_token(&self) -> f64 {
-        self.type_token
+        self.vec[1]
     }
     pub fn hapax_legomana(&self) -> f64 {
-        self.hapax_legomana
+        self.vec[2]
     }
     pub fn words_per_sent(&self) -> f64 {
-        self.words_per_sent
+        self.vec[3]
     }
     pub fn sent_complexity(&self) -> f64 {
-        self.sent_complexity
+        self.vec[4]
     }
 
-    pub fn accumulate(&self, weights: &[f64]) -> f64 {
+    pub fn rmse(&self, rhs: &LinguisticFeatures, weights: &[f64]) -> f64 {
         if weights.len() != 5 {
             panic!("accumulate() must be called with array of 5 floats");
         }
 
-        self.avg_word_len * weights[0]
-            + self.type_token * weights[1]
-            + self.hapax_legomana * weights[2]
-            + self.words_per_sent * weights[3]
-            + self.sent_complexity * weights[4]
+        ((0..5)
+            .map(|i| weights[i] * (self.vec[i] - rhs.vec[i]).powi(2))
+            .sum::<f64>()
+            / 5.0)
+            .sqrt()
     }
 
     pub fn from_file(name: PathBuf) -> Result<LinguisticFeatures, std::io::Error> {
@@ -151,11 +157,13 @@ impl LinguisticFeatures {
 
         Ok(LinguisticFeatures {
             name,
-            avg_word_len: get_float(1)?,
-            type_token: get_float(2)?,
-            hapax_legomana: get_float(3)?,
-            words_per_sent: get_float(4)?,
-            sent_complexity: get_float(5)?,
+            vec: [
+                get_float(1)?,
+                get_float(2)?,
+                get_float(3)?,
+                get_float(4)?,
+                get_float(5)?,
+            ],
         })
     }
 }
@@ -180,7 +188,6 @@ impl Document {
     }
 
     fn parse_phrase(&mut self) -> Phrase {
-        // TODO: Should digit be included here? Should Unknown be included?
         let mut ret = Phrase::new();
         while !matches!(
             self.peek().get_type(),
@@ -225,6 +232,19 @@ impl Document {
 
 impl std::fmt::Display for Document {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-        write!(f, "{}", self.internal)
+        // write!(f, "{}", self.internal)
+
+        writeln!(f, "DOCUMENT")?;
+        for sent in self.internal.borrow() {
+            writeln!(f, "\tSENTENCE")?;
+            for phrase in sent.borrow() {
+                writeln!(f, "\t\tPHRASE")?;
+                for word in phrase.borrow() {
+                    writeln!(f, "\t\t\t{}", word.contents())?;
+                }
+            }
+        }
+
+        Ok(())
     }
 }

@@ -2,6 +2,9 @@
 
 #include <numeric>
 #include <cstdint>
+#include <vector>
+#include <iostream>
+#include <algorithm>
 
 typedef uint_fast16_t T3Bitboard;
 typedef uint_fast8_t T3Square;
@@ -69,7 +72,8 @@ public:
         } else if (o & to_bb(r * 3 + c)) {
           std::cout << "O ";
         } else {
-          std::cout << std::to_string(r * 3 + c) << ' ';
+//          std::cout << std::to_string(r * 3 + c) << ' ';
+            std::cout << ". ";
         }
       }
       std::cout << '\n';
@@ -111,7 +115,7 @@ public:
           if (!is_legal(mov)) continue;
           make_move(mov);
           depth++;
-          value = std::max(value, -eval(-beta, -alpha));
+          value = std::max((int16_t) value, (int16_t) -eval(-beta, -alpha));
           depth--;
           unmake_move(mov);
 

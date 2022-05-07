@@ -12,6 +12,8 @@
       <sourceFolder url="file://$MODULE_DIR$/Sorting" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/chessfiles" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/foobar" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FindAuthor/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/FindAuthor/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
