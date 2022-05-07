@@ -4,8 +4,9 @@ use crate::token::TokenType::*;
 use crate::Scanner;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::BufRead;
+use std::io::{BufRead, Read};
 use std::io::{BufReader, Error, ErrorKind};
+use std::path::PathBuf;
 
 pub struct Document {
     internal: GenericGroup<Sentence>,
@@ -115,10 +116,16 @@ impl LinguisticFeatures {
             + self.sent_complexity * weights[4]
     }
 
-    pub fn from_file(name: &str) -> Result<LinguisticFeatures, std::io::Error> {
+    pub fn from_file(name: PathBuf) -> Result<LinguisticFeatures, std::io::Error> {
         let lines = BufReader::new(File::open(name)?)
             .lines()
-            .filter(|x| x.is_ok())
+            .filter(|x| match x {
+                Ok(_) => true,
+                Err(e) => {
+                    eprintln!("Failed to get line from file: {}", e);
+                    false
+                }
+            })
             .map(|x| x.unwrap())
             .take(6)
             .collect::<Vec<String>>();
