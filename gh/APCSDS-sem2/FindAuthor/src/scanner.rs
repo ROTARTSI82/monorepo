@@ -96,7 +96,7 @@ impl Scanner {
                 Token::new(Word, ret.to_lowercase())
             }
 
-            c @ _ => Token::new(TokenType::Unknown, c.to_string()),
+            c => Token::new(TokenType::Unknown, c.to_string()),
         }
     }
 

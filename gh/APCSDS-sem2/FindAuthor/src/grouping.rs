@@ -47,13 +47,12 @@ impl<T: 'static + Display + Clone> Display for GenericGroup<T> {
             } else {
                 "UNKNOWN"
             }
-            .to_string()
         )?;
 
         let mut first = true;
         for x in &self.children {
             if !first {
-                write!(f, ", ");
+                write!(f, ", ")?;
             }
 
             x.fmt(f)?;

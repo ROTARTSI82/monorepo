@@ -116,7 +116,7 @@ impl LinguisticFeatures {
     }
 
     pub fn from_file(name: &str) -> Result<LinguisticFeatures, std::io::Error> {
-        let mut lines = BufReader::new(File::open(name)?)
+        let lines = BufReader::new(File::open(name)?)
             .lines()
             .filter(|x| x.is_ok())
             .map(|x| x.unwrap())
