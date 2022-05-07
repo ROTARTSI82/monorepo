@@ -46,8 +46,13 @@ public class SmartPlayer extends Player
             for (int c = 0; c < 8; c++)
             {
                 Piece p = getBoard().get(new Location(r, c));
+
                 if (p != null && p.getColor().equals(col))
+                {
                     acc += p.getValue();
+                    if (p instanceof King)
+                        acc += p.getValue();
+                }
                 else if (p != null)
                     acc -= p.getValue();
             }

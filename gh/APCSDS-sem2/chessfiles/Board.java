@@ -143,7 +143,7 @@ public class Board extends BoundedGrid<Piece>
 
                     if (qs.size() == 3 && isValid(nookQs) && get(nookQs) instanceof Rook)
                     {
-                        Rook rook = (Rook) get(nookKs);
+                        Rook rook = (Rook) get(nookQs);
                         if (rook.getColor() == p.getColor())
                             ret.add(new Castling(p, kingQs, new Move(get(nookQs), dookQs)));
                     }

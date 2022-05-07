@@ -25,7 +25,7 @@ public class Scanner
     private String currentChar;
     private boolean endOfFile;
     // define symbolic constants for each type of token
-    public static enum TOKEN_TYPE{WORD, END_OF_SENTENCE, END_OF_FILE, 
+    public static enum TOKEN_TYPE{WORD, EndOfSentence, END_OF_FILE,
         END_OF_PHRASE, DIGIT, UNKNOWN};
     /**
      * Constructor for Scanner objects.  The Reader object should be one of
