@@ -1,26 +1,29 @@
+//! Defines types for parsing [`Document`]s and
+//! calculating the [`LinguisticFeatures`] of the document
+//! for author identification.
+
 use crate::grouping::*;
 use crate::token::Token;
 use crate::token::TokenType::*;
 use crate::Scanner;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, Read};
-use std::io::{BufReader, Error, ErrorKind};
-use std::path::PathBuf;
 
+use crate::features::LinguisticFeatures;
+
+/// Represents a parsed document with a hierarchy of
+/// sentences, phrases, and words, which is stored as a tree.
 pub struct Document {
     internal: GenericGroup<Sentence>,
     scanner: Scanner,
     token: Token,
 }
 
-#[derive(Debug)]
-pub struct LinguisticFeatures {
-    name: String,
-    vec: [f64; 5],
-}
-
 impl Document {
+    /// Constructs a new [`Document`] from a [`Scanner`] over an
+    /// arbitrary input stream.
+    ///
+    /// NOTE: This function is `O(n)` with `n` being the size
+    /// of the input stream.
     pub fn new(mut scanner: Scanner) -> Document {
         let mut ret = Document {
             internal: GenericGroup::<Sentence>::new(),
@@ -31,10 +34,16 @@ impl Document {
         ret
     }
 
+    /// Obtains an immutable reference to the internal list of
+    /// Sentences which make up the text.
+    #[allow(dead_code)]
     pub fn borrow(&self) -> &Vec<Sentence> {
         self.internal.borrow()
     }
 
+    /// Computes the [`LinguisticFeatures`] (various statistical parameters)
+    /// associated with the document in amortized `O(n)`
+    /// with n being the length of the document.
     pub fn get_features(&self) -> LinguisticFeatures {
         let mut wordcount = HashMap::<String, u32>::new();
 
@@ -77,108 +86,41 @@ impl Document {
         println!("Unique Words: {}", wordcount.len());
         println!("One-Off Words: {}", one_off_words);
 
-        LinguisticFeatures {
-            name: "UNKNOWN".to_string(),
-            vec: [
+        LinguisticFeatures::new(
+            "UNKNOWN".to_string(),
+            [
                 chars as f64 / words,
                 wordcount.len() as f64 / words,
                 one_off_words as f64 / words,
                 words as f64 / self.internal.borrow().len() as f64,
                 phrases as f64 / self.internal.borrow().len() as f64,
             ],
-        }
-    }
-}
-
-impl LinguisticFeatures {
-    pub fn get_name(&self) -> &str {
-        &self.name
-    }
-    pub fn avg_word_len(&self) -> f64 {
-        self.vec[0]
-    }
-    pub fn type_token(&self) -> f64 {
-        self.vec[1]
-    }
-    pub fn hapax_legomana(&self) -> f64 {
-        self.vec[2]
-    }
-    pub fn words_per_sent(&self) -> f64 {
-        self.vec[3]
-    }
-    pub fn sent_complexity(&self) -> f64 {
-        self.vec[4]
-    }
-
-    pub fn rmse(&self, rhs: &LinguisticFeatures, weights: &[f64]) -> f64 {
-        if weights.len() != 5 {
-            panic!("accumulate() must be called with array of 5 floats");
-        }
-
-        ((0..5)
-            .map(|i| weights[i] * (self.vec[i] - rhs.vec[i]).powi(2))
-            .sum::<f64>()
-            / 5.0)
-            .sqrt()
-    }
-
-    pub fn from_file(name: PathBuf) -> Result<LinguisticFeatures, std::io::Error> {
-        let lines = BufReader::new(File::open(name)?)
-            .lines()
-            .filter(|x| match x {
-                Ok(_) => true,
-                Err(e) => {
-                    eprintln!("Failed to get line from file: {}", e);
-                    false
-                }
-            })
-            .map(|x| x.unwrap())
-            .take(6)
-            .collect::<Vec<String>>();
-
-        let name = lines
-            .first()
-            .ok_or_else(|| Error::new(ErrorKind::Other, "Author Field missing in from_file"))?
-            .clone();
-
-        let get_float = |n: usize| -> Result<f64, std::io::Error> {
-            match lines
-                .get(n)
-                .ok_or_else(|| Error::new(ErrorKind::Other, "Missing Field in from_file"))?
-                .parse::<f64>()
-            {
-                Ok(x) => Ok(x),
-                Err(e) => Err(Error::new(
-                    ErrorKind::Other,
-                    format!("Missing field: {}", e),
-                )),
-            }
-        };
-
-        Ok(LinguisticFeatures {
-            name,
-            vec: [
-                get_float(1)?,
-                get_float(2)?,
-                get_float(3)?,
-                get_float(4)?,
-                get_float(5)?,
-            ],
-        })
+        )
     }
 }
 
 impl Document {
+    /// Gets the next token about to be returned without consuming it
+    /// or advancing the internal `scanner` forward. This function is `O(1)`.
     fn peek(&self) -> &Token {
         &self.token
     }
 
+    /// Gets the next token in the input stream and consumes it,
+    /// advancing the internal `scanner` forward. This function is `O(1)`.
     fn next_token(&mut self) -> Token {
         let mut ret = self.scanner.next_token();
         std::mem::swap(&mut self.token, &mut ret);
         ret // ret should now contain the old value of self.token
     }
 
+    /// Consumes the next token if the next token is equal in value to
+    /// the token `t` specified. This function is `O(1)`
+    ///
+    /// # Panics
+    /// This function always panics if the next token is NOT the same as the token passed in
+    /// to this function.
+    #[allow(dead_code)]
     fn eat(&mut self, t: Token) {
         if t == self.token {
             self.next_token();
@@ -187,6 +129,11 @@ impl Document {
         }
     }
 
+    /// Reads the internal input source until a complete phrase is received,
+    /// returning the next phrase found in the text. This function is `O(n)`.
+    ///
+    /// This function will consume tokens until a [`EndOfPhrase`], [`EndOfSentence`],
+    /// or [`EndOfFile`] is reached.
     fn parse_phrase(&mut self) -> Phrase {
         let mut ret = Phrase::new();
         while !matches!(
@@ -202,6 +149,11 @@ impl Document {
         ret
     }
 
+    /// Reads the internal input source until a full sentence is received,
+    /// returning the next sentence found in the text. This function is `O(n)`.
+    ///
+    /// This function will consume tokens until a [`EndOfFile`] or [`EndOfSentence`]
+    /// is reached.
     fn parse_sentence(&mut self) -> Sentence {
         let mut ret = Sentence::new();
 
@@ -216,6 +168,8 @@ impl Document {
         ret
     }
 
+    /// Reads the entire input source and loads the contents into this document.
+    /// This function will keep reading until an [`EndOfFile`]. This function is `O(n)`.
     fn parse_document(&mut self) {
         while self.peek().get_type() != EndOfFile {
             while self.peek().get_type() == EndOfSentence {

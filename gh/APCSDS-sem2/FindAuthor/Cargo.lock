@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "FindAuthor"
-version = "0.1.0"
+name = "find_author"
+version = "1.0.0"

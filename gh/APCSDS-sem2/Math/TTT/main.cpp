@@ -62,6 +62,7 @@ int main() {
     TicTacToe game;
 
     std::unordered_set<uint64_t> unique;
+    std::unordered_set<uint64_t> winning;
 
     std::function<void(void)> run = [&]() {
         std::unordered_set<uint64_t> positions;
@@ -75,7 +76,7 @@ int main() {
             search(p.vert_flip());
         };
 
-        Position pos{game.x, game.o, game.is_x_turn};
+        const Position pos{game.x, game.o, game.is_x_turn};
         search(pos);
 
 //        positions.insert(pos.get());
@@ -89,8 +90,11 @@ int main() {
 
         if (std::none_of(positions.begin(), positions.end(), [&](uint64_t v) { return unique.count(v) > 0; })) {
             unique.insert(pos.get());
-            game.print();
-            std::cout << '\n';
+            if (game.state != T3State::ONGOING) {
+                winning.insert(pos.get());
+                game.print();
+                std::cout << '\n';
+            }
         }
 
         if (game.state != T3State::ONGOING) return;
@@ -105,6 +109,6 @@ int main() {
 
     run();
 
-    std::cout << unique.size() << '\n';
+    std::cout << winning.size() << '\n';
 }
 

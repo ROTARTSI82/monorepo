@@ -1,14 +1,34 @@
+//! Identifies the author of a text based on certain statistics.
+//! The statistics of known authors are to be stored in the
+//! SignatureFiles directory.
+//!
+//! Author: Grant Yang
+//!
+//! Version: v1.0 (2022.05.12)
+
 mod document;
+mod features;
 mod grouping;
 mod scanner;
 mod token;
 
 use document::*;
+use features::LinguisticFeatures;
 use scanner::Scanner;
 use std::fs;
 use std::io::Error;
 use std::io::ErrorKind::Other;
 
+/// Entry point into the program.
+/// This program is a command-line utility, and it must have
+/// at least one file name passed in as an argument.
+/// It must also be run in the same directory that contains
+/// the `SignatureFile`s folder.
+///
+/// # Errors
+/// An [`std::io::Error`] will be returned if not enough arguments are
+/// passed in, or if the database is empty
+///
 fn main() -> Result<(), Error> {
     if std::env::args().len() < 2 {
         eprintln!("ERROR! Usage: FindAuthor [files]");
@@ -89,11 +109,12 @@ fn main() -> Result<(), Error> {
                     (ret, err)
                 })
                 .reduce(|a, b| if a.1 < b.1 { a } else { b })
-                .ok_or_else(|| Error::new(Other, "reduce() failed??"))?;
+                .ok_or_else(|| Error::new(Other, "Database was empty"))?;
 
-            println!("\nBEST MATCH: {:#?} (delta={})", best.0, best.1,);
+            println!("\nBEST MATCH: {:#?} (delta={})", best.0, best.1);
             Ok(())
         })
+        .collect::<Vec<Result<(), Error>>>()
     {
         result?;
     }
