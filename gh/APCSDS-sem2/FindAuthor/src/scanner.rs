@@ -52,16 +52,20 @@ impl Scanner {
     ///
     /// See documentation of [`Token`] for the variants that can be produced.
     pub fn next_token(&mut self) -> Token {
+        while self.has_next() && Scanner::is_whitespace(self.peek()) {
+            self.consume_next();
+        }
+
         match self.next() {
             _ if !self.has_next() => Token::new(EndOfFile, "".to_string()),
             c @ '0'..='9' => Token::new(Digit, c.to_string()),
             c @ ('.' | '!' | '?') => Token::new(EndOfSentence, c.to_string()),
-            c @ (',' | ':' | ';') => Token::new(EndOfPhrase, c.to_string()),
+            c @ (',' | ':' | ';' | '—') => Token::new(EndOfPhrase, c.to_string()),
             c @ ('a'..='z' | 'A'..='Z') => {
                 let mut ret = c.to_string();
                 while self.has_next()
                     && match self.peek() {
-                        c @ ('a'..='z' | 'A'..='Z' | '0'..='9' | '-' | '\'' | '_') => {
+                        c @ ('a'..='z' | 'A'..='Z' | '0'..='9' | '-' | '\'' | '_' | '‘' | '’') => {
                             ret += &c.to_string();
                             true
                         }
@@ -138,6 +142,6 @@ impl Scanner {
     /// Checks if a character `c` is whitespace (`' '`, `'\t'`, or `'\n'`)
     #[allow(dead_code)]
     fn is_whitespace(c: char) -> bool {
-        matches!(c, ' ' | '\t' | '\n')
+        matches!(c, ' ' | '\t' | '\n' | '\r')
     }
 }

@@ -111,6 +111,7 @@ impl Document {
     fn next_token(&mut self) -> Token {
         let mut ret = self.scanner.next_token();
         std::mem::swap(&mut self.token, &mut ret);
+        // println!("{}", ret);
         ret // ret should now contain the old value of self.token
     }
 
@@ -141,7 +142,7 @@ impl Document {
             EndOfPhrase | EndOfSentence | EndOfFile
         ) {
             let next = self.next_token();
-            if next.get_type() == Word {
+            if next.get_type() == Word && !next.contents().is_empty() {
                 ret.add(next)
             }
         }
@@ -162,7 +163,10 @@ impl Document {
                 self.next_token();
             }
 
-            ret.add(self.parse_phrase());
+            let phrase = self.parse_phrase();
+            if !phrase.borrow().is_empty() {
+                ret.add(phrase);
+            }
         }
 
         ret
@@ -179,7 +183,9 @@ impl Document {
             // can't combine into 1 line since rust complains about multiple
             // mutable borrows ????
             let sent = self.parse_sentence();
-            self.internal.add(sent);
+            if !sent.borrow().is_empty() {
+                self.internal.add(sent);
+            }
         }
     }
 }

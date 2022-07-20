@@ -53,7 +53,7 @@ impl std::fmt::Display for TokenType {
 }
 
 /// A token appearing in a text
-#[derive(PartialEq, Hash, Clone)]
+#[derive(PartialEq, Hash, Clone, Debug)]
 pub struct Token {
     token_type: TokenType,
     string: String,
