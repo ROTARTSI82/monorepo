@@ -1,0 +1,286 @@
+/// This file contains all the classes from the JavaTown Objects Lab
+
+/// This is the Calculator class from the roleplay exercise.
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Calculator
+{
+    /// Trivial default constructor
+    public Calculator() {}
+
+    /// Adds two numbers and returns their sum
+    /// @param a First number
+    /// @param b Second number
+    /// @return The sum
+    public add(a, b)
+    {
+        return a + b;
+    }
+
+    /// Subtracts two numbers
+    /// @param a Number to subtract from (lhs)
+    /// @param b Amount to subtract (rhs)
+    /// @return The difference
+    public subtract(a, b)
+    {
+        return a - b;
+    }
+
+    /// Multiplies two numbers together
+    /// @param a First number to multiply
+    /// @param b Second number to multiply
+    /// @return The product
+    public multiply(a, b)
+    {
+        return a * b;
+    }
+
+    /// Computes the sqaure of a number
+    /// @param x Number to square
+    /// @return x^2
+    public square(x)
+    {
+        return x * x;
+    }
+
+    /// Checks if a number is odd
+    /// @param n Number to check
+    /// @return True if odd, false otherwise
+    public isOdd(n)
+    {
+        return n % 2 != 0;
+    }
+
+    /// Returns the maximum of two numbers
+    /// @param a First number
+    /// @param b Second number
+    /// @return The max
+    public max(a, b)
+    {
+        if (a > b) return a; else return b;
+    }
+
+    /// Returns to absolute value of a number
+    /// @param n Number to compute the abs of
+    /// @return |n|
+    public abs(n)
+    {
+        if (n < 0) return -n; else return n;
+    }
+}
+
+
+/// This Box class wraps primitives, boxing them (hence the name)
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Box
+{
+    /// Internal primitive
+    private value;
+
+    /// Construct a new box
+    public Box(v)
+    {
+        value = v;
+    }
+
+    /// Getter for the internal value
+    /// @return The current value
+    public getValue()
+    {
+        return value;
+    }
+
+    /// Setter for the internal value
+    /// @postcondition The value of the box is updated to n
+    /// @param n New value
+    public setValue(n)
+    {
+        value = n;
+    }
+}
+
+
+/// This Counter class counts the number of times that it's been ticked since the last reset()
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Counter
+{
+    /// Private instance variable-- the number of times this has been ticked
+    private count;
+
+    /// Trivial default constructor
+    public Counter()
+    {
+        count = 0;
+    }
+
+    /// Tick the counter, increasing the count
+    /// @postcondition The count is incremented
+    public tick()
+    {
+        count = count + 1;
+    }
+
+    /// Get the number of times the counter has been ticked
+    /// @return The number of times the counter has been ticked
+    public getCount()
+    {
+        return count;
+    }
+
+    /// Reset the counter back to 0
+    /// @postcondition The count is reset to 0
+    public reset()
+    {
+        count = 0;
+    }
+}
+
+
+/// This Flipper class generates alternating boolean values
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Flipper
+{
+    /// Private instance var: the current value
+    private val;
+
+    /// Trivial default constructor
+    public Flipper()
+    {
+        val = false;
+    }
+
+    /// Retrieve the next value in the generator
+    /// @postcondition Flips the flipper
+    /// @return Returns alternating boolean values each call, starting with TRUE on the 1st call
+    public next()
+    {
+        val = !val;
+        return val;
+    }
+}
+
+
+/// This Fibber class generates the fibonacci sequence
+/// @version 2021.08.30
+/// @author Grant Yang
+public class Fibber
+{
+    /// Private instance vars storing the next number about to be emitted and the last value returned
+    private upcoming;
+    private prev;
+
+    /// Trivial default constructor
+    public Fibber()
+    {
+        upcoming = 1;
+        prev = 0;
+    }
+
+    /// Generate the next value of the fibonacci sequence
+    /// @postcondition This Fibber object is updated to the next number in the sequence
+    /// @return The fibonacci sequence starting with 1, 1, 2, 3, ...
+    public next()
+    {
+        ret = upcoming;
+        upcoming = upcoming + prev;
+        prev = ret;
+        return ret;
+    }
+}
+
+
+/// This Container holds a value similar to a Box
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Container
+{
+    /// Internal primitive
+    private stuff;
+
+    /// Construct a new Container from an initial value
+    public Container(s)
+    {
+        stuff = s;
+    }
+
+    /// Getter for the internal value
+    /// @return The current value
+    public getStuff()
+    {
+        return stuff;
+    }
+
+    /// Setter for the internal value
+    /// This method is needed to modify an instance in place
+    /// @postcondition The contents of the container have been updated
+    /// @param n New value
+    public setStuff(n)
+    {
+        stuff = n;
+    }
+}
+
+/// This Swapper swaps the contents of two containers
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Swapper
+{
+    /// Trivial constructor
+    public Swapper() {}
+
+    /// Swap the contents of two containers
+    /// @param a First Container object
+    /// @param b Second Container object
+    /// @postcondition The contents of a and b have been swapped.
+    public swap(a, b)
+    {
+        tmp = a.getStuff();
+        a.setStuff(b.getStuff());
+        b.setStuff(tmp);
+    }
+}
+
+
+/// This Enumerator class emits a continuous range
+/// @author Grant Yang
+/// @version 2021.08.30
+public class Enumerator
+{
+    /// Private instance vars: The range of the enumerator
+    private low;
+    private high;
+
+    /// This constructs a new enumerator
+    /// @param lo Numeric lower bound of enumeration (inclusive)
+    /// @param hi Numeric upper bound of enumeration (inclusive)
+    public Enumerator(lo, hi)
+    {
+        low = lo - 1;
+        high = hi;
+    }
+
+    /// This method queries if all the values have been yielded
+    /// @return True if more values can be retrieved by next(), false otherwise
+    public hasNext()
+    {
+        return low < high;
+    }
+
+    /// next() retrieves the next value
+    /// @precondition haxNext() is true
+    /// @postcondition The Enumerator is incremented to the next value
+    /// @return The next integral value in the range
+    public next()
+    {
+        if (this.hasNext())
+        {
+            low = low + 1;
+        }
+        return low;
+    }
+}
+
+

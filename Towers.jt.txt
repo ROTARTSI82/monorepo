@@ -1,0 +1,47 @@
+// Towers of Hanoi Skeleton
+// This class solves the tower of Hanoi problem recursively
+// @author Grant Yang
+// @version 2021.09.08
+public class Towers
+{
+	// Number of discs to solve for.
+	private numDiscs;
+
+	// Construct a new Tower solver to solve for the specified number of discs.
+	// @param num Number of discs to solve for
+	public Towers(num)
+	{
+		numDiscs = num;
+	}
+
+	// Move the top N discs from src to dest using temp as a temporary resting spot.
+	// @param n Number of discs to move
+	// @param src The source pillar to move from
+	// @param dest The pillar to move to
+	// @param temp Temporary pillar to use
+	public moveTower(n, src, dest, temp)
+	{
+		if (n > 0)
+		{
+			this.moveTower(n - 1, src, temp, dest);
+			this.moveDisc(src, dest);
+			this.moveTower(n - 1, temp, dest, src);
+		}
+		else
+			return "Base Case! No discs to move";
+	}
+
+	// Moves a single disc from the top of src to dest
+	// @param src Pillar to move from
+	// @param dest Pillar to move to
+	public moveDisc(src, dest)
+	{
+		return "moving 1 disc from " + src + " to " + dest;
+	}
+
+	// This function solves the tower of hanoi for N=numDiscs
+	public solve()
+	{
+		this.moveTower(numDiscs, 1, 2, 3);
+	}
+}
