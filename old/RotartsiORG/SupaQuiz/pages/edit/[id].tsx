@@ -1,14 +1,12 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Quiz, QuizItem} from "types";
 // import Image from 'next/image'
 // import styles from 'styles/Index.module.css'
 
 const CreatePage = function () {
-    const router = useRouter();
-    const [approved, setApproved] = useState(false);
-
     return (
         <div className="w-full text-center p-12">
             <Head>
@@ -18,8 +16,7 @@ const CreatePage = function () {
             </Head>
 
             <main>
-                <h1>quiz id = {JSON.stringify(router.query)}</h1>
-                <CreateUI approved={approved} />
+                <CreateUI/>
             </main>
         </div>
     )
@@ -28,16 +25,29 @@ const CreatePage = function () {
 const CreateUI = function (props: any) {
 
     const router = useRouter();
-    const quizId = router.query.id;
+    const quizId = router.query.id as string;
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
-    const [quizItems, setQuizItems] = useState<any[]>([])
+    const [quizItems, setQuizItems] = useState<QuizItem[]>([])
+    //CHANGE TO FALSE AFTER YOU IMPLEMENT THE DATABASE STUFF
+    const [render, setRender] = useState(true)
 
+    useEffect(() => {
+        fetch(`quiz/${quizId}`).then((data) => {
+            data.json().then((body : Quiz) => {
+                if (body.id != quizId) {
+                    console.log("what the heck?")
+                    return;
+                }
+                setTitle(body.title);
+                setDescription(body.description);
+                setQuizItems(body.quizItems);
+                setRender(true);
+            })
+        })
+    }, [])
 
-    const init = function () {
-
-    }
 
     const addQuizItem = function () {
         setQuizItems([...quizItems, {
@@ -51,14 +61,12 @@ const CreateUI = function (props: any) {
             quizItems.map((data, id) => {
                 return id == i ? obj : data;
             })
-        )
-
-        console.log(quizItems)
+        );
     }
 
     const pushValues = function () {
 
-        const quizData = {
+        const quizData : Quiz = {
             id: quizId,
             title: title,
             description: description,
@@ -78,11 +86,10 @@ const CreateUI = function (props: any) {
     }
 
 
-    return (
+    return render ? (
         <div className="CreateUI">
             <div className="QuizSettings">
                 <div className="Title">
-                    Quiz Id: {router.query.id}
                     Quiz Title: <input className="TitleInput" onChange={(e) => {setTitle(e.target.value)}}/>
                 </div>
                 <br/>
@@ -121,7 +128,7 @@ const CreateUI = function (props: any) {
 
             <button className="SaveChanges rounded-md border-2 border-black bg-gray-100 p-1" onClick={pushValues}>Save Changes</button>
         </div>
-    )
+    ) : null;
 }
 
 export default CreatePage
