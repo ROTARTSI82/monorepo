@@ -27,8 +27,17 @@ const CreatePage = function () {
 
 const CreateUI = function (props: any) {
 
+    const router = useRouter();
+    const quizId = router.query.id;
+
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
     const [quizItems, setQuizItems] = useState<any[]>([])
 
+
+    const init = function () {
+
+    }
 
     const addQuizItem = function () {
         setQuizItems([...quizItems, {
@@ -48,10 +57,23 @@ const CreateUI = function (props: any) {
     }
 
     const pushValues = function () {
-        fetch('/api/quiz/[id]', {
-            method: "PUT",
-        }).then((data) => {
 
+        const quizData = {
+            id: quizId,
+            title: title,
+            description: description,
+            quizItems: quizItems,
+            //auth token? idk how auth works
+        }
+
+        fetch(`/api/quiz/${quizId}`, {
+            method: "PUT",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quizData)
+        }).then((data) => {
+            if (data.status == 200) {
+                console.log(":)")
+            }
         })
     }
 
@@ -60,11 +82,12 @@ const CreateUI = function (props: any) {
         <div className="CreateUI">
             <div className="QuizSettings">
                 <div className="Title">
-                    Quiz Title: <input className="TitleInput"/>
+                    Quiz Id: {router.query.id}
+                    Quiz Title: <input className="TitleInput" onChange={(e) => {setTitle(e.target.value)}}/>
                 </div>
                 <br/>
                 <div className="Description">
-                    Description: <textarea cols={50} rows={10} className="DescriptionInput">
+                    Description: <textarea cols={50} rows={10} className="DescriptionInput" onChange={(e) => {setDescription(e.target.value)}}>
 
                     </textarea>
                 </div>
