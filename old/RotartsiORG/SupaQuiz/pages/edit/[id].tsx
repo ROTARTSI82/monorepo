@@ -31,8 +31,7 @@ const CreateUI = function (props: any) {
     const [description, setDescription] = useState("")
     const [quizItems, setQuizItems] = useState<QuizItem[]>([])
 
-    //CHANGE TO FALSE AFTER YOU IMPLEMENT THE DATABASE STUFF
-    const [render, setRender] = useState(true)
+    const [render, setRender] = useState(false)
 
     useEffect(() => {
         if (!router.isReady)
@@ -50,6 +49,13 @@ const CreateUI = function (props: any) {
         console.log(quizId);
 
         fetch(`/api/quiz/${quizId}`).then((data) => {
+            if (data.status == 404) {
+                setTitle("");
+                setDescription("");
+                setQuizItems([]);
+                setRender(true);
+                return;
+            }
             data.json().then((body) => {
                 let quizData : Quiz = body.data;
                 console.log(quizData)
@@ -122,9 +128,9 @@ const CreateUI = function (props: any) {
                 <button className="AddQuizItemButton rounded-md border-2 border-black bg-gray-100 p-1" onClick={addQuizItem}>+</button>
                 <div className="QuizItemList">
                     {
-                       quizItems.map((data, id) => {
-                           return (
-                               <div key={id} className="QuizItem">
+                        quizItems.map((data, id) => {
+                            return (
+                                <div key={id} className="QuizItem">
                                     <input className="Word" placeholder="Word" value={data.word} onChange={e => {
                                         setWordDefinition(id, {
                                             word: e.target.value,
@@ -137,9 +143,9 @@ const CreateUI = function (props: any) {
                                             definition: e.target.value
                                         })
                                     }}/>
-                               </div>
-                           )
-                       })
+                                </div>
+                            )
+                        })
                     }
                 </div>
             </div>

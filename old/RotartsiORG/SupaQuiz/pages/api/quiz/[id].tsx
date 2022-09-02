@@ -15,13 +15,16 @@ const handler = nc()
         //auth????
 
         //get from database
-        const { data, error } = await supabase
+        let { data, error, count } = await supabase
             .from('quizzes')
             .select('data')
             .eq('id', req.query.id)
 
         //send response
-        if (data) {
+        console.log(data);
+        if (data?.length == 0) {
+            res.status(404).end("404 Not Found");
+        } else if (data) {
             res.status(200).json(data[0]);
         } else {
             res.status(418).end("I'm a teapot.")
@@ -34,7 +37,7 @@ const handler = nc()
         //auth??
 
         //put into database
-        const {data, error} = await supabase
+        const {error} = await supabase
             .from('quizzes')
             .upsert([{
                 id: req.query.id,
