@@ -25,28 +25,46 @@ const CreatePage = function () {
 const CreateUI = function (props: any) {
 
     const router = useRouter();
-    const quizId = router.query.id as string;
 
+    const [quizId, setQuizId] = useState("");
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [quizItems, setQuizItems] = useState<QuizItem[]>([])
+
     //CHANGE TO FALSE AFTER YOU IMPLEMENT THE DATABASE STUFF
     const [render, setRender] = useState(true)
 
     useEffect(() => {
-        fetch(`quiz/${quizId}`).then((data) => {
-            data.json().then((body : Quiz) => {
-                if (body.id != quizId) {
+        if (!router.isReady)
+            return;
+
+        setRender(false)
+
+        setQuizId(router.query.id as string);
+    }, [router.isReady])
+
+    useEffect(() => {
+        if (!router.isReady)
+            return;
+
+        console.log(quizId);
+
+        fetch(`/api/quiz/${quizId}`).then((data) => {
+            data.json().then((body) => {
+                let quizData : Quiz = body.data;
+                console.log(quizData)
+                if (quizData.id != quizId) {
                     console.log("what the heck?")
                     return;
                 }
-                setTitle(body.title);
-                setDescription(body.description);
-                setQuizItems(body.quizItems);
+                setTitle(quizData.title);
+                setDescription(quizData.description);
+                setQuizItems(quizData.quizItems);
                 setRender(true);
             })
         })
-    }, [])
+
+    }, [quizId])
 
 
     const addQuizItem = function () {
@@ -90,11 +108,11 @@ const CreateUI = function (props: any) {
         <div className="CreateUI">
             <div className="QuizSettings">
                 <div className="Title">
-                    Quiz Title: <input className="TitleInput" onChange={(e) => {setTitle(e.target.value)}}/>
+                    Quiz Title: <input className="TitleInput" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
                 </div>
                 <br/>
                 <div className="Description">
-                    Description: <textarea cols={50} rows={10} className="DescriptionInput" onChange={(e) => {setDescription(e.target.value)}}>
+                    Description: <textarea cols={50} rows={10} className="DescriptionInput" value={description} onChange={(e) => {setDescription(e.target.value)}}>
 
                     </textarea>
                 </div>
