@@ -3,6 +3,7 @@ use crate::{Case, Declension, Gender, Number};
 pub struct RegularNoun {
     pub declension: Declension,
     pub gender: Gender,
+    pub is_greek: bool,
 
     pub nom: String,
     pub gen: String,
