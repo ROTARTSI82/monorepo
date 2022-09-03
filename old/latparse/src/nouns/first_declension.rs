@@ -1,4 +1,4 @@
-use crate::nouns::common::{RegularDeclinor, RegularNoun};
+use crate::nouns::common::{RegularDecliner, RegularNoun};
 use crate::Number::{Plural, Singular};
 use crate::{lower_no_macrons, Case, NounAdjectiveForm, Number};
 
@@ -20,22 +20,31 @@ fn simple_first_ending(form: &NounAdjectiveForm) -> Option<&'static str> {
     chart_lookup(
         &[
             ["a", "ae"],
-            ["ae", "ārum"],
-            ["ae", "īs"],
+            ["ae/āī@poet/ās@arch", "ārum/um"],
+            ["ae", "īs/ābus@dis"],
             ["am", "ās"],
-            ["ā", "īs"],
+            ["ā", "īs/ābus@dis"],
             ["a", "ae"],
         ],
         form,
     )
 }
 
-fn decline_from_endings<T: RegularDeclinor>(
+/// Syntax:
+///     - / denotes multiple possible endings
+///     - ?i denotes that the syncopated and non-syncopated forms are both valid
+///         (The syncopated form is archaic)
+///     - !e_ī is used for 2nd declension vocatives, indicating that whenever possible
+///       ii MUST be syncopated to ī, and otherwise it's a normal -e ending
+///     - @arch denotes an archaic form
+///     - @<TAG> some tag
+fn decline_from_endings(
+    decliner: &impl RegularDecliner,
     entry: &RegularNoun,
     form: &NounAdjectiveForm,
     stem: &str,
 ) -> Option<String> {
-    T::get_ending(entry, form).map(|x| {
+    decliner.get_ending(entry, form).map(|x| {
         x.split('/')
             .map(|e| {
                 if e.is_empty() {
@@ -44,9 +53,19 @@ fn decline_from_endings<T: RegularDeclinor>(
 
                 let stem = stem.to_owned();
                 let is_candidate = lower_no_macrons(&stem).ends_with('i');
+
+                // remove the ? and ! decoration if we can't syncopate anyways
+                let e = if !is_candidate && e.starts_with('?') {
+                    &e[1..]
+                } else if !is_candidate && e.starts_with('!') {
+                    "e" // for 2nd declension vocative
+                } else {
+                    e
+                };
+
                 if e == "?ī" && is_candidate {
-                    stem[..stem.len() - 1].to_owned() + "ī" + "/" + &stem + e
-                } else if e == "!ī" && is_candidate {
+                    stem[..stem.len() - 1].to_owned() + "ī@arch/" + &stem + &e[1..]
+                } else if e == "!e_ī" && is_candidate {
                     stem[..stem.len() - 1].to_owned() + "ī"
                 } else {
                     stem + e
@@ -57,8 +76,8 @@ fn decline_from_endings<T: RegularDeclinor>(
     })
 }
 
-impl RegularDeclinor for FirstDeclension {
-    fn get_ending(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
+impl RegularDecliner for FirstDeclension {
+    fn get_ending(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
         let nom = lower_no_macrons(&entry.nom);
         let gen = lower_no_macrons(&entry.gen);
 
@@ -87,8 +106,8 @@ impl RegularDeclinor for FirstDeclension {
         .and_then(|x| x.get(form.case as usize).copied())
     }
 
-    fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
-        decline_from_endings::<FirstDeclension>(entry, form, &entry.gen[..entry.gen.len() - 2])
+    fn decline(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
+        decline_from_endings(self, entry, form, &entry.gen[..entry.gen.len() - 2])
     }
 }
 
@@ -96,35 +115,44 @@ pub struct SecondDeclension();
 
 fn simple_second_ending(form: &NounAdjectiveForm, entry: &RegularNoun) -> Option<&'static str> {
     let nom = lower_no_macrons(&entry.nom);
-    // "!i" means any occurrence of "ii" MUST be syncopated to a "ī"
+    // "!e_ī" means any occurrence of "ii" MUST be syncopated to a "ī", otherwise it's a
+    //        normal ending -e
     // "?i" means any occurrence of "ii" MAY be syncopated to a "ī" (both are valid)
-    chart_lookup(
-        &[
-            [if entry.is_greek { "os/us" } else { "us" }, "ī"],
-            ["?ī", "ōrum"],
+
+    let chart = if entry.is_greek {
+        [
+            ["us/os", "ī/oe@prop"],
+            ["?ī", "ōrum/ōn@prop"],
             ["ō", "īs"],
-            [if entry.is_greek { "on/um" } else { "um" }, "ōs"],
+            ["um/on", "ōs"],
             ["ō", "īs"],
             [
-                if entry.is_greek {
-                    if nom.ends_with("on") || nom.ends_with("um") {
-                        "on/um" // greek neuter on/um ending
-                    } else {
-                        "e" // greek os/us ending
-                    }
+                if nom.ends_with("on") || nom.ends_with("um") {
+                    "on/um" // greek neuter on/um ending
                 } else {
-                    "e/!ī" // normal ending
+                    "e" // greek os/us ending
                 },
-                "ī", // plural ending
+                "ī",
             ],
             ["ī", "īs"],
-        ],
-        form,
-    )
+        ]
+    } else {
+        [
+            ["us", "ī"],
+            ["?ī", "ōrum"],
+            ["ō", "īs"],
+            ["um", "ōs"],
+            ["ō", "īs"],
+            ["!e_ī", "ī"],
+            ["ī", "īs"],
+        ]
+    };
+
+    chart_lookup(&chart, form)
 }
 
-impl RegularDeclinor for SecondDeclension {
-    fn get_ending(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
+impl RegularDecliner for SecondDeclension {
+    fn get_ending(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
         let nom = lower_no_macrons(&entry.nom);
         let gen = lower_no_macrons(&entry.gen);
 
@@ -162,27 +190,27 @@ impl RegularDeclinor for SecondDeclension {
         }
     }
 
-    fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
-        decline_from_endings::<SecondDeclension>(entry, form, &entry.gen[..entry.gen.len() - 1])
+    fn decline(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
+        decline_from_endings(self, entry, form, &entry.gen[..entry.gen.len() - 1])
     }
 }
 
 pub struct ThirdDeclension();
 
-impl RegularDeclinor for ThirdDeclension {
-    fn get_ending(_entry: &RegularNoun, _form: &NounAdjectiveForm) -> Option<&'static str> {
-        todo!()
+impl RegularDecliner for ThirdDeclension {
+    fn get_ending(&self, _entry: &RegularNoun, _form: &NounAdjectiveForm) -> Option<&'static str> {
+        None
     }
 
-    fn decline(_entry: &RegularNoun, _form: &NounAdjectiveForm) -> Option<String> {
-        todo!()
+    fn decline(&self, _entry: &RegularNoun, _form: &NounAdjectiveForm) -> Option<String> {
+        None
     }
 }
 
 pub struct FourthDeclension();
 
-impl RegularDeclinor for FourthDeclension {
-    fn get_ending(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
+impl RegularDecliner for FourthDeclension {
+    fn get_ending(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
         let nom = lower_no_macrons(&entry.nom);
         let gen = lower_no_macrons(&entry.gen);
 
@@ -227,8 +255,9 @@ impl RegularDeclinor for FourthDeclension {
         }
     }
 
-    fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
-        decline_from_endings::<FourthDeclension>(
+    fn decline(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
+        decline_from_endings(
+            self,
             entry,
             form,
             &entry.gen[..entry.gen.len()
@@ -243,8 +272,8 @@ impl RegularDeclinor for FourthDeclension {
 
 pub struct FifthDeclension();
 
-impl RegularDeclinor for FifthDeclension {
-    fn get_ending(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
+impl RegularDecliner for FifthDeclension {
+    fn get_ending(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str> {
         let nom = lower_no_macrons(&entry.nom);
         let gen = lower_no_macrons(&entry.gen);
 
@@ -269,7 +298,7 @@ impl RegularDeclinor for FifthDeclension {
         )
     }
 
-    fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
-        decline_from_endings::<FifthDeclension>(entry, form, &entry.nom[..entry.nom.len() - 2])
+    fn decline(&self, entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
+        decline_from_endings(self, entry, form, &entry.nom[..entry.nom.len() - 2])
     }
 }

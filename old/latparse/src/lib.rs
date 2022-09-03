@@ -9,7 +9,7 @@ pub mod nouns {
     pub mod first_declension;
 }
 
-fn remove_macrons(x: &str) -> String {
+pub fn remove_macrons(x: &str) -> String {
     x.replace('ā', "a")
         .replace('ē', "e")
         .replace('ī', "i")
@@ -22,7 +22,7 @@ fn remove_macrons(x: &str) -> String {
         .replace('Ū', "U")
 }
 
-fn lower_no_macrons(x: &str) -> String {
+pub fn lower_no_macrons(x: &str) -> String {
     remove_macrons(x).to_lowercase()
 }
 
@@ -32,6 +32,7 @@ pub enum Number {
     Plural = 1,
 }
 
+#[derive(Clone, Copy)]
 pub enum Gender {
     Common,
     Masculine,
@@ -77,13 +78,14 @@ pub enum Conjugation {
     Fourth,
 }
 
+#[derive(Clone, Copy)]
 pub enum Declension {
     Irregular,
-    First,
-    Second,
-    Third,
-    Fourth,
-    Fifth,
+    First = 1,
+    Second = 2,
+    Third = 3,
+    Fourth = 4,
+    Fifth = 5,
 }
 
 pub enum Tense {
