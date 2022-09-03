@@ -29,6 +29,9 @@ impl NounAdjectiveEntry {
     }
 }
 
+/// Types implementing this should be unit types with no data
+/// These methods MUST always correctly return None when the `entry` is not of
+/// the correct declension, and NEVER attempt to decline it weirdly.
 pub trait RegularDeclinor {
     fn get_ending(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<&'static str>;
     fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String>;
