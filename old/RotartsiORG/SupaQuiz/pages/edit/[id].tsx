@@ -40,7 +40,7 @@ const CreateUI = function (props: any) {
         setRender(false)
 
         setQuizId(router.query.id as string);
-    }, [router.isReady])
+    }, [router.isReady, router.query.id])
 
     useEffect(() => {
         if (!router.isReady)
@@ -70,7 +70,7 @@ const CreateUI = function (props: any) {
             })
         })
 
-    }, [quizId])
+    }, [quizId, router.isReady])
 
 
     const addQuizItem = function () {
