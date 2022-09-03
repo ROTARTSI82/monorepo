@@ -1,2 +1,1 @@
- export RUSTFLAGS="$RUSTFLAGS -A dead_code"
-
+export RUSTFLAGS="$RUSTFLAGS -A dead_code"

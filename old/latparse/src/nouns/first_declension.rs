@@ -1,15 +1,17 @@
-use crate::nouns::nouns::{RegularDeclinor, RegularNoun};
-use crate::Gender::{Common, Feminine, Masculine, Neuter};
+use crate::nouns::common::{RegularDeclinor, RegularNoun};
+use crate::Gender::{Feminine, Masculine, Neuter};
 use crate::Number::{Plural, Singular};
-use crate::{lower_no_macrons, remove_macrons, Case, NounAdjectiveForm, Number};
+use crate::{lower_no_macrons, Case, NounAdjectiveForm, Number};
 
 pub struct FirstDeclension();
 
-fn chart_lookup<W, H>(chart: &[[&str; W]; H], form: &NounAdjectiveForm) -> Option<&'static str> {
+fn chart_lookup<const H: usize>(
+    chart: &[[&'static str; 2]; H],
+    form: &NounAdjectiveForm,
+) -> Option<&'static str> {
     chart
         .get(form.case as usize)
-        .map(|r| r.get(form.number as usize).map(|i| *i))
-        .flatten()
+        .and_then(|r| r.get(form.number as usize).copied())
 }
 
 fn simple_first_ending(form: &NounAdjectiveForm) -> Option<&'static str> {
@@ -32,12 +34,12 @@ impl RegularDeclinor for FirstDeclension {
         let gen = lower_no_macrons(&entry.gen);
 
         let greek_possibilities = [
-            nom.ends_with("e") && gen.ends_with("es") && matches!(form.gender, Feminine),
+            nom.ends_with('e') && gen.ends_with("es") && matches!(form.gender, Feminine),
             nom.ends_with("es") && gen.ends_with("ae") && matches!(form.gender, Masculine),
             nom.ends_with("as") && gen.ends_with("ae") && matches!(form.gender, Masculine),
         ];
 
-        if nom.ends_with("a") && gen.ends_with("ae")
+        if nom.ends_with('a') && gen.ends_with("ae")
             || matches!(form.number, Plural) && greek_possibilities.iter().any(|&x| x)
         {
             return simple_first_ending(form);
@@ -53,8 +55,7 @@ impl RegularDeclinor for FirstDeclension {
         } else {
             None
         }
-        .map(|x| x.get(form.case as usize).map(|i| *i))
-        .flatten()
+        .and_then(|x| x.get(form.case as usize).copied())
     }
 
     fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
@@ -88,7 +89,7 @@ impl RegularDeclinor for SecondDeclension {
         let nom = lower_no_macrons(&entry.nom);
         let gen = lower_no_macrons(&entry.gen);
 
-        if nom.ends_with("r")
+        if nom.ends_with('r')
             && matches!(entry.gender, Masculine)
             && matches!(form.number, Number::Singular)
             && matches!(form.case, Case::Nominative | Case::Vocative)
@@ -96,7 +97,7 @@ impl RegularDeclinor for SecondDeclension {
             return Some(""); // same as nominative passed in
         }
 
-        if nom.ends_with("um") && gen.ends_with("i") && matches!(entry.gender, Neuter) {
+        if nom.ends_with("um") && gen.ends_with('i') && matches!(entry.gender, Neuter) {
             if matches!(form.number, Plural)
                 && matches!(
                     form.case,
@@ -111,12 +112,12 @@ impl RegularDeclinor for SecondDeclension {
             }
         }
 
-        if nom.ends_with("us") && gen.ends_with("i") && matches!(entry.gender, Masculine) {}
+        if nom.ends_with("us") && gen.ends_with('i') && matches!(entry.gender, Masculine) {}
 
         simple_second_ending(form)
     }
 
-    fn decline(entry: &RegularNoun, form: &NounAdjectiveForm) -> Option<String> {
+    fn decline(_entry: &RegularNoun, _form: &NounAdjectiveForm) -> Option<String> {
         todo!()
     }
 }

@@ -1,25 +1,25 @@
-use crate::nouns::nouns::NounAdjectiveForm;
+use crate::nouns::common::NounAdjectiveForm;
 
 pub mod verbs {
-    pub mod verbs;
+    pub mod common;
 }
 
 pub mod nouns {
+    pub mod common;
     pub mod first_declension;
-    pub mod nouns;
 }
 
 fn remove_macrons(x: &str) -> String {
-    x.replace("ā", "a")
-        .replace("ē", "e")
-        .replace("ī", "i")
-        .replace("ō", "o")
-        .replace("ū", "u")
-        .replace("Ā", "A")
-        .replace("Ē", "E")
-        .replace("Ī", "I")
-        .replace("Ō", "O")
-        .replace("Ū", "U")
+    x.replace('ā', "a")
+        .replace('ē', "e")
+        .replace('ī', "i")
+        .replace('ō', "o")
+        .replace('ū', "u")
+        .replace('Ā', "A")
+        .replace('Ē', "E")
+        .replace('Ī', "I")
+        .replace('Ō', "O")
+        .replace('Ū', "U")
 }
 
 fn lower_no_macrons(x: &str) -> String {
@@ -97,7 +97,6 @@ pub enum Tense {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn it_works() {
