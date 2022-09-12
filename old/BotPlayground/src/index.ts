@@ -2,6 +2,8 @@ import {ChannelType, Client, GatewayIntentBits, Message, Partials} from "discord
 import {launch} from "./lib/launch";
 import conf from "./conf";
 
+const fs = require('fs');
+
 function fac(n: number): number {
 	return n > 0 ? fac(n-1)*n : 1;
 }
@@ -50,8 +52,17 @@ async function for_all_msgs(guildId: string, func: (x: Message<true>) => void) {
 		if (chan.type !== ChannelType.GuildText)
 			continue;
 
-		for (const [msgId, msg] of await chan.messages.fetch({limit: 100})) {
-			func(msg)
+		let tot = 0;
+		let messages = await chan.messages.fetch({limit: 100});
+		while (messages.size != 0) {
+
+			for (const [msgId, msg] of messages)
+				func(msg)
+
+			tot += messages.size;
+			console.log(`--\t${chan.name}: +${messages.size} (total ${tot})`)
+
+			messages = await chan.messages.fetch({limit: 100, before: messages.last().id});
 		}
 		console.log(`-- Fetched ${chan.name}`)
 	}
@@ -142,9 +153,31 @@ function fmt(s: string): string {
 // rather than in the scope of launch.ts
 launch(client, (inp: string) => eval(inp))
 
+function fmt_message<T extends boolean = boolean>(msg: Message<T>): string {
+	return `[${msg.createdAt.getTime()};${msg.createdAt.toLocaleTimeString()}],[${msg.channel.id};${msg.channel.type === ChannelType.GuildText ? msg.channel.name : "#unknown#"}],[${msg.author.id};${msg.author.username}],${msg.content}`
+}
+
+async function download_msgs(g: string) {
+	let messages: Message<true>[] = [];
+
+	await for_all_msgs(g, msg => {
+		messages.push(msg);
+	});
+
+	messages.sort((a, b) => {
+		if (a.createdAt.getTime() > b.createdAt.getTime()) return 1;
+		else if (a.createdAt.getTime() < b.createdAt.getTime()) return -1;
+		return 0;
+	});
+
+	let outp = messages.map(fmt_message<true>).join("\n");
+	console.log(outp);
+	fs.writeFile("./down.txt", outp, () => {console.log("written")});
+	return outp;
+}
+
 client.on("messageCreate", (msg) => {
 	// if (message.author.bot) return false;
-
-	console.log(`[${new Date().getTime()};${new Date().toLocaleTimeString()}],[${msg.channel.id};${msg.channel.type === ChannelType.GuildText ? msg.channel.name : "#unknown#"}],[${msg.author.id};${msg.author.username}],${msg.content}`)
+	console.log(fmt_message(msg))
 });
 
