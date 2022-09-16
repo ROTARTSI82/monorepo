@@ -4,11 +4,10 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import {Quiz, QuizItem} from "types";
 // import Image from 'next/image'
-// import styles from 'styles/Index.module.css'
 
 const CreatePage = function () {
     return (
-        <div className="w-full text-center p-12">
+        <div className="">
             <Head>
                 <title>SupaQuiz</title>
                 <meta name="description" content="Quizlet Clone Thing" />
@@ -88,6 +87,14 @@ const CreateUI = function (props: any) {
         );
     }
 
+    const removeQuizItem = function (i: number) {
+        setQuizItems(
+            quizItems.filter((data, id) => {
+                return id != i;
+            })
+        )
+    }
+
     const pushValues = function () {
 
         const quizData : Quiz = {
@@ -113,19 +120,26 @@ const CreateUI = function (props: any) {
     return render ? (
         <div className="CreateUI">
             <div className="QuizSettings">
+                <div className='heading'>
+                    Create a new quiz
+                </div>
                 <div className="Title">
-                    Quiz Title: <input className="TitleInput" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
+                    {/*<span className="TitleHeading">Title</span>*/}
+                    <input className="TitleInput" value={title} placeholder="Title"
+                                       onChange={(e) => {setTitle(e.target.value)}}/>
                 </div>
                 <br/>
                 <div className="Description">
-                    Description: <textarea cols={50} rows={10} className="DescriptionInput" value={description} onChange={(e) => {setDescription(e.target.value)}}>
-
-                    </textarea>
+                    {/*<span className="DescriptionHeading">Description</span>*/}
+                    <textarea cols={50} rows={10} className="DescriptionInput"
+                                           placeholder="Description"
+                                           value={description}
+                                           onChange={(e) => {setDescription(e.target.value)}} />
                 </div>
             </div>
 
             <div className="QuizItems">
-                <button className="AddQuizItemButton rounded-md border-2 border-black bg-gray-100 p-1" onClick={addQuizItem}>+</button>
+                <button className="AddQuizItemButton" onClick={addQuizItem}>+</button>
                 <div className="QuizItemList">
                     {
                         quizItems.map((data, id) => {
@@ -143,6 +157,7 @@ const CreateUI = function (props: any) {
                                             definition: e.target.value
                                         })
                                     }}/>
+                                    <button className="RemoveButton" onClick={() => removeQuizItem(id)}>-</button>
                                 </div>
                             )
                         })
@@ -150,7 +165,7 @@ const CreateUI = function (props: any) {
                 </div>
             </div>
 
-            <button className="SaveChanges rounded-md border-2 border-black bg-gray-100 p-1" onClick={pushValues}>Save Changes</button>
+            <button className="SaveChanges" onClick={pushValues}>Save Changes</button>
         </div>
     ) : null;
 }

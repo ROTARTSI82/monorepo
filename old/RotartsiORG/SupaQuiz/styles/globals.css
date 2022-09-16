@@ -3,8 +3,39 @@
 @tailwind utilities;
 
 html {
-    @apply bg-slate-300
+    background: #161530;
+    color: white;
 }
+
+button {
+    background: #2b2357;
+    padding: 2px;
+    border: 2px solid white;
+}
+
+input {
+    background: #2b2357;
+    border: 2px solid white;
+
+}
+
+textarea {
+    background: #2b2357;
+    border: 2px solid white;
+}
+
+.heading {
+    font-size: 2em;
+    color: lawngreen;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
 
 a {
     @apply underline text-blue-500 hover:text-blue-800

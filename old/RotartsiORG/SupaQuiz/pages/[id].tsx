@@ -75,7 +75,7 @@ const QuizView = function (props: any) {
    return render ? (
        <div>
            <div className="QuizInformation">
-               <h1>{title}</h1>
+               <div className="heading">{title}</div>
                <p>{description}</p>
            </div>
            <div className="QuizItems">
@@ -83,7 +83,7 @@ const QuizView = function (props: any) {
                    quizItems.map((data, id) => {
                        return (
                            <div key={id} className="QuizItem">
-                               <span className="Word">{data.word}:</span> <span className="Word">{data.definition}</span>
+                               <span className="Word">{data.word}:</span> <span className="Definition">{data.definition}</span>
                            </div>
                        )
                    })
