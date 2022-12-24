@@ -10,7 +10,7 @@ const LatinInput = forwardRef((props: { onSubmit: (e: FormEvent) => void }, ref:
 	return <Form>
 		<Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
 			<Form.Label>Enter Latin Text</Form.Label>
-			<Form.Control as="textarea" rows={16} ref={ref}/>
+			<Form.Control as="textarea" rows={16} ref={ref} className={"m-auto max-w-[90%] fill-slate-700"}/>
 		</Form.Group>
 
 		<Button variant="primary" type="submit" onClick={props.onSubmit}>
@@ -117,14 +117,17 @@ export default function PageOneClickDictionary(props: unknown) {
 			setLatin(latinRef.current?.value);
 	}
 
-	return <>
+	return <div className={"solarisBg"}>
 		<Head>
 			<title>One-Click Latin Dictionary</title>
+			<meta property="og:title" content="One-Click Latin Dictionary"/>
+			<meta property="og:description" content="Look up words in a text instantly with Whitaker's Words."/>
+			<meta property="og:image" content="favicon.ico"/>
 		</Head>
 
-		<div className={"container max-w-6xl"}>
+		<div className={"container max-w-6xl px-16"}>
 			{latinState ? <LatinReader latin={latinState}/> : <LatinInput ref={latinRef} onSubmit={submitLatin}/> }
 		</div>
-	</>
+	</div>
 }
 
