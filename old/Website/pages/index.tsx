@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     <hr/>
     <main>
       <p className={"p-1 pb-2 text-s"}>
-        Hi, I'm Grant Yang, a sophomore in highschool. Here is a list of interesting things I've done.
+        Hi, I&apos;m Grant Yang, a sophomore in highschool. Here is a list of interesting things I&apos;ve done.
       </p>
 
       <br/>
