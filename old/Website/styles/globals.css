@@ -18,9 +18,21 @@ h2 {
     @apply text-xl
 }
 
-.container {
+.rContainer {
     max-width: min(80%, 80rem);
-    @apply m-auto mt-4 p-3 text-center bg-[#073642] rounded-xl text-slate-300 font-mono;
+    @apply m-auto mt-4 p-3 text-center bg-[#073642] text-slate-300 font-mono;
+}
+
+.rFullWidthCenter {
+    @apply m-auto bg-center content-center text-center w-[100%]
+}
+
+.rCenteredBtn {
+    min-width: min(100%, 20rem);
+}
+
+p {
+    @apply text-left mx-2
 }
 
 html, body, .solarisBg {
@@ -28,5 +40,13 @@ html, body, .solarisBg {
 }
 
 button {
-    @apply bg-teal-900 m-auto m-1 p-1
+    @apply bg-teal-900 m-auto mx-2 mt-1 p-1 hover:bg-teal-700
+}
+
+ul {
+    @apply p-1 mx-2 ml-4 pb-1 list-disc text-left
+}
+
+li {
+    @apply my-[0.5rem]
 }

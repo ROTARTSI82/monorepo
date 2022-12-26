@@ -117,6 +117,12 @@ export default function PageOneClickDictionary(props: unknown) {
 			setLatin(latinRef.current?.value);
 	}
 
+	function clearLatin() {
+		if (latinRef.current)
+			latinRef.current.value = "";
+		setLatin(null);
+	}
+
 	return <div className={"solarisBg"}>
 		<Head>
 			<title>One-Click Latin Dictionary</title>
@@ -125,7 +131,11 @@ export default function PageOneClickDictionary(props: unknown) {
 			<meta property="og:image" content="favicon.ico"/>
 		</Head>
 
-		<div className={"container max-w-6xl px-16"}>
+
+		<div className={"rContainer max-w-6xl px-16"}>
+			<h1>One-Click Latin Dictionary</h1>
+			<Button variant={"primary"} onClick={clearLatin}>Clear</Button>
+			<br/><br/>
 			{latinState ? <LatinReader latin={latinState}/> : <LatinInput ref={latinRef} onSubmit={submitLatin}/> }
 		</div>
 	</div>

@@ -1,0 +1,8 @@
+
+.rTranscriptionForm > div {
+    @apply grid grid-cols-[33%_66%] my-2
+}
+
+.rTranscriptionForm > div > b + :not(input[type=file]) {
+    @apply text-black p-1
+}
