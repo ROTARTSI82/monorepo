@@ -22,22 +22,9 @@ public class ScannerTester
      */
     public static void main(String[] args) throws IOException
     {
-//        Scanner scan = new Scanner(new FileInputStream("scanner/scannerTestAdvanced.txt"));
-//        while (scan.hasNext())
-//            System.out.println(scan.nextToken());
-
-        System.out.println("=======================================");
-//        Scanner scan2 = new Scanner(new FileInputStream("scanner/ScannerTest.txt"));
         Scanner scan2 = new Scanner(new FileInputStream("ast/fib.txt"));
         Environment env = new Environment();
         Parser parse = new Parser(scan2);
-        Statement s = parse.parseStatement();
-        System.out.println("exec1");
-        s.exec(env);
-        System.out.println("e2");
-        s.exec(env);
-//        while (scan2.hasNext())
-//            System.out.println(scan2.nextToken());
-//        System.out.println("end");
+        parse.parseStatement().exec(env);
     }
 }

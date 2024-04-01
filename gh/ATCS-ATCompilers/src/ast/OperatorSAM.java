@@ -16,11 +16,21 @@ import static parser.BoxedValue.box;
  */
 public interface OperatorSAM
 {
+    /**
+     * Applies the operator possibly executes side effects
+     * @param env Environment to execute in
+     * @param left The left-hand side of the operator
+     * @param right The right-hand side of the operator
+     * @return The value that the operator evaluated to
+     * @postcondition The environment may be modified by the operator :=,
+     *                but all other operators are pure functions.
+     */
     BoxedValue apply(Environment env, Expression left, Expression right);
 
     /**
      * NAME_MAP maps the text of an infix operator to the OperatorSAM
-     * that actually implements it.
+     * that actually implements it. The text is the literal string that
+     * would appear in Pascal source code and is case-sensitive
      */
     Map<String, OperatorSAM> NAME_MAP = Map.ofEntries(
             Map.entry("^", (e, a, b) -> box((int) Math.pow(a.eval(e).asInt(), b.eval(e).asInt()))),
@@ -31,7 +41,8 @@ public interface OperatorSAM
             Map.entry("OR", (e, a, b) -> box(a.eval(e).asBool() && b.eval(e).asBool())),
             Map.entry("+", (e, a, b) -> box(a.eval(e).asInt() + b.eval(e).asInt())),
             Map.entry("-", (e, a, b) -> box(a.eval(e).asInt() - b.eval(e).asInt())),
-            Map.entry(",", (e, a, b) -> box(a.eval(e).get().toString() + b.eval(e).get().toString())),
+            Map.entry(",",
+                    (e, a, b) -> box(a.eval(e).get().toString() + b.eval(e).get().toString())),
             Map.entry("=", (e, a, b) -> box(a.eval(e).get().equals(b.eval(e).get()))),
             Map.entry("<>", (e, a, b) -> box(!a.eval(e).get().equals(b.eval(e).get()))),
             Map.entry(">=", (e, a, b) -> box(a.eval(e).asInt() >= b.eval(e).asInt())),
