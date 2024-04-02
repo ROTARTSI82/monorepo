@@ -9,3 +9,4 @@ BEGIN
         WRITELN(a := c);
     END;
 END;
+.

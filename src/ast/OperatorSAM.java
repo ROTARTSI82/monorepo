@@ -41,6 +41,8 @@ public interface OperatorSAM
             Map.entry("OR", (e, a, b) -> box(a.eval(e).asBool() && b.eval(e).asBool())),
             Map.entry("+", (e, a, b) -> box(a.eval(e).asInt() + b.eval(e).asInt())),
             Map.entry("-", (e, a, b) -> box(a.eval(e).asInt() - b.eval(e).asInt())),
+
+            // currently disabled because it causes ambiguity with function call args
             Map.entry(",",
                     (e, a, b) -> box(a.eval(e).get().toString() + b.eval(e).get().toString())),
             Map.entry("=", (e, a, b) -> box(a.eval(e).get().equals(b.eval(e).get()))),
@@ -66,8 +68,8 @@ public interface OperatorSAM
     List<Map.Entry<Boolean, List<String>>> PRECEDENCE = List.of(
             Map.entry(true, List.of("^")),
             Map.entry(false, List.of("*", "/", "mod", "AND")),
-            Map.entry(false, List.of("OR", "+", "-", ",")),
             Map.entry(false, List.of("=", "<>", ">=", "<=", ">", "<")),
+            Map.entry(false, List.of("OR", "+", "-")), // ","
             Map.entry(true, List.of(":="))
     );
 }

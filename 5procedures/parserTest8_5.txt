@@ -1,0 +1,27 @@
+
+//Environment hierarchy test file
+//@author Rohan Ramkumar <25rohanr@students.harker.org>
+//@version 11/03/2023
+
+PROCEDURE foo(y);
+BEGIN
+    x:=2;
+    y:=7;
+    ignore:=bar();
+    WRITELN(y);
+END;
+PROCEDURE bar();
+BEGIN
+    x:=3;
+    y:=y+2;
+END;
+BEGIN
+    x:=1;
+    //y := 8;
+    ignore:=foo(x);
+    WRITELN(x);
+    WRITELN(y);
+END;
+.
+//should output 9 then 3 then 0
+
