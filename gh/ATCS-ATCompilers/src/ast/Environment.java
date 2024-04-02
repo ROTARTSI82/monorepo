@@ -2,6 +2,7 @@ package ast;
 
 import parser.BoxedValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,34 @@ import java.util.Map;
  */
 public class Environment
 {
-    private final Map<String, BoxedValue> variables = new HashMap<>();
+    private final ArrayList<Map<String, BoxedValue>> variables = new ArrayList<>();
+    private final ArrayList<String> frameNames = new ArrayList<>();
+    private Program parent;
+
+    private final boolean debug = false;
+
+
+    public Environment(Program parent)
+    {
+        this.parent = parent;
+    }
+
+    public void push(String name)
+    {
+        frameNames.add(name);
+        variables.add(new HashMap<>());
+    }
+
+    public void pop()
+    {
+        variables.removeLast();
+        frameNames.removeLast();
+    }
+
+    public String getFrameName()
+    {
+        return frameNames.getLast();
+    }
 
     /**
      * Set a variable in the environment
@@ -26,10 +54,28 @@ public class Environment
     {
         if (rawValue instanceof BoxedValue)
             throw new RuntimeException("setVariable() takes raw value, not boxed value");
-        if (!variables.containsKey(name))
-            variables.put(name, BoxedValue.box(rawValue));
+        for (int i = variables.size() - 1; i >= 0; i--)
+            if (variables.get(i).containsKey(name))
+            {
+                variables.get(i).get(name).set(rawValue);
+                return;
+            }
+        declareVariable(name, rawValue);
+    }
+
+    public void declareVariable(String name, Object value)
+    {
+        if (isDebug())
+        {
+            System.out.println("NEW VAR OR SET declareVariable(): " + name + " = " + value);
+            System.out.print("\t");
+            dumpFrames();
+        }
+
+        if (!variables.getLast().containsKey(name))
+            variables.getLast().put(name, BoxedValue.box(value));
         else
-            variables.get(name).set(rawValue);
+            variables.getLast().get(name).set(value);
     }
 
     /**
@@ -40,8 +86,34 @@ public class Environment
      */
     public BoxedValue getVariable(String name)
     {
-        if (!variables.containsKey(name))
-            variables.put(name, BoxedValue.newNamed(name));
-        return variables.get(name);
+        for (int i = variables.size() - 1; i >= 0; i--)
+            if (variables.get(i).containsKey(name))
+                return variables.get(i).get(name);
+
+        if (isDebug())
+        {
+            System.out.println("NEW VARIABLE getVariable() creates: " + name);
+            System.out.print("\t");
+            dumpFrames();
+        }
+
+        BoxedValue val = BoxedValue.newNamed(name);
+        variables.getLast().put(name, val);
+        return val;
+    }
+
+    public ProcedureDeclaration getProcedure(String name)
+    {
+        return parent.procs.get(name);
+    }
+
+    public void dumpFrames()
+    {
+        System.out.println("Frames: " + frameNames);
+    }
+
+    public boolean isDebug()
+    {
+        return debug;
     }
 }

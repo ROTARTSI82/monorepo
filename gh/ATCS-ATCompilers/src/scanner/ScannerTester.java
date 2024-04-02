@@ -1,10 +1,13 @@
 package scanner;
 
 import ast.Environment;
+import ast.Program;
 import ast.Statement;
 import parser.Parser;
 
 import java.io.*;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * ScannerTester.java
@@ -15,6 +18,21 @@ import java.io.*;
  */
 public class ScannerTester
 {
+    public static void go(String file)
+    {
+        try
+        {
+            System.out.println(" ================ [ " + file + " ] =================");
+            Scanner scan2 = new Scanner(new FileInputStream(file));
+            Parser parse = new Parser(scan2);
+            parse.parseProgram().exec();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Entry point into the tester
      * @param args Command-line arguments
@@ -22,9 +40,10 @@ public class ScannerTester
      */
     public static void main(String[] args) throws IOException
     {
-        Scanner scan2 = new Scanner(new FileInputStream("ast/fib.txt"));
-        Environment env = new Environment();
-        Parser parse = new Parser(scan2);
-        parse.parseStatement().exec(env);
+        Stream.of(
+                "5procedures/parserTest7.txt",
+                "5procedures/parserTest8.txt",
+                "5procedures/parserTest8_5.txt", "5procedures/recurse.txt"
+        ).forEach(ScannerTester::go);
     }
 }

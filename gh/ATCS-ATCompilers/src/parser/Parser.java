@@ -180,8 +180,18 @@ public class Parser
                 Expression cond = exprParser.parse();
                 eat("THEN");
                 Statement state = parseStatement();
+
+                // elseClause needs to be final to be used in a lambda, so I have to do this
+                boolean hack = false;
+                if (currentToken.content().equals("ELSE"))
+                {
+                    eat("ELSE");
+                    hack = true;
+                }
+
+                Statement elseClause = hack ? parseStatement() : Statement.NO_OP;
                 return (e) ->
-                { if (cond.eval(e).asBool()) state.exec(e); };
+                { if (cond.eval(e).asBool()) state.exec(e); else elseClause.exec(e); };
             }
             case "CONTINUE" ->
             {
@@ -224,7 +234,25 @@ public class Parser
                 Expression value = exprParser.parse();
                 eat(")");
                 eat(";");
-                return (e) -> System.out.println(value.eval(e).get().toString());
+                return (e) -> System.out.println(value.eval(e).get());
+            }
+            case "EXIT" ->
+            {
+                eat("EXIT");
+                eat(";");
+                return (e) ->
+                { throw new ReturnException(); };
+            }
+            case "RETURN" ->
+            {
+                eat("RETURN");
+                Expression expr = exprParser.parse();
+                eat(";");
+                return (e) ->
+                {
+                    e.setVariable(e.getFrameName(), expr.eval(e).get());
+                    throw new ReturnException();
+                };
             }
             case "READLN" ->
             {
@@ -242,6 +270,36 @@ public class Parser
                 return value::eval;
             }
         }
+    }
+
+    public Program parseProgram()
+    {
+        Map<String, ProcedureDeclaration> procs = new HashMap<>();
+        while (currentToken.content().equals("PROCEDURE"))
+        {
+            eat("PROCEDURE");
+            String val = currentToken.content();
+            eat(null, Token.Type.Identifier);
+            eat("(");
+            ArrayList<String> argSlots = new ArrayList<>();
+            while (!currentToken.content().equals(")"))
+            {
+                argSlots.add(currentToken.content());
+                eat(null, Token.Type.Identifier);
+                if (currentToken.content().equals(","))
+                    eat(",");
+                else
+                    break;
+            }
+            eat(")");
+            eat(";");
+            Statement stmt = parseStatement();
+            procs.put(val, new ProcedureDeclaration(stmt, argSlots));
+        }
+
+        Statement main = parseStatement();
+        eat("EOF", Token.Type.EOF);
+        return new Program(main, procs);
     }
 
     /**
@@ -312,7 +370,22 @@ public class Parser
             String id = currentToken.content();
             eat(id);
 
-            if (currentToken.content().equals("["))
+            if (currentToken.content().equals("("))
+            {
+                eat("(");
+                ArrayList<Expression> args = new ArrayList<>();
+                while (!currentToken.content().equals(")"))
+                {
+                    args.add(exprParser.parse());
+                    if (currentToken.content().equals(","))
+                        eat(",");
+                    else
+                        break;
+                }
+                eat(")");
+                return new ProcedureCall(id, args);
+            }
+            else if (currentToken.content().equals("["))
             {
                 eat("[");
                 Expression idx = exprParser.parse();

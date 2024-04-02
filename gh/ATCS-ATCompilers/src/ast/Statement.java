@@ -16,4 +16,9 @@ public interface Statement
      * @throws BreakException If any BREAK statement was reached. This is caught by loops
      */
     void exec(Environment env) throws ContinueException, BreakException;
+
+    /**
+     * A simple Statement that does nothing when executed.
+     */
+    Statement NO_OP = (e) -> {};
 }
