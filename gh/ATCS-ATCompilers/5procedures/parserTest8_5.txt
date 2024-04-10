@@ -3,7 +3,7 @@
 //@author Rohan Ramkumar <25rohanr@students.harker.org>
 //@version 11/03/2023
 
-PROCEDURE foo(y);
+PROCEDURE foo();
 BEGIN
     x:=2;
     y:=7;
@@ -17,11 +17,10 @@ BEGIN
 END;
 BEGIN
     x:=1;
-    //y := 8;
-    ignore:=foo(x);
+    ignore:=foo();
     WRITELN(x);
     WRITELN(y);
 END;
-.
+
 //should output 9 then 3 then 0
 

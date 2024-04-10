@@ -1,10 +1,11 @@
 package scanner;
 
 import java.io.*;
-import java.util.*;
+import java.util.Set;
 
 /**
  * Scanner is a simple scanner for Compilers and Interpreters (2014-2015) lab exercise 1
+ *
  * @author Grant Yang
  * @version 2024.01.22
  * Scanner tokenizes the raw input stream of characters into a stream
@@ -13,24 +14,61 @@ import java.util.*;
  * Usage:
  * Scanner scan = new Scanner(file);
  * while (scan.hasNext())
- *     System.out.println(scan.nextToken());
+ * System.out.println(scan.nextToken());
  */
 public class Scanner
 {
-    private BufferedReader in;
-    private char currentChar;
-    private boolean eof;
-
-    private int colNo = 1, lineNo = 1;
     private static Set<String> operators, partialOperators, keywords;
     private static boolean initialized = false;
+    private final BufferedReader in;
+    private char currentChar;
+    private boolean eof;
+    private int colNo = 1, lineNo = 1;
+
+    /**
+     * Scanner constructor for construction of a scanner that
+     * uses an InputStream object for input.
+     * Usage:
+     * FileInputStream inStream = new FileInputStream(new File(<file name>);
+     * Scanner lex = new Scanner(inStream);
+     *
+     * @param inStream the input stream to use
+     * @precondition inStream is not null and in a valid state
+     * @postcondition Scanner is initialized
+     */
+    public Scanner(InputStream inStream)
+    {
+        in = new BufferedReader(new InputStreamReader(inStream));
+        eof = false;
+        getNextChar();
+        initializeTables();
+    }
+
+    /**
+     * Scanner constructor for constructing a scanner that
+     * scans a given input string.  It sets the end-of-file flag and then reads
+     * the first character of the input string into the instance field currentChar.
+     * Usage: Scanner lex = new Scanner(input_string);
+     *
+     * @param inString the string to scan
+     * @precondition none
+     * @postcondition Scanner is initialized
+     */
+    public Scanner(String inString)
+    {
+        in = new BufferedReader(new StringReader(inString));
+        eof = false;
+        getNextChar();
+        initializeTables();
+    }
 
     /**
      * Initializes the internal tables used to determine operators and keywords.
      * This method is called automatically whenever tables need to be used, and
      * it does nothing if tables are already initialized.
-     * Precondition: none
-     * Postcondition: Tables are populated
+     *
+     * @precondition none
+     * @postcondition Tables are populated
      */
     private static void initializeTables()
     {
@@ -48,43 +86,9 @@ public class Scanner
     }
 
     /**
-     * Scanner constructor for construction of a scanner that 
-     * uses an InputStream object for input.
-     * Usage: 
-     * FileInputStream inStream = new FileInputStream(new File(<file name>);
-     * Scanner lex = new Scanner(inStream);
-     * @param inStream the input stream to use
-     * Precondition: inStream is not null and in a valid state
-     * Postcondition: Scanner is initialized
-     */
-    public Scanner(InputStream inStream)
-    {
-        in = new BufferedReader(new InputStreamReader(inStream));
-        eof = false;
-        getNextChar();
-        initializeTables();
-    }
-    
-    /**
-     * Scanner constructor for constructing a scanner that 
-     * scans a given input string.  It sets the end-of-file flag an then reads
-     * the first character of the input string into the instance field currentChar.
-     * Usage: Scanner lex = new Scanner(input_string);
-     * @param inString the string to scan
-     * Precondition: none
-     * Postcondition: Scanner is initialized
-     */
-    public Scanner(String inString)
-    {
-        in = new BufferedReader(new StringReader(inString));
-        eof = false;
-        getNextChar();
-        initializeTables();
-    }
-
-    /**
      * A pure function to determine if a character is a numeric digit,
      * according to the regex `[0-9]`
+     *
      * @param d character to check
      * @return True if d is a digit, false otherwise.
      */
@@ -96,6 +100,7 @@ public class Scanner
     /**
      * A pure function to determine if a character is a letter,
      * according to the regex `[a-zA-Z]`
+     *
      * @param d character to check
      * @return True if d is a letter, false otherwise.
      */
@@ -107,6 +112,7 @@ public class Scanner
     /**
      * A pure function to determine if a character is whitespace,
      * according to the regex `[\n\r\t ]`
+     *
      * @param d character to check
      * @return True if d is a whitespace character, false otherwise
      */
@@ -117,9 +123,10 @@ public class Scanner
 
     /**
      * Gets the next character from the raw underlying input stream.
-     * Precondition: The underlying input stream is in a valid state and is not at EOF.
-     * Postcondition: The input stream has advanced by one character, and
-     *                `currentChar` is updated to reflect the new cursor position.
+     *
+     * @precondition The underlying input stream is in a valid state and is not at EOF.
+     * @postcondition The input stream has advanced by one character, and
+     * `currentChar` is updated to reflect the new cursor position.
      */
     private void getNextChar()
     {
@@ -155,11 +162,12 @@ public class Scanner
     /**
      * Consume a single character from the input stream,
      * asserting that the character read matches the expected one.
-     * Precondition: The next character is `expected`
-     * Postcondition: The stream is advanced by one character, and
-     *                `currentChar` is updated to reflect the new cursor position.
+     *
      * @param expected The character to expect
      * @throws ScanErrorException if the next character does not match expected
+     * @precondition The next character is `expected`
+     * @postcondition The stream is advanced by one character, and
+     * `currentChar` is updated to reflect the new cursor position.
      */
     private void eat(char expected) throws ScanErrorException
     {
@@ -173,6 +181,7 @@ public class Scanner
     /**
      * Convenience method to throw an error message, including information about
      * the source location that the error was encountered at.
+     *
      * @param message error that was encountered
      * @throws ScanErrorException when called
      */
@@ -185,7 +194,7 @@ public class Scanner
      * Convenience method for constructing a new token,
      * automatically filling out the source location the token was found at.
      *
-     * @param type Token's type, see documentation for Token.Type enum
+     * @param type    Token's type, see documentation for Token.Type enum
      * @param content String content of the token
      * @return Completed token object
      */
@@ -198,8 +207,9 @@ public class Scanner
      * Pure function that checks if this scanner has reached the end of file.
      * This function may return true even if the next token is EOF, as the scanner
      * must still process the remaining to determine that the next token is EOF.
+     *
      * @return True if there may be more tokens to read, false if there are guaranteed
-     *         to be no more tokens left.
+     * to be no more tokens left.
      */
     public boolean hasNext()
     {
@@ -208,11 +218,12 @@ public class Scanner
 
     /**
      * Parses and emits the next token in the raw input stream, consuming it in the process.
-     * Precondition: None
-     * Postcondition: The internal input stream has advanced by any number of tokens,
-     *                possibly consuming the entire stream.
+     *
      * @return The next token in the stream, or a Token.Type.EOF if there are no more
-     *         tokens left in the stream.
+     * tokens left in the stream.
+     * @precondition None
+     * @postcondition The internal input stream has advanced by any number of tokens,
+     * possibly consuming the entire stream.
      */
     public Token nextToken()
     {
@@ -254,13 +265,14 @@ public class Scanner
      * Private helper method called on all Operator Tokens encountered
      * to transparently skip over any comments. Comment-related tokens
      * should only ever exist in this function, and they should never leave this code.
-     * Precondition: Stream is not at EOF and contains valid comment syntax
-     * Postcondition: Stream is advanced to the first character after the comment if
-     *                `op` is a comment operator, otherwise nothing changes.
+     *
      * @param op The operator token to handle
      * @return The original operator token, or the token after it if
-     *         op was a comment operator.
+     * op was a comment operator.
      * @throws ScanErrorException if end-of-file is reached within a comment
+     * @precondition Stream is not at EOF and contains valid comment syntax
+     * @postcondition Stream is advanced to the first character after the comment if
+     * `op` is a comment operator, otherwise nothing changes.
      */
     private Token skipComments(Token op) throws ScanErrorException
     {
@@ -318,9 +330,10 @@ public class Scanner
      * Advances the input stream until a valid closing comment operator (star slash)
      * is met, discarding the content until then. This function will correctly handle
      * nested block comments, which is unusual behavior but cool I guess.
-     * Precondition: The stream is positioned inside a block comment
-     * Postcondition: The stream is advanced to the first character after the end of the comment.
+     *
      * @throws ScanErrorException if EOF is reached
+     * @precondition The stream is positioned inside a block comment
+     * @postcondition The stream is advanced to the first character after the end of the comment.
      */
     private void scanBlockComment() throws ScanErrorException
     {
@@ -340,10 +353,11 @@ public class Scanner
     /**
      * Consumes a number from the input stream, returning it in a Token.
      * Numbers are defined by the regex `[0-9]+`
-     * Precondition: The stream is positioned at the beginning of a valid number
-     * Postcondition: The stream is advanced past the number
+     *
      * @return A token with `Token::Type::Numeric`
      * @throws ScanErrorException if the precondition is not met or EOF is reached
+     * @precondition The stream is positioned at the beginning of a valid number
+     * @postcondition The stream is advanced past the number
      */
     private Token scanNumber() throws ScanErrorException
     {
@@ -357,17 +371,18 @@ public class Scanner
             eat(currentChar);
         }
 
-        return newToken(Token.Type.Numeric,  ret.toString());
+        return newToken(Token.Type.Numeric, ret.toString());
     }
 
     /**
      * Consumes an identifier or keyword from the input stream, returning it in a Token.
      * Identifiers are defined by the regex `[a-zA-Z][A-Za-z0-9]*`
      * See `Scanner::initializeTables` for a full list of identifiers that are considered keywords
-     * Precondition: The stream is positioned at the beginning of a valid identifier
-     * Postcondition: The stream is advanced past the identifier
+     *
      * @return A token with `Token::Type::Identifier` or `Token::Type::Keyword`
      * @throws ScanErrorException if the precondition is not met or EOF is reached
+     * @precondition The stream is positioned at the beginning of a valid identifier
+     * @postcondition The stream is advanced past the identifier
      */
     private Token scanIdentifier() throws ScanErrorException
     {
@@ -389,10 +404,11 @@ public class Scanner
     /**
      * Consumes an operator from the input stream, returning it in a Token.
      * See `Scanner::initializeTables` for a full list of operators that are recognized.
-     * Precondition: The stream is positioned at the beginning of a valid operator
-     * Postcondition: The stream is advanced past the operator
+     *
      * @return A token with `Token::Type::Operator`
      * @throws ScanErrorException if the precondition is not met or EOF is reached
+     * @precondition The stream is positioned at the beginning of a valid operator
+     * @postcondition The stream is advanced past the operator
      */
     private Token scanOperator() throws ScanErrorException
     {

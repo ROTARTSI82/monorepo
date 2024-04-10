@@ -2,15 +2,15 @@ package scanner;
 
 /**
  * Token.java
+ *
+ * @param line    Line number of the input source this token was found in
+ * @param col     Column number of the input source this token was found in
+ * @param type    The type of token. See Token.Type documentation.
+ * @param content String content of the token.
  * @author Grant Yang
  * @version 2024.01.25
  * Token record that represents lexemes emitted by the Scanner,
  * a record that contains information including source information and token type.
- *
- * @param line Line number of the input source this token was found in
- * @param col Column number of the input source this token was found in
- * @param type The type of token. See Token.Type documentation.
- * @param content String content of the token.
  */
 public record Token(int line, int col, Type type, String content)
 {

@@ -1,16 +1,15 @@
 package scanner;
 
-import ast.Environment;
-import ast.Program;
-import ast.Statement;
 import parser.Parser;
 
-import java.io.*;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 /**
  * ScannerTester.java
+ *
  * @author Grant Yang
  * @version 2024.01.26
  * Tester class that uses the Scanner class to scan the two input test files
@@ -18,7 +17,12 @@ import java.util.stream.Stream;
  */
 public class ScannerTester
 {
-    public static void go(String file)
+    /**
+     * Scans the file and executes it as a pascal program
+     *
+     * @param file The file to scan
+     */
+    private static void go(String file)
     {
         try
         {
@@ -35,15 +39,17 @@ public class ScannerTester
 
     /**
      * Entry point into the tester
+     *
      * @param args Command-line arguments
      * @throws FileNotFoundException If either of the two test cases cannot be read
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
         Stream.of(
                 "5procedures/parserTest7.txt",
                 "5procedures/parserTest8.txt",
-                "5procedures/parserTest8_5.txt", "5procedures/recurse.txt"
+                "5procedures/parserTest8_5.txt", "5procedures/recurse.txt",
+                "5procedures/hanoi.txt"
         ).forEach(ScannerTester::go);
     }
 }
