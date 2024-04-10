@@ -21,6 +21,7 @@ public class PascalArray
     /**
      * Construct and allocate a new array with indices ranging from lo to hi, inclusive.
      * It is initially filled with null Objects.
+     *
      * @param lo The lowest valid integer index
      * @param hi The highest valid integer index
      */
@@ -36,6 +37,7 @@ public class PascalArray
 
     /**
      * Retrieves the element at index idx (indexing according to Pascal's convention)
+     *
      * @param idx Index to read
      * @return A reference to the Object at idx
      */
@@ -46,6 +48,7 @@ public class PascalArray
 
     /**
      * Converts the array to a string, dumping the full contents.
+     *
      * @return A string of the form "$arr<#>$##=[a,b,...]"
      */
     public String toString()

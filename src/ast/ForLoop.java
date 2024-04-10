@@ -4,6 +4,7 @@ import parser.BoxedValue;
 
 /**
  * ForLoop.java
+ *
  * @author Grant Yang
  * @version 2024.03.28
  * A for loop, which executes a statement a certain number of times.
@@ -18,9 +19,10 @@ public class ForLoop implements Statement
 
     /**
      * Constructs a new for loop
+     *
      * @param start The starting value of the loop variable
-     * @param stop The stopping value of the loop variable (exclusive).
-     * @param body The code to execute
+     * @param stop  The stopping value of the loop variable (exclusive).
+     * @param body  The code to execute
      */
     public ForLoop(Expression start, Expression stop, Statement body)
     {
@@ -31,10 +33,11 @@ public class ForLoop implements Statement
 
     /**
      * Execute the for loop, calling exec() on the body until the stopping condition is met.
+     *
      * @param env The environment to execute in
      * @postcondition `start` and `stop` have each been evaluated once,
-     *                and `body` has been executed until either a BREAK was reached
-     *                or the loop variable reached the value of `stop`.
+     * and `body` has been executed until either a BREAK was reached
+     * or the loop variable reached the value of `stop`.
      */
     @Override
     public void exec(Environment env)

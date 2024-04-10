@@ -4,6 +4,7 @@ import parser.BoxedValue;
 
 /**
  * NamedExpression.java
+ *
  * @author Grant Yang
  * @version 2024.03.28
  * Thin wrapper around Expressions that give names to them
@@ -16,7 +17,8 @@ public class NamedExpression implements Expression
 
     /**
      * Construct a NamedExpression from an Expression and a name
-     * @param sm The underlying expression
+     *
+     * @param sm   The underlying expression
      * @param name The name of the expression to print
      * @return A new NamedExpression
      */
@@ -30,6 +32,7 @@ public class NamedExpression implements Expression
 
     /**
      * Convert to string, representing it as the name of the expression
+     *
      * @return A string representing the abstract syntax tree from this point.
      */
     @Override
@@ -40,6 +43,7 @@ public class NamedExpression implements Expression
 
     /**
      * Evaluates the underlying expression
+     *
      * @param env The environment to evaluate in
      * @return The value that the expression evaluated to
      */

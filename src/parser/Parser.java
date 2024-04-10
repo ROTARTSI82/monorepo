@@ -11,9 +11,10 @@ import static parser.BoxedValue.box;
 
 /**
  * Parser.java
+ *
  * @author Grant Yang
  * @version 2024.03.06
- *
+ * <p>
  * This parser parses the stream of tokens provided by a Scanner
  * and evaluates as it goes, interpreting Pascal on the fly.
  * It uses a right-recursive context-free grammar and parses
@@ -28,80 +29,9 @@ public class Parser
     private PrecedenceLevelParser exprParser = null;
 
     /**
-     * This class represents a precedence level of operators to be parsed,
-     * and implements a method for parsing such expressions of that precedence level
-     * from the input stream. This class generalizes parseTerm() and parseExpression().
-     */
-    private class PrecedenceLevelParser
-    {
-        private final PrecedenceLevelParser next;
-        private final boolean rightAssociative;
-        private final List<String> operators;
-
-        /**
-         * Construct a new parser for a specific precedence level
-         * @param rtl If true, this operator is right-associative.
-         * @param ops A list of operators that this precedence level should try to parse.
-         * @param next The next lower precedence level after this, to form a linked list
-         */
-        public PrecedenceLevelParser(boolean rtl, List<String> ops,
-                                     PrecedenceLevelParser next)
-        {
-            this.rightAssociative = rtl;
-            this.operators = ops;
-            this.next = next;
-        }
-
-        /**
-         * Parse an expression of this precedence level from the input stream of
-         * the parser, falling back to either the `next` precedence level
-         * or to `parseFactor()` if `next` is null.
-         * @return An AST node representing the expression that was parsed
-         */
-        public Expression parse()
-        {
-            LinkedList<String> ops = new LinkedList<>();
-            LinkedList<Expression> vals = new LinkedList<>();
-
-            Expression ret = next == null ? parseFactor() : next.parse();
-            if (rightAssociative)
-                vals.add(ret);
-
-            while (operators.contains(currentToken.content()))
-            {
-                String op = currentToken.content();
-                eat(op);
-                ops.add(op);
-                vals.add(next == null ? parseFactor() : next.parse());
-            }
-
-            while (!ops.isEmpty())
-            {
-                if (rightAssociative)
-                {
-                    Expression right = vals.removeLast();
-                    Expression left = vals.removeLast();
-                    String opName = ops.removeLast();
-                    vals.add(new BinOp(opName, left, right));
-                }
-                else
-                {
-                    String opName = ops.removeFirst();
-                    Expression rhs = vals.removeFirst();
-                    ret = new BinOp(opName, ret, rhs);
-                }
-            }
-
-            if (rightAssociative)
-                return vals.getLast();
-            else
-                return ret;
-        }
-    }
-
-    /**
      * Constructs a new parser to parse the tokens scanned in by
      * the scanner specified.
+     *
      * @param scanner The scanner to read from
      */
     public Parser(Scanner scanner)
@@ -109,7 +39,7 @@ public class Parser
         this.scanner = scanner;
         currentToken = scanner.nextToken();
 
-        for (var op: OperatorSAM.PRECEDENCE)
+        for (var op : OperatorSAM.PRECEDENCE)
         {
             boolean rtl = op.getKey();
             this.exprParser = new PrecedenceLevelParser(rtl, op.getValue(), this.exprParser);
@@ -119,22 +49,30 @@ public class Parser
     /**
      * Consumes a token from the input stream, with checks for its specific
      * content and type to emit an error on invalid input.
+     *
      * @param cont The expected string content of the token, or null to specify any string.
      * @param type The expected type of the token, or null to specify any type.
+     * @throws IllegalArgumentException If the read token does not match the expected one
      * @precondition The next token in the scanner matches the expected criteria
      * @postcondition The scanner has advanced forward by 1 token
-     * @throws IllegalArgumentException If the read token does not match the expected one
      */
     private void eat(String cont, Token.Type type) throws IllegalArgumentException
     {
         if ((type == null || currentToken.type().equals(type))
-                && (cont == null || currentToken.content().equals(cont)))
+                && (cont == null || currentToken.content().equalsIgnoreCase(cont)))
             currentToken = scanner.nextToken();
         else
             throw new IllegalArgumentException("%s is illegal: expected %s (%s type)"
                     .formatted(currentToken, cont, type));
     }
 
+    /**
+     * Overloaded version of eat() that only checks for the content of the token
+     * and not the type of token.
+     *
+     * @param token The expected string content of the token
+     * @throws IllegalArgumentException If the read token does not match the expected one
+     */
     private void eat(String token) throws IllegalArgumentException
     {
         eat(token, null);
@@ -142,9 +80,10 @@ public class Parser
 
     /**
      * Parse an integer from the input stream
+     *
+     * @return An AST node representing the integer value that appeared
      * @precondition The scanner is located at the beginning of an integer literal
      * @postcondition The scanner has advanced past the integer literal
-     * @return An AST node representing the integer value that appeared
      */
     private Expression parseNumber()
     {
@@ -157,14 +96,15 @@ public class Parser
      * Parses a and executes a Pascal statement from the input stream.
      * Statement types include blocks (BEGIN ... END;), WRITELN() calls,
      * READLN() calls, and expressions handled by `exprParser`.
+     *
+     * @return An AST node representing the statement
      * @precondition The input stream is located at the beginning of a statement
      * @postcondition The input stream has advanced past the end of the statement,
-     *                but no code has been executed.
-     * @return An AST node representing the statement
+     * but no code has been executed.
      */
     public Statement parseStatement()
     {
-        switch (currentToken.content())
+        switch (currentToken.content().toUpperCase())
         {
             case "WHILE" ->
             {
@@ -183,7 +123,7 @@ public class Parser
 
                 // elseClause needs to be final to be used in a lambda, so I have to do this
                 boolean hack = false;
-                if (currentToken.content().equals("ELSE"))
+                if (currentToken.content().equalsIgnoreCase("ELSE"))
                 {
                     eat("ELSE");
                     hack = true;
@@ -191,21 +131,28 @@ public class Parser
 
                 Statement elseClause = hack ? parseStatement() : Statement.NO_OP;
                 return (e) ->
-                { if (cond.eval(e).asBool()) state.exec(e); else elseClause.exec(e); };
+                {
+                    if (cond.eval(e).asBool()) state.exec(e);
+                    else elseClause.exec(e);
+                };
             }
             case "CONTINUE" ->
             {
                 eat("CONTINUE");
                 eat(";");
                 return (e) ->
-                { throw new ContinueException(); };
+                {
+                    throw new ContinueException();
+                };
             }
             case "BREAK" ->
             {
                 eat("BREAK");
                 eat(";");
                 return (e) ->
-                { throw new BreakException(); };
+                {
+                    throw new BreakException();
+                };
             }
             case "FOR" ->
             {
@@ -221,27 +168,20 @@ public class Parser
             {
                 eat("BEGIN");
                 ArrayList<Statement> blk = new ArrayList<>();
-                while (!currentToken.content().equals("END"))
+                while (!currentToken.content().equalsIgnoreCase("END"))
                     blk.add(parseStatement());
                 eat("END");
                 eat(";");
                 return (e) -> blk.forEach((s) -> s.exec(e));
-            }
-            case "WRITELN" ->
-            {
-                eat("WRITELN");
-                eat("(");
-                Expression value = exprParser.parse();
-                eat(")");
-                eat(";");
-                return (e) -> System.out.println(value.eval(e).get());
             }
             case "EXIT" ->
             {
                 eat("EXIT");
                 eat(";");
                 return (e) ->
-                { throw new ReturnException(); };
+                {
+                    throw new ReturnException();
+                };
             }
             case "RETURN" ->
             {
@@ -254,15 +194,6 @@ public class Parser
                     throw new ReturnException();
                 };
             }
-            case "READLN" ->
-            {
-                eat("READLN");
-                eat("(");
-                Expression value = exprParser.parse();
-                eat(")");
-                eat(";");
-                return new ReadLn(value);
-            }
             default ->
             {
                 Expression value = exprParser.parse();
@@ -272,10 +203,15 @@ public class Parser
         }
     }
 
+    /**
+     * Parses a Pascal program from the input stream,
+     *
+     * @return An AST node representing the parsed program
+     */
     public Program parseProgram()
     {
-        Map<String, ProcedureDeclaration> procs = new HashMap<>();
-        while (currentToken.content().equals("PROCEDURE"))
+        Map<String, ProcedureDeclaration> procedures = new HashMap<>();
+        while (currentToken.content().equalsIgnoreCase("PROCEDURE"))
         {
             eat("PROCEDURE");
             String val = currentToken.content();
@@ -294,25 +230,26 @@ public class Parser
             eat(")");
             eat(";");
             Statement stmt = parseStatement();
-            procs.put(val, new ProcedureDeclaration(stmt, argSlots));
+            procedures.put(val, new ProcedureDeclaration(stmt, argSlots));
         }
 
         Statement main = parseStatement();
-        eat("EOF", Token.Type.EOF);
-        return new Program(main, procs);
+        eat(null, Token.Type.EOF);
+        return new Program(main, procedures);
     }
 
     /**
      * Parses a factor, the highest precedence level and the basic building blocks
      * in Pascal. Factors include identifiers (variables), strings, unary operators (-, NOT),
      * parenthesis, and special values like arrays (array[1..5]) along with TRUE and FALSE
+     *
+     * @return An AST node representing the parsed factor
      * @precondition The input stream is located at the beginning of a valid factor expression.
      * @postcondition The input stream has advanced past the factor.
-     * @return An AST node representing the parsed factor
      */
     private Expression parseFactor()
     {
-        switch (currentToken.content())
+        switch (currentToken.content().toUpperCase())
         {
             case "(" ->
             {
@@ -343,7 +280,7 @@ public class Parser
                 eat("FALSE");
                 return Expression.FALSE;
             }
-            case "array" ->
+            case "ARRAY" ->
             {
                 eat("array");
                 eat("[");
@@ -365,7 +302,8 @@ public class Parser
             return namedOp((e) -> box(ret), "\"" + ret + "\"");
         }
 
-        if (currentToken.type().equals(Token.Type.Identifier))
+        if (currentToken.type().equals(Token.Type.Identifier)
+                || currentToken.type().equals(Token.Type.Keyword))
         {
             String id = currentToken.content();
             eat(id);
@@ -400,5 +338,79 @@ public class Parser
         }
 
         return parseNumber();
+    }
+
+    /**
+     * This class represents a precedence level of operators to be parsed,
+     * and implements a method for parsing such expressions of that precedence level
+     * from the input stream. This class generalizes parseTerm() and parseExpression().
+     */
+    private class PrecedenceLevelParser
+    {
+        private final PrecedenceLevelParser next;
+        private final boolean rightAssociative;
+        private final List<String> operators;
+
+        /**
+         * Construct a new parser for a specific precedence level
+         *
+         * @param rtl  If true, this operator is right-associative.
+         * @param ops  A list of operators that this precedence level should try to parse.
+         * @param next The next lower precedence level after this, to form a linked list
+         */
+        public PrecedenceLevelParser(boolean rtl, List<String> ops,
+                                     PrecedenceLevelParser next)
+        {
+            this.rightAssociative = rtl;
+            this.operators = ops;
+            this.next = next;
+        }
+
+        /**
+         * Parse an expression of this precedence level from the input stream of
+         * the parser, falling back to either the `next` precedence level
+         * or to `parseFactor()` if `next` is null.
+         *
+         * @return An AST node representing the expression that was parsed
+         */
+        public Expression parse()
+        {
+            LinkedList<String> ops = new LinkedList<>();
+            LinkedList<Expression> values = new LinkedList<>();
+
+            Expression ret = next == null ? parseFactor() : next.parse();
+            if (rightAssociative)
+                values.add(ret);
+
+            while (operators.contains(currentToken.content()))
+            {
+                String op = currentToken.content();
+                eat(op);
+                ops.add(op);
+                values.add(next == null ? parseFactor() : next.parse());
+            }
+
+            while (!ops.isEmpty())
+            {
+                if (rightAssociative)
+                {
+                    Expression right = values.removeLast();
+                    Expression left = values.removeLast();
+                    String opName = ops.removeLast();
+                    values.add(new BinOp(opName, left, right));
+                }
+                else
+                {
+                    String opName = ops.removeFirst();
+                    Expression rhs = values.removeFirst();
+                    ret = new BinOp(opName, ret, rhs);
+                }
+            }
+
+            if (rightAssociative)
+                return values.getLast();
+            else
+                return ret;
+        }
     }
 }

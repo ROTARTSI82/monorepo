@@ -9,6 +9,7 @@ import static parser.BoxedValue.box;
 
 /**
  * OperatorSAM.java
+ *
  * @author Grant Yang
  * @version 2024.03.21
  * An interface for a Single Abstract Method to implement
@@ -16,17 +17,6 @@ import static parser.BoxedValue.box;
  */
 public interface OperatorSAM
 {
-    /**
-     * Applies the operator possibly executes side effects
-     * @param env Environment to execute in
-     * @param left The left-hand side of the operator
-     * @param right The right-hand side of the operator
-     * @return The value that the operator evaluated to
-     * @postcondition The environment may be modified by the operator :=,
-     *                but all other operators are pure functions.
-     */
-    BoxedValue apply(Environment env, Expression left, Expression right);
-
     /**
      * NAME_MAP maps the text of an infix operator to the OperatorSAM
      * that actually implements it. The text is the literal string that
@@ -57,7 +47,6 @@ public interface OperatorSAM
                 return a.eval(e).set(v);
             })
     );
-
     /**
      * PRECEDENCE contains a list of operators with the same precedence,
      * with the highest precedence operators coming first.
@@ -72,4 +61,16 @@ public interface OperatorSAM
             Map.entry(false, List.of("OR", "+", "-")), // ","
             Map.entry(true, List.of(":="))
     );
+
+    /**
+     * Applies the operator possibly executes side effects
+     *
+     * @param env   Environment to execute in
+     * @param left  The left-hand side of the operator
+     * @param right The right-hand side of the operator
+     * @return The value that the operator evaluated to
+     * @postcondition The environment may be modified by the operator :=,
+     * but all other operators are pure functions.
+     */
+    BoxedValue apply(Environment env, Expression left, Expression right);
 }
