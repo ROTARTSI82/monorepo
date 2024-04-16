@@ -167,6 +167,6 @@ public class Environment
      */
     public boolean isDebug()
     {
-        return true;
+        return false;
     }
 }
