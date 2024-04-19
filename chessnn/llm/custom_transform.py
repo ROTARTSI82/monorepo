@@ -3,8 +3,12 @@ from rmsnorm import RMSNorm
 from math import sin, cos
 from dataclasses import dataclass
 
+import cv2
+import numpy as np
+import os
+
 dtype = torch.float32
-device = torch.device('cpu')
+device = torch.device('cuda')
 
 
 @dataclass
@@ -143,18 +147,54 @@ class Transformer(torch.nn.Module):
         return d, e
 
 
+def statsof(arr):
+    return f"{np.mean(arr):.6f} {np.std(arr):.6f} [{np.min(arr):.6f} {np.max(arr):.6f}]"
+
+
+def visualize(params, fname="vis/"):
+    for name, param in params:
+        size = param.data.shape
+        raw = param.data.cpu().detach().numpy()
+        if len(size) == 1:
+            raw = raw.reshape(1, size[0])
+        if len(size) > 2:
+            raw = raw.reshape(-1, size[0])
+        print(f"\t{size} einsumming {name}! stats: {statsof(raw)}")
+        # print(raw)
+        mask = (raw < 0).astype(float)
+        negs = np.array([0, 0, 1], dtype=">f")
+        pos = np.array([0, 1, 0], dtype=">f")
+        images = np.einsum("xy,xy,c->xyc", -mask, raw, negs) + np.einsum("xy,xy,c->xyc", 1-mask, raw, pos)
+
+        write_matrices = True
+        if write_matrices:
+            mx = np.max(np.abs(images.flatten()))
+            images *= 256 / (mx + 1e-4)
+            name = f"{fname}{name}.png"
+            print(name, os.getcwd())
+            cv2.imwrite(name, images)
+
+
 if __name__ == "__main__":
     def test_custom_transform():
         c = Config()
+        c.d_model = 2
+        c.n_enc = 1
+        c.n_dec = 1
+        c.n_head = 1
+        c.v_size = 1
+        c.qk_size = 1
+        c.drop = 0
+
         model = Transformer(c).to(device).train()
         emb = torch.nn.Embedding(2, c.d_model, device=device)
         oproj = torch.nn.Linear(c.d_model, 2, device=device, bias=False)
         to_dec = torch.randn(3, c.d_model).to(device)
 
-        opt = torch.optim.AdamW([*model.parameters(), emb.weight, oproj.weight, to_dec], lr=3e-4, eps=1e-5,
-                                betas=(0.9, 0.95), weight_decay=0.1)
+        opt = torch.optim.Adam([*model.parameters(), emb.weight, oproj.weight, to_dec], lr=8e-4, eps=1e-5,
+                               betas=(0.9, 0.95), weight_decay=0.0)
 
-        loss_fn = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
+        loss_fn = torch.nn.CrossEntropyLoss(label_smoothing=0)
 
         params = sum(i.numel() for i in model.parameters())
         print("Training transformer with", params / 1000000, " million parameters\n")
@@ -169,7 +209,7 @@ if __name__ == "__main__":
         inps = torch.tensor(inps, device=device)
         outs = torch.tensor(outs, device=device)
 
-        for epoch in range(128):
+        for epoch in range(512):
             opt.zero_grad()
             model_out = oproj(model(emb(inps), to_dec.repeat(4, 1, 1))[0])
             # print(model_out.shape, model_out)
@@ -182,5 +222,11 @@ if __name__ == "__main__":
             z = zip(inps.tolist(), torch.argmax(model_out, dim=2).tolist())
             print([(i, v) for i, v in z], loss.item())
 
-        print([i for i in model.parameters()])
+        # print([i for i in model.parameters()])
+        params = dict(model.named_parameters())
+        params['embedding'] = emb.weight
+        params['out_proj'] = oproj.weight
+        params['decoder_seed'] = torch.nn.Parameter(to_dec)
+        print(params)
+        visualize(params.items(), "vis/binop_")
     test_custom_transform()

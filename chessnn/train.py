@@ -70,7 +70,7 @@ class ChessModel(torch.nn.Module):
         self.eval_proj = nn.Sequential(RMSNorm(conf.d_model), nn.Linear(conf.d_model, 11, bias=False))
 
         self.addup_query = nn.Parameter(torch.randn(1, 1, conf.qk_size * conf.n_head))
-        self.addup = Attention(conf, False, bias_out=True)
+        self.addup = Attention(conf, True, do_q_proj=False, bias_out=True)
         self.addup_mlp = MLP(conf)
 
     def forward(self, pieces, mov1, mov2, promo, castleflags, halfmoves):
@@ -136,6 +136,8 @@ if __name__ == "__main__":
     tot = dataset.tell()
     dataset.seek(load['loc'])
     dataset.readline()
+
+    visualize(model.named_parameters(), "chessvis/")
 
     board = chess.Board()
 
