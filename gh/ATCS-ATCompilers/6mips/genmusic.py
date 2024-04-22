@@ -25,6 +25,10 @@ toTheMax = """
  0.5;A3,Bb3,A3,Bb3 2;G3
 """.replace('\n', '')
 
+test = """
+1;C1,Eb1,F1,Gb1,F1,Eb1,C1
+""".replace('\n', '')
+
 laeteturIsreal = """
 1;D3,F3,A3 1.5;D3 0.5;D3 1;D3,D3 2;Bb3,A3 1;F3
  1;C4,C4,G3,D4,D4 2;A3,Bb3,F3 1;F3 2;Bb3,G3,A3,D3 1;D3 1.5;G3
