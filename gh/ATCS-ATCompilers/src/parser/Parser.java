@@ -102,7 +102,7 @@ public class Parser
      * @postcondition The input stream has advanced past the end of the statement,
      * but no code has been executed.
      */
-    public Statement parseStatement()
+    public Expression parseStatement()
     {
         switch (currentToken.content().toUpperCase())
         {
@@ -111,7 +111,7 @@ public class Parser
                 eat("WHILE");
                 Expression condition = exprParser.parse();
                 eat("DO");
-                Statement state = parseStatement();
+                Expression state = parseStatement();
                 return new WhileLoop(condition, state);
             }
             case "IF" ->
@@ -119,7 +119,7 @@ public class Parser
                 eat("IF");
                 Expression cond = exprParser.parse();
                 eat("THEN");
-                Statement state = parseStatement();
+                Expression state = parseStatement();
 
                 // elseClause needs to be final to be used in a lambda, so I have to do this
                 boolean hack = false;
@@ -129,12 +129,8 @@ public class Parser
                     hack = true;
                 }
 
-                Statement elseClause = hack ? parseStatement() : Statement.NO_OP;
-                return (e) ->
-                {
-                    if (cond.eval(e).asBool()) state.exec(e);
-                    else elseClause.exec(e);
-                };
+                Expression elseClause = hack ? parseStatement() : Expression.NO_OP;
+                return (e) -> cond.eval(e).asBool() ? state.eval(e) : elseClause.eval(e);
             }
             case "CONTINUE" ->
             {
@@ -161,18 +157,18 @@ public class Parser
                 eat("TO");
                 Expression end = exprParser.parse();
                 eat("DO");
-                Statement body = parseStatement();
+                Expression body = parseStatement();
                 return new ForLoop(start, end, body);
             }
             case "BEGIN" ->
             {
                 eat("BEGIN");
-                ArrayList<Statement> blk = new ArrayList<>();
+                ArrayList<Expression> blk = new ArrayList<>();
                 while (!currentToken.content().equalsIgnoreCase("END"))
                     blk.add(parseStatement());
                 eat("END");
                 eat(";");
-                return (e) -> blk.forEach((s) -> s.exec(e));
+                return (e) -> blk.stream().map((s) -> s.eval(e)).toList().getLast();
             }
             case "EXIT" ->
             {
@@ -198,7 +194,7 @@ public class Parser
             {
                 Expression value = exprParser.parse();
                 eat(";");
-                return value::eval;
+                return value;
             }
         }
     }
@@ -229,11 +225,11 @@ public class Parser
             }
             eat(")");
             eat(";");
-            Statement stmt = parseStatement();
+            Expression stmt = parseStatement();
             procedures.put(val, new ProcedureDeclaration(stmt, argSlots));
         }
 
-        Statement main = parseStatement();
+        Expression main = parseStatement();
         eat(null, Token.Type.EOF);
         return new Program(main, procedures);
     }

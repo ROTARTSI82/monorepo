@@ -12,10 +12,9 @@ import parser.BoxedValue;
  * one less than the stopping value (it is exclusive).
  * For example, `FOR i := 0 TO 10 DO` will execute the body 10 times.
  */
-public class ForLoop implements Statement
+public class ForLoop implements Expression
 {
-    private final Expression start, stop;
-    private final Statement body;
+    private final Expression start, stop, body;
 
     /**
      * Constructs a new for loop
@@ -24,7 +23,7 @@ public class ForLoop implements Statement
      * @param stop  The stopping value of the loop variable (exclusive).
      * @param body  The code to execute
      */
-    public ForLoop(Expression start, Expression stop, Statement body)
+    public ForLoop(Expression start, Expression stop, Expression body)
     {
         this.start = start;
         this.stop = stop;
@@ -40,18 +39,18 @@ public class ForLoop implements Statement
      * or the loop variable reached the value of `stop`.
      */
     @Override
-    public void exec(Environment env)
+    public BoxedValue eval(Environment env)
     {
         BoxedValue val = start.eval(env);
         BoxedValue max = stop.eval(env);
         while (val.asInt() < max.asInt())
             try
             {
-                body.exec(env);
+                body.eval(env);
             }
             catch (BreakException b)
             {
-                return;
+                return BoxedValue.NULL;
             }
             catch (ContinueException ignored)
             {
@@ -61,5 +60,6 @@ public class ForLoop implements Statement
                 // this will execute in the case of BREAK too
                 val.set(val.asInt() + 1);
             }
+        return BoxedValue.NULL;
     }
 }

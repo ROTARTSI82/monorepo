@@ -1,5 +1,7 @@
 package parser;
 
+import types.Type;
+
 /**
  * BoxedValue.java
  *
@@ -15,9 +17,13 @@ package parser;
  */
 public class BoxedValue
 {
+    public static BoxedValue NULL = box(null);
+
     private static int counter = 0;
     private Object value;
     private String name;
+
+    private Type type;
 
     /**
      * Construct a new BoxedValue from a name.
@@ -104,6 +110,6 @@ public class BoxedValue
      */
     public String toString()
     {
-        return name + "{" + value + "}";
+        return name + ":" + type + "{" + value + "}";
     }
 }
