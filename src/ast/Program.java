@@ -13,7 +13,7 @@ import java.util.Map;
 public class Program
 {
     final Map<String, ProcedureDeclaration> procedures;
-    private final Statement main;
+    private final Expression main;
 
     /**
      * Constructor for the Program class
@@ -21,7 +21,7 @@ public class Program
      * @param main       The main entry point statement of the program
      * @param procedures A map from procedure names to their declarations
      */
-    public Program(Statement main, Map<String, ProcedureDeclaration> procedures)
+    public Program(Expression main, Map<String, ProcedureDeclaration> procedures)
     {
         this.main = main;
         this.procedures = procedures;
@@ -38,7 +38,7 @@ public class Program
         try
         {
             env.push("GLOBAL");
-            main.exec(env);
+            main.eval(env);
         }
         catch (Exception e)
         {

@@ -1,5 +1,7 @@
 package ast;
 
+import parser.BoxedValue;
+
 /**
  * WhileLoop.java
  * Implements a while loop, with special exception handling
@@ -8,10 +10,9 @@ package ast;
  * @author Grant Yang
  * @version 2024.03.21
  */
-public class WhileLoop implements Statement
+public class WhileLoop implements Expression
 {
-    private final Expression cond;
-    private final Statement body;
+    private final Expression cond, body;
 
     /**
      * Constructs a new while loop
@@ -19,7 +20,7 @@ public class WhileLoop implements Statement
      * @param cond The expression to check for the condition to continue looping.
      * @param body The code to execute
      */
-    public WhileLoop(Expression cond, Statement body)
+    public WhileLoop(Expression cond, Expression body)
     {
         this.cond = cond;
         this.body = body;
@@ -33,19 +34,20 @@ public class WhileLoop implements Statement
      * @param env Environment to execute in
      */
     @Override
-    public void exec(Environment env)
+    public BoxedValue eval(Environment env)
     {
         while (cond.eval(env).asBool())
             try
             {
-                body.exec(env);
+                body.eval(env);
             }
             catch (BreakException b)
             {
-                return;
+                return BoxedValue.NULL;
             }
             catch (ContinueException ignored)
             {
             }
+        return BoxedValue.NULL;
     }
 }

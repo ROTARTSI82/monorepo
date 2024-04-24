@@ -24,6 +24,11 @@ public interface Expression
     Expression FALSE = namedOp((e) -> box(false), "false");
 
     /**
+     * A simple Expression that does nothing when executed.
+     */
+    Expression NO_OP = (e) -> box(null);
+
+    /**
      * Evaluates the expression to its value.
      *
      * @param env The environment to evaluate in

@@ -1,5 +1,7 @@
 package ast;
 
+import parser.BoxedValue;
+
 import java.util.ArrayList;
 
 /**
@@ -11,9 +13,9 @@ import java.util.ArrayList;
  * This contains information about how to execute the procedure,
  * including its arguments and body code/statement.
  */
-public class ProcedureDeclaration implements Statement
+public class ProcedureDeclaration implements Expression
 {
-    private final Statement body;
+    private final Expression body;
     private final ArrayList<String> argSlots;
 
     /**
@@ -22,7 +24,7 @@ public class ProcedureDeclaration implements Statement
      * @param body     The code to execute when the procedure is called
      * @param argSlots The names of the arguments to the procedure
      */
-    public ProcedureDeclaration(Statement body, ArrayList<String> argSlots)
+    public ProcedureDeclaration(Expression body, ArrayList<String> argSlots)
     {
         this.body = body;
         this.argSlots = argSlots;
@@ -57,9 +59,9 @@ public class ProcedureDeclaration implements Statement
      * and side effects like WRITELN and READLN have been performed.
      */
     @Override
-    public void exec(Environment env)
+    public BoxedValue eval(Environment env)
     {
-        body.exec(env);
+        return body.eval(env);
     }
 
     /**

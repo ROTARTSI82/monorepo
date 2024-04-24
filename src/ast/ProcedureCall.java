@@ -98,7 +98,7 @@ public class ProcedureCall implements Expression
 
         try
         {
-            proc.exec(env);
+            proc.eval(env);
         }
         catch (ReturnException ignored)
         {
