@@ -73,6 +73,7 @@ public class BinOp extends Expression
     @Override
     public void compile(Emitter emit)
     {
+        emit.emit("# " + this);
         if (name.equals(":="))
         {
             Type t = rhs.getType(emit);

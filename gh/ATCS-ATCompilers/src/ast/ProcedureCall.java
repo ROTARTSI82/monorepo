@@ -123,7 +123,29 @@ public class ProcedureCall extends Expression
     @Override
     public void compile(Emitter emit)
     {
-        emit.emit("# procedure call not impl: " + name);
+        emit.emit("# procedure call: " + this);
+        emit.emit("subi $sp $sp 8"); // space for $ra and $fp for the call
+        int size = 8;
+        for (Expression e : args)
+        {
+            e.compile(emit);
+            Type typ = e.getType(emit);
+            if (typ.equals(Type.Double))
+            {
+                emit.emitPushF0();
+                size += 8;
+            }
+            else
+            {
+                size += 4;
+                String reg = OperatorCodegen.REG_SRC.get(typ);
+                if (reg == null) throw new RuntimeException("unsupported arg type for " + e);
+                emit.emitPush32(reg);
+            }
+        }
+
+        emit.emit("addi $sp $sp " + size);
+        emit.emit("jal proc_" + name);
     }
 
     /**
