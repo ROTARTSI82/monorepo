@@ -42,15 +42,19 @@ public class Variable extends Expression
     @Override
     public void compileLValue(Emitter emit)
     {
-        if (emit.vars.containsKey(id))
-        {
-            int frameLoc = emit.vars.get(id).frameLoc();
-            emit.emit("subi $s0 $fp " + frameLoc);
-        }
-        else
+        if (emit.globalVars.containsKey(id))
         {
             emit.emit("la $s0 _" + id);
+            return;
         }
+        else if (emit.vars.containsKey(id))
+        {
+            int frameLoc = emit.vars.get(id).frameLoc();
+            emit.emit("subi $s0 $fp " + frameLoc + " # " + id);
+            return;
+        }
+
+        emit.emit("# ERR: compile Lvalue failed for unknown var " + id);
     }
 
     @Override

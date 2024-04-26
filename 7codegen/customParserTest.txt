@@ -1,0 +1,24 @@
+VAR x, y, sum, i, b;
+BEGIN
+	x := 2;
+	y := x + (3 * x);
+	x := x + y;
+	WRITELN(x * y);
+	IF x > y THEN 
+	BEGIN
+		WRITELN(x);
+		WRITELN(y);
+	END;
+	x := 0;
+	WHILE x < 8 DO
+	BEGIN
+		WRITELN(x);
+		x := x + 2;
+	END;
+	sum := 0;	
+	FOR i := 1 TO 5 DO	BEGIN		sum := sum + i;		WRITELN(sum);	END;
+	READLN(b);
+	IF (b < 10)
+		WRITELN(b);
+END;
+.

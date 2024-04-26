@@ -74,6 +74,7 @@ public class Program
                 new Variable(proc.getArg(i)).hintType(Expression.Type.Int, emit); // declared param type not impl
 
             StringBuilder old = emit.main;
+            emit.main = new StringBuilder();
             proc.compile(emit);
             String procCode = emit.main.toString();
             emit.main = old;
