@@ -47,6 +47,7 @@ public interface OperatorSAM
                 return a.eval(e).set(v);
             })
     );
+
     /**
      * PRECEDENCE contains a list of operators with the same precedence,
      * with the highest precedence operators coming first.

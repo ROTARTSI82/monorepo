@@ -1,0 +1,97 @@
+package ast;
+
+import codegen.Emitter;
+import parser.BoxedValue;
+
+public class Variable extends Expression
+{
+    private final String id;
+
+    public Variable(String id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public BoxedValue eval(Environment env)
+    {
+        return env.getVariable(id);
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        if (!emit.vars.containsKey(id) && !emit.globalVars.containsKey(id))
+            throw new RuntimeException("undefined variable " + id);
+        compileLValue(emit);
+        Type t = getType(emit);
+        if (t.equals(Type.Double))
+        {
+            emit.emit("lw $t0 ($s0)");
+            emit.emit("lw $t1 4($s0)");
+            emit.emit("mtc1.d $t0 $f0");
+        }
+        else if (t.equals(Type.String))
+            emit.emit("lw $a0 ($s0)");
+        else if (t.equals(Type.Int))
+            emit.emit("lw $v0 ($s0)");
+        else
+            throw new RuntimeException("operator:= on type " + t + " not impl");
+    }
+
+    @Override
+    public void compileLValue(Emitter emit)
+    {
+        if (emit.vars.containsKey(id))
+        {
+            int frameLoc = emit.vars.get(id).frameLoc();
+            emit.emit("subi $s0 $fp " + frameLoc);
+        }
+        else
+        {
+            emit.emit("la $s0 _" + id);
+        }
+    }
+
+    @Override
+    public Type getType(Emitter e)
+    {
+        if (e.vars.containsKey(id))
+            return e.vars.get(id).type();
+        else if (e.globalVars.containsKey(id))
+            return e.globalVars.get(id);
+
+        System.out.println(e.vars);
+        System.out.println(e.globalVars);
+        throw new RuntimeException("uninitialized var type for " + id);
+    }
+
+    @Override
+    public void hintType(Type t, Emitter e)
+    {
+        if (e.vars.containsKey(id) && !e.vars.get(id).type().equals(t))
+            throw new RuntimeException("hint type overwrote previous type from "
+                    + e.vars.get(id).type() + " to " + t);
+
+        if (!e.vars.containsKey(id))
+        {
+            System.out.println("register new variable " + id + " type " + t);
+            e.vars.put(id, new Emitter.VarInfo(t, e.frameSize));
+            if (t.equals(Type.Double))
+                e.frameSize += 8;
+            else
+                e.frameSize += 4;
+
+            if (e.storeVarsGlobal)
+                e.allocGlobalVar(id, t);
+        }
+        else
+            e.vars.put(id, new Emitter.VarInfo(t, e.vars.get(id).frameLoc()));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "VARIABLE " + id;
+    }
+}

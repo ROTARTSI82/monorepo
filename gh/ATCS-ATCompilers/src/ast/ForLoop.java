@@ -1,5 +1,6 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
 /**
@@ -12,9 +13,12 @@ import parser.BoxedValue;
  * one less than the stopping value (it is exclusive).
  * For example, `FOR i := 0 TO 10 DO` will execute the body 10 times.
  */
-public class ForLoop implements Expression
+public class ForLoop extends Expression
 {
     private final Expression start, stop, body;
+    private final int id;
+
+    private static int COUNT = 0;
 
     /**
      * Constructs a new for loop
@@ -28,6 +32,7 @@ public class ForLoop implements Expression
         this.start = start;
         this.stop = stop;
         this.body = body;
+        this.id = COUNT++;
     }
 
     /**
@@ -61,5 +66,35 @@ public class ForLoop implements Expression
                 val.set(val.asInt() + 1);
             }
         return BoxedValue.NULL;
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        emit.emit("# begin for loop " + id);
+        start.compile(emit);
+        emit.emit("# for loop " + id);
+        emit.emitPush32("$s0");
+        emit.emitPush32("$v0");
+
+        stop.compile(emit);
+        emit.emitPop32("$t0");
+
+        emit.pushLoopLabel("forLoop" + id);
+        emit.emit("forLoop" + id + ":");
+        emit.emit("bge $v0 $t0 exit_forLoop" + id);
+
+        body.compile(emit);
+
+        emit.emitPop32("$s0");
+        emit.emit("lw $t0 ($s0)");
+        emit.emit("addi $t0 $t0 1");
+        emit.emit("sw $t0 ($s0)");
+        emit.emitPush32("$s0");
+        emit.emit("j forLoop" + id);
+
+        emit.emit("exit_forLoop" + id + ":");
+        emit.popLoopLabel();
+        emit.emit("# end for loop " + id);
     }
 }
