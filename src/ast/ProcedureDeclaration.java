@@ -1,5 +1,6 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * This contains information about how to execute the procedure,
  * including its arguments and body code/statement.
  */
-public class ProcedureDeclaration implements Expression
+public class ProcedureDeclaration extends Expression
 {
     private final Expression body;
     private final ArrayList<String> argSlots;
@@ -28,6 +29,12 @@ public class ProcedureDeclaration implements Expression
     {
         this.body = body;
         this.argSlots = argSlots;
+    }
+
+    @Override
+    public Type getType(Emitter e)
+    {
+        return body.getType(e);
     }
 
     /**
@@ -62,6 +69,12 @@ public class ProcedureDeclaration implements Expression
     public BoxedValue eval(Environment env)
     {
         return body.eval(env);
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        body.compile(emit);
     }
 
     /**

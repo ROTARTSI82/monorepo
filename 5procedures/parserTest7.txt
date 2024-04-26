@@ -1,5 +1,6 @@
 PROCEDURE Add();
 BEGIN
+    x := 2;
 	WRITELN(x);
 	x := x + 2;
 END;

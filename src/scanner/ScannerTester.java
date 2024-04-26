@@ -1,5 +1,7 @@
 package scanner;
 
+import ast.Program;
+import codegen.Emitter;
 import parser.Parser;
 
 import java.io.FileInputStream;
@@ -29,7 +31,13 @@ public class ScannerTester
             System.out.println(" ================ [ " + file + " ] =================");
             Scanner scan2 = new Scanner(new FileInputStream(file));
             Parser parse = new Parser(scan2);
-            parse.parseProgram().exec();
+            Program prog = parse.parseProgram();
+
+            Emitter emit = new Emitter(file + ".asm");
+            prog.compile(emit);
+            emit.close();
+
+            prog.exec();
         }
         catch (IOException e)
         {

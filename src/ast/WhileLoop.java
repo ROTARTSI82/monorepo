@@ -1,5 +1,6 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
 /**
@@ -10,8 +11,10 @@ import parser.BoxedValue;
  * @author Grant Yang
  * @version 2024.03.21
  */
-public class WhileLoop implements Expression
+public class WhileLoop extends Expression
 {
+    private static int COUNT = 0;
+    private final int id;
     private final Expression cond, body;
 
     /**
@@ -22,6 +25,7 @@ public class WhileLoop implements Expression
      */
     public WhileLoop(Expression cond, Expression body)
     {
+        id = COUNT++;
         this.cond = cond;
         this.body = body;
     }
@@ -49,5 +53,23 @@ public class WhileLoop implements Expression
             {
             }
         return BoxedValue.NULL;
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        emit.emit("# begin while loop " + id);
+        cond.compile(emit);
+
+        emit.pushLoopLabel("whileLoop" + id);
+        emit.emit("whileLoop" + id + ":");
+        emit.emit("bnez $v0 exit_forLoop" + id);
+
+        body.compile(emit);
+        emit.emit("j whileLoop" + id);
+
+        emit.emit("exit_whileLoop" + id + ":");
+        emit.popLoopLabel();
+        emit.emit("# end while loop " + id);
     }
 }

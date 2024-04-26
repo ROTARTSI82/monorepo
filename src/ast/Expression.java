@@ -1,8 +1,8 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
-import static ast.NamedExpression.namedOp;
 import static parser.BoxedValue.box;
 
 /**
@@ -12,21 +12,105 @@ import static parser.BoxedValue.box;
  * @version 2024.03.28
  * An expression which can be evaluated to a BoxedValue
  */
-public interface Expression
+public abstract class Expression
 {
     /**
      * The constant boolean literal for TRUE
      */
-    Expression TRUE = namedOp((e) -> box(true), "true");
+    public static final Expression TRUE = new Expression()
+    {
+        @Override
+        public Type getType(Emitter e)
+        {
+            return Type.Int;
+        }
+
+        @Override
+        public BoxedValue eval(Environment env)
+        {
+            return box(true);
+        }
+
+        @Override
+        public void compile(Emitter emit)
+        {
+            emit.emit("addi $v0 $0 1");
+        }
+
+        @Override
+        public String toString()
+        {
+            return "true";
+        }
+    };
+
     /**
      * The constant boolean literal for FALSE
      */
-    Expression FALSE = namedOp((e) -> box(false), "false");
+    public static final Expression FALSE = new Expression()
+    {
+        @Override
+        public Type getType(Emitter e)
+        {
+            return Type.Int;
+        }
+
+        @Override
+        public BoxedValue eval(Environment env)
+        {
+            return box(false);
+        }
+
+        @Override
+        public void compile(Emitter emit)
+        {
+            emit.emit("move $v0 $0");
+        }
+
+        @Override
+        public String toString()
+        {
+            return "false";
+        }
+    };
 
     /**
      * A simple Expression that does nothing when executed.
      */
-    Expression NO_OP = (e) -> box(null);
+    public static final Expression NO_OP = new Expression()
+    {
+        @Override
+        public BoxedValue eval(Environment env)
+        {
+            return BoxedValue.NULL;
+        }
+
+        @Override
+        public void compile(Emitter emit)
+        {
+            emit.emit("# no op");
+        }
+    };
+
+    public static final Expression UNIMPL = new Expression()
+    {
+        @Override
+        public BoxedValue eval(Environment env)
+        {
+            throw new RuntimeException("unimplemented expr");
+        }
+
+        @Override
+        public void compile(Emitter emit)
+        {
+            emit.emit("# ERR: unimpl expr");
+        }
+    };
+
+    public enum Type
+    {
+        Null, Int, Double, String, Array
+    }
 
     /**
      * Evaluates the expression to its value.
@@ -36,5 +120,23 @@ public interface Expression
      * @postcondition The environment may be modified by the expression
      * if the expression contained any := operators.
      */
-    BoxedValue eval(Environment env);
+    public abstract BoxedValue eval(Environment env);
+
+    public Type getType(Emitter e)
+    {
+        return Type.Null;
+    }
+
+    public abstract void compile(Emitter emit);
+
+    // special functions for lvalues and variables
+    public void compileLValue(Emitter emit)
+    {
+        emit.emit("# ERR cannot produce lvalue for this type of expr");
+    }
+
+    public void hintType(Type t, Emitter e)
+    {
+        e.emit("# hint type " + t);
+    }
 }

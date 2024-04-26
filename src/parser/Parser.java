@@ -1,12 +1,12 @@
 package parser;
 
 import ast.*;
+import codegen.Emitter;
 import scanner.Scanner;
 import scanner.Token;
 
 import java.util.*;
 
-import static ast.NamedExpression.namedOp;
 import static parser.BoxedValue.box;
 
 /**
@@ -24,6 +24,7 @@ import static parser.BoxedValue.box;
  */
 public class Parser
 {
+    static final Expression.Type REPLACEME = Expression.Type.Null;
     final private Scanner scanner;
     private Token currentToken;
     private PrecedenceLevelParser exprParser = null;
@@ -89,7 +90,34 @@ public class Parser
     {
         String cont = currentToken.content();
         eat(null, Token.Type.Numeric);
-        return namedOp((e) -> box(Integer.parseInt(cont)), "#" + cont);
+
+        int val = Integer.parseInt(cont);
+        return new Expression()
+        {
+            @Override
+            public Type getType(Emitter e)
+            {
+                return Expression.Type.Int;
+            }
+
+            @Override
+            public BoxedValue eval(Environment env)
+            {
+                return box(val);
+            }
+
+            @Override
+            public void compile(Emitter emit)
+            {
+                emit.emit("li $v0 " + val);
+            }
+
+            @Override
+            public String toString()
+            {
+                return "#" + val;
+            }
+        };
     }
 
     /**
@@ -129,25 +157,44 @@ public class Parser
                     hack = true;
                 }
 
-                Expression elseClause = hack ? parseStatement() : Expression.NO_OP;
-                return (e) -> cond.eval(e).asBool() ? state.eval(e) : elseClause.eval(e);
+                return new IfCondition(cond, state, hack ? parseStatement() : Expression.NO_OP);
             }
             case "CONTINUE" ->
             {
                 eat("CONTINUE");
                 eat(";");
-                return (e) ->
+                return new Expression()
                 {
-                    throw new ContinueException();
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        throw new ContinueException();
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        emit.emit("j " + emit.getLoopLabel());
+                    }
                 };
             }
             case "BREAK" ->
             {
                 eat("BREAK");
                 eat(";");
-                return (e) ->
+                return new Expression()
                 {
-                    throw new BreakException();
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        throw new BreakException();
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        emit.emit("j exit_" + emit.getLoopLabel());
+                    }
                 };
             }
             case "FOR" ->
@@ -168,15 +215,43 @@ public class Parser
                     blk.add(parseStatement());
                 eat("END");
                 eat(";");
-                return (e) -> blk.stream().map((s) -> s.eval(e)).toList().getLast();
+                return new Expression()
+                {
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        return blk.stream().map((s) -> s.eval(env)).toList().getLast();
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        blk.forEach((e) ->
+                        {
+                            System.out.println(e);
+                            e.compile(emit);
+                        });
+                    }
+                };
             }
             case "EXIT" ->
             {
                 eat("EXIT");
                 eat(";");
-                return (e) ->
+                return new Expression()
                 {
-                    throw new ReturnException();
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        throw new ReturnException();
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        // stub
+                        throw new ReturnException();
+                    }
                 };
             }
             case "RETURN" ->
@@ -184,10 +259,26 @@ public class Parser
                 eat("RETURN");
                 Expression expr = exprParser.parse();
                 eat(";");
-                return (e) ->
+                return new Expression()
                 {
-                    e.setVariable(e.getFrameName(), expr.eval(e).get());
-                    throw new ReturnException();
+                    @Override
+                    public Type getType(Emitter e)
+                    {
+                        return Expression.Type.Null;
+                    }
+
+                    @Override
+                    public BoxedValue eval(Environment e)
+                    {
+                        e.setVariable(e.getFrameName(), expr.eval(e).get());
+                        throw new ReturnException();
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        throw new ReturnException();
+                    }
                 };
             }
             default ->
@@ -258,13 +349,55 @@ public class Parser
             {
                 eat("-");
                 Expression expr = parseFactor();
-                return namedOp((e) -> box(-expr.eval(e).asInt()), "-" + expr);
+                return new Expression()
+                {
+                    @Override
+                    public Type getType(Emitter e)
+                    {
+                        return expr.getType(e);
+                    }
+
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        return box(-expr.eval(env).asInt());
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        if (getType(emit) == Type.Double)
+                            emit.emit("neg.d $f0 $f0");
+                        else
+                            emit.emit("neg $v0 $v0");
+                    }
+                };
             }
             case "NOT" ->
             {
                 eat("NOT");
                 Expression expr = parseFactor();
-                return namedOp((e) -> box(!expr.eval(e).asBool()), "NOT " + expr);
+
+                return new Expression()
+                {
+                    @Override
+                    public Type getType(Emitter e)
+                    {
+                        return Expression.Type.Int;
+                    }
+
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        return box(!expr.eval(env).asBool());
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        emit.emit("seq $v0 $0 $v0");
+                    }
+                };
             }
             case "TRUE" ->
             {
@@ -284,10 +417,26 @@ public class Parser
                 eat("..");
                 Expression hi = exprParser.parse();
                 eat("]");
-                return namedOp(
-                        (e) -> box(new PascalArray(lo.eval(e).asInt(), hi.eval(e).asInt())),
-                        "arr[" + lo + ".." + hi + "]"
-                );
+                return new Expression()
+                {
+                    @Override
+                    public Type getType(Emitter e)
+                    {
+                        return Expression.Type.Array;
+                    }
+
+                    @Override
+                    public BoxedValue eval(Environment e)
+                    {
+                        return box(new PascalArray(lo.eval(e).asInt(), hi.eval(e).asInt()));
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        emit.emit("# arrays not impl");
+                    }
+                };
             }
         }
 
@@ -295,7 +444,27 @@ public class Parser
         {
             String ret = currentToken.content();
             eat(ret);
-            return namedOp((e) -> box(ret), "\"" + ret + "\"");
+            return new Expression()
+            {
+                @Override
+                public Type getType(Emitter e)
+                {
+                    return Expression.Type.String;
+                }
+
+                @Override
+                public BoxedValue eval(Environment env)
+                {
+                    return box(ret);
+                }
+
+                @Override
+                public void compile(Emitter emit)
+                {
+                    String label = emit.tryAllocGlobal(ret);
+                    emit.emit("la $a0 " + label);
+                }
+            };
         }
 
         if (currentToken.type().equals(Token.Type.Identifier)
@@ -324,13 +493,29 @@ public class Parser
                 eat("[");
                 Expression idx = exprParser.parse();
                 eat("]");
-                return namedOp(
-                        (e) -> ((PascalArray) e.getVariable(id).get()).at(idx.eval(e).asInt()),
-                        "$" + id + "[" + idx + "]"
-                );
+                return new Expression()
+                {
+                    @Override
+                    public Type getType(Emitter e)
+                    {
+                        throw new RuntimeException("array idx not impl");
+                    }
+
+                    @Override
+                    public BoxedValue eval(Environment env)
+                    {
+                        return ((PascalArray) env.getVariable(id).get()).at(idx.eval(env).asInt());
+                    }
+
+                    @Override
+                    public void compile(Emitter emit)
+                    {
+                        emit.emit("# arr idx not impl");
+                    }
+                };
             }
 
-            return namedOp((e) -> e.getVariable(id), "$" + id);
+            return new Variable(id);
         }
 
         return parseNumber();

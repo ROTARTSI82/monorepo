@@ -1,5 +1,6 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
 import java.io.BufferedReader;
@@ -15,7 +16,7 @@ import java.util.List;
  * A class that represents a procedure call node in the AST.
  * This is used to call a procedure with a given name and argument values.
  */
-public class ProcedureCall implements Expression
+public class ProcedureCall extends Expression
 {
     private final String name;
     private final ArrayList<Expression> args;
@@ -30,6 +31,13 @@ public class ProcedureCall implements Expression
     {
         this.name = name;
         this.args = args;
+    }
+
+    @Override
+    public Type getType(Emitter e)
+    {
+//        throw new RuntimeException("procedure call type not impl");
+        return Type.Int;
     }
 
     /**
@@ -110,6 +118,12 @@ public class ProcedureCall implements Expression
             System.out.println("RETURN PROCEDURE " + proc + "\t" + this + "\t" + values);
 
         return BoxedValue.box(ret); // re-box to force a copy
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        emit.emit("# procedure call not impl: " + name);
     }
 
     /**

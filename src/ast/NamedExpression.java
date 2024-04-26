@@ -1,5 +1,6 @@
 package ast;
 
+import codegen.Emitter;
 import parser.BoxedValue;
 
 /**
@@ -10,10 +11,16 @@ import parser.BoxedValue;
  * Thin wrapper around Expressions that give names to them
  * so that printing them is more informative.
  */
-public class NamedExpression implements Expression
+public class NamedExpression extends Expression
 {
     private Expression op;
     private String name;
+
+    @Override
+    public Type getType(Emitter e)
+    {
+        return op.getType(e);
+    }
 
     /**
      * Construct a NamedExpression from an Expression and a name
@@ -51,5 +58,11 @@ public class NamedExpression implements Expression
     public BoxedValue eval(Environment env)
     {
         return op.eval(env);
+    }
+
+    @Override
+    public void compile(Emitter emit)
+    {
+        op.compile(emit);
     }
 }

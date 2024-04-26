@@ -16,18 +16,29 @@ instr is the MIDI instrument (5 = piano)
 vol is the volume.
 """
 
-tempo = 240
-instr = 5
+tempo = 120
+instr = 74
 vol = 127
+transpose = -12
+onRatio = 1.0
 toTheMax = """
 1;G3,G3 0.5;G3 1.5;D4 1.5;_ 1.5;D4 0.5;D4 1;Bb3,A3,G3,G3 0.5;G3 1.5;D4 1.5;_
  1.5;D4 0.5;D4 1;Bb3,A3,G3,G3 0.5;G3 0.5;A3,Bb3,A3,Bb3 1;G3,G3 0.5;G3
  0.5;A3,Bb3,A3,Bb3 2;G3
-""".replace('\n', '')
+"""
+
+bolero = """
+1.75;D5 0.25;C5,B4,A4,B4,C5 0.25;D5,C5 0.75;B4 0.25;C5,B4,A4,C5,B4,A4
+ 0.75;F4 0.125;F4,_,F4,_ 0.25;F4,_,A4,_,C5,A4,B4,G4
+ 0.5;F4 0.125;F4,_,F4,_ 0.25;F4,_,A4,_,B4,G4,A4,F4
+ 0.5;D4 0.25;D4,C4 1.5;D4 0.125;D4,_,D4,_ 0.25;D4,_,F4,_,A4,F4,G4,E4
+ 0.5;D4 0.25;D4,C4 1.5;D4 0.25;D4,C4 0.5;D4 0.25;E4,F4 2.25;G4
+ 0.25;F4,E4,D4 0.5;C4
+"""
 
 test = """
 1;C1,Eb1,F1,Gb1,F1,Eb1,C1
-""".replace('\n', '')
+"""
 
 laeteturIsreal = """
 1;D3,F3,A3 1.5;D3 0.5;D3 1;D3,D3 2;Bb3,A3 1;F3
@@ -35,9 +46,9 @@ laeteturIsreal = """
  0.5;G3 1;F#3,G3,G3,F3 1.5;Bb3 0.5;Bb3 1;A3,Bb3,Bb3,Bb3,G3 2;Eb3
  2;_ 1;Bb3,G3,Eb3,Eb3,Bb3,Bb3,F3 2;G3,C3,D3,G3 1;D3,G3,G3,F3,Bb3,Bb3,F3
  2;G3,C3,D3,G2
-""".replace('\n', '')
+"""
 
-data = toTheMax
+data = bolero.replace('\n', '')
 
 quarterMillis = 1000 * 60 / tempo
 scale = "C _ D _ E F _ G _ A _ B".lower().split(' ')
@@ -59,13 +70,14 @@ for grouping in data.split(' '):
     dur = float(dat[0])
     notes = list(map(parseNote, dat[1].split(',')))
 
-    sub = quarterMillis * dur * 0.1
+    sub = quarterMillis * dur * (1 - onRatio)
 
     for i in notes:
         if int(i) < 0:
             print("-100", int(quarterMillis * dur), "0 0", end=' ')
             continue
-        print(int(i), int(quarterMillis * dur - sub), instr, vol, end=' ')
-        print('-100', int(sub), '0 0', end=' ')
+        print(int(i + transpose), int(quarterMillis * dur - sub), instr, vol, end=' ')
+        if int(sub) > 0:
+            print('-100', int(sub), '0 0', end=' ')
 
 print('-1 0 0 0', end=' ')
