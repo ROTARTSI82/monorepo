@@ -59,11 +59,10 @@ public class WhileLoop extends Expression
     public void compile(Emitter emit)
     {
         emit.emit("# begin while loop " + id);
-        cond.compile(emit);
-
         emit.pushLoopLabel("whileLoop" + id);
         emit.emit("whileLoop" + id + ":");
-        emit.emit("bnez $v0 exit_forLoop" + id);
+        cond.compile(emit);
+        emit.emit("beqz $v0 exit_whileLoop" + id);
 
         body.compile(emit);
         emit.emit("j whileLoop" + id);

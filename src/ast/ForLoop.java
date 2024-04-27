@@ -73,27 +73,36 @@ public class ForLoop extends Expression
     {
         emit.emit("# begin for loop " + id);
         start.compile(emit);
+        if (!start.getType(emit).equals(Type.Int) || !stop.getType(emit).equals(Type.Int))
+            throw new RuntimeException("for loop var must be int");
+
         emit.emit("# for loop " + id);
         emit.emitPush32("$s0");
+        System.out.println("for sp " + emit.sp);
         emit.emitPush32("$v0");
 
         stop.compile(emit);
-        emit.emitPop32("$t0");
-
+        emit.emitPop32("$t0"); // t0 = value of start, v0 = value of stop
+        emit.emitPush32("$v0");
         emit.pushLoopLabel("forLoop" + id);
         emit.emit("forLoop" + id + ":");
-        emit.emit("bge $v0 $t0 exit_forLoop" + id);
+        emit.emit("bge $t0 $v0 exit_forLoop" + id);
 
         body.compile(emit);
 
-        emit.emitPop32("$s0");
+        // lmao double pointer deref is funny
+        System.out.println("for sp end " + emit.sp);
+
+        emit.emit("lw $s0 8($sp)");
+        emit.emit("lw $v0 4($sp)");
         emit.emit("lw $t0 ($s0)");
         emit.emit("addi $t0 $t0 1");
         emit.emit("sw $t0 ($s0)");
-        emit.emitPush32("$s0");
         emit.emit("j forLoop" + id);
 
         emit.emit("exit_forLoop" + id + ":");
+        emit.emit("addi $sp $sp 8"); // pop $v0 $s0
+        emit.sp -= 8;
         emit.popLoopLabel();
         emit.emit("# end for loop " + id);
     }

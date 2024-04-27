@@ -4,6 +4,7 @@ import codegen.Emitter;
 import parser.BoxedValue;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * ProcedureDeclaration.java
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class ProcedureDeclaration extends Expression
 {
     private final Expression body;
-    private final ArrayList<String> argSlots;
+    private final ArrayList<Map.Entry<String, Type>> argSlots;
 
     /**
      * Constructs a new procedure declaration
@@ -25,7 +26,7 @@ public class ProcedureDeclaration extends Expression
      * @param body     The code to execute when the procedure is called
      * @param argSlots The names of the arguments to the procedure
      */
-    public ProcedureDeclaration(Expression body, ArrayList<String> argSlots)
+    public ProcedureDeclaration(Expression body, ArrayList<Map.Entry<String, Type>> argSlots)
     {
         this.body = body;
         this.argSlots = argSlots;
@@ -41,9 +42,9 @@ public class ProcedureDeclaration extends Expression
      * Get the name of the ith argument to the procedure
      *
      * @param i The index of the argument to get
-     * @return The name of the argument
+     * @return The name of the argument and its type
      */
-    public String getArg(int i)
+    public Map.Entry<String, Type> getArg(int i)
     {
         return argSlots.get(i);
     }

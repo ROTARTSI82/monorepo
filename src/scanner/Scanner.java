@@ -365,11 +365,36 @@ public class Scanner
             compileThrow("number must start with digit, not '%c'".formatted(currentChar));
 
         StringBuilder ret = new StringBuilder();
-        while (isDigit(currentChar))
+        Runnable consumeDigits = () ->
+        {
+            while (isDigit(currentChar))
+            {
+                ret.append(currentChar);
+                try
+                {
+                    eat(currentChar);
+                }
+                catch (Exception e)
+                {
+                    throw new UncheckedIOException(new IOException(e.getMessage()));
+                }
+            }
+        };
+
+        consumeDigits.run();
+        if (currentChar == '.')
         {
             ret.append(currentChar);
             eat(currentChar);
         }
+
+        consumeDigits.run();
+        if (currentChar == 'e' || currentChar == 'E')
+        {
+            ret.append(currentChar);
+            eat(currentChar);
+        }
+        consumeDigits.run();
 
         return newToken(Token.Type.Numeric, ret.toString());
     }

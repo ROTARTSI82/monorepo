@@ -43,15 +43,6 @@ public class Emitter
         }
     }
 
-	public int emitPush32(String src)
-	{
-        sp += 4;
-        main.append("\n\t# push i32 ").append(src).append('\n');
-		main.append("\tsw " + src + " ($sp)\n");
-		main.append("\tsubi $sp $sp 4\n");
-        return sp - 4;
-	}
-
     public void pushLoopLabel(String str)
     {
         loopLabels.add(str);
@@ -67,20 +58,32 @@ public class Emitter
         loopLabels.removeLast();
     }
 
-    public void emitPushF0()
+    // we cannot use s.d because it might be unaligned!!! kms
+    public void emitPushF64(String reg)
     {
-        emit("# push $f0");
-        emit("mfc1.d $v0 $f0");
-        emitPush32("$v0");
-        emitPush32("$v1");
+        emit("# push f64 " + reg);
+        emit("mfc1.d $t6 " + reg);
+        // the stack grows towards negative so we need to adjust to the
+        // point to the beginning of the memory (in positive land)
+        emit("sd $t6 -4($sp)");
+        emit("subi $sp $sp 8");
     }
 
-    public void emitPopF0()
+    public void emitPopF64(String reg)
     {
-        main.append("\n\t# pop f64\n");
-        emitPop32("$v1");
-        emitPop32("$v0");
-        emit("mtc1.d $v0 $f2");
+        emit("# pop f64 to " + reg);
+        emit("addi $sp $sp 8");
+        emit("ld $t6 -4($sp)");
+        emit("mtc1.d $t6 " + reg);
+    }
+
+    public int emitPush32(String src)
+    {
+        sp += 4;
+        main.append("\n\t# push i32 ").append(src).append('\n');
+        main.append("\tsw " + src + " ($sp)\n");
+        main.append("\tsubi $sp $sp 4\n");
+        return sp - 4;
     }
 
 	public int emitPop32(String dst)
@@ -88,7 +91,8 @@ public class Emitter
         sp -= 4;
         main.append("\n\t# pop i32 to ").append(dst).append('\n');
         main.append("\taddi $sp $sp 4\n");
-		main.append("\tlw ").append(dst).append(" ($sp)\n");
+        if (dst != null)
+		    main.append("\tlw ").append(dst).append(" ($sp)\n");
         return sp;
 	}
 

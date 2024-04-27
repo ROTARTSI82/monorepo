@@ -91,31 +91,39 @@ public class Parser
         String cont = currentToken.content();
         eat(null, Token.Type.Numeric);
 
-        int val = Integer.parseInt(cont);
+        boolean isDouble = cont.toLowerCase().contains("e") || cont.contains(".");
         return new Expression()
         {
             @Override
             public Type getType(Emitter e)
             {
-                return Expression.Type.Int;
+                return isDouble ? Expression.Type.Double : Expression.Type.Int;
             }
 
             @Override
             public BoxedValue eval(Environment env)
             {
-                return box(val);
+                if (isDouble)
+                    throw new RuntimeException("doubles not supported in interpreter mode");
+                return box(Integer.parseInt(cont));
             }
 
             @Override
             public void compile(Emitter emit)
             {
-                emit.emit("li $v0 " + val);
+                if (getType(emit).equals(Type.Int))
+                    emit.emit("li $v0 " + cont);
+                else
+                {
+                    String label = emit.tryAllocGlobal(Double.parseDouble(cont));
+                    emit.emit("l.d $f0 " + label);
+                }
             }
 
             @Override
             public String toString()
             {
-                return "#" + val;
+                return "#" + cont;
             }
         };
     }
@@ -304,11 +312,29 @@ public class Parser
             String val = currentToken.content();
             eat(null, Token.Type.Identifier);
             eat("(");
-            ArrayList<String> argSlots = new ArrayList<>();
+            ArrayList<Map.Entry<String, Expression.Type>> argSlots = new ArrayList<>();
             while (!currentToken.content().equals(")"))
             {
-                argSlots.add(currentToken.content());
+                String name = currentToken.content();
+                Expression.Type typ = Expression.Type.Int;
                 eat(null, Token.Type.Identifier);
+
+                if (currentToken.content().equals(":"))
+                {
+                    eat(":");
+                    typ = switch (currentToken.content().toLowerCase())
+                    {
+                        case "integer" -> Expression.Type.Int;
+                        case "real" -> Expression.Type.Double;
+                        case "string" -> Expression.Type.String;
+                        default -> throw new RuntimeException("unrecognized type annotation "
+                                + currentToken.content());
+                    };
+
+                    eat(null, Token.Type.Identifier);
+                }
+
+                argSlots.add(Map.entry(name, typ));
                 if (currentToken.content().equals(","))
                     eat(",");
                 else

@@ -7,8 +7,8 @@ BEGIN
 	WRITELN(x * y);
 	IF x > y THEN 
 	BEGIN
-		WRITELN(x);
-		WRITELN(y);
+		WRITELN("hello world", x);
+		WRITELN("hello world", y, "!");
 	END;
 	BEGIN
      	IF 14 = 14 THEN

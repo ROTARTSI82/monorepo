@@ -74,55 +74,63 @@ public class BinOp extends Expression
     public void compile(Emitter emit)
     {
         emit.emit("# " + this);
-        if (name.equals(":="))
+        Type rht = rhs.getType(emit);
+        if (name.equals(":=") && !rht.equals(Type.Double))
         {
-            Type t = rhs.getType(emit);
-            if (!OperatorCodegen.REG_SRC.containsKey(t))
-                throw new RuntimeException("unknown rule for := on type " + t + ": " + rhs);
             rhs.compile(emit);
-            emit.emitPush32(OperatorCodegen.REG_SRC.get(t));
-            lhs.hintType(rhs.getType(emit), emit);
+            if (!OperatorCodegen.REG_SRC.containsKey(rht))
+                throw new RuntimeException("unknown rule for := on type " + rht + ": " + rhs);
+            emit.emitPush32(OperatorCodegen.REG_SRC.get(rht));
+            lhs.hintType(rht, emit);
             lhs.compileLValue(emit);
             emit.emitPop32("$t0");
             emit.emit("sw $t0 ($s0)");
             return;
         }
 
-        if (lhs.getType(emit).equals(Type.Double) || rhs.getType(emit).equals(Type.Double))
+        if (rht.equals(Type.Double) || lhs.getType(emit).equals(Type.Double))
         {
-            final String cvt = "mtc1 $v0 $f0\n\tcvt.w.d $f0 $f0";
+            if (name.equals(":="))
+            {
+                // rht MUST be Type.Double at this point
+                rhs.compile(emit);
+                emit.emitPushF64("$f0");
+                lhs.hintType(Type.Double, emit);
+                lhs.compileLValue(emit); // this *might* modify $f0??
+                emit.emitPopF64("$f0");
+                // no -4($s0) needed here because it's handled at frameLoc variable LValue time
+                emit.emit("mfc1 $t6 $f0");
+                emit.emit("sd $t6 ($s0)");
+                return;
+            }
+
+            final String cvt = "mtc1 $v0 $f0\n\tcvt.d.w $f0 $f0";
             lhs.compile(emit);
             if (lhs.getType(emit).equals(Type.Int))
                 emit.emit(cvt);
-            emit.emitPushF0();
+            emit.emitPushF64("$f0");
 
             rhs.compile(emit);
-            if (rhs.getType(emit).equals(Type.Int))
+            if (rht.equals(Type.Int))
                 emit.emit(cvt);
-            emit.emit("mov.d $f4 $f0");
-            emit.emitPopF0();
+//            emit.emit("mov.d $f4 $f0");
+            emit.emitPopF64("$f2");
 
             if (OperatorCodegen.DOUBLE_COMPARES.containsKey(name))
             {
-                emit.emit("mov $v0 $0");
+                emit.emit("move $v0 $0");
                 emit.emit("li $t0 1");
                 emit.emit(OperatorCodegen.DOUBLE_COMPARES.get(name) + " $v0 $t0");
             }
-            else if (OperatorCodegen.INT_BORING_CODEGEN.containsKey(name))
-            {
-                emit.emit(OperatorCodegen.INT_BORING_CODEGEN.get(name) + ".d $f0 $f2 $f4");
-            }
             else
             {
-                rhs.compile(emit);
-                emit.emitPushF0();
-                lhs.hintType(Type.Double, emit);
-                lhs.compileLValue(emit); // this *might* modify $f0??
-                emit.emitPopF0();
-                emit.emit("s.d $f0 ($s0)");
+                if (!OperatorCodegen.INT_BORING_CODEGEN.containsKey(name))
+                    throw new RuntimeException(
+                            "unknown boring int operator to be used as double: " + this);
+                emit.emit(OperatorCodegen.INT_BORING_CODEGEN.get(name) + ".d $f0 $f2 $f0");
             }
         }
-        else if (lhs.getType(emit).equals(Type.Int) && rhs.getType(emit).equals(Type.Int))
+        else if (lhs.getType(emit).equals(Type.Int) && rht.equals(Type.Int))
         {
             if (OperatorCodegen.INT_BORING_CODEGEN.containsKey(name))
             {
@@ -130,9 +138,9 @@ public class BinOp extends Expression
                 lhs.compile(emit);
                 emit.emitPush32("$v0");
                 rhs.compile(emit);
-                emit.emit("move $t1 $v0");
+//                emit.emit("move $t1 $v0");
                 emit.emitPop32("$t0");
-                emit.emit(ins + " $v0 $t0 $t1");
+                emit.emit(ins + " $v0 $t0 $v0");
             }
             else
             {
