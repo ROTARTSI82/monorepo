@@ -102,7 +102,7 @@ public class ProcedureCall extends Expression
             System.out.println("PROCEDURE " + proc + "\t" + this + "\t" + values);
         env.push(name);
         for (int i = 0; i < values.size(); i++)
-            env.declareVariable(proc.getArg(i), values.get(i).get());
+            env.declareVariable(proc.getArg(i).getKey(), values.get(i).get());
 
         try
         {
@@ -120,9 +120,75 @@ public class ProcedureCall extends Expression
         return BoxedValue.box(ret); // re-box to force a copy
     }
 
+    private void compileWrite(Emitter emit)
+    {
+        for (Expression exp : args)
+        {
+            Type typ = exp.getType(emit);
+
+            exp.compile(emit);
+            switch (typ)
+            {
+                case Double ->
+                {
+                    emit.emit("mov.d $f12 $f0");
+                    emit.emit("li $v0 3");
+                    emit.emit("syscall");
+                }
+                case String ->
+                {
+                    emit.emit("li $v0 4");
+                    emit.emit("syscall");
+                }
+                case Int ->
+                {
+                    emit.emit("move $a0 $v0");
+                    emit.emit("li $v0 1");
+                    emit.emit("syscall");
+                }
+            }
+        }
+
+        if (name.toUpperCase().endsWith("LN"))
+        {
+            emit.emit("li $v0 11");
+            emit.emit("li $a0 10");
+            emit.emit("syscall");
+        }
+    }
+
     @Override
     public void compile(Emitter emit)
     {
+        if (name.equalsIgnoreCase("WRITELN") || name.equalsIgnoreCase("WRITE"))
+        {
+            compileWrite(emit);
+            return;
+        }
+        else if (name.equalsIgnoreCase("READLN"))
+        {
+            emit.emit("# READLN not impl: incorrect code generated");
+//            Expression dst = args.getFirst();
+//            Type t = dst.getType(emit);
+//            dst.compileLValue(emit);
+//
+//            switch (t)
+//            {
+//                case Double ->
+//                {
+//                    emit.emit("li $v0 7");
+//                    emit.emit("syscall");
+//                    emit.emit("s.d $f0 ($s0)");
+//                }
+//                case Int ->
+//                {
+//                    emit.emit("");
+//                }
+//            }
+
+            return;
+        }
+
         emit.emit("# procedure call: " + this);
         emit.emit("subi $sp $sp 8"); // space for $ra and $fp for the call
         int size = 8;
@@ -132,7 +198,7 @@ public class ProcedureCall extends Expression
             Type typ = e.getType(emit);
             if (typ.equals(Type.Double))
             {
-                emit.emitPushF0();
+                emit.emitPushF64("$f0");
                 size += 8;
             }
             else

@@ -54,12 +54,12 @@ public interface OperatorCodegen
     );
 
     Map<String, String> DOUBLE_COMPARES = Map.ofEntries(
-            Map.entry("=", "c.eq.d $f2 $f4\n\tmovt"),
-            Map.entry("<>", "c.eq.d $f2 $f4\n\tmovf"),
-            Map.entry(">=", "c.le.d $f4 $f2\n\tmovt"),
-            Map.entry("<=", "c.le.d $f2 $f4\n\tmovt"),
-            Map.entry(">", "c.lt.d $f4 $f2\n\tmovt"),
-            Map.entry("<", "c.lt.d $f2 $f4\n\tmovt")
+            Map.entry("=", "c.eq.d $f2 $f0\n\tmovt"),
+            Map.entry("<>", "c.eq.d $f2 $f0\n\tmovf"),
+            Map.entry(">=", "c.le.d $f0 $f2\n\tmovt"),
+            Map.entry("<=", "c.le.d $f2 $f0\n\tmovt"),
+            Map.entry(">", "c.lt.d $f0 $f2\n\tmovt"),
+            Map.entry("<", "c.lt.d $f2 $f0\n\tmovt")
     );
 
     void apply(Emitter emit, Expression left, Expression right, int count);

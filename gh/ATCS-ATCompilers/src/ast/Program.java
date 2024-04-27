@@ -59,8 +59,10 @@ public class Program
         String code = emit.main.toString();
         emit.main = new StringBuilder();
 
-        emit.emit("move $fp $sp");
-        emit.emit("subi $sp $sp " + emit.frameSize);
+        if (emit.frameSize != 0) throw new RuntimeException("main has nonzero frame size");
+//        emit.emit("move $fp $sp");
+//        emit.emit("subi $sp $sp " + emit.frameSize);
+
         emit.emit(code.trim());
         emit.emit("li $v0 10");
         emit.emit("syscall");
@@ -71,7 +73,7 @@ public class Program
             emit.frameSize = 8;
             emit.vars.clear();
             for (int i = 0; i < proc.getNArgs(); i++)
-                new Variable(proc.getArg(i)).hintType(Expression.Type.Int, emit); // declared param type not impl
+                new Variable(proc.getArg(i).getKey()).hintType(proc.getArg(i).getValue(), emit);
 
             StringBuilder old = emit.main;
             emit.main = new StringBuilder();

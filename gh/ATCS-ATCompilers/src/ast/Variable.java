@@ -21,15 +21,17 @@ public class Variable extends Expression
     @Override
     public void compile(Emitter emit)
     {
+        System.out.println(emit.vars);
+        System.out.println(emit.globalVars);
         if (!emit.vars.containsKey(id) && !emit.globalVars.containsKey(id))
             throw new RuntimeException("undefined variable " + id);
         compileLValue(emit);
         Type t = getType(emit);
         if (t.equals(Type.Double))
         {
-            emit.emit("lw $t0 ($s0)");
-            emit.emit("lw $t1 4($s0)");
-            emit.emit("mtc1.d $t0 $f0");
+            // no -4($s0) because its pre-handled in compileLValue
+            emit.emit("ld $t6 ($s0)");
+            emit.emit("mtc1.d $t6 $f0");
         }
         else if (t.equals(Type.String))
             emit.emit("lw $a0 ($s0)");
@@ -50,6 +52,8 @@ public class Variable extends Expression
         else if (emit.vars.containsKey(id))
         {
             int frameLoc = emit.vars.get(id).frameLoc();
+            if (getType(emit).equals(Type.Double))
+                frameLoc += 4; // !! Very important: stack grows from hi mem addr to lo.
             emit.emit("subi $s0 $fp " + frameLoc + " # " + id);
             return;
         }
@@ -81,13 +85,13 @@ public class Variable extends Expression
         {
             System.out.println("register new variable " + id + " type " + t);
             e.vars.put(id, new Emitter.VarInfo(t, e.frameSize));
-            if (t.equals(Type.Double))
-                e.frameSize += 8;
-            else
-                e.frameSize += 4;
 
             if (e.storeVarsGlobal)
                 e.allocGlobalVar(id, t);
+            else if (t.equals(Type.Double))
+                e.frameSize += 8;
+            else
+                e.frameSize += 4;
         }
         else
             e.vars.put(id, new Emitter.VarInfo(t, e.vars.get(id).frameLoc()));

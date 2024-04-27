@@ -54,8 +54,9 @@ public class ScannerTester
     public static void main(String[] args)
     {
         Stream.of(
-                "7codegen/simple.txt",
-                "7codegen/parserTest9.2.txt"
+                "7codegen/parserTest9.2.txt",
+                "7codegen/double.txt",
+                "7codegen/simple.txt"
         ).forEach(ScannerTester::go);
     }
 }
