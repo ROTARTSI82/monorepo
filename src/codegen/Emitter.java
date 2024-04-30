@@ -1,6 +1,7 @@
 package codegen;
 
 import ast.Expression;
+import ast.Program;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class Emitter
     }
 
     private final PrintWriter out;
+    private final Program parentProgram;
     public StringBuilder main = new StringBuilder();
     public int frameSize = 0;
     public Map<String, VarInfo> vars = new HashMap<>();
@@ -25,14 +27,16 @@ public class Emitter
 
     private final StringBuilder data = new StringBuilder();
     private final ArrayList<String> loopLabels = new ArrayList<>();
+    public String returnLabel = "main";
 
     private final HashMap<Object, String> dataCache = new HashMap<>();
     private int dataCount = 0;
     public int sp = 0;
 
     //creates an emitter for writing to a new file with given name
-    public Emitter(String outputFileName)
+    public Emitter(String outputFileName, Program parent)
     {
+        parentProgram = parent;
         try
         {
             out = new PrintWriter(new FileWriter(outputFileName), true);
@@ -41,6 +45,11 @@ public class Emitter
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public Program getParentProgram()
+    {
+        return parentProgram;
     }
 
     public void pushLoopLabel(String str)
@@ -101,15 +110,6 @@ public class Emitter
     {
         if (!code.endsWith(":")) code = "\t" + code;
         main.append(code).append("\n");
-    }
-
-    public void emitReturn()
-    {
-        emit("move $sp $fp");
-        emit("subi $fp $fp 4");
-        emit("lw $ra ($fp)");
-        emit("lw $fp ($sp)");
-        emit("jr $ra");
     }
 
     private String escapeString(String s)

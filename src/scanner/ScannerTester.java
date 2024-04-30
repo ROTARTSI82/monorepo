@@ -33,10 +33,9 @@ public class ScannerTester
             Parser parse = new Parser(scan2);
             Program prog = parse.parseProgram();
 
-            Emitter emit = new Emitter(file + ".asm");
+            Emitter emit = new Emitter(file + ".asm", prog);
             prog.compile(emit);
             emit.close();
-
             prog.exec();
         }
         catch (IOException e)
@@ -54,7 +53,9 @@ public class ScannerTester
     public static void main(String[] args)
     {
         Stream.of(
+                "5procedures/recurse.txt",
                 "7codegen/parserTest9.2.txt",
+                "7codegen/recurse2.txt",
                 "7codegen/double.txt",
                 "7codegen/simple.txt"
         ).forEach(ScannerTester::go);

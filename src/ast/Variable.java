@@ -44,17 +44,17 @@ public class Variable extends Expression
     @Override
     public void compileLValue(Emitter emit)
     {
-        if (emit.globalVars.containsKey(id))
-        {
-            emit.emit("la $s0 _" + id);
-            return;
-        }
-        else if (emit.vars.containsKey(id))
+        if (emit.vars.containsKey(id))
         {
             int frameLoc = emit.vars.get(id).frameLoc();
             if (getType(emit).equals(Type.Double))
                 frameLoc += 4; // !! Very important: stack grows from hi mem addr to lo.
             emit.emit("subi $s0 $fp " + frameLoc + " # " + id);
+            return;
+        }
+        else if (emit.globalVars.containsKey(id))
+        {
+            emit.emit("la $s0 _" + id);
             return;
         }
 
@@ -84,14 +84,17 @@ public class Variable extends Expression
         if (!e.vars.containsKey(id))
         {
             System.out.println("register new variable " + id + " type " + t);
-            e.vars.put(id, new Emitter.VarInfo(t, e.frameSize));
 
             if (e.storeVarsGlobal)
                 e.allocGlobalVar(id, t);
-            else if (t.equals(Type.Double))
-                e.frameSize += 8;
             else
-                e.frameSize += 4;
+            {
+                e.vars.put(id, new Emitter.VarInfo(t, e.frameSize));
+                if (t.equals(Type.Double))
+                    e.frameSize += 8;
+                else
+                    e.frameSize += 4;
+            }
         }
         else
             e.vars.put(id, new Emitter.VarInfo(t, e.vars.get(id).frameLoc()));

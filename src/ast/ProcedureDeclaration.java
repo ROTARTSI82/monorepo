@@ -18,6 +18,7 @@ import java.util.Map;
 public class ProcedureDeclaration extends Expression
 {
     private final Expression body;
+    private final Expression.Type retType;
     private final ArrayList<Map.Entry<String, Type>> argSlots;
 
     /**
@@ -25,17 +26,21 @@ public class ProcedureDeclaration extends Expression
      *
      * @param body     The code to execute when the procedure is called
      * @param argSlots The names of the arguments to the procedure
+     * @param ret      The return type of this function
      */
-    public ProcedureDeclaration(Expression body, ArrayList<Map.Entry<String, Type>> argSlots)
+    public ProcedureDeclaration(Expression body, ArrayList<Map.Entry<String, Type>> argSlots,
+                                Expression.Type ret)
     {
         this.body = body;
         this.argSlots = argSlots;
+        this.retType = ret;
     }
 
     @Override
     public Type getType(Emitter e)
     {
-        return body.getType(e);
+        // the body's type is supposed to be null/ignored
+        return retType;
     }
 
     /**

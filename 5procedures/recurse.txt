@@ -1,5 +1,6 @@
 PROCEDURE fib(n);
 BEGIN
+    // WRITELN("fib", n);
     IF n <= 1 THEN
         RETURN 1;
     fib := fib(n - 1) + fib(n - 2);
@@ -7,8 +8,11 @@ END;
 
 PROCEDURE factorial(i);
 BEGIN
-    IF i = 0 THEN factorial := 1;
-    ELSE factorial := i * factorial(i - 1);
+    // WRITELN("factorial", i);
+    IF i = 0 THEN
+        RETURN 1;
+    ELSE
+        RETURN i * factorial(i - 1);
 END;
 
 BEGIN

@@ -36,8 +36,7 @@ public class ProcedureCall extends Expression
     @Override
     public Type getType(Emitter e)
     {
-//        throw new RuntimeException("procedure call type not impl");
-        return Type.Int;
+        return e.getParentProgram().procedures.get(name).getType(e);
     }
 
     /**

@@ -80,11 +80,12 @@ public class BinOp extends Expression
             rhs.compile(emit);
             if (!OperatorCodegen.REG_SRC.containsKey(rht))
                 throw new RuntimeException("unknown rule for := on type " + rht + ": " + rhs);
-            emit.emitPush32(OperatorCodegen.REG_SRC.get(rht));
+            String reg = OperatorCodegen.REG_SRC.get(rht);
+            emit.emitPush32(reg);
             lhs.hintType(rht, emit);
             lhs.compileLValue(emit);
-            emit.emitPop32("$t0");
-            emit.emit("sw $t0 ($s0)");
+            emit.emitPop32(reg);
+            emit.emit("sw " + reg + " ($s0)");
             return;
         }
 
@@ -158,8 +159,9 @@ public class BinOp extends Expression
     {
         emit.emit("# operator compile lvalue");
         if (!name.equals(":="))
-            super.compileLValue(emit);
-        emit.emit("# operator := compile lvalue not impl");
+            compile(emit);
+        else
+            throw new RuntimeException("operator compile lvalue not impl for " + this);
     }
 
     /**
