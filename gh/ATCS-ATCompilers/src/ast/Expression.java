@@ -112,6 +112,18 @@ public abstract class Expression
         Null, Int, Double, String, Array
     }
 
+    public static Type typeFromString(String s)
+    {
+        return switch (s.toLowerCase())
+        {
+            case "integer" -> Expression.Type.Int;
+            case "real" -> Expression.Type.Double;
+            case "string" -> Expression.Type.String;
+            default -> throw new RuntimeException("unrecognized type annotation "
+                    + s);
+        };
+    }
+
     /**
      * Evaluates the expression to its value.
      *

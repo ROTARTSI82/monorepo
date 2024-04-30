@@ -257,8 +257,7 @@ public class Parser
                     @Override
                     public void compile(Emitter emit)
                     {
-                        // stub
-                        throw new ReturnException();
+                        emit.emit("j return_" + emit.returnLabel);
                     }
                 };
             }
@@ -270,12 +269,6 @@ public class Parser
                 return new Expression()
                 {
                     @Override
-                    public Type getType(Emitter e)
-                    {
-                        return Expression.Type.Null;
-                    }
-
-                    @Override
                     public BoxedValue eval(Environment e)
                     {
                         e.setVariable(e.getFrameName(), expr.eval(e).get());
@@ -285,7 +278,8 @@ public class Parser
                     @Override
                     public void compile(Emitter emit)
                     {
-                        throw new ReturnException();
+                        expr.compile(emit);
+                        emit.emit("j immediateReturn_" + emit.returnLabel);
                     }
                 };
             }
@@ -322,15 +316,7 @@ public class Parser
                 if (currentToken.content().equals(":"))
                 {
                     eat(":");
-                    typ = switch (currentToken.content().toLowerCase())
-                    {
-                        case "integer" -> Expression.Type.Int;
-                        case "real" -> Expression.Type.Double;
-                        case "string" -> Expression.Type.String;
-                        default -> throw new RuntimeException("unrecognized type annotation "
-                                + currentToken.content());
-                    };
-
+                    typ = Expression.typeFromString(currentToken.content());
                     eat(null, Token.Type.Identifier);
                 }
 
@@ -341,9 +327,17 @@ public class Parser
                     break;
             }
             eat(")");
+            Expression.Type typ = Expression.Type.Int;
+            if (currentToken.content().equals(":"))
+            {
+                eat(":");
+                typ = Expression.typeFromString(currentToken.content());
+                eat(null, Token.Type.Identifier);
+            }
+
             eat(";");
             Expression stmt = parseStatement();
-            procedures.put(val, new ProcedureDeclaration(stmt, argSlots));
+            procedures.put(val, new ProcedureDeclaration(stmt, argSlots, typ));
         }
 
         Expression main = parseStatement();

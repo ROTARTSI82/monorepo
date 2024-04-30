@@ -1,3 +1,11 @@
+# loop.asm
+# @author Grant Yang
+# @versin 2024.04.30
+#
+# A simple MIPS program to print numbers as it loops from a lower bound
+# to a higher bound, going by a step size. All three values
+# are read from stdin from user input.
+
 .data
 promptLo: .asciiz "Enter hi bound: "
 promptHi: .asciiz "Enter lo bound: "

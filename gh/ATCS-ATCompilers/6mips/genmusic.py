@@ -16,7 +16,7 @@ instr is the MIDI instrument (5 = piano)
 vol is the volume.
 """
 
-tempo = 120
+tempo = 110
 instr = 74
 vol = 127
 transpose = -12

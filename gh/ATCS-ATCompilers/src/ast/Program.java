@@ -53,27 +53,31 @@ public class Program
     public void compile(Emitter emit)
     {
         emit.frameSize = 0;
+        emit.returnLabel = "main";
         emit.storeVarsGlobal = true;
         emit.vars.clear();
+
         main.compile(emit);
-        String code = emit.main.toString();
-        emit.main = new StringBuilder();
-
         if (emit.frameSize != 0) throw new RuntimeException("main has nonzero frame size");
-//        emit.emit("move $fp $sp");
-//        emit.emit("subi $sp $sp " + emit.frameSize);
 
-        emit.emit(code.trim());
+        emit.emit("return_main:");
+        emit.emit("immediateReturn_main:");
         emit.emit("li $v0 10");
         emit.emit("syscall");
 
         emit.storeVarsGlobal = false;
-        procedures.forEach((name, proc) ->
+        for (Map.Entry<String, ProcedureDeclaration> raw : procedures.entrySet())
         {
+            String name = raw.getKey();
+            ProcedureDeclaration proc = raw.getValue();
+
             emit.frameSize = 8;
             emit.vars.clear();
+            emit.returnLabel = name;
+
             for (int i = 0; i < proc.getNArgs(); i++)
-                new Variable(proc.getArg(i).getKey()).hintType(proc.getArg(i).getValue(), emit);
+                new Variable(proc.getArg(i).getKey()).hintType(proc.getArg(i).getValue(),
+                        emit);
 
             StringBuilder old = emit.main;
             emit.main = new StringBuilder();
@@ -86,9 +90,29 @@ public class Program
             emit.emit("sw $ra -4($sp)");
             emit.emit("move $fp $sp");
             emit.emit("subi $sp $sp " + emit.frameSize);
-            emit.emit(procCode.trim());
-            emit.emitReturn();
-            // return codez not impl
-        });
+
+            emit.main.append('\t').append(procCode.trim()).append('\n');
+
+            emit.emit("return_" + name + ":");
+
+            if (emit.vars.containsKey(name)) // return value!
+            {
+                if (!emit.vars.get(name).type().equals(proc.getType(emit)))
+                    throw new RuntimeException("mismatched return variable type and return type");
+                new Variable(name).compile(emit); // this is so funny
+            }
+            else
+            {
+                emit.emit("# no return value");
+            }
+
+            emit.emit("immediateReturn_" + name + ":");
+
+            emit.emit("move $sp $fp");
+            emit.emit("subi $fp $fp 4");
+            emit.emit("lw $ra ($fp)");
+            emit.emit("lw $fp ($sp)");
+            emit.emit("jr $ra");
+        }
     }
 }
