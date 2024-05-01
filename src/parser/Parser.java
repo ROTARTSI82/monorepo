@@ -279,6 +279,9 @@ public class Parser
                     public void compile(Emitter emit)
                     {
                         expr.compile(emit);
+                        if (!expr.getType(emit).equals(
+                                emit.getParentProgram().procedures.get(emit.returnLabel).getType(emit)))
+                            throw new RuntimeException("mismatched RETURN and func return type");
                         emit.emit("j immediateReturn_" + emit.returnLabel);
                     }
                 };
@@ -327,7 +330,7 @@ public class Parser
                     break;
             }
             eat(")");
-            Expression.Type typ = Expression.Type.Int;
+            Expression.Type typ = Expression.Type.Null;
             if (currentToken.content().equals(":"))
             {
                 eat(":");

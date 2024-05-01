@@ -75,7 +75,7 @@ public class Emitter
         // the stack grows towards negative so we need to adjust to the
         // point to the beginning of the memory (in positive land)
         emit("sd $t6 -4($sp)");
-        emit("subi $sp $sp 8");
+        emit("addi $sp $sp -8");
     }
 
     public void emitPopF64(String reg)
@@ -91,7 +91,7 @@ public class Emitter
         sp += 4;
         main.append("\n\t# push i32 ").append(src).append('\n');
         main.append("\tsw " + src + " ($sp)\n");
-        main.append("\tsubi $sp $sp 4\n");
+        main.append("\taddi $sp $sp -4\n");
         return sp - 4;
     }
 
@@ -151,7 +151,8 @@ public class Emitter
             });
         }
         else if (!globalVars.get(var).equals(t))
-            throw new RuntimeException("allocGlobalVar existing var with different type");
+            throw new RuntimeException("allocGlobalVar existing var with different type: "
+                    + var + " with new type " + t + " from old " + globalVars.get(var));
 
         globalVars.put(var, t);
     }

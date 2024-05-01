@@ -49,7 +49,7 @@ public class Variable extends Expression
             int frameLoc = emit.vars.get(id).frameLoc();
             if (getType(emit).equals(Type.Double))
                 frameLoc += 4; // !! Very important: stack grows from hi mem addr to lo.
-            emit.emit("subi $s0 $fp " + frameLoc + " # " + id);
+            emit.emit("addi $s0 $fp -" + frameLoc + " # " + id);
             return;
         }
         else if (emit.globalVars.containsKey(id))
@@ -78,7 +78,8 @@ public class Variable extends Expression
     public void hintType(Type t, Emitter e)
     {
         if (e.vars.containsKey(id) && !e.vars.get(id).type().equals(t))
-            throw new RuntimeException("hint type overwrote previous type from "
+            throw new RuntimeException("hint type overwrote previous type of var "
+                    + id + " from "
                     + e.vars.get(id).type() + " to " + t);
 
         if (!e.vars.containsKey(id))

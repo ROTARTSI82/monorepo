@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class Program
 {
-    final Map<String, ProcedureDeclaration> procedures;
+    public final Map<String, ProcedureDeclaration> procedures;
     private final Expression main;
 
     /**
@@ -89,7 +89,7 @@ public class Program
             emit.emit("sw $fp ($sp)");
             emit.emit("sw $ra -4($sp)");
             emit.emit("move $fp $sp");
-            emit.emit("subi $sp $sp " + emit.frameSize);
+            emit.emit("addi $sp $sp -" + emit.frameSize);
 
             emit.main.append('\t').append(procCode.trim()).append('\n');
 
@@ -97,8 +97,12 @@ public class Program
 
             if (emit.vars.containsKey(name)) // return value!
             {
-                if (!emit.vars.get(name).type().equals(proc.getType(emit)))
-                    throw new RuntimeException("mismatched return variable type and return type");
+                Expression.Type declared = proc.getType(emit);
+                Expression.Type found = emit.vars.get(name).type();
+                if (!found.equals(declared))
+                    throw new RuntimeException(
+                            "mismatched return variable type for " + name + ": declared "
+                            + declared + " but found " + found);
                 new Variable(name).compile(emit); // this is so funny
             }
             else
@@ -109,8 +113,8 @@ public class Program
             emit.emit("immediateReturn_" + name + ":");
 
             emit.emit("move $sp $fp");
-            emit.emit("subi $fp $fp 4");
-            emit.emit("lw $ra ($fp)");
+//            emit.emit("addi $fp $fp -4");
+            emit.emit("lw $ra -4($sp)");
             emit.emit("lw $fp ($sp)");
             emit.emit("jr $ra");
         }
