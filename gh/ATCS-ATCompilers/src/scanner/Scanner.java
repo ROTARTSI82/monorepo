@@ -80,7 +80,11 @@ public class Scanner
                 ":", ":=", "<=", ">=", "<", ">", ".", "=", "%", ";", "<>", "\"", "'", ",", "[", "]",
                 "..", "^"
         );
-        partialOperators = Set.of(":");
+
+        // put operators that arent valid by themselves but can be valid
+        // part of a compound operator here. for example, if : was not valid but := was, put : here.
+        partialOperators = Set.of();
+
         keywords = Set.of("BEGIN", "END", "VAR", "WHILE", "RETURN", "PROCEDURE", "DO", "WRITELN");
         initialized = true;
     }

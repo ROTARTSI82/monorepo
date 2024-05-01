@@ -189,12 +189,20 @@ public class ProcedureCall extends Expression
         }
 
         emit.emit("# procedure call: " + this);
-        emit.emit("subi $sp $sp 8"); // space for $ra and $fp for the call
+        emit.emit("addi $sp $sp -8"); // space for $ra and $fp for the call
         int size = 8;
+        int i = 0;
         for (Expression e : args)
         {
             e.compile(emit);
             Type typ = e.getType(emit);
+            Type expect = emit.getParentProgram().procedures.get(name).getArg(i).getValue();
+            if (!typ.equals(expect))
+                throw new RuntimeException("wrong argument type in func call " + this + ": arg "
+                        + emit.getParentProgram().procedures.get(name).getArg(i).getKey()
+                        + " expected " + expect + " got " + typ);
+            i++;
+
             if (typ.equals(Type.Double))
             {
                 emit.emitPushF64("$f0");
