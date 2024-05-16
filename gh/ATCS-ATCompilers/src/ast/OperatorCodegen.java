@@ -33,23 +33,23 @@ public interface OperatorCodegen
                 a.compile(e);
                 e.emit("bnez $v0 shortCirc" + i);
                 b.compile(e);
-                e.emit("shortCirc" + i + ":");
+                e.emit("shortCirc" + i + ": # binop (" + a + " OR " + b + "):");
             }),
             Map.entry("AND", (e, a, b, i) ->
             {
                 a.compile(e);
                 e.emit("beqz $v0 shortCirc" + i);
                 b.compile(e);
-                e.emit("shortCirc" + i + ":");
+                e.emit("shortCirc" + i + ": # binop (" + a + " AND " + b + "):");
             }),
             Map.entry(":=", (e, a, b, i) ->
             {
                 b.compile(e);
-                e.emitPush32("$v0");
+                e.emit("push $v0");
                 a.hintType(Expression.Type.Int, e);
                 a.compileLValue(e);
-                e.emitPop32("$v0");
-                e.emit("sw $v0 ($s0)");
+                e.emit("pop $v0");
+                e.emit("sw $v0 ($s0) # binop (" + a + " := " + b + ")");
             })
     );
 

@@ -91,7 +91,9 @@ public class Program
             emit.emit("move $fp $sp");
             emit.emit("addi $sp $sp -" + emit.frameSize);
 
-            emit.main.append('\t').append(procCode.trim()).append('\n');
+            emit.main.append("\n\t# real function body for ")
+                    .append(name).append("\n\t")
+                    .append(procCode.trim()).append('\n');
 
             emit.emit("return_" + name + ":");
 
@@ -113,7 +115,6 @@ public class Program
             emit.emit("immediateReturn_" + name + ":");
 
             emit.emit("move $sp $fp");
-//            emit.emit("addi $fp $fp -4");
             emit.emit("lw $ra -4($sp)");
             emit.emit("lw $fp ($sp)");
             emit.emit("jr $ra");

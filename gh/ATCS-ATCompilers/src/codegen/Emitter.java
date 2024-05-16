@@ -6,9 +6,11 @@ import ast.Program;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Emitter
@@ -67,44 +69,6 @@ public class Emitter
         loopLabels.removeLast();
     }
 
-    // we cannot use s.d because it might be unaligned!!! kms
-    public void emitPushF64(String reg)
-    {
-        emit("# push f64 " + reg);
-        emit("mfc1.d $t6 " + reg);
-        // the stack grows towards negative so we need to adjust to the
-        // point to the beginning of the memory (in positive land)
-        emit("sd $t6 -4($sp)");
-        emit("addi $sp $sp -8");
-    }
-
-    public void emitPopF64(String reg)
-    {
-        emit("# pop f64 to " + reg);
-        emit("addi $sp $sp 8");
-        emit("ld $t6 -4($sp)");
-        emit("mtc1.d $t6 " + reg);
-    }
-
-    public int emitPush32(String src)
-    {
-        sp += 4;
-        main.append("\n\t# push i32 ").append(src).append('\n');
-        main.append("\tsw " + src + " ($sp)\n");
-        main.append("\taddi $sp $sp -4\n");
-        return sp - 4;
-    }
-
-	public int emitPop32(String dst)
-	{
-        sp -= 4;
-        main.append("\n\t# pop i32 to ").append(dst).append('\n');
-        main.append("\taddi $sp $sp 4\n");
-        if (dst != null)
-		    main.append("\tlw ").append(dst).append(" ($sp)\n");
-        return sp;
-	}
-
 	// prints one line of code to file (with non-labels indented)
     public void emit(String code)
     {
@@ -114,13 +78,14 @@ public class Emitter
 
     private String escapeString(String s)
     {
+        // i hope to god this is vaguely correct
         return s
                 .replaceAll("\\n", "\\n")
                 .replaceAll("\"", "\\\"")
                 .replaceAll("\\\\", "\\\\");
     }
 
-    public String tryAllocGlobal(Object obj)
+    public String nextLabelID(Object obj)
     {
         if (dataCache.containsKey(obj))
             return dataCache.get(obj);
@@ -158,14 +123,17 @@ public class Emitter
     }
 
     //closes the file.  should be called after all calls to emit.
-    public void close()
+    public void close() throws IOException
     {
+        out.println(Files.readString(Paths.get("preamble.asm"))
+                .replaceAll("\\$date", LocalDateTime.now().toString()));
         out.println(".data");
         out.println(data);
         out.println(".text 0x00400000");
         out.println(".globl main");
         out.println("main:");
         out.println(main);
+//        out.println(Files.readString(Paths.get("stdlib.asm")));
         out.close();
     }
 }

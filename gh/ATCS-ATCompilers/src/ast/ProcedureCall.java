@@ -132,18 +132,18 @@ public class ProcedureCall extends Expression
                 {
                     emit.emit("mov.d $f12 $f0");
                     emit.emit("li $v0 3");
-                    emit.emit("syscall");
+                    emit.emit("syscall # WRITE double " + exp);
                 }
                 case String ->
                 {
                     emit.emit("li $v0 4");
-                    emit.emit("syscall");
+                    emit.emit("syscall # WRITE string " + exp);
                 }
                 case Int ->
                 {
                     emit.emit("move $a0 $v0");
                     emit.emit("li $v0 1");
-                    emit.emit("syscall");
+                    emit.emit("syscall # WRITE int " + exp);
                 }
             }
         }
@@ -152,7 +152,7 @@ public class ProcedureCall extends Expression
         {
             emit.emit("li $v0 11");
             emit.emit("li $a0 10");
-            emit.emit("syscall");
+            emit.emit("syscall # newline from WRITELN");
         }
     }
 
@@ -167,24 +167,6 @@ public class ProcedureCall extends Expression
         else if (name.equalsIgnoreCase("READLN"))
         {
             emit.emit("# READLN not impl: incorrect code generated");
-//            Expression dst = args.getFirst();
-//            Type t = dst.getType(emit);
-//            dst.compileLValue(emit);
-//
-//            switch (t)
-//            {
-//                case Double ->
-//                {
-//                    emit.emit("li $v0 7");
-//                    emit.emit("syscall");
-//                    emit.emit("s.d $f0 ($s0)");
-//                }
-//                case Int ->
-//                {
-//                    emit.emit("");
-//                }
-//            }
-
             return;
         }
 
@@ -194,18 +176,19 @@ public class ProcedureCall extends Expression
         int i = 0;
         for (Expression e : args)
         {
+            String argName = emit.getParentProgram().procedures.get(name).getArg(i).getKey();
+            emit.emit("# " + name + " argument " + i + ": " + argName);
             e.compile(emit);
             Type typ = e.getType(emit);
             Type expect = emit.getParentProgram().procedures.get(name).getArg(i).getValue();
             if (!typ.equals(expect))
                 throw new RuntimeException("wrong argument type in func call " + this + ": arg "
-                        + emit.getParentProgram().procedures.get(name).getArg(i).getKey()
-                        + " expected " + expect + " got " + typ);
+                        + argName + " expected " + expect + " got " + typ);
             i++;
 
             if (typ.equals(Type.Double))
             {
-                emit.emitPushF64("$f0");
+                emit.emit("push.d $f0");
                 size += 8;
             }
             else
@@ -213,7 +196,7 @@ public class ProcedureCall extends Expression
                 size += 4;
                 String reg = OperatorCodegen.REG_SRC.get(typ);
                 if (reg == null) throw new RuntimeException("unsupported arg type for " + e);
-                emit.emitPush32(reg);
+                emit.emit("push " + reg);
             }
         }
 

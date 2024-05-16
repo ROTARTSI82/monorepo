@@ -21,6 +21,11 @@ public class BinOp extends Expression
     private static int COUNT = 0;
 
 
+    /**
+     * Calculate the type of the expression
+     * @param e Codegen context to use for the calculation
+     * @return The type of this binary expression
+     */
     @Override
     public Type getType(Emitter e)
     {
@@ -30,8 +35,8 @@ public class BinOp extends Expression
 
         Type lht = lhs.getType(e);
         Type rht = rhs.getType(e);
-        if (lht == null) System.out.println("null type on " + lhs);
-        if (rht == null) System.out.println("null type on " + rhs);
+        if (lht == null) throw new RuntimeException("null type on " + lhs);
+        if (rht == null) throw new RuntimeException("null type on " + rhs);
         if (lht.equals(Type.Double) || rht.equals(Type.Double))
             return Type.Double;
         return rhs.getType(e);
@@ -70,10 +75,13 @@ public class BinOp extends Expression
         return ret;
     }
 
+    /**
+     * Compiles the binary operator
+     * @param emit Object into which to emit the code
+     */
     @Override
     public void compile(Emitter emit)
     {
-        emit.emit("# " + this);
         Type rht = rhs.getType(emit);
         if (name.equals(":=") && !rht.equals(Type.Double))
         {
@@ -81,11 +89,11 @@ public class BinOp extends Expression
             if (!OperatorCodegen.REG_SRC.containsKey(rht))
                 throw new RuntimeException("unknown rule for := on type " + rht + ": " + rhs);
             String reg = OperatorCodegen.REG_SRC.get(rht);
-            emit.emitPush32(reg);
+            emit.emit("push " + reg);
             lhs.hintType(rht, emit);
             lhs.compileLValue(emit);
-            emit.emitPop32(reg);
-            emit.emit("sw " + reg + " ($s0)");
+            emit.emit("pop " + reg);
+            emit.emit("sw " + reg + " ($s0) # binop " + this);
             return;
         }
 
@@ -95,13 +103,13 @@ public class BinOp extends Expression
             {
                 // rht MUST be Type.Double at this point
                 rhs.compile(emit);
-                emit.emitPushF64("$f0");
+                emit.emit("push.d $f0");
                 lhs.hintType(Type.Double, emit);
                 lhs.compileLValue(emit); // this *might* modify $f0??
-                emit.emitPopF64("$f0");
+                emit.emit("pop.d $f0");
                 // no -4($s0) needed here because it's handled at frameLoc variable LValue time
                 emit.emit("mfc1 $t6 $f0");
-                emit.emit("sd $t6 ($s0)");
+                emit.emit("sd $t6 ($s0) # binop " + this);
                 return;
             }
 
@@ -109,26 +117,27 @@ public class BinOp extends Expression
             lhs.compile(emit);
             if (lhs.getType(emit).equals(Type.Int))
                 emit.emit(cvt);
-            emit.emitPushF64("$f0");
+            emit.emit("push.d $f0");
 
             rhs.compile(emit);
             if (rht.equals(Type.Int))
                 emit.emit(cvt);
-//            emit.emit("mov.d $f4 $f0");
-            emit.emitPopF64("$f2");
+            emit.emit("pop.d $f2");
 
             if (OperatorCodegen.DOUBLE_COMPARES.containsKey(name))
             {
                 emit.emit("move $v0 $0");
                 emit.emit("li $t0 1");
-                emit.emit(OperatorCodegen.DOUBLE_COMPARES.get(name) + " $v0 $t0");
+                emit.emit(OperatorCodegen.DOUBLE_COMPARES.get(name)
+                        + " $v0 $t0 # binop " + this);
             }
             else
             {
                 if (!OperatorCodegen.INT_BORING_CODEGEN.containsKey(name))
                     throw new RuntimeException(
                             "unknown boring int operator to be used as double: " + this);
-                emit.emit(OperatorCodegen.INT_BORING_CODEGEN.get(name) + ".d $f0 $f2 $f0");
+                emit.emit(OperatorCodegen.INT_BORING_CODEGEN.get(name)
+                        + ".d $f0 $f2 $f0 # binop " + this);
             }
         }
         else if (lhs.getType(emit).equals(Type.Int) && rht.equals(Type.Int))
@@ -137,11 +146,10 @@ public class BinOp extends Expression
             {
                 String ins = OperatorCodegen.INT_BORING_CODEGEN.get(name);
                 lhs.compile(emit);
-                emit.emitPush32("$v0");
+                emit.emit("push $v0");
                 rhs.compile(emit);
-//                emit.emit("move $t1 $v0");
-                emit.emitPop32("$t0");
-                emit.emit(ins + " $v0 $t0 $v0");
+                emit.emit("pop $t0");
+                emit.emit(ins + " $v0 $t0 $v0 # binop " + this);
             }
             else
             {
@@ -150,10 +158,15 @@ public class BinOp extends Expression
         }
         else
         {
-            emit.emit("# ERR: codegen failed for operator " + this);
+            throw new RuntimeException("unknown codegen for operator " + this);
         }
     }
 
+    /**
+     * Compile this binary operator as a lvalue, storing the memory location
+     * of the associated variable into $s0.
+     * @param emit Emitter object to use for codegen
+     */
     @Override
     public void compileLValue(Emitter emit)
     {

@@ -36,7 +36,7 @@ public class ScannerTester
             Emitter emit = new Emitter(file + ".asm", prog);
             prog.compile(emit);
             emit.close();
-            prog.exec();
+//            prog.exec();
         }
         catch (IOException e)
         {
@@ -57,7 +57,8 @@ public class ScannerTester
                 "7codegen/parserTest9.2.txt",
                 "7codegen/recurse2.txt",
                 "7codegen/double.txt",
-                "7codegen/simple.txt"
+                "7codegen/simple.txt",
+                "7codegen/calcpi.txt"
         ).forEach(ScannerTester::go);
     }
 }
