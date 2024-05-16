@@ -112,11 +112,11 @@ public class Parser
             public void compile(Emitter emit)
             {
                 if (getType(emit).equals(Type.Int))
-                    emit.emit("li $v0 " + cont);
+                    emit.emit("li $v0 " + cont + " # literal number");
                 else
                 {
-                    String label = emit.tryAllocGlobal(Double.parseDouble(cont));
-                    emit.emit("l.d $f0 " + label);
+                    String label = emit.nextLabelID(Double.parseDouble(cont));
+                    emit.emit("l.d $f0 " + label + " # literal float: " + cont);
                 }
             }
 
@@ -389,10 +389,17 @@ public class Parser
                     @Override
                     public void compile(Emitter emit)
                     {
+                        expr.compile(emit);
                         if (getType(emit) == Type.Double)
-                            emit.emit("neg.d $f0 $f0");
+                            emit.emit("neg.d $f0 $f0 # unary op " + this);
                         else
-                            emit.emit("neg $v0 $v0");
+                            emit.emit("neg $v0 $v0 # unary op " + this);
+                    }
+
+                    @Override
+                    public String toString()
+                    {
+                        return "-(" + expr + ")";
                     }
                 };
             }
@@ -418,7 +425,14 @@ public class Parser
                     @Override
                     public void compile(Emitter emit)
                     {
-                        emit.emit("seq $v0 $0 $v0");
+                        expr.compile(emit);
+                        emit.emit("seq $v0 $0 $v0 # unary op " + this);
+                    }
+
+                    @Override
+                    public String toString()
+                    {
+                        return "NOT(" + expr + ")";
                     }
                 };
             }
@@ -484,8 +498,8 @@ public class Parser
                 @Override
                 public void compile(Emitter emit)
                 {
-                    String label = emit.tryAllocGlobal(ret);
-                    emit.emit("la $a0 " + label);
+                    String label = emit.nextLabelID(ret);
+                    emit.emit("la $a0 " + label + " # literal string");
                 }
             };
         }
