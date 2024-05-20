@@ -23,6 +23,12 @@ public class Variable extends Expression
         this.id = id;
     }
 
+    /**
+     * Evaluate the value of variable, returning its BoxedValue
+     * @param env The environment to evaluate in
+     * @return The value of the variable, which can be used
+     *         both as an L-value or an R-value.
+     */
     @Override
     public BoxedValue eval(Environment env)
     {

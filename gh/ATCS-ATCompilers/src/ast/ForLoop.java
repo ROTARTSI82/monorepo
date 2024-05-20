@@ -90,7 +90,6 @@ public class ForLoop extends Expression
 
         emit.emit("# for loop " + id);
         emit.emit("push $s0");
-        System.out.println("for sp " + emit.sp);
         emit.emit("push $v0");
 
         stop.compile(emit);
@@ -103,8 +102,6 @@ public class ForLoop extends Expression
         body.compile(emit);
 
         // lmao double pointer deref is funny
-        System.out.println("for sp end " + emit.sp);
-
         emit.emit("# for loop " + id + " update loop variable");
         emit.emit("lw $s0 8($sp)");
         emit.emit("lw $v0 4($sp)");
@@ -115,7 +112,6 @@ public class ForLoop extends Expression
 
         emit.emit("exit_forLoop" + id + ":");
         emit.emit("addi $sp $sp 8"); // pop $v0 $s0
-        emit.sp -= 8;
         emit.popLoopLabel();
         emit.emit("# end for loop " + id);
     }

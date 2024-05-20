@@ -33,6 +33,11 @@ public class ProcedureCall extends Expression
         this.args = args;
     }
 
+    /**
+     * Gets the return type of the procedure call based on the procedure definition table.
+     * @param e Emitter object containing the context for this expression
+     * @return The type of the procedure call
+     */
     @Override
     public Type getType(Emitter e)
     {
@@ -119,6 +124,10 @@ public class ProcedureCall extends Expression
         return BoxedValue.box(ret); // re-box to force a copy
     }
 
+    /**
+     * Compile WRITE and WRITELN calls into MIPS syscalls
+     * @param emit Object into which to emit the code
+     */
     private void compileWrite(Emitter emit)
     {
         for (Expression exp : args)
@@ -156,6 +165,11 @@ public class ProcedureCall extends Expression
         }
     }
 
+    /**
+     * Compile the procedure call into MIPS assembly,
+     * handling pushing the arguments onto the stack and a jal instruction.
+     * @param emit Object into which to emit the code
+     */
     @Override
     public void compile(Emitter emit)
     {

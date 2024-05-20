@@ -55,6 +55,10 @@ public class WhileLoop extends Expression
         return BoxedValue.NULL;
     }
 
+    /**
+     * Compile the while loop into assembly
+     * @param emit Object into which to emit the code
+     */
     @Override
     public void compile(Emitter emit)
     {
