@@ -58,7 +58,7 @@ main:
 	# for loop 2
 	push $s0
 	push $v0
-	li $v0 10 # literal number
+	li $v0 65536 # literal number
 	pop $t0
 	push $v0
 forLoop2:

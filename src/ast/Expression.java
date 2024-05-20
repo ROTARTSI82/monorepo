@@ -92,26 +92,20 @@ public abstract class Expression
         }
     };
 
-    public static final Expression UNIMPL = new Expression()
-    {
-        @Override
-        public BoxedValue eval(Environment env)
-        {
-            throw new RuntimeException("unimplemented expr");
-        }
-
-        @Override
-        public void compile(Emitter emit)
-        {
-            emit.emit("# ERR: unimpl expr");
-        }
-    };
-
+    /**
+     * Possible types for an expression
+     */
     public enum Type
     {
         Null, Int, Double, String, Array
     }
 
+    /**
+     * Convert from a string name to the type object
+     * @precondition The string is a recognized type name
+     * @param s String name of the type
+     * @return Type object corresponding to the string
+     */
     public static Type typeFromString(String s)
     {
         return switch (s.toLowerCase())
@@ -134,19 +128,45 @@ public abstract class Expression
      */
     public abstract BoxedValue eval(Environment env);
 
+    /**
+     * Calculate the type of this expression.
+     * For variables, hintType() should be called before getType().
+     * @param e Emitter object containing the context for this expression
+     * @return The type of the variable, defaulting to Type.Null
+     */
     public Type getType(Emitter e)
     {
         return Type.Null;
     }
 
+    /**
+     * Compile this expression, storing the results into
+     * $v0, $a0, etc. depending on the type of the expression.
+     * Registers are not guaranteed to be preserved, so the stack
+     * is used extensively.
+     * @param emit Object into which to emit the code
+     */
     public abstract void compile(Emitter emit);
 
-    // special functions for lvalues and variables
+    /**
+     * Compile L-value, putting the address of the expression into $s0
+     * This is used for variables and anything that may appear on the left
+     * hand side of an assignment operator :=.
+     * @param emit Object into which to emit the code
+     */
     public void compileLValue(Emitter emit)
     {
         emit.emit("# ERR cannot produce lvalue for this type of expr");
     }
 
+    /**
+     * Emit a hint to the emitter about the type of this expression.
+     * This is used to set the type of variables on the first assignment.
+     * @param t Type to hint
+     * @param e Emitter to hint to
+     * @precondition Any previous calls to hintType() should agree with this call,
+     *               i.e. all previous calls had the same type t.
+     */
     public void hintType(Type t, Emitter e)
     {
         e.emit("# hint type " + t);

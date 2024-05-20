@@ -50,6 +50,10 @@ public class Program
         return env;
     }
 
+    /**
+     * Compile the program to MIPS assembly code
+     * @param emit The emitter to write the code to
+     */
     public void compile(Emitter emit)
     {
         emit.frameSize = 0;

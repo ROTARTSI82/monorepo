@@ -60,6 +60,10 @@ public class NamedExpression extends Expression
         return op.eval(env);
     }
 
+    /**
+     * Compile the underlying expression
+     * @param emit Object into which to emit the code
+     */
     @Override
     public void compile(Emitter emit)
     {

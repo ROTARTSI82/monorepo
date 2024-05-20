@@ -36,6 +36,11 @@ public class ProcedureDeclaration extends Expression
         this.retType = ret;
     }
 
+    /**
+     * Gets the return type of the procedure
+     * @param e Emitter object containing the context for this expression
+     * @return The return type of the procedure
+     */
     @Override
     public Type getType(Emitter e)
     {
