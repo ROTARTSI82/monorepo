@@ -15,11 +15,13 @@ export default function handler(
 		return;
 	}
 
-	https.get(`https://archives.nd.edu/cgi-bin/wordz.pl?keyword=${encodeURIComponent(req.query.word)}`, (httpsRes) => {
+	https.get(`https://latin-words.com/cgi-bin/translate.cgi?query=${encodeURIComponent(req.query.word)}`, (httpsRes) => {
+		let body = "";
 		httpsRes.on("data", (data) => {
-			const html = data.toString();
-			const def = html.substring(html.indexOf("<pre>")+5, html.lastIndexOf("</pre>")).trim();
-			res.status(200).json(def)
+			body += data.toString();
 		});
+		httpsRes.on("end", () => {
+			res.status(200).json(JSON.parse(body).message);
+		})
 	});
 }

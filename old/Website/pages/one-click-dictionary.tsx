@@ -42,7 +42,7 @@ function WhitakersWordsFetcher(props: {word: string}) {
 
 const alphabet = "abcdefghijklmnopqrstuvwxyzāēīōū";
 function parseWords(line: string) {
-	let ret: JSX.Element[] = [];
+	let ret = [];
 
 	let nonWord = "";
 	let wordPart = "";

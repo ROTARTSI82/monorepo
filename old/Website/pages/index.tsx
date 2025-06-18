@@ -22,9 +22,9 @@ const Home: NextPage = () => {
           Hi, I&apos;m Grant Yang, a sophomore in highschool.
         </p>
         <div className={styles.rTextGrid}>
-          <div><Link href={"https://github.com/ROTARTSI82"}><a>ROTARTSI82 on GitHub</a></Link></div>
+          <div><Link href={"https://github.com/ROTARTSI82"}>ROTARTSI82 on GitHub</Link></div>
           <div>Rotartsi#3754 on Discord</div>
-          <div><Link href={"https://open.spotify.com/user/lg0amvf4xozuf1uec7x6a8bq4?si=6bd3570a3e9944ff"}><a>Rotartsi on Spotify</a></Link></div>
+          <div><Link href={"https://open.spotify.com/user/lg0amvf4xozuf1uec7x6a8bq4?si=6bd3570a3e9944ff"}>Rotartsi on Spotify</Link></div>
         </div>
         <br/>
         <p>
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
         <ul>
           <li>
             <Link href={"https://github.com/ROTARTSI82/Chess"}>
-              <a>Scacus</a>
+              Scacus
             </Link>
             &nbsp;A C++ UCI chess engine that does alpha-beta game tree search, with transposition tables and
             quiescence search. The board representation is with &quot;magic bitboards,&quot; and its speed is on par with
@@ -43,25 +43,25 @@ const Home: NextPage = () => {
           </li>
           <li>
             <Link href={"one-click-dictionary"}>
-              <a>One Click Dictionary</a>
+              One Click Dictionary
             </Link>
             &nbsp;Simple web app for looking up unfamiliar Latin words.
             It allows you to paste in some text and click individual words to look them up with Whitaker&apos;s Words.
           </li>
           <li>
             <Link href={"transcriber"}>
-              <a>Transcription Viewer</a>
+              Transcription Viewer
             </Link>
             &nbsp;(WIP, doesn&apos;t work yet): A nice UI for viewing and editing transcriptions and sharing them with links.
             It&apos;s meant to be used with <Link href={"https://gist.github.com/ROTARTSI82/d0606b3e2acd697d64808c9a8fe8c582"}>
-              <a>this hacky python script</a>
+              this hacky python script
             </Link>,
             which transcribes an audio file with OpenAI Whisper and adds information about speakers with
             PyAnnote&apos;s speaker diarization. Probably worse than just using Otter.ai, but hey.
           </li>
           <li>
             <Link href={"https://rotartsi82.github.io/VirtualBell"}>
-              <a>MS Virtual Bell</a>
+              MS Virtual Bell
             </Link>
             &nbsp;Virtual bell schedule for the middle school, which I made for convenience during the
             pandemic.
