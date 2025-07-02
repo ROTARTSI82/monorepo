@@ -1,14 +1,16 @@
+use std::io;
+use std::io::Cursor;
+use std::ops::{Add, AddAssign, BitAnd, BitOrAssign, Mul, Not, Shl, ShrAssign};
 use anyhow::{anyhow, ensure, Error};
-use tokio::io::{AsyncRead, AsyncReadExt};
+use tokio::io::{AsyncRead, AsyncReadExt, AsyncWriteExt, AsyncWrite};
 use tokio::net::TcpStream;
-use tokio::pin;
 
-const SEGMENT_BITS: i32 = 0x7F;
-const CONTINUE_BIT: u8 = 0x80;
+const SEGMENT_BITS: i64 = 0x7F;
+const CONTINUE_BIT: u8 = 0b10000000;
 
 
 // macro hack to get the varying string lengths to work
-type String256 = String;
+type LimitedString<const L: i32> = String;
 
 // rust macros fucking suck
 // what is this bullshit i spent hours figuring out how to get it to parse correctly
@@ -16,14 +18,16 @@ macro_rules! packets {
     (def_field $ta:ident $stream:ident i32 $f:ident) => {
         let ($f, add) = $stream.read_var_int().await?; $ta += add;
     };
-    (def_field $ta:ident $stream:ident String256 $f:ident) => { 
-        let ($f, add) = $stream.read_string(256).await?; $ta += add;
+    (def_field $ta:ident $stream:ident i64 $f:ident) => {
+        let ($f, add) = $stream.read_var_long().await?; $ta += add;
     };
-    
-    (def_field $ta:ident $stream:ident u16 $f:ident) => { 
+    (def_field $ta:ident $stream:ident (LimitedString<$l:literal>) $f:ident) => {
+        let ($f, add) = $stream.read_string($l).await?; $ta += add;
+    };
+    (def_field $ta:ident $stream:ident u16 $f:ident) => {
         let $f = $stream.read_u16().await?; $ta += 2;
     };
-    (def_field $ta:ident $stream:ident u8 $f:ident) => { 
+    (def_field $ta:ident $stream:ident u8 $f:ident) => {
         let $f = $stream.read_u8().await?; $ta += 1;
     };
 
@@ -34,54 +38,142 @@ macro_rules! packets {
         packets!(coerce $name, { $($field, )* })
     }};
 
-    ($($num:literal: $name:ident $body:tt),+) => {
+    ($enum_name:ident, $func_name:ident; $($num:literal: $name:ident $body:tt),+) => {
         #[derive(Debug)]
-        pub enum ClientPacket {
+        pub enum $enum_name {
             $(
                 $name $body,
             )*
         }
 
-        pub async fn read_packet(mut stream: &mut TcpStream) -> Result<ClientPacket, Error> {
+        pub async fn $func_name(mut stream: &mut TcpStream) -> Result<$enum_name, Error> {
             let (length, _) = stream.read_var_int().await?;
             let (packet_id, mut accum) = stream.read_var_int().await?;
-            println!("recv packet {length} of id {packet_id}");
+            println!("\t {} recv {}", stringify!($enum_name), packet_id);
 
             Ok(match packet_id {
                 $(
                 $num => {
-                    packets!(resolve_arm accum length stream ClientPacket::$name $body)
+                    packets!(resolve_arm accum length stream $enum_name::$name $body)
                 },
                 )*
-                _ => Err(anyhow!("invalid packet id {}", packet_id))?,
+                _ => Err(anyhow!("invalid packet id {} in {}", packet_id, stringify!($enum_name)))?,
             })
         }
     }
 }
 
-packets!(
-    0: Intention { protocol: i32, addr: String256, port: u16, intent: i32 },
+packets!(InitPacket, rpack_init;
+    0: Intention { protocol: i32, addr: (LimitedString<256>), port: u16, intent: i32 },
     0xFE: LegacyServerPing { payload: u8 }
 );
 
-trait ReadExt: AsyncRead {
-    async fn read_var_int(&mut self) -> Result<(i32, i32), Error> where Self: Unpin {
-        let mut ret = 0i32;
-        let mut pos = 0i32;
+packets!(HandshakePacket, rpack_handshake;
+    0: StatusRequest { },
+    1: Ping { payload: i64 }
+);
 
-        Ok(loop {
-            let next = self.read_u8().await?;
-            ret |= (next as i32 & SEGMENT_BITS) << (7*pos);
-            pos += 1;
-            if (next & CONTINUE_BIT) == 0 {
-                break (ret, pos);
-            }
-            
-            if (7*pos) >= 32 {
-                Err(anyhow!("VarInt too large"))?
-            }
-        })
+macro_rules! write_packet {
+    (accum (LimitedString<$l:literal>) $acc:ident; $f:ident) => {
+        let len = $f.as_bytes().len();
+        ensure!(len <= 3*$l + 3 && 1 <= len);
+        $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_int(len as i32);
+        $acc += len as i32;
+    };
+    (accum i32 $acc:ident; $f:ident) => {
+        $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_int($f); };
+    (accum i64 $acc:ident; $f:ident) => {
+        $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_long($f); };
+
+    (do_write (LimitedString<$l:literal>) $stream:ident; $elem:ident) => {
+        $stream.write_string($elem).await?;
+    };
+    (do_write i32 $stream:ident; $elem:ident) => { $stream.write_var_int($elem).await?; };
+    (do_write i64 $stream:ident; $elem:ident) => { $stream.write_var_long($elem).await?; };
+    ($stream:ident { $($elem:ident: $ty:tt = $expr:expr),+ }) => {
+        let mut priv_accum = 0;
+        $(
+            let $elem = $expr;
+            write_packet!(accum $ty priv_accum; $elem);
+        )*
+
+        let mut size: usize = priv_accum.try_into()?;
+        println!("\tcalculated len {priv_accum}");
+        let mut buf = Cursor::new(Vec::with_capacity(size + 4));
+        buf.write_var_int(priv_accum).await?;
+        size += buf.get_ref().len(); // this part is not included in the length calculation
+        
+        $(
+            write_packet!(do_write $ty buf; $elem);
+        )*
+        ensure!(buf.get_ref().len() == size);
+        $stream.write_all(buf.get_ref()).await?;
     }
+}
+
+pub(crate) use write_packet;
+
+macro_rules! impl_rw {
+    (resolve_len i32) => {{ 32 }};
+    (resolve_len i64) => {{ 64 }};
+    (to_unsigned i32) => { u32 };
+    (to_unsigned i64) => { u64 };
+    ($ty:tt: $rname:ident, $wname:ident, $qname:ident) => {
+        async fn $rname (&mut self) -> Result<($ty, i32), Error> where Self: Unpin {
+            let mut ret = 0;
+            let mut pos = 0;
+            let mut buf = [0; 4];
+
+            Ok(loop {
+                let next = self.eof_read_u8().await?;
+                ret |= (next as $ty & SEGMENT_BITS as $ty) << (7 * pos);
+                pos += 1;
+                if (next & CONTINUE_BIT) == 0 {
+                    break (ret, pos);
+                }
+
+                if 7 * pos >= impl_rw!(resolve_len $ty) {
+                    Err(anyhow!("VarInt too large"))?
+                }
+            })
+        }
+
+        async fn $wname (&mut self, val: $ty) -> Result<(), Error>
+        where Self: Unpin {
+            // we need logical shift not arithmetic
+            type Unsigned = impl_rw!(to_unsigned $ty);
+            let mut val = val as Unsigned;
+            loop {
+                if val & !(SEGMENT_BITS as Unsigned) == 0 {
+                    self.write_u8(val as u8).await?;
+                    break Ok(());
+                }
+
+                self.write_u8((val & SEGMENT_BITS as Unsigned) as u8 | CONTINUE_BIT).await?;
+                val = val >> 7;
+            }
+        }
+
+        fn $qname (val: $ty) -> i32 {
+            type Unsigned = impl_rw!(to_unsigned $ty);
+            let mut val = val as Unsigned;
+            let mut cnt = 0;
+            loop {
+                if val & !(SEGMENT_BITS as Unsigned) == 0 {
+                    break cnt + 1;
+                }
+
+                val = val >> 7;
+                cnt += 1;
+            }
+        }
+    }
+}
+
+
+pub trait MCAsyncRWExt: AsyncRead + AsyncWrite {
+    impl_rw!(i32: read_var_int, write_var_int, len_var_int);
+    impl_rw!(i64: read_var_long, write_var_long, len_var_long);
 
     async fn read_string(&mut self, max_len: i32) -> Result<(String, i32), Error> where Self: Unpin {
         let (length, read) = self.read_var_int().await?;
@@ -90,6 +182,24 @@ trait ReadExt: AsyncRead {
         self.read_exact(&mut buf).await?;
         Ok((String::from_utf8(buf)?, length + read))
     }
+
+    async fn write_string(&mut self, val: &str) -> Result<(), Error> where Self: Unpin {
+        self.write_var_int(val.as_bytes().len() as i32).await?;
+        self.write_all(val.as_bytes()).await?;
+        Ok(())
+    }
+
+    async fn eof_read_u8(&mut self) -> Result<u8, Error> where Self: Unpin {
+        let mut x = [0; 1];
+        let read = self.read(&mut x).await?;
+        if read == 1 {
+            Ok(x[0])
+        } else {
+            println!("connection closed with bytes={read}");
+            Err(anyhow!("connection closed by other side"))?
+        }
+    }
 }
 
-impl ReadExt for &mut TcpStream {}
+impl MCAsyncRWExt for &mut TcpStream {}
+impl MCAsyncRWExt for io::Cursor<Vec<u8>> {}
