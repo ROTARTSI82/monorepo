@@ -7,7 +7,7 @@ use tokio::net::{TcpListener, TcpStream};
 use core::net::SocketAddr;
 use std::io::Cursor;
 use anyhow::{anyhow, ensure, Error};
-use crate::netdata::{write_packet, StatusPacket, InitPacket, MCAsyncRWExt, VarInt, VarLong};
+use crate::netdata::{write_packet, InitPacket, LimitedString, StatusPacket, VarInt, MCRWObj};
 
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -20,10 +20,10 @@ struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Ok(tokio::runtime::Builder::new_multi_thread()
+    tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()?
-        .block_on(async_main())?)
+        .block_on(async_main())
 }
 
 
@@ -54,13 +54,13 @@ async fn server_listener(serv: Server) -> ! {
         match serv.listener.accept().await {
             Ok((socket, addr)) => {
                 tokio::spawn(async move {
-                    match client_connected(ConnectedClient::new(socket, addr)).await {
-                        Err(e) => println!("client errored out {:?}", e),
-                        Ok(()) => {},
+                    if let Err(e) = 
+                        client_connected(ConnectedClient::new(socket, addr)).await {
+                        println!("client errored out {e:?}");
                     }
                 });
             }
-            Err(e) => println!("Connection error: {}", e),
+            Err(e) => println!("Connection error: {e}"),
         }
     }
 }
@@ -106,18 +106,18 @@ const HARDCODE: &str = r##"{
 }"##;
 
 
+
 async fn client_connected(mut client: ConnectedClient) -> Result<(), Error> {
     println!("new connection: {}", client.addr);
-    let mut sock = &mut client.sock;
+    let sock = &mut client.sock;
     sock.set_nodelay(true)?;
-    
-    let mut vec = Cursor::new(Vec::with_capacity(20));
-    vec.write_u8(0).await?;
     
     // handshake
     let handshake = netdata::rpack_init(sock).await?;
     match handshake {
-        InitPacket::Intention { addr, protocol, intent, port } => {
+        InitPacket::Intention { addr, protocol, 
+                                intent, port } => {
+            let (protocol, intent, addr) = (protocol.0, intent.0, addr.0);
             println!("handshake {addr}:{port} with proto {protocol} intent {intent}");
             if intent == 1 { // status
                 loop {
@@ -125,21 +125,26 @@ async fn client_connected(mut client: ConnectedClient) -> Result<(), Error> {
                     match ping {
                         StatusPacket::StatusRequest {} => {
                             println!("status request got");
-                            write_packet!(sock { id: VarInt = 0, payload: (LimitedString<4096>) = HARDCODE });
+                            write_packet!(sock { id = VarInt(0), 
+                                                 payload = LimitedString::<4096>(String::from(HARDCODE)) });
                             println!("sent info");
                         }
                         StatusPacket::Ping { payload } => {
                             println!("ping payload {payload}");
-                            write_packet!(sock { id: VarInt = 1, p: i64 = payload});
-                            println!("sent pong");
+                            write_packet!(sock { id = VarInt(1), p = payload });
+                            println!("sent pong. closing connection");
                             return Ok(()); // we're done!
                         }
                     }
                 }
             } else if intent == 2 {
-                
+                // TODO: implement login
+                loop {
+                    let pack = netdata::rpack_login(sock).await?;
+                    println!("Got login {pack:?}");
+                }
             } else if intent == 3 {
-                
+                // TODO: implement transfer
             } else {
                 Err(anyhow!("invalid handshake intent {intent}"))?
             }
@@ -148,15 +153,12 @@ async fn client_connected(mut client: ConnectedClient) -> Result<(), Error> {
             ensure!(payload == 1);
             println!("legacy server ping successful");
         }
-        _ => Err(anyhow!("invalid handshake"))?
     }
     
     loop {
-        let x = sock.eof_read_u8().await?;
+        let x = sock.read_u8().await?;
         print!("{x}\t");
     }
-
-    Ok(())
 }
 
 impl ConnectedClient {
