@@ -10,15 +10,17 @@ const CONTINUE_BIT: u8 = 0b10000000;
 
 
 // macro hack to get the varying string lengths to work
-type LimitedString<const L: i32> = String;
+pub type LimitedString<const L: i32> = String;
+pub type VarInt = i32;
+pub type VarLong = i64;
 
 // rust macros fucking suck
 // what is this bullshit i spent hours figuring out how to get it to parse correctly
 macro_rules! packets {
-    (def_field $ta:ident $stream:ident i32 $f:ident) => {
+    (def_field $ta:ident $stream:ident VarInt $f:ident) => {
         let ($f, add) = $stream.read_var_int().await?; $ta += add;
     };
-    (def_field $ta:ident $stream:ident i64 $f:ident) => {
+    (def_field $ta:ident $stream:ident VarLong $f:ident) => {
         let ($f, add) = $stream.read_var_long().await?; $ta += add;
     };
     (def_field $ta:ident $stream:ident (LimitedString<$l:literal>) $f:ident) => {
@@ -30,11 +32,14 @@ macro_rules! packets {
     (def_field $ta:ident $stream:ident u8 $f:ident) => {
         let $f = $stream.read_u8().await?; $ta += 1;
     };
+    (def_field $ta:ident $stream:ident i64 $f:ident) => {
+        let $f = $stream.read_i64().await?; $ta += 8;
+    };
 
     (coerce $b:path, $other:tt) => {{ $b $other }};
     (resolve_arm $accum:ident $len:ident $stream:ident $name:path { $($field:ident: $ty:tt),* }) => {{
         $( packets!(def_field $accum $stream $ty $field); )*
-        ensure!($accum == $len);
+        dbg!($accum == $len);
         packets!(coerce $name, { $($field, )* })
     }};
 
@@ -64,11 +69,11 @@ macro_rules! packets {
 }
 
 packets!(InitPacket, rpack_init;
-    0: Intention { protocol: i32, addr: (LimitedString<256>), port: u16, intent: i32 },
+    0: Intention { protocol: VarInt, addr: (LimitedString<256>), port: u16, intent: VarInt },
     0xFE: LegacyServerPing { payload: u8 }
 );
 
-packets!(HandshakePacket, rpack_handshake;
+packets!(StatusPacket, rpack_status;
     0: StatusRequest { },
     1: Ping { payload: i64 }
 );
@@ -80,16 +85,18 @@ macro_rules! write_packet {
         $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_int(len as i32);
         $acc += len as i32;
     };
-    (accum i32 $acc:ident; $f:ident) => {
+    (accum VarInt $acc:ident; $f:ident) => {
         $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_int($f); };
-    (accum i64 $acc:ident; $f:ident) => {
+    (accum VarLong $acc:ident; $f:ident) => {
         $acc += <&mut tokio::net::TcpStream as MCAsyncRWExt>::len_var_long($f); };
+    (accum i64 $acc:ident; $f:ident) => { $acc += 8; };
 
     (do_write (LimitedString<$l:literal>) $stream:ident; $elem:ident) => {
         $stream.write_string($elem).await?;
     };
-    (do_write i32 $stream:ident; $elem:ident) => { $stream.write_var_int($elem).await?; };
-    (do_write i64 $stream:ident; $elem:ident) => { $stream.write_var_long($elem).await?; };
+    (do_write VarInt $stream:ident; $elem:ident) => { $stream.write_var_int($elem).await?; };
+    (do_write VarLong $stream:ident; $elem:ident) => { $stream.write_var_long($elem).await?; };
+    (do_write i64 $stream:ident; $elem:ident ) => { $stream.write_i64($elem).await?; };
     ($stream:ident { $($elem:ident: $ty:tt = $expr:expr),+ }) => {
         let mut priv_accum = 0;
         $(
@@ -102,7 +109,7 @@ macro_rules! write_packet {
         let mut buf = Cursor::new(Vec::with_capacity(size + 4));
         buf.write_var_int(priv_accum).await?;
         size += buf.get_ref().len(); // this part is not included in the length calculation
-        
+
         $(
             write_packet!(do_write $ty buf; $elem);
         )*
@@ -202,4 +209,4 @@ pub trait MCAsyncRWExt: AsyncRead + AsyncWrite {
 }
 
 impl MCAsyncRWExt for &mut TcpStream {}
-impl MCAsyncRWExt for io::Cursor<Vec<u8>> {}
+impl MCAsyncRWExt for Cursor<Vec<u8>> {}

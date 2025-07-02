@@ -7,7 +7,7 @@ use tokio::net::{TcpListener, TcpStream};
 use core::net::SocketAddr;
 use std::io::Cursor;
 use anyhow::{anyhow, ensure, Error};
-use crate::netdata::{write_packet, HandshakePacket, InitPacket, MCAsyncRWExt};
+use crate::netdata::{write_packet, StatusPacket, InitPacket, MCAsyncRWExt, VarInt, VarLong};
 
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -121,18 +121,18 @@ async fn client_connected(mut client: ConnectedClient) -> Result<(), Error> {
             println!("handshake {addr}:{port} with proto {protocol} intent {intent}");
             if intent == 1 { // status
                 loop {
-                    let ping = netdata::rpack_handshake(sock).await?;
+                    let ping = netdata::rpack_status(sock).await?;
                     match ping {
-                        HandshakePacket::StatusRequest {} => {
+                        StatusPacket::StatusRequest {} => {
                             println!("status request got");
-                            write_packet!(sock { id: i32 = 0, payload: (LimitedString<4096>) = HARDCODE });
+                            write_packet!(sock { id: VarInt = 0, payload: (LimitedString<4096>) = HARDCODE });
                             println!("sent info");
                         }
-                        HandshakePacket::Ping { payload } => {
+                        StatusPacket::Ping { payload } => {
                             println!("ping payload {payload}");
-                            write_packet!(sock { id: i32 = 1, p: i64 = payload});
+                            write_packet!(sock { id: VarInt = 1, p: i64 = payload});
                             println!("sent pong");
-                            break;
+                            return Ok(()); // we're done!
                         }
                     }
                 }
@@ -151,7 +151,8 @@ async fn client_connected(mut client: ConnectedClient) -> Result<(), Error> {
         _ => Err(anyhow!("invalid handshake"))?
     }
     
-    while let x = sock.read_i8().await? {
+    loop {
+        let x = sock.eof_read_u8().await?;
         print!("{x}\t");
     }
 
