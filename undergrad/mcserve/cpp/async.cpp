@@ -23,8 +23,7 @@ std::ostream &operator<<(std::ostream &os, const std::variant<T...> &var) { retu
 struct suspend_always {
     constexpr bool await_ready() noexcept { return false; }
     void await_resume() noexcept {}
-    template <typename B>
-    void await_suspend(std::coroutine_handle<B> parent) noexcept { schedule_once(parent); }
+    void await_suspend(std::coroutine_handle<> parent) noexcept { schedule_once(parent); }
 };
 
 struct shared_interface_t {
@@ -41,11 +40,14 @@ struct shared_interface_t {
     }
 
     template <typename B>
-    inline void link_subroutine(const std::coroutine_handle<B> new_link) {
-        std::cout << "set link ->" << (uint64_t) new_link.address() << '\n';
-        new_link.promise().shared_interface.self = new_link;
-        new_link.promise().shared_interface.child = this;
-        link = &new_link.promise().shared_interface;
+    inline void link_as_subroutine_to(const std::coroutine_handle<B> ret_to) {
+        std::cout << "set link ->" << (uint64_t) ret_to.address() << '\n';
+        if (ret_to.promise().shared_interface.self != std::noop_coroutine()
+                && ret_to != ret_to.promise().shared_interface.self)
+            std::cout << "wtf: link_as_subroutine_to is overriding a link?\n";
+        ret_to.promise().shared_interface.self = ret_to;
+        ret_to.promise().shared_interface.child = this;
+        link = &ret_to.promise().shared_interface;
     }
 };
 
@@ -82,19 +84,24 @@ struct linking_promise {
 
             if (!dying.done())
                 std::cout << "wtf: continuation_handler trying to continue a non-done coroutine?\n";
-            if (self->link->child != self)
-                std::cout << "wtf: unlinking something that was never linked?\n";
+            if (self->link && self->link->child && self->link->child != self)
+                std::cout << "wtf: unlinking something that was never linked (this might be the top level of select() or join()): "
+                    << (uint64_t) self->link->child << '\t' << (uint64_t) self << '\n';
 
             // possibility that link is dead because of something like join() or select()
             // where we have multiple handles linking back to the same master.
             // this is probably not the correct way to handle this lol
-            self->link->child = nullptr;
+            if (self->link)
+                self->link->child = nullptr;
+
             if (self->link && self->link->self && !self->link->self.done())
-                return self->link->self;
-            else {
+                if (self->link->active && self->active)
+                    return self->link->self;
+                else
+                    std::cout << "LINK INACTIVE\n";
+            else
                 std::cout << "LINK DEAD\n";
-                return std::noop_coroutine();
-            }
+            return std::noop_coroutine();
         }
     };
 
@@ -115,9 +122,9 @@ struct future {
     std::coroutine_handle<> await_suspend(std::coroutine_handle<B> parent) {
         // when we get co_awaited, our `frame` is the subtask:
         // we need to schedule completing the subtask, then fire `parent` after subtask is done.
-        frame.promise().shared_interface.link_subroutine(parent);
+        frame.promise().shared_interface.link_as_subroutine_to(parent);
 
-        if (frame.promise().shared_interface.active)
+        if (frame.promise().shared_interface.active && parent.promise().shared_interface.active)
             return frame;
         else
             return std::noop_coroutine();
@@ -151,8 +158,8 @@ inline future<unit> resume_barrier(int resumes_before_finish) {
 constexpr inline void _link_all(future<unit> &) {} // base case for recursion
 template <typename T, typename... Args>
 constexpr inline void _link_all(future<unit> &parent, future<T> first, future<Args>... rest) {
-    first.frame.promise().shared_interface.link_subroutine(parent.frame);
-    schedule_once(first.frame); // should probably be a group instead with special handling
+    first.frame.promise().shared_interface.link_as_subroutine_to(parent.frame);
+    schedule_once(first.frame);
     _link_all(parent, rest...);
 }
 
