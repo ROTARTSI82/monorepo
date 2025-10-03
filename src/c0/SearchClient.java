@@ -86,12 +86,14 @@ public class SearchClient {
      * and the document(s) with the highest score are returned. If the same word
      * appears multiple times in the query, that word will be weighted more according to
      * its frequency in the query. This algorithm does not, however, consider the frequency
-     * of the keyword within the documents being searched.
+     * of the keyword within the documents being searched. 
+     * 
+     * The query is case-insensitive, and we ignore whitespace.
      * 
      * @param index The search index for your corpus, built by createIndex(List<Media>).
-     * @param query A simple string of keywords to look for.
+     * @param query A simple string of keywords to look for literally.
      * @return A set of documents which contain the maximal proportion of words in the query string.
-     * @throws NullPointerException If `index` or `query` are null, 
+     * @throws NullPointerException Can throw if `index` or `query` are null, 
      *                              or if `index` contains null values.
      */
     public static Set<Media> search(Map<String, Set<Media>> index, String query) {
