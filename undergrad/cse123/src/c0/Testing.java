@@ -1,3 +1,10 @@
+/**
+ * @author Grant Yang
+ * @version 2025.09.25
+ * CSE 123
+ * C0: Search Engine
+ * TA: Benoit Le
+ */
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,6 +70,8 @@ public class Testing {
 
         assertFalse(index.containsKey("sci-fi"));
         assertTrue(index.containsKey("\"sci-fi\""));
+        assertEquals(mistborn.compareTo(mistborn), 0);
+        assertTrue(mistborn.compareTo(farenheit) > 0);
 
         Set<Book> expected = Set.of(mistborn, hobbit);
         assertEquals(expected, index.get("fantasy"));

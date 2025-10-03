@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * An implementation of the Media interface for representing Books,
- * including content, metadata (like title and author), and user ratings for the book.
+ * including content, metadata (like title and author), and managing user ratings for the book.
  */
 public class Book implements Media, Comparable<Book> {
 
@@ -99,15 +99,18 @@ public class Book implements Media, Comparable<Book> {
     }
 
     /**
-     * Adds a numeric rating for this book. The statistics calculated by 
-     * getNumRatings() and getAverageRating() are updated accordingly.
-     * @param score The integer rating for the book. Any rating scale
+     * Tries to adds a numeric rating for this book. The statistics calculated by 
+     * getNumRatings() and getAverageRating() are updated if successful.
+     * @param score A non-negative integer rating for the book. Any rating scale
      *              may be used by the client, and all ratings are weighted equally.
+     *              However if the score is negative, this function does nothing.
      */
     @Override
     public void addRating(int score) {
-        ratingsAccum += score;
-        numRatings++;
+        if (score >= 0) {
+            ratingsAccum += score;
+            numRatings++;
+        }
     }
 
     /**
@@ -142,28 +145,66 @@ public class Book implements Media, Comparable<Book> {
     }
 
     /**
-     * Compares two books by their average rating.
-     * The number of ratings is not considered if the books have at least
-     * one rating, but a book with zero ratings is considered less than any
-     * book with one or more ratings and equal to other books with zero ratings.
+     * Utility function that compares a list of Comparable elements using
+     * lexicographical order. Effectively implements compareTo on List<T extends Comparable<T>>.
+     * We look at the lowest index at which the lists differ and use the result of 
+     * compareTo on the elements. If there is no index at which the lists differ 
+     * (i.e. one list is the prefix of another), the longer list is considered greater.
+     * This total ordering is consistent with equals().
+     * 
+     * @param lhs Left hand side of the comparison
+     * @param rhs Right hand side of the comparison
+     * @return Positive integer if lhs > rhs, negative intger if lhs < rhs,
+     *         and 0 if lhs.equals(rhs).
+     */
+    private <T extends Comparable<T>> int listCompareTo(List<T> lhs, List<T> rhs) {
+        int size = Math.max(lhs.size(), rhs.size());
+        for (int i = 0; i < size; i++) {
+            if (i >= lhs.size())
+                return -1;
+            else if (i >= rhs.size())
+                return 1;
+            
+            int cmp = lhs.get(i).compareTo(rhs.get(i));
+            if (cmp != 0)
+                return cmp;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Compares two books by the negative of their average rating first, then by 
+     * the negative of the number of ratings, lexicographically by title, by authors, 
+     * and then by content. We choose to reverse the usual ordering for average rating
+     * and number of ratings so that the highest rated books with the most ratings 
+     * will appear first in our collection, but all other fields use the normal ordering. 
+     * This total ordering is compatible with equals().
      * 
      * @param o The other book to compare to.
      * @throws NullPointerException If o is null.
-     * @return A positive integer if this book is higher rated than the other book,
-     *         zero if they are rated equally, and a negative integer if the
-     *         other book is higher rated.
+     * @return Returns 0 if this.equals(o). Otherwise, returns a
+     *         positive integer if this book is "greater than" the other book,
+     *         a negative integer if it is "less than".
      */
     @Override
     public int compareTo(Book o) {
         if (o == null)
             throw new NullPointerException("Book.compareTo(null) called");
     
-        if (getNumRatings() == 0)
-            return -o.getNumRatings();
-        else if (o.getNumRatings() == 0)
-            return 1;
-        
-        double diff = getAverageRating() - o.getAverageRating();
-        return (int) (diff >= 0 ? Math.ceil(diff) : Math.floor(diff));
+        // this seems inefficient but isn't too bad as we can stop comparing
+        // as soon as we notice a difference in each field.
+        int[] comparisons = new int[]{
+            -((Double) getAverageRating()).compareTo(o.getAverageRating()),
+            -((Integer) getNumRatings()).compareTo(o.getNumRatings()),
+            title.compareTo(o.title),
+            listCompareTo(authors, o.authors),
+            listCompareTo(content, o.content)
+        };
+
+        for (int i : comparisons)
+            if (i != 0)
+                return i;
+        return 0;
     }
 }
