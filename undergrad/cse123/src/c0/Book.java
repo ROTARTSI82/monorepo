@@ -65,19 +65,12 @@ public class Book implements Media, Comparable<Book> {
      */
     @Override
     public String toString() {
-        String authorStr = "";
-        for (String author : authors)
-            authorStr += ", " + author;
-
-        if (!authorStr.isEmpty())
-            authorStr = authorStr.substring(2);
-        
         String ratingsExtras = "";
         if (getNumRatings() > 0)
             ratingsExtras = String.format(": %.2f (%d ratings)", 
                                           getAverageRating(), getNumRatings());
 
-        return title + " by [" + authorStr + "]" + ratingsExtras;
+        return title + " by " + authors.toString() + ratingsExtras;
     }
 
     /**
@@ -147,8 +140,8 @@ public class Book implements Media, Comparable<Book> {
     /**
      * Utility function that compares a list of Comparable elements using
      * lexicographical order. Effectively implements compareTo on List<T extends Comparable<T>>.
-     * We look at the lowest index at which the lists differ and use the result of 
-     * compareTo on the elements. If there is no index at which the lists differ 
+     * At the lowest index at which the lists differ, we use the ordering
+     * of the differing elements. If there is no index at which the lists differ 
      * (i.e. one list is the prefix of another), the longer list is considered greater.
      * This total ordering is consistent with equals().
      * 
@@ -158,19 +151,14 @@ public class Book implements Media, Comparable<Book> {
      *         and 0 if lhs.equals(rhs).
      */
     private <T extends Comparable<T>> int listCompareTo(List<T> lhs, List<T> rhs) {
-        int size = Math.max(lhs.size(), rhs.size());
-        for (int i = 0; i < size; i++) {
-            if (i >= lhs.size())
-                return -1;
-            else if (i >= rhs.size())
-                return 1;
-            
+        int size = Math.min(lhs.size(), rhs.size());
+        for (int i = 0; i < size; i++) {            
             int cmp = lhs.get(i).compareTo(rhs.get(i));
             if (cmp != 0)
                 return cmp;
         }
 
-        return 0;
+        return ((Integer) lhs.size()).compareTo(rhs.size());
     }
 
     /**

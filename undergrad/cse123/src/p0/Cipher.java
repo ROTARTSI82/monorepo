@@ -57,6 +57,9 @@ public abstract class Cipher {
             String line = sc.nextLine();
             ps.println(encrypt ? encrypt(line) : decrypt(line));
         }
+        
+        ps.close();
+        sc.close();
     }
 
     //   Behavior: Returns whether the character is within the encodable range.

@@ -29,7 +29,7 @@ public class Substitution extends Cipher {
      * be an automorphism on [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
      * 
      * @param encoding A specification for the mapping to use for the cipher, 
-     *                 where the nth character specifies the value of the map for
+     *                 where the nth index specifies the value of the map for
      *                 Cipher.MIN_CHAR + n.
      * @throws IllegalArgumentException If the encoding map is null, or if it is not 
      *                                  an automorphism (i.e. its length is not equal to
@@ -45,6 +45,9 @@ public class Substitution extends Cipher {
      * Validates that the mapping specified by the encoding/key string 
      * both has a valid codomain and is injective.
      * The codomain must be a subset of (or equal to) [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
+     * 
+     * (I would make this a protected helper method since I want to use it in
+     * CaesarKey, but for some reason y'all decided to ban protected so it's public instead)
      * 
      * @param encoding A string specifying the mapping, where the character at the nth
      *                 index specifies the value of the map for the nth input value.
@@ -74,7 +77,7 @@ public class Substitution extends Cipher {
      * be an automorphism on [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
      * 
      * @param encoding A specification for the mapping to use for the cipher, 
-     *                 where the nth character specifies the value of the map for
+     *                 where the nth index specifies the value of the map for
      *                 Cipher.MIN_CHAR + n.
      * @throws IllegalArgumentException If the encoding map is null, or if it is not 
      *                                  an automorphism (i.e. its length is not equal to
@@ -93,11 +96,12 @@ public class Substitution extends Cipher {
      * Encrypts a string by performing the substitution specified in setEncoding().
      * @param input The plaintext to encrypt. This string must not be null, and 
      *              it must not contain characters outside of the encodable range.
+     *              Characters outside of the encodable range are ignored.
      * @returns The encrypted ciphertext resulting from the substitution. This string
      *          will be of the same length as the input and only contain characters
      *          within the encodable range.
      * @throws IllegalStateException If no encoding was set on this cipher prior to this call.
-     * @throws IllegalArgumentException If the input was null or contained out of range characters.
+     * @throws IllegalArgumentException If the input was null.
      */
     @Override
     public String encrypt(String input) {
@@ -109,9 +113,8 @@ public class Substitution extends Cipher {
         String out = "";
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if (!Cipher.isCharInRange(c))
-                throw new IllegalArgumentException("input contains out of range char: " + c);
-            out += encoding.charAt(((int) c) - Cipher.MIN_CHAR);
+            if (Cipher.isCharInRange(c))
+                out += encoding.charAt(((int) c) - Cipher.MIN_CHAR);
         }
 
         return out;
@@ -121,11 +124,12 @@ public class Substitution extends Cipher {
      * Decrypts a string by performing the inverse of the substitution specified in setEncoding().
      * @param input The ciphertext to decrypt. This string must not be null, and 
      *              it must not contain characters outside of the encodable range.
+     *              Characters outside of the encodable range are ignored.
      * @returns The plaintext resulting from the inverse substitution. This string
      *          will be of the same length as the input and only contain characters
      *          within the encodable range.
      * @throws IllegalStateException If no encoding was set on this cipher prior to this call.
-     * @throws IllegalArgumentException If the input was null or contained out of range characters.
+     * @throws IllegalArgumentException If the input was null.
      */
     @Override
     public String decrypt(String input) {
@@ -137,9 +141,8 @@ public class Substitution extends Cipher {
         String out = "";
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if (!Cipher.isCharInRange(c))
-                throw new IllegalArgumentException("input contains out of range char: " + c);
-            out += (char) (Cipher.MIN_CHAR + encoding.indexOf(c));
+            if (Cipher.isCharInRange(c))
+                out += (char) (Cipher.MIN_CHAR + encoding.indexOf(c));
         }
 
         return out;
