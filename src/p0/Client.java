@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Client {
-    // TODO: Change this line once you've implemented a cipher!
+
     public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
         new CaesarShift(4), new CaesarKey("123"), new CaesarShift(12), new CaesarKey("lemon")
     ));
@@ -46,5 +46,6 @@ public class Client {
                 }      
             }
         } while (chosen != 5);
+        console.close();
     }
 }

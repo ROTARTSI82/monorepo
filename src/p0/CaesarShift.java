@@ -8,14 +8,15 @@
 
  /**
   * Implements a simple Caesar shift cipher, shifting every character
-  * of the alphabet by a fixed offset using modular arithmetic.
+  * of the encodable range by a fixed offset using modular arithmetic.
   */
 public class CaesarShift extends Substitution {
 
     /**
      * Constructs a Caesar shift cipher from a shift amount. All input characters
      * are shifted by `shift` ASCII code points, with modular arithmetic used to
-     * wrap values that are shifted outside of [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
+     * wrap values that are shifted outside of [Cipher.MIN_CHAR, Cipher.MAX_CHAR]
+     * back into the encodable range.
      * 
      * @param shift A non-negative number of letters to shift by.
      * @throws IllegalArgumentException If the shift offset is negative.

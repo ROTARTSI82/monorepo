@@ -51,9 +51,6 @@ public class SearchClient {
      * This function treats keywords in a case-insensitive manner
      * and strips leading and trailing whitespace.
      * 
-     * I think this runs in something like O(m log m) time
-     * where m is the combined number of keywords in the documents? idk tho.
-     * 
      * @param docs The set of documents to index. If the list contains any null
      *             elements, they will be ignored. This parameter must not be null.
      * @throws NullPointerException If `docs` is null.
@@ -66,6 +63,8 @@ public class SearchClient {
 
         Map<String, Set<Media>> index = new TreeMap<String, Set<Media>>();
         
+        // I think this runs in something like O(m log m) time
+        // where m is the combined number of keywords in the documents? idk tho
         for (Media doc : docs) {
             if (doc != null) {
                 for (String tok : doc.getContent()) {
@@ -81,12 +80,13 @@ public class SearchClient {
     }
 
     /**
-     * Performs a search, ranking results by how often they contain words from the query.
-     * Each document gets a score equal to the number of words in the query that they contain,
-     * and the document(s) with the highest score are returned. If the same word
-     * appears multiple times in the query, that word will be weighted more according to
-     * its frequency in the query. This algorithm does not, however, consider the frequency
-     * of the keyword within the documents being searched. 
+     * Performs a search for documents by how often they contain words from the query.
+     * The document(s) containing the highest number of the keywords are returned,
+     * with multiple documents being returned if there is a tie. 
+     * An empty set is returned if none of the query keywords appear in any documents.
+     *
+     * This search does consider the frequency of the keywords in the query, but
+     * it does NOT consider the frequency of the keywords within the documents being searched. 
      * 
      * The query is case-insensitive, and we ignore whitespace.
      * 
