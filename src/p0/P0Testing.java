@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assume.assumeTrue;
 import java.util.*;
 
-public class Testing {
+public class P0Testing {
 
     @Test
     @DisplayName("EXAMPLE TEST CASE - 'A'-'G' Spec Example")

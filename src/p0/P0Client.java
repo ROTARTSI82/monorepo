@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Client {
+public class P0Client {
 
     public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
         new CaesarShift(4), new CaesarKey("123"), new CaesarShift(12), new CaesarKey("lemon")
