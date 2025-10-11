@@ -10,7 +10,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
-public class Testing {
+public class C0Testing {
 
     @Test
     @DisplayName("Book string, list constructor")
