@@ -2,10 +2,11 @@ Code Quality
 =
 
 + Do not include package statements in your code.
-+ Use wildcard import statements instead of specific imports. e.g. use statements like import java.util.*; over import java.util.ArrayList;
++ Use wildcard import statements instead of specific imports. e.g. use statements like `import java.util.*;` over `import java.util.ArrayList;`
 + Place field declarations at the top of your class.
 + No line should exceed 100 characters in length.
 + Exception code should come at the top of the method. Everything related to checking for and throwing the exception (computing a value to be used in the condition, the if statement itself) counts as exception code. Any code unrelated to the exception conditions / throwing should be placed lower than exception code.
+  + If an exception check cannot be checked at the beginning of the method (e.g. requires significant computation / additional statements), check for it when it can be more easily detected as the method continues.
   + Do not attach else statements onto exception checks to connect regular behavior code.
     + Note: else ifs that check for more exceptions are fine.
 + Initialize fields inside the constructor. Do not initialize fields at declaration.
