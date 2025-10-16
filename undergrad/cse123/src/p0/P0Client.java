@@ -6,16 +6,13 @@ public class P0Client {
     public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
         new CaesarShift(4), new CaesarKey("123"), new CaesarShift(12), new CaesarKey("lemon")
     ));
-    // public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
-    //     new CaesarShift(4), new CaesarKey("123"),
-    //     new CaesarShift(1)));
 
     // (we also encourage you to change Cipher.MIN_CHAR and Cipher.MAX_CHAR when testing!)
     public static void main(String[] args) throws FileNotFoundException {
         Scanner console = new Scanner(System.in);
         System.out.println("Welcome to the CSE 123 cryptography application!");
         System.out.println("What would you like to do?");
-        int chosen = -1;
+        int chosen;
         do {
             System.out.println();
             System.out.println("(1) Encode / (2) Decode a string");

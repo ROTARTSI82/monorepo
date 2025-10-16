@@ -1,13 +1,13 @@
 /**
  * @author Grant Yang
- * @version 2025.10.03
+ * @version 2025.10.15
  * CSE 123 BC
  * P0: Ciphers
  * TA: Benoit Le
  */
 
 /**
- * A substituion cipher that simply applies a substitution per-character
+ * A substitution cipher that simply applies a substitution per-character
  * on a string, using a mapping specified by an automorphism on the encodable range.
  */
 public class Substitution extends Cipher {
@@ -16,8 +16,7 @@ public class Substitution extends Cipher {
 
     /**
      * Constructs a substitution cipher without an encoding.
-     * The cipher is in an invalid state until setEncoding() is called successfully,
-     * and calling encrypt() or decrypt() will result in an error.
+     * An encoding must be set on this cipher before it can be used.
      */
     public Substitution() {
         super();
@@ -25,7 +24,7 @@ public class Substitution extends Cipher {
     }
 
     /**
-     * Constructs a substitution cipher with the specified mapping, which must
+     * Constructs a substitution cipher with the specified encoding mapping, which must
      * be an automorphism on [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
      * 
      * @param encoding A specification for the mapping to use for the cipher, 
@@ -33,8 +32,8 @@ public class Substitution extends Cipher {
      *                 Cipher.MIN_CHAR + n.
      * @throws IllegalArgumentException If the encoding map is null, or if it is not 
      *                                  an automorphism (i.e. its length is not equal to
-     *                                  Cipher.TOTAL_CHARS or it contains duplicate characters or
-     *                                  characters outside of [Cipher.MIN_CHAR, Cipher.MAX_CHAR]).
+     *                                  Cipher.TOTAL_CHARS, or it contains duplicate characters or
+     *                                  characters outside [Cipher.MIN_CHAR, Cipher.MAX_CHAR]).
      */
     public Substitution(String encoding) {
         this();
@@ -46,9 +45,6 @@ public class Substitution extends Cipher {
      * both has a valid codomain and is injective.
      * The codomain must be a subset of (or equal to) [Cipher.MIN_CHAR, Cipher.MAX_CHAR].
      * 
-     * (I would make this a protected helper method since I want to use it in
-     * CaesarKey, but for some reason y'all decided to ban protected so it's public instead)
-     * 
      * @param encoding A string specifying the mapping, where the character at the nth
      *                 index specifies the value of the map for the nth input value.
      * @throws IllegalArgumentException If the encoding specified is not injective 
@@ -57,6 +53,7 @@ public class Substitution extends Cipher {
      *                                  Also throws if `encoding` is null.
      */
     public static void checkCodomainInjective(String encoding) {
+        // ^ this function would be protected, but that's banned so it's public instead.
         if (encoding == null)
             throw new IllegalArgumentException("null mapping");
         
@@ -65,8 +62,8 @@ public class Substitution extends Cipher {
             int dupIdx = encoding.substring(0, i).indexOf(c);
             if (dupIdx != -1)
                 throw new IllegalArgumentException(
-                    "mapping not injective: " + c +
-                    " appears at both " + dupIdx + " and " + i);
+                        "mapping not injective: " + c +
+                        " appears at both " + dupIdx + " and " + i);
             if (!Cipher.isCharInRange(c))
                 throw new IllegalArgumentException("mapping contains out of range char: " + c);
         }
@@ -78,28 +75,28 @@ public class Substitution extends Cipher {
      * 
      * @param encoding A specification for the mapping to use for the cipher, 
      *                 where the nth index specifies the value of the map for
-     *                 Cipher.MIN_CHAR + n.
+     *                 `Cipher.MIN_CHAR + n`.
      * @throws IllegalArgumentException If the encoding map is null, or if it is not 
      *                                  an automorphism (i.e. its length is not equal to
-     *                                  Cipher.TOTAL_CHARS or it contains duplicate characters or
-     *                                  characters outside of [Cipher.MIN_CHAR, Cipher.MAX_CHAR]).
+     *                                  Cipher.TOTAL_CHARS, or it contains duplicate characters or
+     *                                  characters outside [Cipher.MIN_CHAR, Cipher.MAX_CHAR]).
      */
     public void setEncoding(String encoding) {
         checkCodomainInjective(encoding);
         if (encoding.length() != TOTAL_CHARS)
             throw new IllegalArgumentException(
-                "encoding must have the same length as Cipher's encodable range");
+                    "encoding must have the same length as Cipher's encodable range");
         this.encoding = encoding;
     }
 
     /**
-     * Encrypts a string by performing the substitution specified in setEncoding().
+     * Encrypts a string by performing the specified encoding substitution.
      * @param input The plaintext to encrypt. This string must not be null, and 
-     *              it must not contain characters outside of the encodable range.
-     *              Characters outside of the encodable range are ignored.
-     * @returns The encrypted ciphertext resulting from the substitution. This string
-     *          will be of the same length as the input and only contain characters
-     *          within the encodable range.
+     *              it must not contain characters outside the encodable range.
+     *              Characters outside the encodable range are ignored.
+     * @return The encrypted ciphertext resulting from the substitution. This string
+     *         will be of the same length as the input and only contain characters
+     *         within the encodable range.
      * @throws IllegalStateException If no encoding was set on this cipher prior to this call.
      * @throws IllegalArgumentException If the input was null.
      */
@@ -121,13 +118,13 @@ public class Substitution extends Cipher {
     }
 
     /**
-     * Decrypts a string by performing the inverse of the substitution specified in setEncoding().
+     * Decrypts a string by performing the inverse of the specified encoding substitution.
      * @param input The ciphertext to decrypt. This string must not be null, and 
-     *              it must not contain characters outside of the encodable range.
-     *              Characters outside of the encodable range are ignored.
-     * @returns The plaintext resulting from the inverse substitution. This string
-     *          will be of the same length as the input and only contain characters
-     *          within the encodable range.
+     *              it must not contain characters outside the encodable range.
+     *              Characters outside the encodable range are ignored.
+     * @return The plaintext resulting from the inverse substitution. This string
+     *         will be of the same length as the input and only contain characters
+     *         within the encodable range.
      * @throws IllegalStateException If no encoding was set on this cipher prior to this call.
      * @throws IllegalArgumentException If the input was null.
      */

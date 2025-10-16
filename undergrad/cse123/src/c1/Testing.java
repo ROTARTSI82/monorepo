@@ -23,7 +23,7 @@ public class Testing {
      */
     @Test
     @DisplayName("Simple P1 Win")
-    void testSimpleP1Win() {
+    public void testSimpleP1Win() {
         makeMoves(new int[]{2, 3, 3, 4, 5, 4, 4, 5, 6, 5}, 1);
         game.makeMove("5");
         assertWinner(1);
@@ -34,7 +34,7 @@ public class Testing {
      */
     @Test
     @DisplayName("Simple P2 Win")
-    void testSimpleP2Win() {
+    public void testSimpleP2Win() {
         makeMoves(new int[]{1,2,1,2,1,2,3}, 1);
         game.makeMove("2");
         assertWinner(2);
@@ -45,7 +45,7 @@ public class Testing {
      */
     @Test
     @DisplayName("Draw condition - Double Connect 4")
-    void testDrawDoubleConnect4() {
+    public void testDrawDoubleConnect4() {
         // fills up the board with a funny pattern that has no winner
         makeMoves(new int[]{
                 1,1,2,2,3,3,5,4,4,5,6,6,7,7,
@@ -63,7 +63,7 @@ public class Testing {
      */
     @Test
     @DisplayName("Illegal moves")
-    void testIllegalMoves() {
+    public void testIllegalMoves() {
         makeMoves(new int[]{1,2,3,4,5,6,7}, 1);
         assertThrows(IllegalArgumentException.class, () -> game.makeMove("R 1"),
                 "Should not be able to remove other player's piece");
@@ -92,7 +92,7 @@ public class Testing {
      * Sets up a new game before each test.
      */
     @BeforeEach
-    void setup() {
+    public void setup() {
         game = new ConnectFour();
         assertEquals(1, game.getNextPlayer(), "Player 1 should be first");
         assertFalse(game.isGameOver(), "Game should not be over at start");
@@ -104,7 +104,7 @@ public class Testing {
      * @param move The move to make
      * @param turn The player whose turn it is before the move (1 or 2).
      */
-    void makeMove(String move, int turn) {
+    private void makeMove(String move, int turn) {
         game.makeMove(move);
         System.out.println(move + "\n" + game);
 
@@ -120,7 +120,7 @@ public class Testing {
      *              All moves must be legal in the order given.
      * @param turn The player whose turn it is before the start of the sequence (1 or 2).
      */
-    void makeMoves(int[] moves, int turn) {
+    private void makeMoves(int[] moves, int turn) {
         for (int move : moves) {
             makeMove(String.valueOf(move), turn);
             turn ^= 0b11;
@@ -133,7 +133,7 @@ public class Testing {
      *              All moves must be legal in the order given.
      * @param turn The player whose turn it is before the start of the sequence (1 or 2).
      */
-    void makeMoves(String[] moves, int turn) {
+    private void makeMoves(String[] moves, int turn) {
         for (String move : moves) {
             makeMove(move, turn);
             turn ^= 0b11;
@@ -144,7 +144,7 @@ public class Testing {
      * Checks that the game has ended, with the expected winner.
      * @param winner The winner we expect (1 or 2), or 0 for a draw.
      */
-    void assertWinner(int winner) {
+    private void assertWinner(int winner) {
         System.out.println(game);
         assertEquals(-1, game.getNextPlayer(), "Game should be over");
         assertTrue(game.isGameOver());

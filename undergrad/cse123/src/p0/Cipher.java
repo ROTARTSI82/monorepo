@@ -6,11 +6,11 @@ import java.io.*;
 public abstract class Cipher {
     // The minimum character able to be encrypted/decrypted by any cipher
     // (we encourage you to change this value when testing!)
-    public static final int MIN_CHAR = (int)(' ');
+    public static final int MIN_CHAR = ' ';
     
     // The maximum character able to be encrypted/decrypted by any cipher
     // (we encourage you to change this value when testing!)
-    public static final int MAX_CHAR = (int)('}');
+    public static final int MAX_CHAR = '}';
     
     // The total number of characters able to be encrypted/decrypted by any cipher
     // (aka. the total number of characters in the encodable range)
@@ -45,7 +45,7 @@ public abstract class Cipher {
     //    Returns: None
     // Parameters: 'fileName' - the name of the file to be encrypted / decrypted. Should be 
     //             non-null.
-    //             'encrypt'  - whether or not encryption should occur
+    //             'encrypt'  - whether encryption should occur
     //             'suffix'   - appended to the fileName when creating the output file. Should be 
     //             non-null.
     private void fileHelper(String fileName, boolean encrypt, String suffix)

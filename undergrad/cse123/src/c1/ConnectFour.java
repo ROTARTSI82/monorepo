@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.10.11
+ * @version 2025.10.15
  * CSE 123
  * C1: Abstract Strategy Game
  * TA: Benoit Le
@@ -10,8 +10,9 @@ import java.util.*;
 
 /**
  * An implementation of Connect Four as an AbstractStrategyGame.
- * The game is played on a 7-column by 6-row grid, and players may additionally
- * remove the bottom piece of a column if that piece belongs to them.
+ * The game is played on a 7-column by 6-row grid, with players
+ * dropping pieces until one gets connect 4. Players may additionally use their turn
+ * to remove the bottom piece of a column if that piece belongs to them.
  */
 public class ConnectFour extends AbstractStrategyGame {
 
@@ -24,7 +25,7 @@ public class ConnectFour extends AbstractStrategyGame {
     private int turn;
 
     /**
-     * Constructs a new Connect Four game.
+     * Constructs a new Connect Four game with a blank board.
      * The game starts with player 1's turn.
      */
     public ConnectFour() {
@@ -61,7 +62,8 @@ public class ConnectFour extends AbstractStrategyGame {
      * Prints the current game state to a String as a grid of characters.
      * @return A visual representation of the grid, with a space before each character.
      *         Empty squares are represented by '.', player 1's pieces by '1',
-     *         and player 2's pieces by '2'. Rows are separated by newlines.
+     *         and player 2's pieces by '2'. Rows are separated by newlines,
+     *         and column numbers are printed as a visual guide above the board.
      */
     @Override
     public String toString() {
@@ -88,8 +90,8 @@ public class ConnectFour extends AbstractStrategyGame {
     }
 
     /**
-     * Returns the winner of the game. A player may win by making a connect four
-     * or if the other player has no pieces left to remove when the board is full.
+     * Gets the winner of the game. A player may win by making a connect four
+     * horizontally, vertically, or diagonally.
      * A draw occurs if both players get a connect four on the same turn,
      * regardless of how many connect fours each player has.
      *
@@ -102,9 +104,7 @@ public class ConnectFour extends AbstractStrategyGame {
     }
 
     /**
-     * Returns the player whose turn it is.
-     * This value will flip between 1 and 2 with each call to makeMove() while the game is ongoing.
-     *
+     * Gets the player whose turn it is.
      * @return 1 or 2 if the game is in progress, or -1 if the game is over.
      */
     @Override
@@ -140,7 +140,7 @@ public class ConnectFour extends AbstractStrategyGame {
         if (input == null)
             throw new IllegalArgumentException("getMove(scanner = null) called");
         // should this just return input.nextLine() without checking validity?
-        String move = input.nextLine();
+        String move = input.nextLine().trim();
         checkValidMove(move);
         return move;
     }
@@ -148,8 +148,8 @@ public class ConnectFour extends AbstractStrategyGame {
     /**
      * Makes a move on the board. This can be either adding a piece to a column
      * or removing the player's own piece from the bottom of a column.
-     * After this call, the new game state can be queried by getWinner() and getNextPlayer().
-     * If the move is invalid, the state of the ConnectFour game will not have changed.
+     * This function is atomic: it either makes the move successfully or does nothing
+     * if the move is invalid.
      *
      * @param input The move to be made, as a String. Can be a single digit from 1-7
      *              or 'A [1-7]' to place a piece in a 1-indexed column,
@@ -200,7 +200,7 @@ public class ConnectFour extends AbstractStrategyGame {
     /**
      * Scans the board for a four-in-a-row pattern, defined by the given mask.
      * This method iterates through all possible positions on the board where the
-     * pattern could start. If a win is detected, it updates the game's turn state
+     * pattern could start. If a win is detected, it updates the game's state
      * to reflect the winner. If multiple players win in the same turn, it results
      * in a tie.
      *
