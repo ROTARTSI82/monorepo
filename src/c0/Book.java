@@ -14,9 +14,9 @@ import java.util.*;
  */
 public class Book implements Media, Comparable<Book> {
 
-    private String title;
-    private List<String> authors;
-    private List<String> content;
+    private final String title;
+    private final List<String> authors;
+    private final List<String> content;
 
     private double ratingsAccum;
     private int numRatings;
@@ -30,7 +30,6 @@ public class Book implements Media, Comparable<Book> {
      * @param sc The Scanner to read the contents of the book from.
      *           All tokens will be consumed from the scanner, and getContent()
      *           can be used to retrieve a list of the tokens.
-     * 
      * Postcondition: All tokens are exhausted from Scanner sc!
      * @throws IllegalArgumentException If any argument to the constructor is null,
      *                                  or if any element of `authors` is null.
@@ -42,12 +41,12 @@ public class Book implements Media, Comparable<Book> {
         for (String author : authors)
             if (author == null)
                 throw new IllegalArgumentException(
-                    "authors must not contain null elements in Book ctor");
+                        "authors must not contain null elements in Book ctor");
 
         ratingsAccum = 0;
         numRatings = 0;
 
-        content = new ArrayList<String>();
+        content = new ArrayList<>();
         while (sc.hasNext())
             content.add(sc.next());
         
@@ -92,11 +91,10 @@ public class Book implements Media, Comparable<Book> {
     }
 
     /**
-     * Tries to adds a numeric rating for this book. The statistics calculated by 
-     * getNumRatings() and getAverageRating() are updated if successful.
+     * Tries to add a numeric rating for this book and updates the relevant statistics.
      * @param score A non-negative integer rating for the book. Any rating scale
      *              may be used by the client, and all ratings are weighted equally.
-     *              However if the score is negative, this function does nothing.
+     *              However, if the score is negative, this function does nothing.
      */
     @Override
     public void addRating(int score) {
@@ -147,7 +145,7 @@ public class Book implements Media, Comparable<Book> {
      * 
      * @param lhs Left hand side of the comparison
      * @param rhs Right hand side of the comparison
-     * @return Positive integer if lhs > rhs, negative intger if lhs < rhs,
+     * @return Positive integer if lhs > rhs, negative integer if lhs < rhs,
      *         and 0 if lhs.equals(rhs).
      */
     private <T extends Comparable<T>> int listCompareTo(List<T> lhs, List<T> rhs) {
@@ -158,7 +156,7 @@ public class Book implements Media, Comparable<Book> {
                 return cmp;
         }
 
-        return ((Integer) lhs.size()).compareTo(rhs.size());
+        return Integer.compare(lhs.size(), rhs.size());
     }
 
     /**
@@ -183,8 +181,8 @@ public class Book implements Media, Comparable<Book> {
         // this seems inefficient but isn't too bad as we can stop comparing
         // as soon as we notice a difference in each field.
         int[] comparisons = new int[]{
-            -((Double) getAverageRating()).compareTo(o.getAverageRating()),
-            -((Integer) getNumRatings()).compareTo(o.getNumRatings()),
+            -Double.compare(getAverageRating(), o.getAverageRating()),
+            -Integer.compare(getNumRatings(), o.getNumRatings()),
             title.compareTo(o.title),
             listCompareTo(authors, o.authors),
             listCompareTo(content, o.content)

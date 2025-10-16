@@ -2,6 +2,8 @@ Code Quality
 =
 
 + Do not include package statements in your code.
++ Always include `public` or `private` access modifiers on everything.
++ When wrapping lines, the line continuation must be indented twice or lined up visually. Prefer indenting twice.
 + Use wildcard import statements instead of specific imports. e.g. use statements like `import java.util.*;` over `import java.util.ArrayList;`
 + Place field declarations at the top of your class.
 + No line should exceed 100 characters in length.

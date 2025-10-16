@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.10.03
+ * @version 2025.10.15
  * CSE 123 BC
  * P0: Ciphers
  * TA: Benoit Le
@@ -25,9 +25,9 @@ public class CaesarKey extends Substitution {
      *            in the encodable range that is not already being used as a substitution for 
      *            any previous character.
      * @throws IllegalArgumentException If the key is null, contains duplicate characters,
-     *                                  or contains characters outside of the encodable range.
+     *                                  or contains characters outside the encodable range.
      */
-    CaesarKey(String key) {
+    public CaesarKey(String key) {
         super();
         Substitution.checkCodomainInjective(key);
         String encoding = key;
