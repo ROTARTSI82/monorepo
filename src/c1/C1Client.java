@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Client {
+public class C1Client {
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         AbstractStrategyGame game = new ConnectFour();

@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ExampleTesting {
+public class C1ExampleTesting {
 
     @Test
     @DisplayName("EXAMPLE TEST CASE - Small TicTacToe Example")
