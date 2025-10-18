@@ -9,12 +9,10 @@
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 /**
  * A suite of unit tests for the Connect Four game.
  */
-public class Testing {
+public class C1Testing {
 
     private AbstractStrategyGame game;
 
