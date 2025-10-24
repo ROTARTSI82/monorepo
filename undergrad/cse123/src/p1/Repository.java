@@ -1,60 +1,75 @@
+/**
+ * @author Grant Yang
+ * @version 2025.10.18
+ * CSE 123
+ * P1: Mini-Git
+ * TA: Benoit Le
+ */
+
 import java.util.*;
 import java.text.*;
 
+/**
+ * Represents a named repository in a Git-like version control system.
+ * A repository is a collection of commits, where each commit represents a snapshot of changes.
+ */
 public class Repository {
 
     private Commit head;
     private final String name;
 
+    /**
+     * Constructs a new, empty repository with the specified name.
+     * @param name The name for this repository. This must not be an empty string.
+     * @throws IllegalArgumentException if the name is null or empty.
+     */
     public Repository(String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("cannot create repo with null or empty name");
         head = null;
         this.name = name;
-        /*
-            Create a new, empty repository with the specified name
-                If the name is null or empty, throw an IllegalArgumentException
-         */
     }
 
+    /**
+     * Gets the ID of the current head commit of this repository. This operation is O(1).
+     * @return The ID of the most recent commit, or null if the repository is empty.
+     */
     public String getRepoHead() {
-        /* O(1)
-            Return the ID of the current head of this repository.
-             If the head is null, return null
-         */
         return head == null ? null : head.id;
     }
 
+    /**
+     * Gets the total number of commits in the repository.
+     * @return The (non-negative) number of commits.
+     */
     public int getRepoSize() {
-        //     Return the number of commits in the repository.
         int acc = 0;
         for (Commit cursor = head; cursor != null; cursor = cursor.past)
             acc++;
         return acc;
     }
 
+    /**
+     * Gets a human-readable string representation of this repository. This operation is O(1).
+     * If the repository has commits, the format is:
+     * >    "{name} - Current head: {head}"
+     * where {head} is the string representation of the head commit.
+     * If the repository is empty, the format is:
+     * >    "{name} - No commits"
+     * @return A string summarizing the repository's state.
+     */
     public String toString() {
-        /* O(1)
-            Return a string representation of this repository in the following format:
-
-        <name> - Current head: <head>
-
-            <head> should be the result of calling toString() on the head commit.
-
-        If there are no commits in this repository, instead return <name> - No commits
-         */
         return head == null ? name + " - No commits" :
                 String.format("%s - Current head: %s", name, head);
     }
 
+    /**
+     * Checks if a commit with the specified ID exists in the repository.
+     * @param targetId The ID of the commit to search for.
+     * @return true if a commit with the given ID exists in this repo, false otherwise.
+     * @throws IllegalArgumentException if targetId is null.
+     */
     public boolean contains(String targetId) {
-        /*
-            Return true if the commit with ID targetId is in the repository, false if not.
-
-    Throws an IllegalArgumentException if targetId is null
-
-    Note that all elements are unique. Therefore, it should not continue looping unnecessarily once the element of interest is found.
-         */
         if (targetId == null)
             throw new IllegalArgumentException("targetId cannot be null");
         for (Commit cursor = head; cursor != null; cursor = cursor.past)
@@ -63,16 +78,18 @@ public class Repository {
         return false;
     }
 
+    /**
+     * Returns a string containing the history of the most recent n commits.
+     * The commits are listed from most recent to least recent, separated by newlines.
+     * No trailing newline is included.
+     * @param n The maximum number of commits to include in the history.
+     * @return A newline-separated string of the most recent n commits, or all commits if n is
+     *         larger than the repository size. Returns an empty string if the repository is empty.
+     * @throws IllegalArgumentException if n is not a positive number.
+     */
     public String getHistory(int n) {
-        /*
-            Return a string consisting of the String representations of the most recent n commits in this repository, with the most recent first. Commits should be separated by a newline (\n) character with no trailing newline character at the end.
-
-        If there are fewer than n commits in this repository, return them all.
-
-        If there are no commits in this repository, return the empty string.
-
-        If n is non-positive, throw an IllegalArgumentException.
-         */
+        if (n <= 0)
+            throw new IllegalArgumentException("n must be a positive integer.");
         String ret = "";
         Commit cursor = head;
         for (int i = 0; i < n && cursor != null; i++, cursor = cursor.past)
@@ -80,31 +97,30 @@ public class Repository {
         return ret.isEmpty() ? "" : ret.substring(0, ret.length() - 1);
     }
 
+    /**
+     * Creates a new commit with the given message and adds it to the repository.
+     * The new commit becomes the head of the repository. This operation is O(1).
+     * @param message The message for the new commit.
+     * @return The unique ID of the newly created commit.
+     * @throws IllegalArgumentException if message is null.
+     */
     public String commit(String message) {
-        /* O(1)
-            Create a new commit with the given message, and add it to this repository.
-
-        The new commit should become the new head of this repository, preserving the history behind it.
-
-    Throws an IllegalArgumentException if message is null
-
-    Return the ID of the new commit.
-         */
+        if (message == null)
+            throw new IllegalArgumentException("message cannot be null");
         head = new Commit(message, head);
-        return null;
+        return head.id;
     }
 
 
+    /**
+     * Tries to remove the commit with the specified ID from the repository.
+     * @param targetId The ID of the commit to remove.
+     * @return true if the commit was removed, false if it did not exist.
+     * @throws IllegalArgumentException if targetId is null.
+     */
     public boolean drop(String targetId) {
-        /*
-            Remove the commit with ID targetId from this repository, maintaining the rest of the history.
-
-    Throws an IllegalArgumentException if targetId is null
-
-    Returns true if the commit was successfully dropped, and false if there is no commit that matches the given ID in the repository.
-
-    Note that all elements are unique. Therefore, it should not continue looping unnecessarily once the element of interest is found.
-         */
+        if (targetId == null)
+            throw new IllegalArgumentException("targetId cannot be null");
 
         if (head == null)
             return false;
@@ -123,20 +139,17 @@ public class Repository {
         return true;
     }
 
+    /**
+     * Merges the history of another repository into this one. All commits from the other
+     * repository are moved into this one, and the histories are combined.
+     * After this operation, the other repository will be empty.
+     * @param other The repository to merge into this one.
+     *              `other` must not be the same repo as the one synchronize() is called on.
+     * @throws IllegalArgumentException if the other repository is null.
+     */
     public void synchronize(Repository other) {
-        /*
-            Takes all the commits in the other repository and moves them into this repository, combining the two repository histories such that chronological order is preserved. That is, after executing this method, this repository should contain all commits that were from this and other, and the commits should be ordered in timestamp order from most recent to least recent.
-
-        If the other repository is null, throw an IllegalArgumentException
-
-        If the other repository is empty, this repository should remain unchanged.
-
-        If this repository is empty, all commits in the other repository should be moved into this repository.
-
-        At the end of this method's execution, other should be an empty repository in all cases.
-
-        You should not construct any new Commit objects to implement this method. You may, however, create as many references as you like.
-         */
+        if (other == null)
+            throw new IllegalArgumentException("other repository cannot be null");
         if (other.head != null && (head == null || other.head.timeStamp >= head.timeStamp)) {
             Commit oldHead = head;
             head = other.head;
@@ -166,9 +179,9 @@ public class Repository {
      * and the time that the commit was made. A commit also stores
      * a reference to the immediately previous commit if it exists.
      *
-     * Staff Note: You may notice that the comments in this 
-     * class openly mention the fields of the class. This is fine 
-     * because the fields of the Commit class are public. In general, 
+     * Staff Note: You may notice that the comments in this
+     * class openly mention the fields of the class. This is fine
+     * because the fields of the Commit class are public. In general,
      * be careful about revealing implementation details!
      */
     public static class Commit {
@@ -234,9 +247,9 @@ public class Repository {
         }
 
         /**
-        * Resets the IDs of the commit nodes such that they reset to 0.
-        * Primarily for testing purposes.
-        */
+         * Resets the IDs of the commit nodes such that they reset to 0.
+         * Primarily for testing purposes.
+         */
         public static void resetIds() {
             Commit.currentCommitID = 0;
         }

@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.10.15
+ * @version 2025.10.22
  * CSE 123
  * C1: Abstract Strategy Game
  * TA: Benoit Le
@@ -59,7 +59,7 @@ public class ConnectFour extends AbstractStrategyGame {
     }
 
     /**
-     * Prints the current game state to a String as a grid of characters.
+     * Gets a human-readable String representation of the game state as a grid of characters.
      * @return A visual representation of the grid, with a space before each character.
      *         Empty squares are represented by '.', player 1's pieces by '1',
      *         and player 2's pieces by '2'. Rows are separated by newlines,
@@ -105,7 +105,8 @@ public class ConnectFour extends AbstractStrategyGame {
 
     /**
      * Gets the player whose turn it is.
-     * @return 1 or 2 if the game is in progress, or -1 if the game is over.
+     * @return 1 for player 1 or 2 for player 2 if the game is in progress,
+     *         or -1 if the game is over.
      */
     @Override
     public int getNextPlayer() {
@@ -129,9 +130,13 @@ public class ConnectFour extends AbstractStrategyGame {
 
     /**
      * Reads the next line of input from the user and returns it as the desired move.
-     *
+     * After this call, the Scanner is advanced by one line.
      * @param input The scanner to read the move from. The scanner should have a next line to read.
-     * @return The player's desired move as a String.
+     *              Valid moves are either a single digit [1-7] (inclusive), or strings
+     *              of the form 'A [1-7]' or 'R [1-7]'. The next line should contain only
+     *              the valid move, though leading and trailing whitespace is ignored.
+     * @return The next move from the Scanner as a String,
+     *         with leading and trailing whitespace removed.
      * @throws IllegalArgumentException if the given Scanner is null, or if the line
      *                                  read from the scanner is not a valid move.
      */
