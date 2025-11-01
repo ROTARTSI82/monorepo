@@ -10,7 +10,7 @@ import java.util.*;
 import java.awt.*;
 
 /**
- *
+ * A utility class for painting Piet Mondrian inspired patterns onto canvases.
  */
 public class Mondrian {
 
@@ -39,7 +39,6 @@ public class Mondrian {
      *            We require that 0 <= top < canvas height
      * @param bottom The 0-indexed bottom boundary of the area (exclusive).
      *               We require that top < bottom <= canvas height
-     * Violating any precondition above is undefined behavior.
      */
     private void basicMondrian(Color[][] pix, int left, int right, int top, int bottom) {
         int w = right - left;
@@ -63,26 +62,28 @@ public class Mondrian {
             basicMondrian(pix, left, right, divY + 1, bottom);
         } else {
             Color fill = PALETTE[RAND.nextInt(PALETTE.length)];
-            for (int x = left; x < right; x++)
-                for (int y = top; y < bottom; y++)
+            for (int x = left; x < right; x++) {
+                for (int y = top; y < bottom; y++) {
                     pix[y][x] = fill;
+                }
+            }
         }
     }
 
     /**
      * Fills a canvas with a Piet Mondrian-inspired pattern. The canvas is randomly
-     * bisected into rectangular regions such that no region is larger than a fourth
+     * divided into rectangular regions such that no region is larger than a fourth
      * of the total canvas size in either dimension, and regions are randomly colored
      * red, yellow, cyan, or white. A 1-pixel border is left around the entire canvas
      * and between each region, and no region is smaller than 10 pixels by 10 pixels.
-     * @param pixels The canvas to paint on. Must be stored in row-major order, and
-     *               must be at least 300 pixels by 300 pixels.
+     * @param pixels The canvas to paint on, no smaller than 300 pixels by 300 pixels.
      * @throws IllegalArgumentException If the canvas is null or smaller than 300x300 pixels.
      */
     public void paintBasicMondrian(Color[][] pixels) {
-        if (pixels == null || pixels.length < 300 || pixels[0].length < 300)
+        if (pixels == null || pixels.length < 300 || pixels[0].length < 300) {
             throw new IllegalArgumentException(
                     "pixels must not be null and must be at least 300 x 300");
+        }
 
         thresholdW = pixels[0].length / 4;
         thresholdH = pixels.length / 4;
@@ -91,13 +92,21 @@ public class Mondrian {
     }
 
     /**
-     * Helper method for painting a rough Sierpinski's carpet pattern made of
-     * Piet Mondrian-inspired rectangles.
+     * Helper method for recursively painting a rough Sierpinski's carpet pattern made of
+     * Piet Mondrian-inspired rectangles, randomly divided into multicolored regions
+     * according to basicMondrian(). The region specified for the carpet must be in bounds
+     * on the canvas, and their must be enough clearance on all sides (generally three times the
+     * width and the height) to paint the fractal parts. The fractal parts will be nudged
+     * randomly by 3 pixels in x and in y at each level of the fractal,
+     * resulting in a slightly misaligned look. We stop when the fractal parts become smaller
+     * than 10 pixels by 10 pixels in either dimension.
      * @param pix The canvas to paint on. Must be in row-major order.
-     * @param x
-     * @param y
-     * @param w
-     * @param h
+     * @param x The x-coordinate of the center of the carpet.
+     * @param y The y-coordinate of the center of the carpet.
+     * @param w The width of the first level of the carpet (the biggest center rectangle).
+     *          If it is even, the additional odd pixel out will be on the left.
+     * @param h The height of the first level of the carpet (the biggest center rectangle).
+     *          If it is even, the additional odd pixel out will be on the top.
      */
     private void mondrianCarpet(Color[][] pix, int x, int y, int w, int h) {
         if (w > 10 && h > 10) {
@@ -105,31 +114,38 @@ public class Mondrian {
             thresholdH = Math.max(h / 4, 10);
             minSize = 5;
 
-            basicMondrian(pix, x - w / 2, x + w / 2, y - h / 2, y + h / 2);
+            basicMondrian(pix, x - w / 2, x + (w + 1) / 2,
+                    y - h / 2, y + (h + 1) / 2);
 
-            for (int px = -1; px < 2; px++)
-                for (int py = -1; py < 2; py++)
+            for (int px = -1; px < 2; px++) {
+                for (int py = -1; py < 2; py++) {
                     if (px != 0 || py != 0) {
                         int nx = x + px * w + (RAND.nextBoolean() ? 1 : -1) * RAND.nextInt(4);
                         int ny = y + py * w + (RAND.nextBoolean() ? 1 : -1) * RAND.nextInt(4);
-                        nx = Math.clamp(nx, w / 6, pix[0].length - w / 6);
-                        ny = Math.clamp(ny, h / 6, pix.length - h / 6);
+                        nx = Math.max(w / 6, Math.min(nx, pix[0].length - w / 6));
+                        ny = Math.max(h / 6, Math.min(ny, pix.length - h / 6));
                         mondrianCarpet(pix, nx, ny, w / 3, h / 3);
                     }
+                }
+            }
         }
     }
 
-
     /**
-     *
-     * @param pixels The canvas to paint on, stored in row-major order and no smaller than
-     *               300 pixels by 300 pixels.
-     * @throws IllegalArgumentException If pixels is null or is smaller than 300x300 pixels
+     * Fills a canvas with a rough Sierpinski's carpet made of Piet Mondrian inspired
+     * randomly divided multicolored rectangles. The carpet starts at the center of the canvas
+     * with the initial rectangle being a third of the width/height, and we generate the fractal
+     * and stop when the rectangles become smaller than 10 pixels in either dimension.
+     * Each fractal part is slightly nudged in a random direction, resulting in a rough,
+     * misaligned look.
+     * @param pixels The canvas to paint on, no smaller than 300 pixels by 300 pixels.
+     * @throws IllegalArgumentException If pixels is null or is smaller than 300x300 pixels.
      */
     public void paintComplexMondrian(Color[][] pixels) {
-        if (pixels == null || pixels.length < 300 || pixels[0].length < 300)
+        if (pixels == null || pixels.length < 300 || pixels[0].length < 300) {
             throw new IllegalArgumentException(
                     "pixels must not be null and must be at least 300 x 300");
+        }
 
         mondrianCarpet(pixels, pixels[0].length / 2, pixels.length / 2,
                 pixels[0].length / 3, pixels.length / 3);
