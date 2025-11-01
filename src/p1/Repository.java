@@ -111,7 +111,6 @@ public class Repository {
         return head.id;
     }
 
-
     /**
      * Tries to remove the commit with the specified ID from the repository.
      * @param targetId The ID of the commit to remove.
@@ -170,8 +169,8 @@ public class Repository {
                 cursor.past.past = oldPast;
             }
     }
-
-
+    
+    
     /**
      * DO NOT MODIFY
      * A class that represents a single commit in the repository.
