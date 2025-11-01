@@ -1,12 +1,22 @@
+/**
+ * @author Grant Yang
+ * @version 2025.11.01
+ * CSE 123 BC
+ * C2: Mondrian Art
+ * TA: Benoit Le
+ */
 
 import java.awt.*;
-import java.util.Scanner;
+import java.util.*;
 
+/**
+ * A program to interactively generate Mondrian art.
+ */
 public class C2Client {
 
     /**
      * Tests the divideCanvas() method by running two subdivisions
-     * on a 400x400 test image and saving it to "test.png".
+     * on a 400x400 test image, saving it to "test.png", and displaying it.
      */
     private static void testDivideCanvas() {
         Picture pic1 = new Picture(400, 400);
@@ -17,6 +27,11 @@ public class C2Client {
         pic1.show();
     }
 
+    /**
+     * Entry point. Prompts the user to generate either a
+     * basic or complex Mondrian painting of a specified size, then saves and displays it.
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         // testDivideCanvas()
 
@@ -39,7 +54,7 @@ public class C2Client {
 
         if (choice == 1) {
             mond.paintBasicMondrian(pixels);
-        } else {    // choice == 2
+        } else {
             mond.paintComplexMondrian(pixels);
         }
 
@@ -49,35 +64,64 @@ public class C2Client {
         System.out.println("Enjoy your artwork!");
     }
 
-    /*Fills in pixels within the region defined by x1, x2, y1, and y2 where
-    (x1, y1) represents the upper-left corner inclusive, and (x2, y2)
-    represents the lower-right corner exclusive. Your solution should leave a single pixel
-    as a border around the edges of the region (you can optionally ignore this border requirement).
-    We recommend you approach this method iteratively*/
+    /**
+     * Fills a rectangular region of a canvas with white.
+     * @param pixels The canvas of pixels to fill, in row-major order.
+     * @param x1 The 0-indexed left boundary of the area (inclusive).
+     *           We require that 0 <= x1 < canvas width
+     * @param x2 The 0-indexed right boundary of the area (exclusive).
+     *           We require that x1 < x2 <= canvas width
+     * @param y1 The 0-indexed top boundary of the area (inclusive).
+     *           We require that 0 <= y1 < canvas height
+     * @param y2 The 0-indexed bottom boundary of the area (exclusive).
+     *           We require that y1 < y2 <= canvas height
+     * @throws IndexOutOfBoundsException If any of the bounds lie outside the canvas.
+     */
     public static void fill(Color[][] pixels, int x1, int x2, int y1, int y2) {
-        for (int x = x1; x < x2; x++)
-            for (int y = y1; y < y2; y++)
+        for (int x = x1; x < x2; x++) {
+            for (int y = y1; y < y2; y++) {
                 pixels[y][x] = Color.WHITE;
+            }
+        }
     }
 
+    /**
+     * Recursively divides a region of the canvas into four equal sub-quadrants,
+     * leaving a 1-pixel border between each subregion.
+     * The base case fills the region with white.
+     * @param pixels The canvas of pixels to operate on, in row-major order.
+     * @param left The 0-indexed left boundary of the area (inclusive).
+     *             We require that 0 <= left < canvas width
+     * @param right The 0-indexed right boundary of the area (exclusive).
+     *              We require that left < right <= canvas width
+     * @param top The 0-indexed top boundary of the area (inclusive).
+     *            We require that 0 <= top < canvas height
+     * @param bottom The 0-indexed bottom boundary of the area (exclusive).
+     *               We require that top < bottom <= canvas height
+     * @param depth The number of remaining recursive divisions to perform.
+     */
     private static void divideHelper(Color[][] pixels, int left, int right,
                                      int top, int bottom, int depth) {
         if (depth > 0) {
-            int midX  = left + (right - left) / 2;
-            int midY  = top + (bottom - top) / 2;
-            divideHelper(pixels, left, midX, midY + 1, bottom, depth - 1);
-            divideHelper(pixels, midX + 1, right, midY + 1, bottom, depth - 1);
+            int midX = left + (right - left) / 2;
+            int midY = top + (bottom - top) / 2;
             divideHelper(pixels, left, midX, top, midY, depth - 1);
             divideHelper(pixels, midX + 1, right, top, midY, depth - 1);
+            divideHelper(pixels, left, midX, midY + 1, bottom, depth - 1);
+            divideHelper(pixels, midX + 1, right, midY + 1, bottom, depth - 1);
         } else {
             fill(pixels, left, right, top, bottom);
         }
     }
 
-    /*    Divides the given pixels (assumed to be all black) into 4 equally sized regions n times,
-     filling in each of the split regions with the color white while leaving a 1 or 2 pixel border
-     along the edges of each of the resulting regions.
-    You may assume that n is greater than or equal to 0.*/
+    /**
+     * Divides the given canvas into equal regions along both x and y and fills them with white,
+     * leaving a 1-pixel border both between regions and around the entire canvas.
+     * @param pixels The canvas to paint on. Must be large enough to accommodate the
+     *               requested number of divisions.
+     * @param n The number of divisions into quadrants to perform,
+     *          so that we end up with 4^n regions total. Must be >= 0.
+     */
     public static void divideCanvas(Color[][] pixels, int n) {
         divideHelper(pixels, 1, pixels[0].length - 1, 1, pixels.length - 1, n);
     }
