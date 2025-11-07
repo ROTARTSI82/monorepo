@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.10.18
+ * @version 2025.11.05
  * CSE 123
  * P1: Mini-Git
  * TA: Benoit Le
@@ -11,7 +11,8 @@ import java.text.*;
 
 /**
  * Represents a named repository in a Git-like version control system.
- * A repository is a collection of commits, where each commit represents a snapshot of changes.
+ * A repository is a collection of commits organized chronologically,
+ * where each commit represents a snapshot of changes.
  */
 public class Repository {
 
@@ -141,6 +142,8 @@ public class Repository {
     /**
      * Merges the history of another repository into this one. All commits from the other
      * repository are moved into this one, and the histories are combined.
+     * The chronological ordering of the commits is preserved, and the head of the
+     * repo will be the most recent commit of the combined histories.
      * After this operation, the other repository will be empty.
      * @param other The repository to merge into this one.
      *              `other` must not be the same repo as the one synchronize() is called on.
@@ -169,7 +172,6 @@ public class Repository {
                 cursor.past.past = oldPast;
             }
     }
-    
     
     /**
      * DO NOT MODIFY
