@@ -37,58 +37,33 @@ public class P2Client {
         if (sites == null)
             throw new IllegalArgumentException("sites cannot be null");
 
-        // would sorting the sites by most cost-effective to least help here?
-
-        // honestly memoization probably makes it slower in this case, but it's funny
-        return memoizedAllocRelief(budget, sites, new HashMap<>());
-    }
-
-    /**
-     * A memoized helper to solve the 0/1 Knapsack problem to allocate disaster
-     * relief to sites such that the number of people helped is maximized with the given budget.
-     * If there is a tie in the maximum number of people helped, the cheaper solution is returned.
-     * @param budget The maximum amount of money to spend
-     * @param sites A list of disaster regions, each consisting of a cost for helping
-     *              some number of people. We do not consider partial relief of a region,
-     *              and we consider our aid to be atomic.
-     * @param memo A cache for partial results. It should map (b, n) to the optimal
-     *             allocation for a budget of b, considering only the last n elements of sites.
-     * @return An Allocation of the set of regions we should provide relief to.
-     */
-    private static Allocation memoizedAllocRelief(double budget, List<Region> sites,
-            Map<Map.Entry<Double, Integer>, Allocation> memo) {
+        // would sorting the sites from most cost-effective to least cost-effective help?
 
         Allocation incl = new Allocation();
         if (budget <= 0 || sites.isEmpty())
             return incl;
 
-        Map.Entry<Double, Integer> entry = new AbstractMap.SimpleEntry<>(budget, sites.size());
-        if (memo.containsKey(entry)) {
-            System.out.println("hit cache");
-            return memo.get(entry);
-        }
+        // memoization might help? but I think it will probably just be slower
+        // because we will like never hit the cache with `Double`s with float imprecision
+        // anyways, yay 2^n algo
 
         if (budget >= sites.getFirst().getCost()) {
-            Allocation alloc = memoizedAllocRelief(budget - sites.getFirst().getCost(),
-                    sites.subList(1, sites.size()), memo);
+            // subList() returns a list view and doesn't copy, so this is efficient.
+            Allocation alloc = allocateRelief(budget - sites.getFirst().getCost(),
+                    sites.subList(1, sites.size()));
             incl = alloc.withRegion(sites.getFirst());
         }
 
         // we could add a heuristic to avoid considering excluding the site if the
         // cost of the remaining sites is within our budget pretty easily, but I'm lazy
         // and idk if that really helps that much anyways
-        Allocation excl = memoizedAllocRelief(budget, sites.subList(1, sites.size()), memo);
+        Allocation excl = allocateRelief(budget, sites.subList(1, sites.size()));
         int inclPpl = incl.totalPeople();
         int exclPpl = excl.totalPeople();
 
-        Allocation ret;
         if (inclPpl == exclPpl)
-            ret = incl.totalCost() > excl.totalCost() ? excl : incl;
-        else
-            ret = inclPpl > exclPpl ? incl : excl;
-
-        memo.put(entry, ret);
-        return ret;
+            return incl.totalCost() > excl.totalCost() ? excl : incl;
+        return inclPpl > exclPpl ? incl : excl;
     }
 
     ///////////////////////////////////////////////////////////////////////////
