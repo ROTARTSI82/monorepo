@@ -1,0 +1,235 @@
+Feature: here
+Threshold: 0.0625
+Feature: later
+Threshold: 0.08333333333333333
+Feature: no
+Threshold: 0.045454545454545456
+Feature: the
+Threshold: 0.04838709677419355
+Feature: great
+Threshold: 0.039473684210526314
+Feature: I
+Threshold: 0.07352941176470588
+Feature: as
+Threshold: 0.06845238095238095
+Feature: New
+Threshold: 0.038461538461538464
+Feature: :)it
+Threshold: 0.05
+Feature: "Hi
+Threshold: 0.038461538461538464
+Feature: times.
+Threshold: 0.038461538461538464
+Feature: don't
+Threshold: 0.045454545454545456
+Feature: house
+Threshold: 0.1
+Feature: but
+Threshold: 0.021739130434782608
+Feature: and
+Threshold: 0.03333333333333333
+Feature: you
+Threshold: 0.10416666666666666
+Feature: be
+Threshold: 0.07142857142857142
+Feature: do."
+Threshold: 0.125
+Feature: calls..messages..missed
+Threshold: 0.16666666666666666
+Feature: Watching
+Threshold: 0.1
+Feature: "Dear,
+Threshold: 0.1
+Feature: like
+Threshold: 0.0625
+Feature: now...
+Threshold: 0.1
+Feature: question.
+Threshold: 0.125
+Feature: your
+Threshold: 0.057692307692307696
+Feature: buy
+Threshold: 0.025
+Feature: anything
+Threshold: 0.1
+Feature: Smile
+Threshold: 0.09615384615384616
+Feature: wif
+Threshold: 0.08333333333333333
+Feature: @
+Threshold: 0.038461538461538464
+Feature: WHO
+Threshold: 0.125
+Feature: why?
+Threshold: 0.08333333333333333
+Feature: I'm
+Threshold: 0.03571428571428571
+Feature: home.
+Threshold: 0.021739130434782608
+Feature: when
+Threshold: 0.045454545454545456
+Feature: very
+Threshold: 0.03333333333333333
+Feature: buying?
+Threshold: 0.07142857142857142
+Feature: my
+Threshold: 0.07142857142857142
+Feature: ha
+Threshold: 0.09090909090909091
+Feature: my
+Threshold: 0.027777777777777776
+Feature: log
+Threshold: 0.03125
+Feature: checking
+Threshold: 0.08333333333333333
+Feature: watching
+Threshold: 0.125
+Feature: Going
+Threshold: 0.125
+Feature: trust
+Threshold: 0.08333333333333333
+Feature: R
+Threshold: 0.05555555555555555
+Feature: Anything
+Threshold: 0.125
+Feature: reply...
+Threshold: 0.125
+Feature: does
+Threshold: 0.1
+Feature: with
+Threshold: 0.04
+Feature: ..
+Threshold: 0.07142857142857142
+Feature: "Ela
+Threshold: 0.07142857142857142
+Feature: got
+Threshold: 0.08333333333333333
+Feature: are
+Threshold: 0.1
+Feature: we
+Threshold: 0.08333333333333333
+Feature: cut
+Threshold: 0.041666666666666664
+Feature: not
+Threshold: 0.07142857142857142
+Feature: to
+Threshold: 0.05
+Feature: later"
+Threshold: 0.125
+Feature: that
+Threshold: 0.02631578947368421
+Feature: U
+Threshold: 0.09090909090909091
+Feature: XX
+Threshold: 0.05
+Feature: Gud
+Threshold: 0.07142857142857142
+Feature: lucky
+Threshold: 0.0625
+Feature: in
+Threshold: 0.021739130434782608
+Feature: next
+Threshold: 0.16666666666666666
+Feature: i
+Threshold: 0.05263157894736842
+Feature: maybe
+Threshold: 0.03571428571428571
+spam
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+Feature: entry
+Threshold: 0.03571428571428571
+Feature: STOP
+Threshold: 0.041666666666666664
+Feature: ard...
+Threshold: 0.025
+spam
+ham
+spam
+spam
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+Feature: be
+Threshold: 0.034482758620689655
+ham
+spam
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+Feature: to
+Threshold: 0.06839080459770114
+ham
+Feature: 5249,
+Threshold: 0.017241379310344827
+ham
+spam
+ham
+ham
+ham
+ham
+ham
+ham
+Feature: delivery
+Threshold: 0.05263157894736842
+Feature: for
+Threshold: 0.038461538461538464
+spam
+ham
+spam
+ham
+ham
+ham
+Feature: click
+Threshold: 0.05263157894736842
+Feature: about
+Threshold: 0.03333333333333333
+ham
+spam
+spam
+ham
+ham
+ham

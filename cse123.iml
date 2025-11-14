@@ -9,9 +9,19 @@
       <sourceFolder url="file://$MODULE_DIR$/src/p1" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/c2" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/p2" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/p3" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="junit-platform-console-standalone-1.13.0-M3" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/annotations-26.0.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

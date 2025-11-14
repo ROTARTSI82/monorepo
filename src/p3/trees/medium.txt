@@ -1,0 +1,34 @@
+Feature: Bstfrnd
+Threshold: 0.020833333333333332
+Feature: have
+Threshold: 0.05
+Feature: u
+Threshold: 0.045454545454545456
+Feature: love
+Threshold: 0.05
+Feature: be
+Threshold: 0.025
+Feature: surfing
+Threshold: 0.16666666666666666
+Feature: calls..messages..missed
+Threshold: 0.16666666666666666
+Feature: class?
+Threshold: 0.08333333333333333
+Feature: ?"
+Threshold: 0.05
+Feature: movie.
+Threshold: 0.16666666666666666
+Feature: are
+Threshold: 0.08333333333333333
+spam
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
+ham
