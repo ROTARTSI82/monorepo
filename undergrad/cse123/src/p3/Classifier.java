@@ -1,27 +1,46 @@
-import org.jetbrains.annotations.NotNull;
+/**
+ * @author Grant Yang
+ * @version 2025.11.14
+ * CSE 123
+ * P3: Cornbear's Classifier
+ * TA: Benoit Le
+ */
+
 
 import java.io.*;
 import java.util.*;
 
+/**
+ * A simple model for the classification of text into arbitrary classes.
+ * Supports saving and loading models, training a model from data,
+ * and running classifications on new data.
+ */
 public class Classifier {
-
-    // Add fields here
-
     private ClassifierNode root;
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     private ClassifierNode readTree(Scanner in) {
         if (!in.hasNext())
             return null;
 
         String line = in.nextLine();
-        if (line.equals("Spam") || line.equals("Ham"))
-            return new ClassifierNode(line.equals("Spam"));
+        if (line.startsWith("Feature: ")) {
+            String feat = line.substring("Feature: ".length());
+            double threshold = Double.parseDouble(in.nextLine().substring("Threshold: ".length()));
+            return new ClassifierNode(feat, threshold, readTree(in), readTree(in));
+        }
 
-        String feat = line.substring("Feature: ".length());
-        double threshold = Double.parseDouble(in.nextLine().substring("Threshold: ".length()));
-        return new ClassifierNode(feat, threshold, readTree(in), readTree(in));
+        return new ClassifierNode(null, line);
     }
 
+    /**
+     *
+     * @param input
+     */
     public Classifier(Scanner input) {
         if (input == null)
             throw new IllegalArgumentException("input Scanner may not be null");
@@ -30,68 +49,83 @@ public class Classifier {
             throw new IllegalStateException("tree read from Scanner is empty");
     }
 
-    private ClassifierNode learn(TextBlock example, boolean truth, ClassifierNode cur) {
+    /**
+     *
+     * @param example
+     * @param label
+     * @param cur
+     * @return
+     */
+    private ClassifierNode learn(TextBlock example, String label, ClassifierNode cur) {
         if (cur.left == null) {
-            if (cur.spam ^ truth) {
-                // we will ignore the possibility of findBiggestDifference returning null
+            if (!cur.classification.equals(label)) {
                 String feat = cur.decider.findBiggestDifference(example);
+                ClassifierNode newLeaf = new ClassifierNode(example, label);
                 double exampleFeat = example.get(feat);
                 double threshold = midpoint(cur.decider.get(feat), exampleFeat);
-                ClassifierNode newLeaf = new ClassifierNode(example, truth);
                 return new ClassifierNode(feat, threshold,
-                        exampleFeat <= threshold ? newLeaf : cur,
-                        exampleFeat <= threshold ? cur : newLeaf);
+                        exampleFeat < threshold ? newLeaf : cur,
+                        exampleFeat < threshold ? cur : newLeaf);
             }
         } else {
-            if (!example.containsFeature(cur.feat) || example.get(cur.feat) <= cur.threshold)
-                cur.left = learn(example, truth, cur.left);
+            if (example.get(cur.feat) < cur.threshold)
+                cur.left = learn(example, label, cur.left);
             else
-                cur.right = learn(example, truth, cur.right);
+                cur.right = learn(example, label, cur.right);
         }
 
         return cur;
     }
 
+    /**
+     *
+     * @param data
+     * @param labels
+     */
     public Classifier(List<TextBlock> data, List<String> labels) {
         if (data == null || labels == null || labels.isEmpty() || data.size() != labels.size())
             throw new IllegalArgumentException(
                     "data and labels may not be null or empty and must be of the same length");
-        root = new ClassifierNode(data.getFirst(), labels.getFirst().equals("Spam"));
+        root = new ClassifierNode(data.getFirst(), labels.getFirst());
 
-        for (int i = 1; i < data.size(); i++) {
-            TextBlock example = data.get(i);
-            ClassifierNode res = classifyTraverse(example, root);
-            boolean truth = labels.get(i).equals("Spam");
-            if (res.spam ^ truth) {
-                res.feat = res.decider.findBiggestDifference(example);
-                res.threshold = midpoint(res.decider.get(res.feat), example.get(res.feat));
-                if (example.get(res.feat) <= res.threshold) {
-                    res.left = new ClassifierNode(example, truth);
-                    res.right = new ClassifierNode(res.decider, res.spam);
-                } else {
-                    res.right = new ClassifierNode(example, truth);
-                    res.left = new ClassifierNode(res.decider, res.spam);
-                }
-            }
-        }
+        for (int i = 1; i < data.size(); i++)
+            root = learn(data.get(i), labels.get(i), root);
     }
 
+    /**
+     *
+     * @param block
+     * @param cur
+     * @return
+     */
     private ClassifierNode classifyTraverse(TextBlock block, ClassifierNode cur) {
         if (cur.left == null)
             return cur;
-        if (!block.containsFeature(cur.feat) || block.get(cur.feat) <= cur.threshold)
+        if (block.get(cur.feat) < cur.threshold)
             return classifyTraverse(block, cur.left);
         return classifyTraverse(block, cur.right);
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public String classify(TextBlock input) {
-        return classifyTraverse(input, root).spam ? "Spam" : "Ham";
+        if (input == null)
+            throw new IllegalArgumentException("input may not be null");
+        return classifyTraverse(input, root).classification;
     }
 
+    /**
+     *
+     * @param out
+     * @param node
+     */
     private void saveTraverse(PrintStream out, ClassifierNode node) {
         if (node != null) {
             if (node.left == null) {
-                out.println(node.spam ? "Spam" : "Ham");
+                out.println(node.classification);
             } else {
                 out.println("Feature: " + node.feat);
                 out.println("Threshold: " + node.threshold);
@@ -101,45 +135,58 @@ public class Classifier {
         }
     }
 
+    /**
+     *
+     * @param output
+     */
     public void save(PrintStream output) {
         if (output == null)
             throw new IllegalArgumentException("output PrintStream may not be null");
         saveTraverse(output, root);
     }
 
+    /**
+     *
+     */
     private static class ClassifierNode {
         // branch case
-        ClassifierNode left;
-        ClassifierNode right;
-        String feat;
-        double threshold;
+        public ClassifierNode left;
+        public ClassifierNode right;
+        public final String feat;
+        public final double threshold;
 
-        // leaf case (decider is only used during training)
-        TextBlock decider;
-        boolean spam;
+        // leaf case
+        public final String classification;
+        public final TextBlock decider; // only used during training
 
-        ClassifierNode(boolean isSpam) {
-            left = null;
-            spam = isSpam;
-        }
-
-        ClassifierNode(TextBlock decider, boolean isSpam) {
+        /**
+         *
+         * @param decider
+         * @param klass
+         */
+        public ClassifierNode(TextBlock decider, String klass) {
             left = null;
             this.decider = decider;
-            spam = isSpam;
+            classification = klass;
+            threshold = 0;
+            feat = null;
         }
 
-        ClassifierNode(String feat, double threshold,
-                       ClassifierNode left, ClassifierNode right) {
+        /**
+         *
+         * @param feat
+         * @param threshold
+         * @param left
+         * @param right
+         */
+        public ClassifierNode(String feat, double threshold,
+                              ClassifierNode left, ClassifierNode right) {
             this.feat = feat;
             this.threshold = threshold;
             this.left = left;
             this.right = right;
-        }
-
-        void setDecider(TextBlock decider, boolean isSpam) {
-            this.decider = decider;
-
+            decider = null;
+            classification = null;
         }
     }
 
