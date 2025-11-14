@@ -3,8 +3,8 @@ import java.io.*;
 
 // Client class for interaction with Classifiers
 public class P3Client {
-    public static final String TRAIN_FILE = "data/emails/train.csv"; 
-    public static final String TEST_FILE = "data/emails/test.csv";      
+    public static final String TRAIN_FILE = "data/federalist_papers/train.csv";
+    public static final String TEST_FILE = "data/federalist_papers/test.csv";
     
     // Index of the column (feature) we're trying to predict. In the case of Email files, 
     // index 0 corresponds with the first column: Category
