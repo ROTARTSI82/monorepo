@@ -17,9 +17,9 @@ public class P2Testing {
 
     @Test
     @DisplayName("Aid All")
-    public void firstTestCase() {
+    public void testAidAll() {
         setUpRandom();
-        double nudge = RAND.nextDouble(10);
+        double nudge = RAND.nextDouble(100);
         Allocation alloc = P2Client.allocateRelief(totalCost + nudge, scenario);
 
         Allocation expected = new Allocation();
@@ -30,15 +30,15 @@ public class P2Testing {
 
     @Test
     @DisplayName("Aid None")
-    public void secondTestCase() {
+    public void testAidNone() {
         setUpRandom();
-        Allocation alloc = P2Client.allocateRelief(RAND.nextDouble(10), scenario);
+        Allocation alloc = P2Client.allocateRelief(RAND.nextDouble(100), scenario);
         assertEquals(new Allocation(), alloc);
     }
 
     @Test
     @DisplayName("Aid Some")
-    public void thirdTestCase() {
+    public void testAidSome() {
         scenario = P2Client.createSimpleScenario();
         Allocation alloc = P2Client.allocateRelief(2500, scenario);
 

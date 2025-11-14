@@ -13,57 +13,131 @@ public class P2Client {
     private static final Random RAND = new Random();
 
     public static void main(String[] args) throws Exception {
-        List<Region> scenario = createRandomScenario(24, 10, 100, 100, 1000);
-        // List<Region> scenario = createSimpleScenario();
-        System.out.println(scenario);
-        
-        double budget = 10000;
+        List<Region> scenario = createRandomScenario(25, 10, 100, 100, 1000);
+        List<Region> scenario2 = createSimpleScenario();
+        System.out.println(scenario2);
+        quicksort(scenario2);
+        System.out.println(scenario2);
+
+        double budget = 120000;
         Allocation allocation = allocateRelief(budget, scenario);
         printResult(allocation, budget);
     }
 
     /**
      * Solves the 0/1 Knapsack problem to allocate disaster relief to sites such that the
-     * number of people helped is maximized with the given budget. If there is a tie
+     * number of people helped is maximized within the given budget. If there is a tie
      * in the maximum number of people helped, the cheaper solution is returned.
      * @param budget The maximum amount of money to spend
-     * @param sites A list of disaster regions, each consisting of a cost for helping
+     * @param sites A list of disaster regions, each with a cost for helping
      *              some number of people. We do not consider partial relief of a region,
      *              and we consider our aid to be atomic.
      * @throws IllegalArgumentException if `sites` is null
-     * @return An Allocation of the set of regions we should provide relief to.
+     * @return An Allocation representing the optimal set of regions we should provide relief to.
      */
     public static Allocation allocateRelief(double budget, List<Region> sites) {
         if (sites == null)
             throw new IllegalArgumentException("sites cannot be null");
 
-        // would sorting the sites from most cost-effective to least cost-effective help?
+        double totCost = 0;
+        for (Region region : sites)
+            totCost += region.getCost();
 
-        Allocation incl = new Allocation();
+        List<Region> cpy = new ArrayList<>(sites);
+        quicksort(cpy);
+
+        return allocReliefHelper(budget, cpy, totCost, new HashMap<>());
+    }
+
+    /**
+     * Sorts the list of Regions in-place by cost and then population, with the cheapest Regions
+     * first. If multiple regions have the same cost, the post populous ones appear first.
+     * @param ls The list of regions to sort in-place. Must not be null.
+     */
+    private static void quicksort(List<Region> ls) {
+        // I am banned from using Collections.sort() unfortunately
+        // so I get to implement this myself
+        if (ls.size() > 1) {
+            boolean sorted = true;
+            int idx = RAND.nextInt(ls.size());
+            double pivotCost = ls.get(idx).getCost();
+            int pivotPop = ls.get(idx).getPopulation();
+
+            int lo = 0;
+            int hi = ls.size() - 1;
+            while (lo <= hi) {
+                double cost = ls.get(lo).getCost();
+                int pop = ls.get(lo).getPopulation();
+                if (cost < pivotCost || (cost == pivotCost && pop >= pivotPop)) {
+                    sorted &= cost == pivotCost;
+                    sorted &= pop == pivotPop;
+                    lo++;
+                } else {
+                    sorted = false;
+                    Region tmp = ls.get(hi);
+                    ls.set(hi--, ls.get(lo));
+                    ls.set(lo, tmp);
+                }
+            }
+
+            if (!sorted) {
+                quicksort(ls.subList(0, lo));
+                quicksort(ls.subList(lo, ls.size()));
+            }
+        }
+    }
+
+    /**
+     * Implements a recursive search to solve the 0/1 knapsack problem to allocate
+     * relief to regions such that the number of people helped is maximized within a given budget.
+     * If multiple solutions help the same number of people, the cheapest one is returned.
+     * @param budget The maximum amount of money to spend
+     * @param sites A list of disaster regions, each with a cost for helping some number of people.
+     *              This parameter will be modified by this function call!
+     * @param totCost The cost of providing relief to all the Regions in `sites`.
+     * @param memo Cache for partial results, mapping (n, b) to the Allocation that gives the
+     *             optimal solution for providing relief for the last `n` Regions in sites
+     *             within the budget `b`. This parameter will be modified by this function!
+     * @return An Allocation representing the optimal set of regions we should provide relief to.
+     */
+    private static Allocation allocReliefHelper(double budget, List<Region> sites,
+                                                double totCost,
+                                                Map<Map.Entry<Integer, Double>, Allocation> memo) {
         if (budget <= 0 || sites.isEmpty())
+            return new Allocation();
+
+        Map.Entry<Integer, Double> entry = new AbstractMap.SimpleEntry<>(sites.size(), budget);
+        if (memo.containsKey(entry))
+            return memo.get(entry);
+
+        if (budget >= totCost) {
+            Allocation incl = new Allocation();
+            for (Region region : sites)
+                incl = incl.withRegion(region);
+            memo.put(entry, incl);
             return incl;
-
-        // memoization might help? but I think it will probably just be slower
-        // because we will like never hit the cache with `Double`s with float imprecision
-        // anyways, yay 2^n algo
-
-        if (budget >= sites.getFirst().getCost()) {
-            // subList() returns a list view and doesn't copy, so this is efficient.
-            Allocation alloc = allocateRelief(budget - sites.getFirst().getCost(),
-                    sites.subList(1, sites.size()));
-            incl = alloc.withRegion(sites.getFirst());
         }
 
-        // we could add a heuristic to avoid considering excluding the site if the
-        // cost of the remaining sites is within our budget pretty easily, but I'm lazy
-        // and idk if that really helps that much anyways
-        Allocation excl = allocateRelief(budget, sites.subList(1, sites.size()));
-        int inclPpl = incl.totalPeople();
-        int exclPpl = excl.totalPeople();
+        double firstCost = sites.getFirst().getCost();
+        if (budget >= firstCost) {
+            List<Region> next = sites.subList(1, sites.size());
+            Allocation incl = allocReliefHelper(budget - firstCost, next,
+                    totCost - firstCost, memo).withRegion(sites.getFirst());
 
-        if (inclPpl == exclPpl)
-            return incl.totalCost() > excl.totalCost() ? excl : incl;
-        return inclPpl > exclPpl ? incl : excl;
+            Allocation excl = allocReliefHelper(budget, next, totCost - firstCost, memo);
+            int inclPpl = incl.totalPeople();
+            int exclPpl = excl.totalPeople();
+
+            Allocation ret;
+            if (inclPpl == exclPpl)
+                ret = incl.totalCost() > excl.totalCost() ? excl : incl;
+            else
+                ret = inclPpl > exclPpl ? incl : excl;
+            memo.put(entry, ret);
+            return ret;
+        }
+
+        return new Allocation();
     }
 
     ///////////////////////////////////////////////////////////////////////////
