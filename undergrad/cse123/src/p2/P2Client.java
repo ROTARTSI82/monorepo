@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.11.07
+ * @version 2025.11.19
  * CSE 123
  * P2: Disaster Relief
  * TA: Benoit Le
@@ -128,11 +128,8 @@ public class P2Client {
             int inclPpl = incl.totalPeople();
             int exclPpl = excl.totalPeople();
 
-            Allocation ret;
-            if (inclPpl == exclPpl)
-                ret = incl.totalCost() > excl.totalCost() ? excl : incl;
-            else
-                ret = inclPpl > exclPpl ? incl : excl;
+            Allocation ret = inclPpl > exclPpl ||
+                    (inclPpl == exclPpl && incl.totalCost() < excl.totalCost()) ? incl : excl;
             memo.put(entry, ret);
             return ret;
         }
