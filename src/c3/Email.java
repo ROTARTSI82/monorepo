@@ -8,6 +8,10 @@ public class Email implements Comparable<Email> {
     private final String from;
     private final String to;
 
+    public int compareTime(long compare) {
+        return Long.compare(timestamp, compare);
+    }
+
     public Email(long timestamp, int sentiment,
                  String subject, String from, String to) {
         this.timestamp = timestamp;
