@@ -44,16 +44,21 @@ public class Client {
             if (option.equalsIgnoreCase("add")) {
                 // TODO: Call your collection manager's add method and 
                 // pass in the result of the Item's parse() method
+                collectionManager.add(Email.parse(console));
                 System.out.println();
             } else if (option.equalsIgnoreCase("contains")) {
                 // TODO: Print the result of your collection manager's 
                 // contains method and pass in the result of the Item's parse() method
+                System.out.println("contains: "
+                        + collectionManager.contains(Email.parse(console)));
                 System.out.println();
             } else if (option.equalsIgnoreCase("print")) {
                 System.out.println(collectionManager.toString());
                 System.out.println();
             } else if (option.equalsIgnoreCase("creative")) {
-                // collectionManager.creativeExtension(); // TODO: Update with any parameters you need!
+                long lo = Long.parseLong(console.nextLine());
+                long hi = Long.parseLong(console.nextLine());
+                collectionManager.removeBetween(lo, hi);
                 System.out.println();
             } else if (option.equalsIgnoreCase("save")) {
                 System.out.print("Enter file to save to: ");
@@ -94,8 +99,9 @@ public class Client {
         for (int i = 1; i < 4; i ++) {
             System.out.println(emails);
             CollectionManager cm = new CollectionManager();
-            for (int j = emails.size() * (i - 1) / 3; j < emails.size() * i / 3; j++)
-                cm.add(emails.get(j));
+            int start = emails.size() * (i - 1) / 3;
+            for (int j = 0; j < 64; j++)
+                cm.add(emails.get(start + j));
             cm.save(new PrintStream("input" + i + ".txt"));
         }
     }

@@ -1,6 +1,5 @@
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
-import java.util.function.Function;
 
 public class CollectionManager {
     
@@ -51,17 +50,6 @@ public class CollectionManager {
         return containsRecursor(item, root);
     }
 
-    private Map.Entry<BSTNode, BSTNode> rmMaxMin(BSTNode tree, boolean maximize) {
-        if (maximize) {
-            if (tree.right == null)
-                return new AbstractMap.SimpleEntry<>(tree.left, tree);
-        } else {
-            if (tree.left == null)
-                return new AbstractMap.SimpleEntry<>(tree.right, tree);
-        }
-        return null;
-    }
-
     private void saveRecursor(PrintStream out, BSTNode tree) {
         if (tree != null) {
             out.println(tree.item);
@@ -76,48 +64,57 @@ public class CollectionManager {
         saveRecursor(output, root);
     }
 
+    // returns (new root, max node)
+    private Map.Entry<BSTNode, BSTNode> rmMaxOrMin(BSTNode tree, boolean maximize) {
+        if (maximize) {
+            if (tree.right == null)
+                return new AbstractMap.SimpleEntry<>(tree.left, tree);
+            Map.Entry<BSTNode, BSTNode> res = rmMaxOrMin(tree.right, true);
+            tree.right = res.getKey();
+            return new AbstractMap.SimpleEntry<>(tree, res.getValue());
+        } else {
+            if (tree.left == null)
+                return new AbstractMap.SimpleEntry<>(tree.right, tree);
+            Map.Entry<BSTNode, BSTNode> res = rmMaxOrMin(tree.left, false);
+            tree.left = res.getKey();
+            return new AbstractMap.SimpleEntry<>(tree, res.getValue());
+        }
+    }
+
     private BSTNode rmRoot(BSTNode tree) {
         if (tree.left != null) {
-            BSTNode cursor = tree.left;
-            if (cursor.right == null) {
-                cursor.right = tree.right;
-                return cursor;
-            }
-
-            while (cursor.right.right != null)
-                cursor = cursor.right;
-            BSTNode ret = cursor.right;
-            ret.left = tree.left;
+            Map.Entry<BSTNode, BSTNode> res = rmMaxOrMin(tree.left, true);
+            BSTNode ret = res.getValue();
+            ret.left = res.getKey();
             ret.right = tree.right;
-            cursor.right = null;
             return ret;
         } else if (tree.right != null) {
-            BSTNode cursor = tree.right;
-            if (cursor.left == null) {
-                // cursor.left = tree.left;
-                return cursor;
-            }
-
-            while (cursor.left.left != null)
-                cursor = cursor.left;
-            BSTNode ret = cursor.left;
-            // ret.left = tree.left;
-            ret.right = tree.right;
-            cursor.left = null;
+            Map.Entry<BSTNode, BSTNode> res = rmMaxOrMin(tree.right, false);
+            BSTNode ret = res.getValue();
+            ret.right = res.getKey();
+            ret.left = tree.left;
             return ret;
         }
 
         return null;
     }
 
-    private BSTNode rmAll(BSTNode tree, Function<Email, Boolean> predicate) {
+    private BSTNode rmBetweenRecursor(BSTNode tree, long timeLo, long timeHi) {
         if (tree == null)
             return null;
-        tree.left = rmAll(tree.left, predicate);
-        tree.right = rmAll(tree.right, predicate);
-        if (predicate.apply(tree.item))
+        tree.left = rmBetweenRecursor(tree.left, timeLo, timeHi);
+        tree.right = rmBetweenRecursor(tree.right, timeLo, timeHi);
+        if (tree.item.compareTime(timeLo) > 0 && tree.item.compareTime(timeHi) < 0)
             return rmRoot(tree);
         return tree;
+    }
+
+    public void removeBetween(long timeLo, long timeHi) {
+        root = rmBetweenRecursor(root, timeLo, timeHi);
+    }
+
+    public String toString() {
+        return root.toString();
     }
 
     private static class BSTNode {
@@ -128,6 +125,11 @@ public class CollectionManager {
             this.item = item;
             this.left = left;
             this.right = right;
+        }
+
+        public String toString() {
+            return (left != null ? left.toString() : "") + item + "\n" +
+                   (right != null ? right.toString() : "");
         }
     }
 }
