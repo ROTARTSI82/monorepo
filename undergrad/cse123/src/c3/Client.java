@@ -3,6 +3,8 @@ import java.io.*;
 
 public class Client {
     public static void main(String[] args) throws FileNotFoundException {
+        // generateInputs();
+
         Scanner console = new Scanner(System.in);
         System.out.println("Welcome to the CSE 123 Collection Manager! " +
                            "To begin, enter your desired mode of operation:");
@@ -42,21 +44,20 @@ public class Client {
             System.out.println();
 
             if (option.equalsIgnoreCase("add")) {
-                // TODO: Call your collection manager's add method and 
-                // pass in the result of the Item's parse() method
                 collectionManager.add(Email.parse(console));
                 System.out.println();
             } else if (option.equalsIgnoreCase("contains")) {
-                // TODO: Print the result of your collection manager's 
-                // contains method and pass in the result of the Item's parse() method
-                System.out.println("contains: "
-                        + collectionManager.contains(Email.parse(console)));
+                boolean cont = collectionManager.contains(Email.parse(console));
+                System.out.println("Email in collection: " + cont);
                 System.out.println();
             } else if (option.equalsIgnoreCase("print")) {
                 System.out.println(collectionManager.toString());
                 System.out.println();
             } else if (option.equalsIgnoreCase("creative")) {
+                System.out.println("Removing all Emails within timestamp range.");
+                System.out.print("Lower bound (exclusive, UNIX timestamp, integer): ");
                 long lo = Long.parseLong(console.nextLine());
+                System.out.print("Upper bound (exclusive, UNIX timestamp, integer): ");
                 long hi = Long.parseLong(console.nextLine());
                 collectionManager.removeBetween(lo, hi);
                 System.out.println();
@@ -93,15 +94,25 @@ public class Client {
         Scanner scan = new Scanner(bigTest);
         ArrayList<Email> emails = new ArrayList<>();
         while (scan.hasNextLine())
-            emails.add(Email.parse(scan));
+            emails.add(Email.rawParse(scan));
 
         Collections.shuffle(emails);
         for (int i = 1; i < 4; i ++) {
-            System.out.println(emails);
+            System.out.println("======== input" + i);
             CollectionManager cm = new CollectionManager();
             int start = emails.size() * (i - 1) / 3;
-            for (int j = 0; j < 64; j++)
-                cm.add(emails.get(start + j));
+            int j = 0;
+            while (j < 12) {
+                String cont = emails.get(start + j).toString().toLowerCase();
+                if (cont.contains("maxwell") || cont.contains("gmax") || cont.contains("lhs") ||
+                        cont.contains("trump") || cont.contains("clinton")) {
+                    System.out.println(emails.get(start + j));
+                    cm.add(emails.get(start + j));
+                    j++;
+                } else {
+                    Collections.shuffle(emails);
+                }
+            }
             cm.save(new PrintStream("input" + i + ".txt"));
         }
     }
