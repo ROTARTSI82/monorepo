@@ -199,8 +199,12 @@ public class CollectionManager {
     private BSTNode rmBetweenRecursor(BSTNode tree, long timeLo, long timeHi) {
         if (tree == null)
             return null;
-        tree.left = rmBetweenRecursor(tree.left, timeLo, timeHi);
-        tree.right = rmBetweenRecursor(tree.right, timeLo, timeHi);
+        // time is the first field compared in the ordering of Emails, so
+        // we can optimize this search like so.
+        if (tree.item.compareTime(timeLo) > 0)
+            tree.left = rmBetweenRecursor(tree.left, timeLo, timeHi);
+        if (tree.item.compareTime(timeHi) < 0)
+            tree.right = rmBetweenRecursor(tree.right, timeLo, timeHi);
         if (tree.item.compareTime(timeLo) > 0 && tree.item.compareTime(timeHi) < 0)
             return rmRoot(tree);
         return tree;
@@ -212,7 +216,6 @@ public class CollectionManager {
      * @param timeHi The upper bound for the email's UNIX timestamp (exclusive, seconds).
      */
     public void removeBetween(long timeLo, long timeHi) {
-        // ^ this is my creative extension btw
         root = rmBetweenRecursor(root, timeLo, timeHi);
     }
 
@@ -240,7 +243,7 @@ public class CollectionManager {
          * Constructs a new node in the binary search tree
          * @param item The Email item that decides branching at this node
          * @param left The left subtree of Emails strictly less than `item`.
-         * @param right The right subtree of Emails greater than or equal to `item`.
+         * @param right The right subtree of Emails greater than `item`.
          */
         public BSTNode(Email item, BSTNode left, BSTNode right) {
             this.item = item;

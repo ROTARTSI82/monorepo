@@ -1,6 +1,6 @@
 /**
  * @author Grant Yang
- * @version 2025.11.14
+ * @version 2025.12.01
  * CSE 123
  * P3: Cornbear's Classifier
  * TA: Benoit Le
@@ -95,8 +95,8 @@ public class Classifier {
      *             There should be no duplicate data points with conflicting labels,
      *             and there should be no empty or null TextBlocks.
      * @param labels A list of the (non-null) corresponding labels for the training data.
-     * @throws IllegalArgumentException if data or labels are null, if labels is empty, or if data
-     *                                  and labels have different sizes.
+     * @throws IllegalArgumentException if data or labels is null, if labels or data is empty,
+     *                                  or if data and labels have different sizes.
      */
     public Classifier(List<TextBlock> data, List<String> labels) {
         if (data == null || labels == null || labels.isEmpty() || data.size() != labels.size())
@@ -243,7 +243,7 @@ public class Classifier {
         if (data.size() != labels.size()) {
             throw new IllegalArgumentException(
                     String.format("Length of provided data [%d] " +
-                                    "doesn't match provided labels [%d]", 
+                                    "doesn't match provided labels [%d]",
                             data.size(), labels.size()));
         }
 
