@@ -59,8 +59,8 @@ public class Email implements Comparable<Email> {
      */
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Email otherItem)
-            return otherItem.compareTo(this) == 0;
+        if (other instanceof Email)
+            return ((Email) other).compareTo(this) == 0;
         return false;
     }
 
@@ -137,13 +137,7 @@ public class Email implements Comparable<Email> {
         String line = in.nextLine();
         if (line.startsWith("null"))
             return null;
-        String[] parts;
-        if (line.endsWith(" ~ ")) {
-            // hack around split()'s behavior
-            parts = (line + " ").split(" ~ ");
-            parts[4] = "";
-        } else
-            parts = line.split(" ~ ");
+        String[] parts = line.split(" ~ ", -1);
         return new Email(Long.parseLong(parts[0]), Integer.parseInt(parts[1]),
                          parts[2], parts[3], parts[4]);
     }

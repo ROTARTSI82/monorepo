@@ -1,3 +1,11 @@
+/**
+ * @author Grant Yang
+ * @version 2025.11.30
+ * CSE 123
+ * C3: B(e)ST of the B(e)ST
+ * TA: Benoit Le
+ */
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
@@ -5,7 +13,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class Testing {
-    private static final List<Email> EMAIL_SET = List.of(
+    private static final List<Email> EMAIL_SET = Arrays.asList(
             new Email(1478328181, 98,
                       "Market Indicator Gives Trump An 86% Chance Of Winning The Election",
                       "Richard Kahn", "Jeffrey Epstein [jeevacation@gmail.com]"),
@@ -47,7 +55,7 @@ public class Testing {
         // tests that loading and immediately saving does not change anything.
         // also tests specific items were loaded correctly.
         for (int i = 1; i < 4; i++) {
-            String in1 = Files.readString(Path.of("input" + i + ".txt"));
+            String in1 = new String(Files.readAllBytes(Paths.get("input" + i + ".txt")));
             CollectionManager cm = new CollectionManager(new Scanner(in1));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PrintStream out = new PrintStream(baos);
