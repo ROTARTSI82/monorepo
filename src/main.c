@@ -1,6 +1,8 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 #include <time.h>
 
@@ -38,44 +40,82 @@ int popen2(char *name, char *argname) {
   return -1;
 }
 
-inline void parse_all(__u64 rx, __u64 tx, __u64 rd, __u64 wr) {
-}
-
 static volatile bool running = true;
 
 void exit_handler(int) {
   running = false;
 }
 
-int main() {
-  struct statlog_bpf *bpf;
-  bpf = statlog_bpf__open_and_load();
+struct iostat_t {
+  __u64 nettx, netrx, diskr, diskw;
+};
+
+void bpf_runner(int infd, int outfd) {
+  struct statlog_bpf *bpf = statlog_bpf__open_and_load();
   if (!bpf) {
-    printf("bpf did not open: %s\n", strerror(errno));
-    return 1;
+    perror("bpf open and load error");
+    return;
   }
 
-  int attach = statlog_bpf__attach(bpf);
-  if (!attach) {
-    printf("attach error: %s\n", strerror(errno));
+  if (statlog_bpf__attach(bpf)) {
+    perror("bpf attach error");
     goto cleanup;
   }
 
-  __u64 netrx = 0, nettx = 0, diskr = 0, diskw = 0;
   
+  for (;;) {
+    char buf[2] = {0, 0};
+    ssize_t bytes = read(infd, buf, 1);
+    if (bytes == 0 || buf[0] == 0)
+      break;
+
+    struct iostat_t new = {
+      __atomic_load_n(&bpf->bss->net_tx, __ATOMIC_RELAXED),
+      __atomic_load_n(&bpf->bss->net_rx, __ATOMIC_RELAXED),
+      __atomic_load_n(&bpf->bss->disk_reads, __ATOMIC_RELAXED),
+      __atomic_load_n(&bpf->bss->disk_writes, __ATOMIC_RELAXED)
+    };
+
+    write(outfd, &new, sizeof(new));
+  }
+
+cleanup:
+  close(infd);
+  close(outfd);
+  statlog_bpf__destroy(bpf);
+}
+
+int main() {
+  int bpfout[2];
+  int bpftrig[2];
+  if (pipe2(bpfout, O_DIRECT) == -1)
+    return 1;
+  if (pipe2(bpftrig, O_DIRECT) == -1)
+    return 1;
+  
+  
+  int pid = fork();
+  if (pid == 0) {
+    close(bpftrig[1]);
+    close(bpfout[0]);
+    bpf_runner(bpftrig[0], bpfout[1]);
+    return 0;
+  } else if (pid < 0){
+    return 1;
+  }
+
+  close(bpftrig[0]);
+  close(bpfout[1]);
+
   {
     struct sigaction config = {{exit_handler}, {0}, 0, NULL};
     if (sigaction(SIGINT, &config, NULL) != 0)
-      goto cleanup;
+      return 1;
   }
 
+  struct iostat_t cumulative = {0, 0, 0, 0};
   while (running) {
     sleep(3);
-
-    __u64 n_diskr = __atomic_load_n(&bpf->bss->disk_reads, __ATOMIC_RELAXED);
-    __u64 n_diskw = __atomic_load_n(&bpf->bss->disk_writes, __ATOMIC_RELAXED);
-    __u64 n_netrx = __atomic_load_n(&bpf->bss->net_rx, __ATOMIC_RELAXED);
-    __u64 n_nettx = __atomic_load_n(&bpf->bss->net_tx, __ATOMIC_RELAXED);
    
     struct timespec ts = {0, 0};
     clock_gettime(CLOCK_REALTIME, &ts);
@@ -85,23 +125,43 @@ int main() {
     FILE *mem = fopen("/proc/meminfo", "r");
     FILE *cpu = fopen("/proc/stat", "r");
 
+    struct iostat_t new;
+
     if (!pwr || !mem || !cpu)
       goto cont;
 
-    // TODO: parse the files above and log the stats
-     printf("\t%llu\t%llu\t%llu\t%llu\n", n_diskr, n_diskw, n_netrx, n_nettx);
+    char w = 1;
+    if (write(bpftrig[1], &w, 1) != 1 ||
+        read(bpfout[0], &new, sizeof(new)) != sizeof(new))
+      goto cont;
 
+    struct iostat_t diff = {
+      new.nettx - cumulative.nettx,
+      new.netrx - cumulative.netrx,
+      new.diskr - cumulative.diskr,
+      new.diskw - cumulative.diskw
+    };
+    
+    // TODO: parse the files above and log the stats
+    printf("\t%llu\t%llu\t%llu\t%llu\n", new.nettx, new.netrx, new.diskr, new.diskw);
+
+    
+    cumulative = new;
 
   cont:
-    diskr = n_diskr; diskw = n_diskw;
-    netrx = n_netrx; nettx = n_nettx;
-
-    fclose(mem);
-    fclose(cpu);
-    fclose(pwr);
+    if (mem)
+      fclose(mem);
+    if (cpu)
+      fclose(cpu);
+    if (pwr)
+      fclose(pwr);
+    else if (fd > 0)
+      close(fd);
   }
 
-cleanup:
-  statlog_bpf__destroy(bpf);
-  printf("Goodbye!\n");
+  int status = 0;
+  write(bpftrig[1], &status, 1);
+  close(bpftrig[1]);
+  close(bpfout[0]);
+  waitpid(pid, &status, 0);
 }
