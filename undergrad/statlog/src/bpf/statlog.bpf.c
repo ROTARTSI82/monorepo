@@ -16,10 +16,12 @@ struct block_rq_complete_args {
     unsigned char common_preempt_count;
     int common_pid;
     unsigned int dev;
+    int __pad1; // Added padding to align sector at offset 16
     unsigned long long sector;
     unsigned int nr_sector;
     int errors;
-    char rwbs[8]; // Read/Write/Block String (e.g., "R", "W", "RA")
+    unsigned short ioprio; // Missing in previous version
+    char rwbs[10]; // Size 10 in kernel, was 8
 };
 
 struct net_args {
@@ -36,10 +38,21 @@ SEC("tracepoint/block/block_rq_complete")
 int handle_block_rq_complete(struct block_rq_complete_args *ctx) {
     __u64 bytes = ctx->nr_sector * 512; // 1 sector = 512 bytes
     
-    if (ctx->rwbs[0] == 'W') {
-        // Use atomic addition to prevent race conditions across CPU cores
+    // rwbs can contain multiple flags (e.g., "WS", "RA").
+    // We search for 'W' or 'R' in the string.
+    int is_write = 0;
+    int is_read = 0;
+
+    #pragma unroll
+    for (int i = 0; i < 10; i++) {
+        if (ctx->rwbs[i] == 'W') is_write = 1;
+        else if (ctx->rwbs[i] == 'R') is_read = 1;
+        else if (ctx->rwbs[i] == '\0') break;
+    }
+
+    if (is_write) {
         __sync_fetch_and_add(&disk_writes, bytes);
-    } else if (ctx->rwbs[0] == 'R') {
+    } else if (is_read) {
         __sync_fetch_and_add(&disk_reads, bytes);
     }
     
