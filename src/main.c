@@ -98,8 +98,7 @@ int main() {
     return 1;
   if (pipe2(bpftrig, O_DIRECT) == -1)
     return 1;
-  
-  
+    
   int pid = fork();
   if (pid == 0) {
     close(bpftrig[1]);
@@ -160,7 +159,7 @@ int main() {
       goto cont;
 
     // parse /proc/meminfo
-    size_t bytes = getline(&line, &capacity, mem);
+    ssize_t bytes = getline(&line, &capacity, mem);
     if (bytes <= 9)
       goto cont; 
     long mem_total = atol(line + 9);
@@ -179,7 +178,7 @@ int main() {
       if (bytes <= 5)
         continue;
       char *lineptr = line;
-      while (lineptr < line + bytes && !isspace(*++lineptr));
+      while (++lineptr < line + bytes && !isspace(*lineptr));
       long tot = 0, idle = 0;
       for (int i = 0; i < 8; i++) {
         long timer = strtol(lineptr, &lineptr, 10);
@@ -198,6 +197,35 @@ int main() {
     }
     printf("\tcpu %f\n", tot_util);
 
+    // parse sensors output
+    bytes = getline(&line, &capacity, pwr);
+    bytes = getline(&line, &capacity, pwr);
+    bytes = getline(&line, &capacity, pwr);
+    if (bytes <= 5)
+      goto cont;
+    int fanrpm = atoi(line + 5);
+    double wattage = 0;
+    double maxtmp = -100;
+    double mintmp = 200;
+    do {
+      bytes = getline(&line, &capacity, pwr);
+      if (bytes > 4 && strncmp("PPT:", line, 4) == 0)
+        wattage = atof(line + 4);
+      else {
+        char *lineptr = line;
+        while (++lineptr < line + bytes && !isspace(*lineptr));
+        if (lineptr < line + bytes) {
+          double measured = atof(lineptr);
+          if (measured != 0 && measured > maxtmp)
+            maxtmp = measured;
+          if (measured != 0 && measured < mintmp)
+            mintmp = measured;
+        }
+      }
+    } while (bytes > 0);
+    printf("\trpm %d\twatts %f\ttemps %f %f\n", fanrpm, wattage, mintmp, maxtmp);
+    
+    // ipc with the root bpf process
     char w = 1;
     if (write(bpftrig[1], &w, 1) != 1 ||
         read(bpfout[0], &new, sizeof(new)) != sizeof(new))
