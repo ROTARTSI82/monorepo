@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include <ctype.h>
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
@@ -86,6 +87,11 @@ cleanup:
 }
 
 int main() {
+  if (getuid() != 0) {
+    perror("process must be started as root.\n");
+    return 1;
+  }
+  
   int bpfout[2];
   int bpftrig[2];
   if (pipe2(bpfout, O_DIRECT) == -1)
@@ -107,6 +113,21 @@ int main() {
   close(bpftrig[0]);
   close(bpfout[1]);
 
+  const char *sudo_uid_str = getenv("SUDO_UID");
+  const char *sudo_gid_str = getenv("SUDO_GID");
+  if (!sudo_uid_str || !sudo_gid_str) {
+    perror("not invoked with sudo");
+    return 1;
+  }
+
+  if (setgid(atoi(sudo_gid_str)) == -1 || setuid(atoi(sudo_uid_str)) == -1 ||
+      getuid() == 0 || setuid(0) != -1) {
+    perror("failed to drop root privileges. run with sudo.\n");
+    return 1;
+  }
+
+  printf("uid %d gid %d\n", getuid(), getgid());
+
   {
     struct sigaction config = {{exit_handler}, {0}, 0, NULL};
     if (sigaction(SIGINT, &config, NULL) != 0)
@@ -114,6 +135,14 @@ int main() {
   }
 
   struct iostat_t cumulative = {0, 0, 0, 0};
+
+  // hardcoded 16 cores + initial cpu line for my system
+  long cpu_counters[17][2] = {0};
+
+  // initial getline() allocation.
+  size_t capacity = 1024;
+  char *line = malloc(capacity); 
+
   while (running) {
     sleep(3);
    
@@ -123,12 +152,51 @@ int main() {
     int fd = popen2("/usr/bin/sensors", "sensors");
     FILE *pwr = fd > 0 ? fdopen(fd, "r") : NULL;
     FILE *mem = fopen("/proc/meminfo", "r");
-    FILE *cpu = fopen("/proc/stat", "r");
+    FILE *stats = fopen("/proc/stat", "r");
 
     struct iostat_t new;
 
-    if (!pwr || !mem || !cpu)
+    if (!pwr || !mem || !stats)
       goto cont;
+
+    // parse /proc/meminfo
+    size_t bytes = getline(&line, &capacity, mem);
+    if (bytes <= 9)
+      goto cont; 
+    long mem_total = atol(line + 9);
+    bytes = getline(&line, &capacity, mem);
+    bytes = getline(&line, &capacity, mem);
+    if (bytes <= 13)
+      goto cont;
+    long mem_avail = atol(line + 13);
+    double mem_frac = 1 - mem_avail / (double) mem_total;
+    printf("\tmem %f\n", mem_frac);
+
+    // parse /proc/stat
+    double tot_util = 0;
+    for (int cpu = 0; cpu < 17; cpu++) {
+      bytes = getline(&line, &capacity, stats);
+      if (bytes <= 5)
+        continue;
+      char *lineptr = line;
+      while (lineptr < line + bytes && !isspace(*++lineptr));
+      long tot = 0, idle = 0;
+      for (int i = 0; i < 8; i++) {
+        long timer = strtol(lineptr, &lineptr, 10);
+        tot += timer;
+        if (i == 3 || i == 4)
+          idle += timer;
+      }
+
+      long dtot = tot - cpu_counters[cpu][0];
+      long didle = idle - cpu_counters[cpu][1];
+      double utilization = 1 - didle / (double) dtot;
+      if (cpu > 0)
+        tot_util += utilization;
+      cpu_counters[cpu][0] = tot;
+      cpu_counters[cpu][1] = idle;
+    }
+    printf("\tcpu %f\n", tot_util);
 
     char w = 1;
     if (write(bpftrig[1], &w, 1) != 1 ||
@@ -143,7 +211,8 @@ int main() {
     };
     
     // TODO: parse the files above and log the stats
-    printf("\t%llu\t%llu\t%llu\t%llu\n", new.nettx, new.netrx, new.diskr, new.diskw);
+    printf("\ttx %llu\trx %llu\tr %llu\tw %llu\n\n", diff.nettx, diff.netrx, diff.diskr, diff.diskw);
+    
 
     
     cumulative = new;
@@ -151,8 +220,8 @@ int main() {
   cont:
     if (mem)
       fclose(mem);
-    if (cpu)
-      fclose(cpu);
+    if (stats)
+      fclose(stats);
     if (pwr)
       fclose(pwr);
     else if (fd > 0)
