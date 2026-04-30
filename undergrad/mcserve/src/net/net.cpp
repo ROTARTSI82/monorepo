@@ -15,7 +15,6 @@
 
 #include <unistd.h>
 
-#include "mc/async.hpp"
 
 struct resolve_hostname {
     addrinfo *res = nullptr;
@@ -61,11 +60,6 @@ void print_addrinfo(addrinfo *ainfo) {
 }
 
 namespace mc {
-    future<int, noalloc_promise<int>> test() {
-        co_await std::suspend_always{};
-        co_return 5;
-    };
-
     tcp_server::tcp_server(const char *addr, const char *port) {
         std::cout << "starting server on " << addr << ":" << port << '\n';
         auto host = resolve_hostname(addr, port);

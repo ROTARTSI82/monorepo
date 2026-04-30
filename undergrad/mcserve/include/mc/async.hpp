@@ -2,105 +2,59 @@
 
 #include <coroutine>
 #include <condition_variable>
-#include <optional>
 #include <queue>
 #include <thread>
 #include <mutex>
 #include <stop_token>
 
-
-#define CO_AWAIT(promise) { \
-    auto _p = (promise); \
-    while (!_p.done()) { \
-        co_await std::suspend_always{}; \
-        _p.resume(); \
-    } \
-    _p \
-}
-
 namespace mc {
-
-    template <typename T>
-    struct returning_promise;
-
-
-    struct void_future {
+    struct pool_future {
         struct promise_type {
+            struct {
+                bool destroy : 1;
+                uint8_t prio : 7;
+            };
             std::suspend_always initial_suspend() { return {}; }
             std::suspend_always final_suspend() noexcept { return {}; }
             void return_void() {}
             void unhandled_exception() {}
-            void_future get_return_object() {
+            pool_future get_return_object() {
                 return {std::coroutine_handle<promise_type>::from_promise(*this)};
             }
         };
 
+        struct compare {
+            bool operator()(const std::coroutine_handle<promise_type> &a,
+                            const std::coroutine_handle<promise_type> &b) {
+                return a.promise().prio < b.promise().prio;
+            }
+        };
+
         std::coroutine_handle<promise_type> handle = {nullptr};
-        void_future(const std::coroutine_handle<promise_type> &in) : handle(in) {}
-        ~void_future() { handle.destroy(); }
+        pool_future(const std::coroutine_handle<promise_type> &in) : handle(in) {}
+        ~pool_future() { }
 
         [[nodiscard]] inline bool done() { return handle.done(); }
         inline void resume() { handle.resume(); }
     };
 
-    template <typename T, typename P = returning_promise<T>>
-    struct future {
-        using promise_type = P;
+    using pool_handle = std::coroutine_handle<pool_future::promise_type>;
 
-        std::coroutine_handle<P> handle = {nullptr};
-        future(const std::coroutine_handle<P> &in) : handle(in) {}
-
-        [[nodiscard]] inline bool done() { return handle.done(); }
-        [[nodiscard]] inline P &promise() { return handle.promise(); }
-        inline void resume() { handle.resume(); }
-
-        [[nodiscard]] constexpr inline T &value() {
-            return handle.promise().value.value();
-        }
-
-        ~future() { handle.destroy(); }
-    };
-
-
-    template <typename T>
-    struct returning_promise {
-        std::optional<T> value;
-
-        future<T, returning_promise<T>> get_return_object() {
-            return {std::coroutine_handle<returning_promise<T>>::from_promise(*this)};
-        }
-        void return_value(T &&v) { value = v; }
-    };
-
-    template <typename T>
-    struct noalloc_promise : returning_promise<T> {
-        void *operator new(size_t size) {
-            std::cout << "op new: " << size << '\n';
-            return ::operator new(size);
-        };
-        void *operator new[](size_t size) {
-            std::cout << "op new[]: " << size << '\n';
-            return ::operator new[](size);
-        };
-
-        future<T, noalloc_promise<T>> get_return_object() {
-            return {std::coroutine_handle<noalloc_promise<T>>::from_promise(*this)};
+    // awaitable object for setting prio
+    struct suspend_and_set_prio {
+        int prio;
+        suspend_and_set_prio(int p) : prio(p) {}
+        bool await_ready() { return false; }
+        void await_resume() { }
+        void await_suspend(pool_handle handle) {
+            handle.promise().prio = prio;
         }
     };
 
     class thread_pool {
     public:
-        struct task {
-            std::coroutine_handle<> coro;
-            int prio;
-
-            [[nodiscard]] inline bool operator<(const task &other) const noexcept {
-                return prio < other.prio;
-            }
-        };
-
         std::vector<std::thread> threads{};
-        std::priority_queue<task> tasks{};
+        std::priority_queue<pool_handle, std::vector<pool_handle>, pool_future::compare> tasks{};
         std::condition_variable ready{};
         std::mutex mtx{};
         std::stop_source stop{};
@@ -108,8 +62,21 @@ namespace mc {
         thread_pool(int num);
         ~thread_pool();
 
-        inline void queue(const std::coroutine_handle<> &coro, int prio) {
-            tasks.emplace(coro, prio);
+        static void worker_thread_fun(thread_pool *, std::stop_token);
+
+        inline void raw_queue(const pool_handle &coro) {
+            {
+                std::unique_lock<std::mutex> lg(mtx);
+                tasks.emplace(coro);
+            }
+            ready.notify_one();
+        }
+
+        inline void queue(const pool_handle &coro,
+                          int prio = 1, bool destroy = true) {
+            coro.promise().prio = prio;
+            coro.promise().destroy = destroy;
+            raw_queue(coro);
         }
     };
 }
