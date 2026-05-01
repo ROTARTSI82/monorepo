@@ -1,6 +1,7 @@
 #include "mc/net/net.hpp"
 #include "mc/async.hpp"
 
+#include <coroutine>
 #include <thread>
 #include <unistd.h>
 #include <limits.h>
@@ -21,18 +22,23 @@ int main() {
                 std::cout << "task " << t << " on " << std::this_thread::get_id() << "\n";
             }
             std::this_thread::sleep_for(50ms);
-            co_await mc::suspend_and_set_prio(i * t);
+            co_await std::suspend_always{};
         }
     };
 
     char hostname[HOST_NAME_MAX];
     gethostname(hostname, sizeof(hostname));
-    mc::tcp_server serv{hostname, "8000"};
+    mc::tcp_server serv{hostname, "8000", &pool};
     std::cout << "fun!\n";
 
-    for (int i = 0; i < nothreads; i++) {
-        pool.queue(task(i).handle, i, true);
-    }
+    // for (int i = 0; i < nothreads; i++) {
+    //     pool.queue(task(i));
+    // }
+    pool.queue(mc::tcp_server::accept_loop(&serv));
 
-    std::this_thread::sleep_for(1000ms);
+    int x = -1;
+    while (x != 0) {
+        std::cin >> x;
+        std::cout << x;
+    }
 }
