@@ -22,7 +22,7 @@ struct resolve_hostname {
     resolve_hostname(addrinfo *inp) : res(inp) {}
 
     resolve_hostname(const char *addr, const char *port) {
-        addrinfo hints = {0};
+        addrinfo hints{};
         hints.ai_family = AF_UNSPEC;
         hints.ai_socktype = SOCK_STREAM;
 

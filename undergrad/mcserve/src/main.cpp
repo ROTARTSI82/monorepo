@@ -1,10 +1,9 @@
 #include "mc/net/net.hpp"
 #include "mc/async.hpp"
 
-#include <coroutine>
 #include <thread>
 #include <unistd.h>
-#include <bits/local_lim.h>
+#include <limits.h>
 
 #include <iostream>
 
@@ -12,7 +11,7 @@ using namespace std::literals;
 
 
 int main() {
-    auto nothreads = std::thread::hardware_concurrency();
+    int nothreads = std::thread::hardware_concurrency();
     mc::thread_pool pool(nothreads);
     std::mutex mtx;
     auto task = [&](int t) -> mc::pool_future {

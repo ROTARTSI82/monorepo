@@ -10,5 +10,5 @@ add_executable(mcserve ${MC_SOURCES})
 target_include_directories(mcserve PUBLIC include)
 target_include_directories(mcserve PRIVATE src)
 
-target_link_options(mcserve PUBLIC -march=native -mtune=native -Os -g3 -glldb -flto)
-target_compile_options(mcserve PUBLIC -march=native -mtune=native -Os -g3 -glldb -flto)
+target_link_options(mcserve PUBLIC -march=native -mtune=native -Os -g3 -glldb -flto -Wall -Wextra)
+target_compile_options(mcserve PUBLIC -march=native -mtune=native -Os -g3 -glldb -flto -Wall -Wextra)

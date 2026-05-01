@@ -39,5 +39,9 @@ namespace mc {
         ready.notify_all();
         for (auto &thread : threads)
             thread.join();
+        while (!tasks.empty()) {
+            tasks.top().destroy();
+            tasks.pop();
+        }
     }
 }
