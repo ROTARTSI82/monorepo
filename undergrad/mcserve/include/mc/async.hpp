@@ -13,10 +13,7 @@
 
 namespace mc {
     class thread_pool;
-
-    enum class requeue_mode : int {
-        READY, IO_BLOCKED
-    };
+    struct io_awaiter;
 
     template <typename P>
     struct defer {
@@ -27,7 +24,7 @@ namespace mc {
     struct pool_future {
         struct promise_type {
             thread_pool *owner = nullptr;
-            std::atomic<requeue_mode> requeue = requeue_mode::READY;
+            io_awaiter *io_blocked = nullptr;
 
             std::suspend_always initial_suspend() { return {}; }
             std::suspend_always final_suspend() noexcept { return {}; }
@@ -42,8 +39,8 @@ namespace mc {
         pool_future(const std::coroutine_handle<promise_type> &in) : handle(in) {}
         ~pool_future() { if (handle) handle.destroy(); }
 
-        [[nodiscard]] inline bool done() { return handle.done(); }
-        inline void resume() { handle.resume(); }
+        [[nodiscard]] inline bool done() const { return handle.done(); }
+        inline void resume() const { handle.resume(); }
     };
 
     using pool_task = std::coroutine_handle<pool_future::promise_type>;
@@ -62,7 +59,10 @@ namespace mc {
         std::vector<pollfd> events{};
         std::vector<pool_task> event_listeners{};
         std::mutex event_mtx{};
-        int notif_fd = STDOUT_FILENO;
+
+        // if we try to notify before setting up the notification task,
+        // we harmlessly write to stdout (intended behavior).
+        int notif_fds[2];
 
         thread_pool(int num);
         ~thread_pool();
@@ -110,17 +110,9 @@ namespace mc {
 
         inline bool await_ready() { return !suspended; }
         void await_suspend(pool_task h) {
-            std::cout << "suspend io_awaiter fd=" << fd << '\n';
-            thread_pool *pool = h.promise().owner;
-            {
-                std::unique_lock<std::mutex> lg(pool->event_mtx);
-                h.promise().requeue = requeue_mode::IO_BLOCKED;
-                pool->event_listeners.emplace_back(h);
-                pool->events.emplace_back(fd, events, 0); // pollfd
-            }
-            int yes = 1;
-            if (notify)
-                write(pool->notif_fd, &yes, sizeof(yes));
+            // we live on the coroutine frame, so using a pointer to this
+            // is safe. see code in thread_pool::io_thread_fun for handling.
+            h.promise().io_blocked = this;
         }
         // value of the co_await expression: signal we should retry if we suspended.
         ssize_t await_resume() { return suspended ? -1 : bytes; };

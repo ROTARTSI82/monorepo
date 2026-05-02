@@ -87,7 +87,8 @@ inline int configure_socket(int sock, const std::string_view &str) {
 }
 
 namespace mc {
-    tcp_server::tcp_server(const char *addr, const char *port, thread_pool *pool) : pool(pool) {
+    tcp_server::tcp_server(const char *addr, const char *port,
+                           thread_pool *pool) : pool(pool) {
         std::cout << "starting server on " << addr << ":" << port << '\n';
         auto host = resolve_hostname(addr, port);
         addrinfo *serv = host.res;
@@ -117,16 +118,15 @@ namespace mc {
             close(sock);
     }
 
-    static pool_future handle_connection(int client, tcp_server *serv);
+    static pool_future handle_connection(int client);
 
     pool_future tcp_server::accept_loop(tcp_server *serv) {
-        while (true) {
+        for (;;) {
             co_await io_awaiter{serv->sock, POLLIN};
-            std::cout << "accept wakeup\n";
 
             sockaddr_storage addr_storage{};
             socklen_t addrlen = sizeof(addr_storage);
-            sockaddr *addr = reinterpret_cast<sockaddr *>(&addr_storage);
+            auto *addr = reinterpret_cast<sockaddr *>(&addr_storage);
             int client = accept(serv->sock, addr, &addrlen);
             if (configure_socket(client, "accept") == -1)
                 continue;
@@ -144,7 +144,7 @@ namespace mc {
             }
             std::cout << ipstr << '\n';
 
-            serv->pool->queue(handle_connection(client, serv));
+            serv->pool->queue(handle_connection(client));
         }
     }
 }
@@ -152,15 +152,14 @@ namespace mc {
 using namespace mc;
 
 
-pool_future mc::handle_connection(int client, tcp_server *_serv) {
+pool_future mc::handle_connection(int client) {
     auto d = defer{[=]() { close(client); }};
     fd_reader rbuf{client};
 
-    ssize_t bytes = -1;
+    ssize_t bytes;
     for (;;) {
         do {
             bytes = co_await rbuf.recv();
-            std::cout << "recv wakeup\n";
         } while (bytes == -1);
 
         *rbuf.end = '\0';
