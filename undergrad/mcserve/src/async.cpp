@@ -1,6 +1,10 @@
 #include "mc/async.hpp"
+#include <atomic>
+#include <fcntl.h>
 #include <iostream>
+#include <stop_token>
 #include <string.h>
+#include <unistd.h>
 
 namespace mc {
     void thread_pool::worker_thread_fun(thread_pool *pool, std::stop_token stop) {
@@ -19,10 +23,17 @@ namespace mc {
                 job = pool->tasks.front();
                 pool->tasks.pop();
             }
+            job.promise().state = task_state::RUNNING;
             if (!job.done())
                 job.resume();
 
-            if (job.promise().requeue) {
+            task_state expected = task_state::RUNNING;
+            // TODO: race condition here still not fully fixed.
+            // we can still get a io_thread to come and queue it,
+            // then some other worker thread starts running it and be
+            // in the middle of job.resume() when we hit this point.
+            if (job.promise().state.compare_exchange_strong(
+                    expected, task_state::QUEUED, std::memory_order_relaxed)) {
                 if (!job.done())
                     pool->queue(job);
                 else
@@ -32,29 +43,65 @@ namespace mc {
     }
 
     void thread_pool::io_thread_fun(thread_pool *pool, std::stop_token stop) {
+        std::vector<pollfd> events{};
+        std::vector<pool_task> listeners{};
+
         while (!stop.stop_requested()) {
-            std::cout << "io thread heartbeat polling " << pool->events.size() << '\n';
-            if (poll(pool->events.data(), pool->events.size(), 1000) == -1)
+            {
+                std::unique_lock<std::mutex> lg(pool->event_mtx);
+                events.reserve(events.size() + pool->events.size());
+                events.insert(events.end(), pool->events.begin(), pool->events.end());
+                listeners.reserve(listeners.size() + pool->event_listeners.size());
+                listeners.insert(listeners.end(),
+                    pool->event_listeners.begin(), pool->event_listeners.end());
+                pool->event_listeners.clear();
+                pool->events.clear();
+                std::cout << "io thread heartbeat polling "
+                    << events.size() << " : "
+                    << listeners.size() << '\n';
+            }
+            if (poll(events.data(), events.size(), 1000) == -1)
                 std::cout << "err on poll: " << strerror(errno) << '\n';
 
-            std::unique_lock<std::mutex> lg(pool->event_mtx);
-            for (size_t i = 0; i < pool->events.size(); i++) {
-                if (pool->events[i].revents
-                        && i < pool->event_listeners.size()
-                        && pool->event_listeners[i]) {
-                    pool_task to_resume = pool->event_listeners[i];
+            for (size_t i = 0; i < events.size(); i++) {
+                if (events[i].revents
+                        && i < listeners.size()
+                        && listeners[i]) {
+                    pool_task to_resume = listeners[i];
+                    listeners[i] = nullptr;
+                    events[i].fd = -1;
 
-                    // O(n^2), can probably be made more efficient.
-                    pool->event_listeners.erase(pool->event_listeners.begin() + i);
-                    pool->events.erase(pool->events.begin() + i);
-                    i--;
-
-                    lg.unlock();
                     pool->queue(to_resume);
-                    lg.lock();
-                    std::cout << "io resumed " << i << '\n';
+                    std::cout << "io resumed " << i  << " for " << events[i].revents << '\n';
                 }
             }
+
+            std::erase_if(events, [](const auto &e) { return e.fd == -1; });
+            std::erase_if(listeners, [](const auto &h) { return !h; });
+        }
+
+        for (const auto &h : listeners)
+            if (h) h.destroy();
+        for (const auto &e : events)
+            if (e.fd > 0) close(e.fd);
+    }
+
+    pool_future notify_worker(thread_pool *pool, std::stop_token tok) {
+        int pipefds[2];
+        pipe(pipefds);
+        pool->notif_fd = pipefds[1];
+
+        for (int i = 0; i < 2; i++) {
+            int flags = fcntl(pipefds[i], F_GETFL);
+            if (fcntl(pipefds[i], F_SETFL, flags | O_NONBLOCK) == -1)
+                std::cout << strerror(errno) << '\n';
+        }
+
+        char buf[16];
+        while (!tok.stop_requested()) {
+            co_await io_awaiter{pipefds[0], POLLIN, false};
+            // dont care about result, just consume it
+            read(pipefds[0], buf, sizeof(buf));
         }
     }
 
@@ -63,6 +110,7 @@ namespace mc {
         threads.emplace_back(io_thread_fun, this, stop.get_token());
         for (int i = 1; i < num; i++)
             threads.emplace_back(worker_thread_fun, this, stop.get_token());
+        queue(notify_worker(this, stop.get_token()));
     }
 
     thread_pool::~thread_pool() {
@@ -77,5 +125,7 @@ namespace mc {
 
         for (const auto h : event_listeners)
             h.destroy();
+        for (const auto &e : events)
+            if (e.fd > 0) close(e.fd);
     }
 }

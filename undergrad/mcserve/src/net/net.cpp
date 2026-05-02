@@ -64,14 +64,15 @@ void print_addrinfo(addrinfo *ainfo) {
     }
 }
 
-int mk_socket(addrinfo *serv) {
-    int sock = socket(serv->ai_family, serv->ai_socktype, serv->ai_protocol);
+inline int configure_socket(int sock, const std::string_view &str) {
     if (sock == -1) {
-        std::cout << "err on socket: " << strerror(errno) << '\n';
+        if ((errno != EAGAIN && errno != EWOULDBLOCK) || str == "socket")
+            std::cout << "err on " << str << ": " << strerror(errno) << '\n';
         return -1;
     }
 
-    if (fcntl(sock, F_SETFL, O_NONBLOCK) == -1) {
+    int flags = fcntl(sock, F_GETFL);
+    if (fcntl(sock, F_SETFL, flags | O_NONBLOCK) == -1) {
         std::cout << "err on fcntl: " << strerror(errno) << '\n';
         close(sock);
         return -1;
@@ -92,7 +93,10 @@ namespace mc {
         addrinfo *serv = host.res;
         if (serv == nullptr) return;
         print_addrinfo(serv);
-        sock = mk_socket(serv);
+
+        sock = socket(serv->ai_family, serv->ai_socktype, serv->ai_protocol);
+        if ((sock = configure_socket(sock, "socket")) == -1)
+            return;
 
         if (bind(sock, serv->ai_addr, serv->ai_addrlen) == -1) {
             std::cout << "err on bind: " << strerror(errno) << '\n';
@@ -113,21 +117,19 @@ namespace mc {
             close(sock);
     }
 
-    static pool_future handle_connection(int client, sockaddr *addr, socklen_t addrlen, tcp_server *serv);
+    static pool_future handle_connection(int client, tcp_server *serv);
 
     pool_future tcp_server::accept_loop(tcp_server *serv) {
         while (true) {
             co_await io_awaiter{serv->sock, POLLIN};
+            std::cout << "accept wakeup\n";
 
             sockaddr_storage addr_storage{};
             socklen_t addrlen = sizeof(addr_storage);
             sockaddr *addr = reinterpret_cast<sockaddr *>(&addr_storage);
             int client = accept(serv->sock, addr, &addrlen);
-            if (client == -1) {
-                if (errno != EAGAIN && errno != EWOULDBLOCK)
-                    std::cout << "err on accept: " << strerror(errno) << '\n';
+            if (configure_socket(client, "accept") == -1)
                 continue;
-            }
 
             std::cout << "connection ";
             char ipstr[INET6_ADDRSTRLEN];
@@ -142,7 +144,7 @@ namespace mc {
             }
             std::cout << ipstr << '\n';
 
-            serv->pool->queue(handle_connection(client, addr, addrlen, serv));
+            serv->pool->queue(handle_connection(client, serv));
         }
     }
 }
@@ -150,25 +152,33 @@ namespace mc {
 using namespace mc;
 
 
-pool_future mc::handle_connection(int client, sockaddr *addr, socklen_t addrlen,
-                                  tcp_server *serv) {
-    // copy it into our frame cause the object is about to be destroyed
-    // on our parents frame. then we do our initial suspend.
-    sockaddr_storage addr_store;
-    memcpy(&addr_store, addr, addrlen);
-    addr = reinterpret_cast<sockaddr *>(&addr_store);
-    co_await std::suspend_always{};
-
+pool_future mc::handle_connection(int client, tcp_server *_serv) {
     fd_reader rbuf{client};
 
     ssize_t bytes = -1;
-    while (bytes != 0) {
+    for (;;) {
         do {
             bytes = co_await rbuf.recv();
+            std::cout << "recv wakeup\n";
         } while (bytes == -1);
 
         *rbuf.end = '\0';
         std::cout << "recv " << bytes << ": " << rbuf.head << '\n';
+
+        if (bytes == 0)
+            break;
+
+        while (rbuf.head < rbuf.end) {
+            ssize_t sent = co_await send(client, rbuf.head, rbuf.end - rbuf.head);
+            if (sent > 0)
+                rbuf.head += sent;
+
+            if (sent == 0)
+                goto dc;
+        }
     }
+
+dc:
     std::cout << "disconnect\n";
+    close(client);
 }

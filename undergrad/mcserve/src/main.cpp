@@ -29,6 +29,11 @@ int main() {
     char hostname[HOST_NAME_MAX];
     gethostname(hostname, sizeof(hostname));
     mc::tcp_server serv{hostname, "8000", &pool};
+    if (serv.sock == -1) {
+        std::cout << "server did not start\n";
+        return 1;
+    }
+
     std::cout << "fun!\n";
 
     // for (int i = 0; i < nothreads; i++) {
