@@ -1,5 +1,6 @@
 #include "mc/async.hpp"
 #include <atomic>
+#include <cassert>
 #include <fcntl.h>
 #include <iostream>
 #include <stop_token>
@@ -23,22 +24,22 @@ namespace mc {
                 job = pool->tasks.front();
                 pool->tasks.pop();
             }
-            job.promise().state = task_state::RUNNING;
+            job.promise().requeue = requeue_mode::READY;
             if (!job.done())
                 job.resume();
 
-            task_state expected = task_state::RUNNING;
-            // TODO: race condition here still not fully fixed.
-            // we can still get a io_thread to come and queue it,
-            // then some other worker thread starts running it and be
-            // in the middle of job.resume() when we hit this point.
-            if (job.promise().state.compare_exchange_strong(
-                    expected, task_state::QUEUED, std::memory_order_relaxed)) {
-                if (!job.done())
-                    pool->queue(job);
-                else
-                    job.destroy();
-            }
+            requeue_mode mode = requeue_mode::IO_BLOCKED;
+            if (job.promise().requeue.compare_exchange_strong(
+                    mode, requeue_mode::READY, std::memory_order_relaxed))
+                // an io_worker_thread will now reschedule this task,
+                // now that we have marked it as ready
+                continue;
+
+            assert(mode == requeue_mode::READY);
+            if (!job.done())
+                pool->queue(job);
+            else
+                job.destroy();
         }
     }
 
@@ -66,7 +67,8 @@ namespace mc {
             for (size_t i = 0; i < events.size(); i++) {
                 if (events[i].revents
                         && i < listeners.size()
-                        && listeners[i]) {
+                        && listeners[i]
+                        && listeners[i].promise().requeue == requeue_mode::READY) {
                     pool_task to_resume = listeners[i];
                     listeners[i] = nullptr;
                     events[i].fd = -1;
@@ -82,19 +84,22 @@ namespace mc {
 
         for (const auto &h : listeners)
             if (h) h.destroy();
-        for (const auto &e : events)
-            if (e.fd > 0) close(e.fd);
     }
 
     pool_future notify_worker(thread_pool *pool, std::stop_token tok) {
         int pipefds[2];
-        pipe(pipefds);
+        if (pipe(pipefds) == -1)
+            std::cout << "err on pipe: " << strerror(errno) << '\n';
         pool->notif_fd = pipefds[1];
+        auto d = defer{[a=pipefds[0],b=pipefds[1]]() {
+            close(a);
+            close(b);
+        }};
 
         for (int i = 0; i < 2; i++) {
             int flags = fcntl(pipefds[i], F_GETFL);
             if (fcntl(pipefds[i], F_SETFL, flags | O_NONBLOCK) == -1)
-                std::cout << strerror(errno) << '\n';
+                std::cout << "err on fcntl: " << strerror(errno) << '\n';
         }
 
         char buf[16];
@@ -125,7 +130,5 @@ namespace mc {
 
         for (const auto h : event_listeners)
             h.destroy();
-        for (const auto &e : events)
-            if (e.fd > 0) close(e.fd);
     }
 }

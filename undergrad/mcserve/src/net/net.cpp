@@ -153,6 +153,7 @@ using namespace mc;
 
 
 pool_future mc::handle_connection(int client, tcp_server *_serv) {
+    auto d = defer{[=]() { close(client); }};
     fd_reader rbuf{client};
 
     ssize_t bytes = -1;
@@ -180,5 +181,4 @@ pool_future mc::handle_connection(int client, tcp_server *_serv) {
 
 dc:
     std::cout << "disconnect\n";
-    close(client);
 }

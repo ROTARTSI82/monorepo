@@ -14,15 +14,20 @@
 namespace mc {
     class thread_pool;
 
-    enum class task_state : int {
-        QUEUED, RUNNING, IO_BLOCKED
+    enum class requeue_mode : int {
+        READY, IO_BLOCKED
+    };
+
+    template <typename P>
+    struct defer {
+        P fun;
+        ~defer() { fun(); }
     };
 
     struct pool_future {
-
         struct promise_type {
             thread_pool *owner = nullptr;
-            std::atomic<task_state> state = task_state::QUEUED;
+            std::atomic<requeue_mode> requeue = requeue_mode::READY;
 
             std::suspend_always initial_suspend() { return {}; }
             std::suspend_always final_suspend() noexcept { return {}; }
@@ -69,7 +74,6 @@ namespace mc {
             coro.promise().owner = this;
             {
                 std::unique_lock<std::mutex> lg(task_mtx);
-                coro.promise().state = task_state::QUEUED;
                 tasks.emplace(coro);
             }
             ready.notify_one();
@@ -110,7 +114,7 @@ namespace mc {
             thread_pool *pool = h.promise().owner;
             {
                 std::unique_lock<std::mutex> lg(pool->event_mtx);
-                h.promise().state = task_state::IO_BLOCKED;
+                h.promise().requeue = requeue_mode::IO_BLOCKED;
                 pool->event_listeners.emplace_back(h);
                 pool->events.emplace_back(fd, events, 0); // pollfd
             }
