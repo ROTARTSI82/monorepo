@@ -8,9 +8,18 @@
 #include <unistd.h>
 
 namespace mc {
+
+    inline void cancel_thread_pool_task(const pool_task &task, thread_pool *pool) {
+        task_rescheduler *ret = task.promise->return_link;
+        if (ret)
+            ret->return_link(task, pool);
+        else
+            task.destroy();
+    }
+
     void thread_pool::worker_thread_fun(thread_pool *pool, std::stop_token stop) {
         while (!stop.stop_requested()) {
-            pool_task job;
+            pool_task job = nullptr;
             {
                 std::unique_lock<std::mutex> lg(pool->task_mtx);
                 if (pool->tasks.empty()) {
@@ -28,26 +37,16 @@ namespace mc {
             if (!job.done())
                 job.resume();
 
-            io_awaiter *io = job.promise().io_blocked;
-            if (io) {
-                job.promise().io_blocked = nullptr;
-                bool notify = io->notify;
-                {
-                    std::unique_lock<std::mutex> lg(pool->event_mtx);
-                    pool->event_listeners.emplace_back(job);
-                    pool->events.emplace_back(io->fd, io->events, 0); // pollfd
-                }
-                int yes = 1;
-                if (notify)
-                    write(pool->notif_fds[1], &yes, sizeof(yes));
-            } else {
-                if (!job.done())
-                    pool->queue(job);
-                else
-                    job.destroy();
-            }
+            task_rescheduler *rs = job.promise->resched;
+            if (rs)
+                rs->reschedule(job, pool);
+            else if (!job.done())
+                pool->queue(job);
+            else
+                cancel_thread_pool_task(job, pool);
         }
     }
+
 
     void thread_pool::io_thread_fun(thread_pool *pool, std::stop_token stop) {
         std::vector<pollfd> events{};
@@ -99,11 +98,12 @@ namespace mc {
                 std::cout << "err on poll: " << strerror(errno) << '\n';
         }
 
-        for (const auto &h : listeners)
-            if (h) h.destroy();
+        // free in-flight listeners correctly
+        for (size_t i = 0; i < listeners.size(); i++)
+            cancel_thread_pool_task(listeners[i], pool);
     }
 
-    pool_future notify_worker(int fd, std::stop_token tok) {
+    pool_future<void> notify_worker(int fd, std::stop_token tok) {
         char buf[16];
         while (!tok.stop_requested()) {
             // this task will always be waiting on the notify_fd
@@ -137,13 +137,20 @@ namespace mc {
         ready.notify_all();
         for (auto &thread : threads)
             thread.join();
-        while (!tasks.empty()) {
-            tasks.front().destroy();
-            tasks.pop();
-        }
 
-        for (const auto h : event_listeners)
-            h.destroy();
+        do {
+            while (!tasks.empty()) {
+                // this can add a task to the back of the tasks queue
+                cancel_thread_pool_task(tasks.front(), this);
+                tasks.pop();
+            }
+
+            for (size_t i = 0; i < event_listeners.size(); i++)
+                // this may grow the vector or add to tasks
+                cancel_thread_pool_task(event_listeners[i], this); 
+            event_listeners.clear();
+        } while (!tasks.empty() || !event_listeners.empty());
+
         close(notif_fds[0]);
     }
 }

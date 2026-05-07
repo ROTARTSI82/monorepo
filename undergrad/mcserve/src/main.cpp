@@ -8,6 +8,14 @@
 #include <iostream>
 
 using namespace std::literals;
+using namespace mc;
+
+pool_future<int> fib(int test) {
+    if (test <= 1) co_return 1;
+    int ret = (co_await fib(test - 1)) + (co_await fib(test - 2));
+    std::cout << "fib " << test << " = " << ret << '\n';
+    co_return ret;
+}
 
 
 int main() {
@@ -21,6 +29,8 @@ int main() {
         std::cout << "server did not start\n";
         return 1;
     }
+
+    pool.queue(fib(64));
 
     pool.queue(mc::tcp_server::accept_loop(&serv));
 

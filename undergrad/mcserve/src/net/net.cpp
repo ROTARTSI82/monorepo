@@ -118,9 +118,9 @@ namespace mc {
             close(sock);
     }
 
-    static pool_future handle_connection(int client);
+    static pool_future<void> handle_connection(int client);
 
-    pool_future tcp_server::accept_loop(tcp_server *serv) {
+    pool_future<void> tcp_server::accept_loop(tcp_server *serv) {
         for (;;) {
             co_await io_awaiter{serv->sock, POLLIN};
 
@@ -152,7 +152,7 @@ namespace mc {
 using namespace mc;
 
 
-pool_future mc::handle_connection(int client) {
+pool_future<void> mc::handle_connection(int client) {
     auto d = defer{[=]() { close(client); }};
     fd_reader rbuf{client};
 

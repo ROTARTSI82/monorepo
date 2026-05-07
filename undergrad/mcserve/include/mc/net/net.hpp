@@ -12,6 +12,6 @@ namespace mc {
         tcp_server(const char *addr, const char *port, thread_pool *pool);
         ~tcp_server();
 
-        static pool_future accept_loop(tcp_server *);
+        static pool_future<void> accept_loop(tcp_server *);
     };
 }
