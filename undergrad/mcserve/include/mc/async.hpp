@@ -291,6 +291,7 @@ namespace mc {
                 co_await io_awaiter{fd, POLLIN};
                 read(fd, buf, sizeof(buf));
             }
+            co_return true;
         }
     };
 }

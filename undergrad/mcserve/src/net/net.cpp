@@ -31,7 +31,7 @@ struct resolve_hostname {
         hints.ai_family = AF_UNSPEC;
         hints.ai_socktype = SOCK_STREAM;
 
-        int gai_errno = getaddrinfo(addr, port, &hints, &res) != 0;
+        int gai_errno = getaddrinfo(addr, port, &hints, &res);
         if (gai_errno != 0) {
             std::cerr << "err on getaddrinfo: " << gai_strerror(gai_errno) << '\n';
             return;
@@ -168,6 +168,19 @@ pool_future<void> mc::handle_connection(int client) {
         if (bytes == 0)
             break;
 
+        const std::string HEADERS = "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html\r\n"
+            "Connection: close\r\n"
+            "\r\n";
+        const char *ptr = HEADERS.data();
+        while (ptr < HEADERS.data() + HEADERS.size()) {
+            ssize_t sent = co_await send(client, reinterpret_cast<const uint8_t *>(ptr), HEADERS.data() + HEADERS.size() - ptr);
+            if (sent > 0)
+                ptr += sent;
+            if (sent == 0)
+                goto dc;
+        }
+
         while (rbuf.head < rbuf.end) {
             ssize_t sent = co_await send(client, rbuf.head, rbuf.end - rbuf.head);
             if (sent > 0)
@@ -176,6 +189,8 @@ pool_future<void> mc::handle_connection(int client) {
             if (sent == 0)
                 goto dc;
         }
+
+        goto dc;
     }
 
 dc:

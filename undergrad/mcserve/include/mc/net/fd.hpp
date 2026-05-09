@@ -5,7 +5,7 @@
 
 namespace mc {
 
-    io_awaiter send(int fd, uint8_t *buf, ssize_t bytes);
+    io_awaiter send(int fd, const uint8_t *buf, ssize_t bytes);
 
     class fd_reader {
     public:

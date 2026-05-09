@@ -21,22 +21,23 @@ pool_future<int> fib(int test, timer *time) {
 
 int main() {
     int nothreads = static_cast<int>(std::thread::hardware_concurrency());
+    // create timers before the pool so the
+    // file descriptors are destroyed after threads are joi
+    timer time{};
+    timer interval{};
     mc::thread_pool pool(nothreads);
 
     char hostname[HOST_NAME_MAX];
     gethostname(hostname, sizeof(hostname));
-    mc::tcp_server serv{hostname, "8000", &pool};
+    mc::tcp_server serv{"127.0.0.1", "8000", &pool};
     if (serv.sock == -1) {
         std::cout << "server did not start\n";
         return 1;
     }
 
-    timer time{};
     pool.queue(fib(8, &time));
 
     pool.queue(mc::tcp_server::accept_loop(&serv));
-
-    timer interval{};
     pool.queue(interval.set_interval(2, 0,
                 []() { std::cout << "lmfao\n"; }));
 

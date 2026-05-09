@@ -88,9 +88,11 @@ namespace mc {
                 pool->event_listeners.clear();
                 pool->events.clear();
             }
-            for (const auto &f: events)
-                std::cout << '\t' << f.fd;
-            std::cout << '\n';
+
+            // for (const auto &f: events)
+            //     std::cout << '\t' << f.fd;
+            // std::cout << '\n';
+
             // todo: consider replacing with EPOLL with EPOLLONESHOT,
             // or io_uring maybe? the epoll approach is epoll_ctl with
             // EPOLL_CTL_ADD (or if EEXIST, EPOLL_CTL_MOD) and
@@ -136,7 +138,8 @@ namespace mc {
 
     thread_pool::~thread_pool() {
         stop.request_stop();
-        close(notif_fds[1]); // also serve to wake io_thread
+        int yes = 1;
+        write(notif_fds[1], &yes, sizeof(yes));
         ready.notify_all();
         for (auto &thread : threads)
             thread.join();
@@ -155,6 +158,7 @@ namespace mc {
         } while (!tasks.empty() || !event_listeners.empty());
 
         close(notif_fds[0]);
+        close(notif_fds[1]);
     }
 
     timer::timer(bool realtime) {

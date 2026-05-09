@@ -6,7 +6,7 @@
 
 namespace mc {
 
-    io_awaiter send(int fd, uint8_t *buf, ssize_t bytes) {
+    io_awaiter send(int fd, const uint8_t *buf, ssize_t bytes) {
         ssize_t sent = ::send(fd, buf, bytes, 0);
         if (sent == -1) {
             if (errno != EAGAIN && errno != EWOULDBLOCK)
