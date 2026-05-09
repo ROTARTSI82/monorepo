@@ -10,8 +10,8 @@ add_executable(mcserve ${MC_SOURCES})
 target_include_directories(mcserve PUBLIC include)
 target_include_directories(mcserve PRIVATE src)
 
-target_link_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra)
-target_compile_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra)
+target_link_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra -fno-exceptions)
+target_compile_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra -fno-exceptions)
 
 set(OPTIMIZE false)
 if(OPTIMIZE)

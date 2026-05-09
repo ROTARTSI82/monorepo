@@ -14,7 +14,11 @@
 #include <poll.h>
 #include <unistd.h>
 
+#include <sys/timerfd.h>
+#include <string.h>
+
 namespace mc {
+    const std::stop_source never_stop = {};
     class thread_pool;
 
     template <typename T>
@@ -56,18 +60,28 @@ namespace mc {
     };
 
     template <typename T>
-    struct pool_future {
+    struct _pool_future {
         using promise_type = pool_promise<T>;
 
         std::coroutine_handle<promise_type> handle = {nullptr};
         
-        pool_future(const std::coroutine_handle<promise_type> &in) : handle(in) {}
+        _pool_future(const std::coroutine_handle<promise_type> &in) : handle(in) {}
 
-        pool_future(pool_future &) = delete;
-        pool_future &operator=(pool_future &) = delete;
+        _pool_future(_pool_future &) = delete;
+        _pool_future &operator=(_pool_future &) = delete;
         
-        ~pool_future() { if (handle) handle.destroy(); }
+        ~_pool_future() { if (handle) handle.destroy(); }
     };
+
+    template <typename T>
+    struct pool_future : public _pool_future<T> {
+        inline std::optional<T> &value() {
+            return this->handle.promise().ret;
+        }
+    };
+
+    template <>
+    struct pool_future<void> : _pool_future<void> {};
 
     struct pool_task {
         std::coroutine_handle<> handle = nullptr;
@@ -98,11 +112,10 @@ namespace mc {
 
     struct task_rescheduler {
     public:
-        // reschedule should NEVER .destroy() the coroutine, only
-        // ever put it back into the pool in some way.
-        // this is so that the return links are always handled correctly
+        // to cancel a coroutine, be sure to call pool->task_return
+        // and NEVER directly destroy the handle
         virtual void reschedule(const pool_task &h, thread_pool *pool) = 0;
-        virtual void return_link(const pool_task &, thread_pool *) {}
+        virtual void return_link(const pool_task &, thread_pool *, bool) {}
 
         template <typename P>
         void await_suspend(std::coroutine_handle<P> h) {
@@ -133,6 +146,8 @@ namespace mc {
 
         thread_pool(int num);
         ~thread_pool();
+
+        void task_return(const pool_task &task, bool cancel);
 
         static void worker_thread_fun(thread_pool *, std::stop_token);
         static void io_thread_fun(thread_pool *, std::stop_token);
@@ -203,7 +218,7 @@ namespace mc {
         pool_task caller = nullptr;
 
         pool_awaiter(const pool_future<T> &fut) : callee(fut.handle) {
-            // keep future alive, so it still auto-destroys the thingy
+            // keep futures alive, so it still auto-destroys the thingy
         }
 
         ~pool_awaiter() {
@@ -221,7 +236,7 @@ namespace mc {
             pool->queue(pool_task{callee});
         }
 
-        void return_link(const pool_task &in, thread_pool *pool) override {
+        void return_link(const pool_task &in, thread_pool *pool, bool) override {
             assert(in.handle == callee);
             pool_task cpy = caller;
             caller.handle = nullptr;
@@ -242,4 +257,40 @@ namespace mc {
     pool_awaiter<T> operator co_await(const pool_future<T> &fut) {
         return {fut};
     }
+
+    struct timer {
+    private:
+        int fd;
+
+    public:
+        timer(bool realtime = false);
+        ~timer();
+
+        timer(timer &) = delete;
+        timer &operator=(timer &) = delete;
+
+                
+        io_awaiter sleep(unsigned long sec, unsigned long ns);
+
+        template <typename P>
+        pool_future<bool> set_interval(unsigned long sec, unsigned long ns,
+                                       P pred, std::stop_token tok = never_stop.get_token()) {
+            itimerspec utmr = {};
+            utmr.it_value.tv_nsec = ns;
+            utmr.it_value.tv_sec = sec;
+            utmr.it_interval.tv_nsec = ns;
+            utmr.it_interval.tv_sec = sec;
+            if (timerfd_settime(fd, 0, &utmr, nullptr) == -1) {
+                std::cout << "err on timerfd_settime: " << strerror(errno) << '\n';
+                co_return false;
+            }
+
+            char buf[16];
+            while (!tok.stop_requested()) {
+                pred();
+                co_await io_awaiter{fd, POLLIN};
+                read(fd, buf, sizeof(buf));
+            }
+        }
+    };
 }

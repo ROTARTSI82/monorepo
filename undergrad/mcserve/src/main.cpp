@@ -10,10 +10,11 @@
 using namespace std::literals;
 using namespace mc;
 
-pool_future<int> fib(int test) {
+pool_future<int> fib(int test, timer *time) {
     if (test <= 1) co_return 1;
-    int ret = (co_await fib(test - 1)) + (co_await fib(test - 2));
+    int ret = (co_await fib(test - 1, time)) + (co_await fib(test - 2, time));
     std::cout << "fib " << test << " = " << ret << '\n';
+    co_await time->sleep(0, 100 *1000000);
     co_return ret;
 }
 
@@ -30,9 +31,14 @@ int main() {
         return 1;
     }
 
-    pool.queue(fib(64));
+    timer time{};
+    pool.queue(fib(8, &time));
 
     pool.queue(mc::tcp_server::accept_loop(&serv));
+
+    timer interval{};
+    pool.queue(interval.set_interval(2, 0,
+                []() { std::cout << "lmfao\n"; }));
 
     int x = -1;
     while (x != 0) {

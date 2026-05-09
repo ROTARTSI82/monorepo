@@ -6,13 +6,14 @@
 #include <cstring>
 #include <thread>
 #include <unistd.h>
+#include <sys/timerfd.h>
 
 namespace mc {
 
-    inline void cancel_thread_pool_task(const pool_task &task, thread_pool *pool) {
+    void thread_pool::task_return(const pool_task &task, bool cancel) {
         task_rescheduler *ret = task.promise->return_link;
         if (ret)
-            ret->return_link(task, pool);
+            ret->return_link(task, this, cancel);
         else
             task.destroy();
     }
@@ -43,7 +44,7 @@ namespace mc {
             else if (!job.done())
                 pool->queue(job);
             else
-                cancel_thread_pool_task(job, pool);
+                pool->task_return(job, false);
         }
     }
 
@@ -67,6 +68,8 @@ namespace mc {
                         // keep it in the poll set. running it on the io thread
                         // is fine since it just marks the notification as consumed
                         // and basically busy-waits.
+                        // this one requires special treatment since without it
+                        // we can't wake ourselves up on notifications!
                         listeners[i].resume();
                     }
                 }
@@ -100,7 +103,7 @@ namespace mc {
 
         // free in-flight listeners correctly
         for (size_t i = 0; i < listeners.size(); i++)
-            cancel_thread_pool_task(listeners[i], pool);
+            pool->task_return(listeners[i], true);
     }
 
     pool_future<void> notify_worker(int fd, std::stop_token tok) {
@@ -141,16 +144,45 @@ namespace mc {
         do {
             while (!tasks.empty()) {
                 // this can add a task to the back of the tasks queue
-                cancel_thread_pool_task(tasks.front(), this);
+                task_return(tasks.front(), true);
                 tasks.pop();
             }
 
             for (size_t i = 0; i < event_listeners.size(); i++)
                 // this may grow the vector or add to tasks
-                cancel_thread_pool_task(event_listeners[i], this); 
+                task_return(event_listeners[i], true); 
             event_listeners.clear();
         } while (!tasks.empty() || !event_listeners.empty());
 
         close(notif_fds[0]);
     }
+
+    timer::timer(bool realtime) {
+        fd = timerfd_create(realtime ? CLOCK_REALTIME : CLOCK_MONOTONIC, 0);
+        if (fd == -1)
+            std::cout << "err on timerfd_create: " << strerror(errno) << '\n';
+        int flags = fcntl(fd, F_GETFL);
+        if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+            std::cout << "err on fcntl: " << strerror(errno) << '\n';
+    }
+
+    timer::~timer() {
+        close(fd);
+    }
+    
+    io_awaiter timer::sleep(unsigned long sec, unsigned long ns) {
+        itimerspec utmr = {};
+        utmr.it_value.tv_sec = sec;
+        utmr.it_value.tv_nsec = ns;
+        utmr.it_interval.tv_nsec = 0;
+        utmr.it_interval.tv_sec = 0;
+
+        if (timerfd_settime(fd, 0, &utmr, nullptr) == -1) {
+            std::cout << "err on timerfd_settime: " << strerror(errno) << '\n';
+            return io_awaiter{-1};
+        }
+
+        return io_awaiter{fd, POLLIN};
+    }
+
 }
