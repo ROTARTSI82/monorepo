@@ -67,7 +67,7 @@ void bpf_runner(int infd, int outfd) {
   for (;;) {
     char buf[2] = {0, 0};
     ssize_t bytes = read(infd, buf, 1);
-    if (bytes == 0 || buf[0] == 0)
+    if (bytes <= 0 || buf[0] == 0)
       break;
 
     struct iostat_t new = {
@@ -86,27 +86,21 @@ cleanup:
   statlog_bpf__destroy(bpf);
 }
 
-int main() {
-  if (getuid() != 0) {
-    perror("process must be started as root.\n");
-    return 1;
-  }
+int try_start_bpf(int bpfout[2], int bpftrig[2]) {
   
-  int bpfout[2];
-  int bpftrig[2];
   if (pipe2(bpfout, O_DIRECT) == -1)
-    return 1;
+    return -1;
   if (pipe2(bpftrig, O_DIRECT) == -1)
-    return 1;
+    return -1;
     
   int pid = fork();
   if (pid == 0) {
     close(bpftrig[1]);
     close(bpfout[0]);
     bpf_runner(bpftrig[0], bpfout[1]);
-    return 0;
+    return -2;
   } else if (pid < 0){
-    return 1;
+    return -1;
   }
 
   close(bpftrig[0]);
@@ -116,15 +110,24 @@ int main() {
   const char *sudo_gid_str = getenv("SUDO_GID");
   if (!sudo_uid_str || !sudo_gid_str) {
     perror("not invoked with sudo");
-    return 1;
+    return pid;
   }
 
   if (setgid(atoi(sudo_gid_str)) == -1 || setuid(atoi(sudo_uid_str)) == -1 ||
       getuid() == 0 || setuid(0) != -1) {
-    perror("failed to drop root privileges. run with sudo.\n");
-    return 1;
+    perror("failed to drop root privileges\n");
+    return -1;
   }
+  return pid;
+}
 
+int main() {
+  int bpfout[2] = {-1, -1};
+  int bpftrig[2] = {-1, -1};
+  int pid = getuid() == 0 ? try_start_bpf(bpfout, bpftrig) : -1;
+  if (pid == -2)
+    return 0;
+  
   printf("uid %d gid %d\n", getuid(), getgid());
 
   {
@@ -137,6 +140,7 @@ int main() {
 
   // hardcoded 16 cores + initial cpu line for my system
   long cpu_counters[17][2] = {0};
+  long proc_counter = 0;
 
   // initial getline() allocation.
   size_t capacity = 1024;
@@ -147,6 +151,8 @@ int main() {
    
     struct timespec ts = {0, 0};
     clock_gettime(CLOCK_REALTIME, &ts);
+    double unix_time = ts.tv_sec + ts.tv_nsec / 1e9;
+    printf("\tt %f", unix_time);
 
     int fd = popen2("/usr/bin/sensors", "sensors");
     FILE *pwr = fd > 0 ? fdopen(fd, "r") : NULL;
@@ -158,18 +164,7 @@ int main() {
     if (!pwr || !mem || !stats)
       goto cont;
 
-    // parse /proc/meminfo
-    ssize_t bytes = getline(&line, &capacity, mem);
-    if (bytes <= 9)
-      goto cont; 
-    long mem_total = atol(line + 9);
-    bytes = getline(&line, &capacity, mem);
-    bytes = getline(&line, &capacity, mem);
-    if (bytes <= 13)
-      goto cont;
-    long mem_avail = atol(line + 13);
-    double mem_frac = 1 - mem_avail / (double) mem_total;
-    printf("\tmem %f\n", mem_frac);
+    ssize_t bytes;
 
     // parse /proc/stat
     double tot_util = 0;
@@ -195,7 +190,32 @@ int main() {
       cpu_counters[cpu][0] = tot;
       cpu_counters[cpu][1] = idle;
     }
-    printf("\tcpu %f\n", tot_util);
+    printf("\tcpu %f", tot_util);
+
+    do {
+      bytes = getline(&line, &capacity, stats);
+      if (bytes <= 10)
+        continue;
+      if (strncmp(line, "processes", 9) == 0) {
+        long newproc = atol(line + 9);
+        printf("\tdproc %ld", newproc - proc_counter);
+        proc_counter = newproc;
+        break;
+      }
+    } while (bytes > 0);
+
+    // parse /proc/meminfo
+    bytes = getline(&line, &capacity, mem);
+    if (bytes <= 9)
+      goto cont; 
+    long mem_total = atol(line + 9);
+    bytes = getline(&line, &capacity, mem);
+    bytes = getline(&line, &capacity, mem);
+    if (bytes <= 13)
+      goto cont;
+    long mem_avail = atol(line + 13);
+    double mem_frac = 1 - mem_avail / (double) mem_total;
+    printf("\tmem %f\n", mem_frac);
 
     // parse sensors output
     bytes = getline(&line, &capacity, pwr);
@@ -226,26 +246,27 @@ int main() {
     printf("\trpm %d\twatts %f\ttemps %f %f\n", fanrpm, wattage, mintmp, maxtmp);
     
     // ipc with the root bpf process
-    char w = 1;
-    if (write(bpftrig[1], &w, 1) != 1 ||
-        read(bpfout[0], &new, sizeof(new)) != sizeof(new))
-      goto cont;
+    if (bpftrig[1] != -1) {
+      char w = 1;
+      if (write(bpftrig[1], &w, 1) != 1 ||
+          read(bpfout[0], &new, sizeof(new)) != sizeof(new))
+        goto cont;
 
-    struct iostat_t diff = {
-      new.nettx - cumulative.nettx,
-      new.netrx - cumulative.netrx,
-      new.diskr - cumulative.diskr,
-      new.diskw - cumulative.diskw
-    };
+      struct iostat_t diff = {
+        new.nettx - cumulative.nettx,
+        new.netrx - cumulative.netrx,
+        new.diskr - cumulative.diskr,
+        new.diskw - cumulative.diskw
+      };
     
-    // TODO: parse the files above and log the stats
-    printf("\ttx %llu\trx %llu\tr %llu\tw %llu\n\n", diff.nettx, diff.netrx, diff.diskr, diff.diskw);
-    
+      // TODO: parse the files above and log the stats
+      printf("\ttx %llu\trx %llu\tr %llu\tw %llu\n", diff.nettx, diff.netrx, diff.diskr, diff.diskw);
 
-    
-    cumulative = new;
+      cumulative = new;
+    }
 
   cont:
+    printf("\n");
     if (mem)
       fclose(mem);
     if (stats)
@@ -256,9 +277,11 @@ int main() {
       close(fd);
   }
 
-  int status = 0;
-  write(bpftrig[1], &status, 1);
-  close(bpftrig[1]);
-  close(bpfout[0]);
-  waitpid(pid, &status, 0);
+  if (pid > 0) {
+    int status = 0;
+    write(bpftrig[1], &status, 1);
+    close(bpftrig[1]);
+    close(bpfout[0]);
+    waitpid(pid, &status, 0);
+  }
 }
