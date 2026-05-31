@@ -10,7 +10,7 @@ find_library(LIBELF elf REQUIRED)
 find_library(LIBZ z REQUIRED)
 
 add_executable(statlog src/main.c)
-target_include_directories(statlog PUBLIC src)
+target_include_directories(statlog PUBLIC src src/bpf)
 
 target_compile_options(statlog PUBLIC -Os -flto -mtune=native -march=native -Wall -Wextra)
 target_link_options(statlog PUBLIC -Os -flto -mtune=native -march=native -s -Wall -Wextra)

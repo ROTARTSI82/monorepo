@@ -1,77 +1,65 @@
-#include <linux/bpf.h>
+#include "vmlinux.h"
 #include <bpf/bpf_helpers.h>
+#include <bpf/bpf_tracing.h>
 
-// 1. Declare our global variables! 
-// libbpf will automatically map these to user-space memory.
-__u64 disk_reads = 0;
-__u64 disk_writes = 0;
-__u64 net_rx = 0;
-__u64 net_tx = 0;
+struct {
+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+	__uint(max_entries, 1);
+	__type(key, u32);
+	__type(value, u64);
+} net_tx SEC(".maps");
 
-// 2. Define the memory layout of the tracepoint arguments.
-// These map exactly to the kernel's internal tracepoint format.
-struct block_rq_complete_args {
-    unsigned short common_type;
-    unsigned char common_flags;
-    unsigned char common_preempt_count;
-    int common_pid;
-    unsigned int dev;
-    int __pad1; // Added padding to align sector at offset 16
-    unsigned long long sector;
-    unsigned int nr_sector;
-    int errors;
-    unsigned short ioprio; // Missing in previous version
-    char rwbs[10]; // Size 10 in kernel, was 8
-};
+struct {
+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+	__uint(max_entries, 1);
+	__type(key, u32);
+	__type(value, u64);
+} net_rx SEC(".maps");
 
-struct net_args {
-    unsigned short common_type;
-    unsigned char common_flags;
-    unsigned char common_preempt_count;
-    int common_pid;
-    void *skbaddr;
-    unsigned int len; // Length of the network packet in bytes
-};
+struct {
+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+	__uint(max_entries, 1);
+	__type(key, u32);
+	__type(value, u64);
+} disk_reads SEC(".maps");
 
-// --- DISK I/O HOOK ---
-SEC("tracepoint/block/block_rq_complete")
-int handle_block_rq_complete(struct block_rq_complete_args *ctx) {
-    __u64 bytes = ctx->nr_sector * 512; // 1 sector = 512 bytes
-    
-    // rwbs can contain multiple flags (e.g., "WS", "RA").
-    // We search for 'W' or 'R' in the string.
-    int is_write = 0;
-    int is_read = 0;
+struct {
+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+	__uint(max_entries, 1);
+	__type(key, u32);
+	__type(value, u64);
+} disk_writes SEC(".maps");
 
-    #pragma unroll
-    for (int i = 0; i < 10; i++) {
-        if (ctx->rwbs[i] == 'W') is_write = 1;
-        else if (ctx->rwbs[i] == 'R') is_read = 1;
-        else if (ctx->rwbs[i] == '\0') break;
-    }
-
-    if (is_write) {
-        __sync_fetch_and_add(&disk_writes, bytes);
-    } else if (is_read) {
-        __sync_fetch_and_add(&disk_reads, bytes);
-    }
-    
-    return 0;
+static __always_inline void increment_map(void *map, u64 val)
+{
+	u32 key = 0;
+	u64 *count = bpf_map_lookup_elem(map, &key);
+	if (count)
+		*count += val;
 }
 
-// --- NETWORK I/O HOOKS ---
-SEC("tracepoint/net/netif_receive_skb")
-int handle_net_rx(struct net_args *ctx) {
-    __sync_fetch_and_add(&net_rx, ctx->len);
-    return 0;
+SEC("tp_btf/block_rq_complete")
+int BPF_PROG(block_rq_complete, struct request *rq, int error, unsigned int nr_bytes)
+{
+	if ((rq->cmd_flags & 255) == REQ_OP_WRITE)
+		increment_map(&disk_writes, nr_bytes);
+	else if ((rq->cmd_flags & 255) == REQ_OP_READ)
+		increment_map(&disk_reads, nr_bytes);
+	return 0;
 }
 
-SEC("tracepoint/net/net_dev_queue")
-int handle_net_tx(struct net_args *ctx) {
-    __sync_fetch_and_add(&net_tx, ctx->len);
-    return 0;
+SEC("tp_btf/netif_receive_skb")
+int BPF_PROG(netif_receive_skb, struct sk_buff *skb)
+{
+	increment_map(&net_rx, skb->len);
+	return 0;
 }
 
-// The kernel requires a GPL license to load tracepoint BPF programs
+SEC("tp_btf/net_dev_queue")
+int BPF_PROG(net_dev_queue, struct sk_buff *skb)
+{
+	increment_map(&net_tx, skb->len);
+	return 0;
+}
+
 char LICENSE[] SEC("license") = "GPL";
-
