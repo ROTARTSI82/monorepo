@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include <signal.h>
 #include <time.h>
+#include <bpf/libbpf.h>
 
 #include "statread.c"
 
@@ -9,6 +10,22 @@ static volatile bool running = true;
 
 void exit_handler(int) {
   running = false;
+}
+
+static __u64 sum_percpu_map(struct bpf_map *map) {
+  int ncpus = libbpf_num_possible_cpus();
+  __u64 values[ncpus];
+  __u32 key = 0;
+  __u64 sum = 0;
+
+  if (bpf_map__lookup_elem(map, &key, sizeof(key), values, sizeof(__u64) * ncpus, 0) < 0) {
+    return 0;
+  }
+
+  for (int i = 0; i < ncpus; i++) {
+    sum += values[i];
+  }
+  return sum;
 }
 
 void bpf_runner(int infd, int outfd) {
@@ -33,10 +50,10 @@ void bpf_runner(int infd, int outfd) {
       break;
 
     struct iostat_t new = {
-      __atomic_load_n(&bpf->bss->net_tx, __ATOMIC_RELAXED),
-      __atomic_load_n(&bpf->bss->net_rx, __ATOMIC_RELAXED),
-      __atomic_load_n(&bpf->bss->disk_reads, __ATOMIC_RELAXED),
-      __atomic_load_n(&bpf->bss->disk_writes, __ATOMIC_RELAXED)
+      sum_percpu_map(bpf->maps.net_tx),
+      sum_percpu_map(bpf->maps.net_rx),
+      sum_percpu_map(bpf->maps.disk_reads),
+      sum_percpu_map(bpf->maps.disk_writes)
     };
 
     write(outfd, &new, sizeof(new));
