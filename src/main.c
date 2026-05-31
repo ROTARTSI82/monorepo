@@ -15,6 +15,8 @@ void bpf_runner(int infd, int outfd) {
   struct statlog_bpf *bpf = statlog_bpf__open_and_load();
   if (!bpf) {
     perror("bpf open and load error");
+    close(infd);
+    close(outfd);
     return;
   }
 
@@ -50,8 +52,10 @@ int try_start_bpf(int bpfout[2], int bpftrig[2]) {
   
   if (pipe2(bpfout, O_DIRECT) == -1)
     return -1;
-  if (pipe2(bpftrig, O_DIRECT) == -1)
+  if (pipe2(bpftrig, O_DIRECT) == -1) {
+    close(bpfout[0]); close(bpfout[1]);
     return -1;
+  }
     
   int pid = fork();
   if (pid == 0) {
@@ -60,6 +64,8 @@ int try_start_bpf(int bpfout[2], int bpftrig[2]) {
     bpf_runner(bpftrig[0], bpfout[1]);
     return -2;
   } else if (pid < 0){
+    close(bpfout[0]); close(bpfout[1]);
+    close(bpftrig[0]); close(bpftrig[1]);
     return -1;
   }
 
@@ -69,13 +75,16 @@ int try_start_bpf(int bpfout[2], int bpftrig[2]) {
   const char *sudo_uid_str = getenv("SUDO_UID");
   const char *sudo_gid_str = getenv("SUDO_GID");
   if (!sudo_uid_str || !sudo_gid_str) {
-    perror("not invoked with sudo");
+    fprintf(stderr, "not invoked with sudo\n");
     return pid;
   }
 
   if (setgid(atoi(sudo_gid_str)) == -1 || setuid(atoi(sudo_uid_str)) == -1 ||
       getuid() == 0 || setuid(0) != -1) {
     perror("failed to drop root privileges\n");
+    close(bpftrig[1]);
+    close(bpfout[0]);
+    bpftrig[1] = bpfout[0] = -1;
     return -1;
   }
   return pid;

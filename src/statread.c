@@ -58,8 +58,9 @@ long atol_at(DIR *dir, char *pathname) {
   int fd = opendirat(dir, pathname);
   if (fd == -1) return -1;
 
-  ssize_t bytes = read(fd, shared_buf, buf_capacity);
-  if (bytes <= 0 || (size_t) bytes >= buf_capacity) return -1;
+  ssize_t bytes = read(fd, shared_buf, buf_capacity - 1);
+  close(fd);
+  if (bytes <= 0 || (size_t) bytes >= buf_capacity - 1) return -1;
   shared_buf[bytes] = '\0';
   return atol(shared_buf);
 }
@@ -82,8 +83,11 @@ int read_hwmon(struct stats_t *stats) {
 
     DIR *subdir;
     int subdirfd = opendirat(hwmon, dir->d_name);
-    if (subdirfd == -1 || (subdir = fdopendir(subdirfd)) == NULL)
+    if (subdirfd == -1) continue;
+    if ((subdir = fdopendir(subdirfd)) == NULL) {
+      close(subdirfd);
       continue;
+    }
 
     struct dirent *entry;
     while ((entry = readdir(subdir)) != NULL) {
@@ -112,7 +116,7 @@ int read_hwmon(struct stats_t *stats) {
         // to avoid double counting
         if (strstr(entry->d_name, "_input")) {
           char buf[PATH_MAX];
-          strncpy(buf, entry->d_name, sizeof(buf));
+          *stpncpy(buf, entry->d_name, sizeof(buf) - 1) = '\0';
           char *suffix = strstr(buf, "_input");
           if (suffix == NULL || suffix - buf >= PATH_MAX - 16) {
             printf("err: substr failed or buf too small\n");
@@ -208,8 +212,10 @@ int read_procstat(struct stats_t *stats, struct differential_t *diff) {
 }
 
 int read_stats(struct stats_t *stats, struct differential_t *diff) {
-  if (shared_buf == NULL)
+  if (shared_buf == NULL) {
     shared_buf = malloc(buf_capacity);
+    if (!shared_buf) return -1;
+  }
 
   int hwmon = read_hwmon(stats);
   int meminfo = read_meminfo(stats);
@@ -238,8 +244,10 @@ int popen2(char *name, char *argname) {
     close(pipefd[1]); // write pipe
     
     int status;
-    if (waitpid(pid, &status, 0) == -1 || status != 0)
+    if (waitpid(pid, &status, 0) == -1 || status != 0) {
+      close(pipefd[0]);
       return -1;
+    }
 
     return pipefd[0];
   }
