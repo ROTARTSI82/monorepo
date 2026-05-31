@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include "bpf/statlog.skel.h"
+#define NCPU 16
 
 #define CHK_ERRNO(msg, expr, chk, ret) if ((expr) == (chk)) { \
   printf("error on " msg ": %s\n", strerror(errno)); \
@@ -25,7 +26,7 @@ struct iostat_t {
 struct differential_t {
   struct iostat_t io_last;
   long proc_counter;
-  long cpu_counters[17][2];
+  long cpu_counters[NCPU + 1][2];
 };
 
 struct stats_t {
@@ -172,7 +173,7 @@ int read_procstat(struct stats_t *stats, struct differential_t *diff) {
   
   stats->cpu_tot_util = 0;
   ssize_t bytes = 0;
-  for (int cpu = 0; cpu < 17; cpu++) {
+  for (int cpu = 0; cpu < NCPU + 1; cpu++) {
     bytes = getline(&shared_buf, &buf_capacity, procstat);
     if (bytes <= 5)
       continue;
