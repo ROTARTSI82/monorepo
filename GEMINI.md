@@ -8,3 +8,5 @@ The focus is on craft:
 3) produce the smallest binary size possible
 4) robustness and correctness. do everything idiomatically and safely. do the *right* thing in the *right* way.
 
+the project is built with cmake, using CMakeLists.txt with -G Ninja and clang. the build directory is ./build/
+

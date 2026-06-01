@@ -1,4 +1,12 @@
-bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+if [ ! -f vmlinux.h ]; then
+    BTF_PATH=${1:-/sys/kernel/btf/vmlinux}
+    if [ -f "$BTF_PATH" ]; then
+        bpftool btf dump file "$BTF_PATH" format c > vmlinux.h
+    else
+        echo "Error: vmlinux.h not found and $BTF_PATH not available."
+        exit 1
+    fi
+fi
 clang -g -Os \
       -target bpf -D__TARGET_ARCH_x86 \
       -mcpu=probe \
