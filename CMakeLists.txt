@@ -9,10 +9,6 @@ find_library(LIBBPF bpf REQUIRED)
 find_library(LIBELF elf REQUIRED)
 find_library(LIBZ z REQUIRED)
 
-find_program(BPFTOOL bpftool REQUIRED)
-find_program(CLANG clang REQUIRED)
-find_program(LLVM_STRIP llvm-strip REQUIRED)
-
 # Detect architecture for BPF
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
     set(BPF_ARCH "x86")
@@ -22,17 +18,15 @@ else()
     set(BPF_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
-set(VMLINUX_BTF_PATH "/sys/kernel/btf/vmlinux" CACHE FILEPATH "Path to vmlinux BTF file")
-
 # BPF build step
 set(BPF_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/bpf")
 add_custom_command(
   OUTPUT "${BPF_SRC_DIR}/statlog.skel.h" "${BPF_SRC_DIR}/statlog.bpf.o" "${BPF_SRC_DIR}/vmlinux.h"
-  COMMAND ${CMAKE_COMMAND} -E env BPFTOOL=${BPFTOOL} CLANG=${CLANG} LLVM_STRIP=${LLVM_STRIP} ARCH=${BPF_ARCH} ./compile.sh "${VMLINUX_BTF_PATH}"
+  COMMAND ${CMAKE_COMMAND} -E env ARCH=${BPF_ARCH} ./compile.sh
   WORKING_DIRECTORY ${BPF_SRC_DIR}
   MAIN_DEPENDENCY ${BPF_SRC_DIR}/statlog.bpf.c
   DEPENDS "${BPF_SRC_DIR}/compile.sh"
-  COMMENT "Generating BPF skeleton for ${BPF_ARCH} from ${BPF_SRC_DIR}/statlog.bpf.c using ${VMLINUX_BTF_PATH}"
+  COMMENT "Generating BPF skeleton for ${BPF_ARCH} from statlog.bpf.c using ${VMLINUX_BTF_PATH}"
   VERBATIM
 )
 

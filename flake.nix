@@ -22,8 +22,8 @@
         nativeBuildInputs = with pkgs; [
           cmake
           bpftools
-          llvmPackages.clang
-          llvmPackages.llvm
+          llvm
+          clang
         ];
 
         buildInputs = with pkgs; [
@@ -32,14 +32,15 @@
           zlib
         ];
 
-        # hardening flags don't work when compiling bpf .o file?
-        hardeningDisable = [ "all" ];
+        # hardening flags that don't work when compiling bpf .o file
+        # is there a way to disable this ONLY for the bpf step?
+        hardeningDisable = [ "zerocallusedregs" ];
 
-        # Use the setup hook to properly initialize cmake flags
+        # Use the setup hook to properly initialize flags for BPF in ./src/bpf/compile.sh
         preConfigure = ''
           # Find the vmlinux file. We search in linux.dev which often contains the ELF vmlinux.
           export BTF_PATH=$(find ${pkgs.linux.dev} -maxdepth 1 -name vmlinux -type f -print -quit 2>/dev/null || true)
-          export BPFCPU="v3"
+          export BPF_CPU="v3"
         '';
 
         meta = with pkgs.lib; {

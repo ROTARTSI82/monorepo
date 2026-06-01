@@ -1,8 +1,8 @@
 BPFTOOL=${BPFTOOL:-bpftool}
-CLANG=${CLANG:-clang}
+BPF_CLANG=${BPF_CLANG:-clang}
 LLVM_STRIP=${LLVM_STRIP:-llvm-strip}
 ARCH=${ARCH:-x86}
-BPFCPU=${BPFCPU:-probe}
+BPF_CPU=${BPF_CPU:-probe}
 BTF_PATH=${BTF_PATH:-/sys/kernel/btf/vmlinux}
 
 if [ ! -f vmlinux.h ]; then
@@ -13,9 +13,9 @@ if [ ! -f vmlinux.h ]; then
         exit 1
     fi
 fi
-$CLANG -g -Os \
+$BPF_CLANG -g -Os \
       -target bpf -D__TARGET_ARCH_$ARCH \
-      -mcpu=$BPFCPU \
+      -mcpu=$BPF_CPU \
       -fno-asynchronous-unwind-tables \
       -fmerge-all-constants \
       -Wno-missing-declarations \
