@@ -3,49 +3,52 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixpkgs }: {
-    # We specify x86_64-linux directly to remove the 'flake-utils' dependency.
-    packages.x86_64-linux.default = let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in pkgs.stdenv.mkDerivation {
-      pname = "statlog";
-      version = "0.1.0";
-      src = ./.;
+  outputs = { self, nixpkgs }: let
+    # List of systems we want to support building for
+    supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+    
+    # A helper function to generate the packages attribute for each system
+    # This replaces the need for the flake-utils dependency
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+  in {
+    packages = forAllSystems (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.clangStdenv.mkDerivation {
+        pname = "statlog";
+        version = "0.1.0";
+        src = ./.;
 
-      # Tools used ONLY at build time
-      nativeBuildInputs = with pkgs; [
-        cmake
-        bpftool
-        clang
-        llvm
-      ];
+        nativeBuildInputs = with pkgs; [
+          cmake
+          bpftools
+          llvmPackages.clang
+          llvmPackages.llvm
+        ];
 
-      # Libraries linked into the final binary
-      buildInputs = with pkgs; [
-        libbpf
-        elfutils
-        zlib
-      ];
+        buildInputs = with pkgs; [
+          libbpf
+          elfutils
+          zlib
+        ];
 
-      preConfigure = ''
-        pushd src/bpf
-        # Find the vmlinux file in the Nix store to generate vmlinux.h
-        VMLINUX=$(ls ${pkgs.linux}/vmlinux ${pkgs.linux.dev}/lib/modules/*/build/vmlinux 2>/dev/null | head -n 1)
-        ./compile.sh "$VMLINUX"
-        popd
-      '';
+        # hardening flags don't work when compiling bpf .o file?
+        hardeningDisable = [ "all" ];
 
-      installPhase = ''
-        mkdir -p $out/bin
-        cp statlog $out/bin/
-      '';
+        # Use the setup hook to properly initialize cmake flags
+        preConfigure = ''
+          # Find the vmlinux file. We search in linux.dev which often contains the ELF vmlinux.
+          export BTF_PATH=$(find ${pkgs.linux.dev} -maxdepth 1 -name vmlinux -type f -print -quit 2>/dev/null || true)
+          export BPFCPU="v3"
+        '';
 
-      meta = with pkgs.lib; {
-        description = "A simple system monitor using eBPF";
-        license = licenses.mit;
-        platforms = [ "x86_64-linux" ];
-        mainProgram = "statlog";
+        meta = with pkgs.lib; {
+          description = "A simple system monitor using eBPF";
+          license = licenses.mit;
+          platforms = supportedSystems;
+          mainProgram = "statlog";
+        };
       };
-    };
+    });
   };
 }
