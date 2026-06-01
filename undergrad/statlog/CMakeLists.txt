@@ -9,15 +9,19 @@ find_library(LIBBPF bpf REQUIRED)
 find_library(LIBELF elf REQUIRED)
 find_library(LIBZ z REQUIRED)
 
+set(VMLINUX_BTF_PATH "/sys/kernel/btf/vmlinux" CACHE FILEPATH "Path to vmlinux BTF file")
+
 # BPF build step
 set(BPF_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/bpf")
 add_custom_command(
   OUTPUT "${BPF_SRC_DIR}/statlog.skel.h" "${BPF_SRC_DIR}/statlog.bpf.o" "${BPF_SRC_DIR}/vmlinux.h"
-  COMMAND ./compile.sh
+  COMMAND bpftool btf dump file "${VMLINUX_BTF_PATH}" format c > vmlinux.h
+  COMMAND clang -g -Os -target bpf -D__TARGET_ARCH_x86 -mcpu=probe -fno-asynchronous-unwind-tables -fmerge-all-constants -Wno-missing-declarations -c statlog.bpf.c -o statlog.bpf.o
+  COMMAND llvm-strip -g statlog.bpf.o
+  COMMAND bpftool gen skeleton statlog.bpf.o > statlog.skel.h
   WORKING_DIRECTORY ${BPF_SRC_DIR}
   MAIN_DEPENDENCY ${BPF_SRC_DIR}/statlog.bpf.c
-  DEPENDS ${BPF_SRC_DIR}/compile.sh /sys/kernel/btf/vmlinux
-  COMMENT "Generating BPF skeleton from ${BPF_SRC_DIR}/statlog.bpf.c"
+  COMMENT "Generating BPF skeleton from ${BPF_SRC_DIR}/statlog.bpf.c using ${VMLINUX_BTF_PATH}"
   VERBATIM
 )
 

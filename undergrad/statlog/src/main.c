@@ -6,10 +6,10 @@
 #include "statread.c"
 
 
-static volatile bool running = true;
+static volatile sig_atomic_t running = 1;
 
 void exit_handler(int) {
-  running = false;
+  running = 0;
 }
 
 static __u64 sum_percpu_map(struct bpf_map *map) {
@@ -107,14 +107,18 @@ int try_start_bpf(int bpfout[2], int bpftrig[2]) {
   return pid;
 }
 
-int main() {
+int main(int argc, char **_) {
+  signal(SIGPIPE, SIG_IGN);
+
+  bool csvmode = argc > 1;
   int bpfout[2] = {-1, -1};
   int bpftrig[2] = {-1, -1};
   int pid = getuid() == 0 ? try_start_bpf(bpfout, bpftrig) : -1;
   if (pid == -2)
     return 0;
   
-  printf("uid %d gid %d\n", getuid(), getgid());
+  printf("time,cpu,proc,mem,rpm,pwr,mintemp,maxtemp,tx,rx,diskr,diskw\n");
+  // printf("uid %d gid %d\n", getuid(), getgid());
 
   {
     struct sigaction config = {{exit_handler}, {0}, 0, NULL};
@@ -126,12 +130,9 @@ int main() {
   struct stats_t stats = {0};
   
   while (running) {
-    sleep(3);
-   
     struct timespec ts = {0, 0};
     clock_gettime(CLOCK_REALTIME, &ts);
     double unix_time = ts.tv_sec + ts.tv_nsec / 1e9;
-    printf("\tt %f", unix_time);
 
 
     int result = read_stats(&stats, &integral);
@@ -140,17 +141,13 @@ int main() {
       goto cont;
     }
     
-
-    // parse /proc/stat
-    printf("\tcpu %f", stats.cpu_tot_util);
-
-    printf("\tdproc %ld", stats.newproc_diff);
-
     double mem_frac = 1 - stats.mem_avail / (double) stats.mem_total;
-    printf("\tmem %f\n", mem_frac);
 
-    // parse sensors output
-    printf("\trpm %d\twatts %f\ttemps %f %f\n",
+    printf(csvmode ? "%f," : "\tt %f", unix_time);
+    printf(csvmode ? "%f," : "\tcpu %f", stats.cpu_tot_util);
+    printf(csvmode ? "%ld," : "\tdproc %ld", stats.newproc_diff);
+    printf(csvmode ? "%f," : "\tmem %f\n", mem_frac);
+    printf(csvmode ? "%d,%f,%f,%f," : "\trpm %d\twatts %f\ttemps %f %f\n",
            stats.fan_rpm, stats.wattage, stats.min_temp, stats.max_temp);
     
     // ipc with the root bpf process
@@ -166,15 +163,17 @@ int main() {
       stats.io_diff.diskr = new.diskr - integral.io_last.diskr;
       stats.io_diff.diskw = new.diskw - integral.io_last.diskw;
     
-      // TODO: parse the files above and log the stats
-      printf("\ttx %llu\trx %llu\tr %llu\tw %llu\n", stats.io_diff.nettx,
-             stats.io_diff.netrx, stats.io_diff.diskr, stats.io_diff.diskw);
+      printf(csvmode ? "%llu,%llu,%llu,%llu," : "\ttx %llu\trx %llu\tr %llu\tw %llu\n",
+             stats.io_diff.nettx, stats.io_diff.netrx, stats.io_diff.diskr, stats.io_diff.diskw);
 
       integral.io_last = new;
     }
 
   cont:
-    printf("\n");
+    // exit if printing fails i guess.
+    if (printf("\n") < 0 || fflush(stdout) < 0) break;
+    if (!running) break;
+    sleep(3);
   }
 
   printf("goodbye!\n");
