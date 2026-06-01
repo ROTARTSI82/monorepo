@@ -24,8 +24,10 @@ add_custom_command(
 add_executable(statlog src/main.c src/bpf/statlog.skel.h)
 target_include_directories(statlog PUBLIC src src/bpf)
 
-target_compile_options(statlog PUBLIC -Os -flto -mtune=native -march=native -Wall -Wextra)
-target_link_options(statlog PUBLIC -Os -flto -mtune=native -march=native -s -Wall -Wextra)
+set(STATLOG_FLAGS -Wall -Wextra -march=native -mtune=native
+    -Os -flto -fno-asynchronous-unwind-tables -fmerge-all-constants)
+target_compile_options(statlog PUBLIC ${STATLOG_FLAGS})
+target_link_options(statlog PUBLIC ${STATLOG_FLAGS} -s)
 
 target_link_libraries(statlog ${LIBBPF} ${LIBELF} ${LIBZ})
 
