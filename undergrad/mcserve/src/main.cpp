@@ -1,9 +1,9 @@
-#include "mc/net/net.hpp"
 #include "mc/async.hpp"
+#include "mc/net/net.hpp"
 
+#include <limits.h>
 #include <thread>
 #include <unistd.h>
-#include <limits.h>
 
 #include <iostream>
 
@@ -11,39 +11,43 @@ using namespace std::literals;
 using namespace mc;
 
 pool_future<int> fib(int test, timer *time) {
-    if (test <= 1) co_return 1;
-    int ret = (co_await fib(test - 1, time)) + (co_await fib(test - 2, time));
-    std::cout << "fib " << test << " = " << ret << '\n';
-    co_await time->sleep(0, 100 *1000000);
-    co_return ret;
+  if (test <= 1)
+    co_return 1;
+  int ret = (co_await fib(test - 1, time)) + (co_await fib(test - 2, time));
+  std::cout << "fib " << test << " = " << ret << '\n';
+  co_await time->sleep(0, 100 * 1000000);
+  co_return ret;
 }
 
+int main(int argc, char **argv) {
+  std::string portalloc = "8000";
+  const char *port = portalloc.c_str();
+  if (argc >= 2)
+    port = argv[1];
 
-int main() {
-    int nothreads = static_cast<int>(std::thread::hardware_concurrency());
-    // create timers before the pool so the
-    // file descriptors are destroyed after threads are joi
-    timer time{};
-    timer interval{};
-    mc::thread_pool pool(nothreads);
+  int nothreads = static_cast<int>(std::thread::hardware_concurrency());
+  // create timers before the pool so the
+  // file descriptors are destroyed after threads are joi
+  timer time{};
+  timer interval{};
+  mc::thread_pool pool(nothreads);
 
-    char hostname[HOST_NAME_MAX];
-    gethostname(hostname, sizeof(hostname));
-    mc::tcp_server serv{"127.0.0.1", "8000", &pool};
-    if (serv.sock == -1) {
-        std::cout << "server did not start\n";
-        return 1;
-    }
+  char hostname[HOST_NAME_MAX];
+  gethostname(hostname, sizeof(hostname));
+  mc::simple_http_echo serv{"127.0.0.1", port, &pool};
+  if (serv.sock == -1) {
+    std::cout << "server did not start\n";
+    return 1;
+  }
 
-    pool.queue(fib(8, &time));
+  pool.queue(fib(8, &time));
 
-    pool.queue(mc::tcp_server::accept_loop(&serv));
-    pool.queue(interval.set_interval(2, 0,
-                []() { std::cout << "lmfao\n"; }));
+  pool.queue(mc::tcp_server::accept_loop(&serv));
+  pool.queue(interval.set_interval(2, 0, []() { std::cout << "lmfao\n"; }));
 
-    int x = -1;
-    while (x != 0) {
-        std::cin >> x;
-        std::cout << x;
-    }
+  int x = -1;
+  while (x != 0) {
+    std::cin >> x;
+    std::cout << x;
+  }
 }
