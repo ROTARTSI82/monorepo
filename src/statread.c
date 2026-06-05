@@ -1,26 +1,33 @@
 #include <ctype.h>
-#include <stdint.h>
 #include <dirent.h>
 #include <errno.h>
-#include <limits.h>
-#include <stdio.h>
 #include <fcntl.h>
+#include <limits.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "bpf/statlog.skel.h"
-#define NCPU 16
+#include "parseline.c"
 
-#define CHK_ERRNO(msg, expr, chk, ret) if ((expr) == (chk)) { \
-  printf("error on " msg ": %s\n", strerror(errno)); \
-  return (ret); \
-}
+// expect defines:
+// #define NCPU 16
+// #define NDISKS 1
+// #define DISKS {"nvme0n1"}
 
+// disks to include in the count
+const char *DISK_ARR[NDISKS] = DISKS;
+
+#define CHK_ERRNO(msg, expr, chk, ret)                                         \
+  if ((expr) == (chk)) {                                                       \
+    printf("error on " msg ": %s\n", strerror(errno));                         \
+    return (ret);                                                              \
+  }
 
 struct iostat_t {
-  __u64 nettx, netrx, diskr, diskw;
+  uint64_t nettx, netrx, diskr, diskw;
 };
 
 struct differential_t {
@@ -48,7 +55,8 @@ struct stats_t {
 
 int opendirat(DIR *dir, char *pathname) {
   int dfd = dirfd(dir);
-  if (dfd == -1) return -1;
+  if (dfd == -1)
+    return -1;
   return openat(dfd, pathname, O_RDONLY);
 }
 
@@ -57,15 +65,16 @@ char *shared_buf = NULL;
 
 long atol_at(DIR *dir, char *pathname) {
   int fd = opendirat(dir, pathname);
-  if (fd == -1) return -1;
+  if (fd == -1)
+    return -1;
 
   ssize_t bytes = read(fd, shared_buf, buf_capacity - 1);
   close(fd);
-  if (bytes <= 0 || (size_t) bytes >= buf_capacity - 1) return -1;
+  if (bytes <= 0 || (size_t)bytes >= buf_capacity - 1)
+    return -1;
   shared_buf[bytes] = '\0';
   return atol(shared_buf);
 }
-
 
 int read_hwmon(struct stats_t *stats) {
   stats->fan_rpm = 0;
@@ -84,7 +93,8 @@ int read_hwmon(struct stats_t *stats) {
 
     DIR *subdir;
     int subdirfd = opendirat(hwmon, dir->d_name);
-    if (subdirfd == -1) continue;
+    if (subdirfd == -1)
+      continue;
     if ((subdir = fdopendir(subdirfd)) == NULL) {
       close(subdirfd);
       continue;
@@ -96,7 +106,8 @@ int read_hwmon(struct stats_t *stats) {
           strstr(entry->d_name, "_input")) {
         // Temperature: temp[N]_input (millidegrees C)
         long val = atol_at(subdir, entry->d_name);
-        if (val == -1) continue;
+        if (val == -1)
+          continue;
 
         double temp = val / 1000.0;
         if (temp < stats->min_temp)
@@ -147,17 +158,19 @@ int read_hwmon(struct stats_t *stats) {
 int read_meminfo(struct stats_t *stats) {
   FILE *mem = fopen("/proc/meminfo", "r");
   CHK_ERRNO("open /proc/meminfo", mem, NULL, -1);
-  
+
   ssize_t bytes = getline(&shared_buf, &buf_capacity, mem);
-  if (bytes <= 9) goto fail;
+  if (bytes <= 9)
+    goto fail;
 
   stats->mem_total = atol(shared_buf + 9);
   bytes = getline(&shared_buf, &buf_capacity, mem);
   bytes = getline(&shared_buf, &buf_capacity, mem);
-  if (bytes <= 13) goto fail;
-  
+  if (bytes <= 13)
+    goto fail;
+
   stats->mem_avail = atol(shared_buf + 13);
-  
+
   fclose(mem);
   return 0;
 
@@ -170,7 +183,7 @@ fail:
 int read_procstat(struct stats_t *stats, struct differential_t *diff) {
   FILE *procstat = fopen("/proc/stat", "r");
   CHK_ERRNO("open /proc/stat", procstat, NULL, -1);
-  
+
   stats->cpu_tot_util = 0;
   ssize_t bytes = 0;
   for (int cpu = 0; cpu < NCPU + 1; cpu++) {
@@ -178,7 +191,8 @@ int read_procstat(struct stats_t *stats, struct differential_t *diff) {
     if (bytes <= 5)
       continue;
     char *lineptr = shared_buf;
-    while (++lineptr < shared_buf + bytes && !isspace(*lineptr));
+    while (++lineptr < shared_buf + bytes && !isspace(*lineptr))
+      ;
     long tot = 0, idle = 0;
     for (int i = 0; i < 8; i++) {
       long timer = strtol(lineptr, &lineptr, 10);
@@ -189,13 +203,13 @@ int read_procstat(struct stats_t *stats, struct differential_t *diff) {
 
     long dtot = tot - diff->cpu_counters[cpu][0];
     long didle = idle - diff->cpu_counters[cpu][1];
-    double utilization = 1 - didle / (double) dtot;
+    double utilization = 1 - didle / (double)dtot;
     if (cpu > 0)
       stats->cpu_tot_util += utilization;
     diff->cpu_counters[cpu][0] = tot;
     diff->cpu_counters[cpu][1] = idle;
   }
-  
+
   do {
     bytes = getline(&shared_buf, &buf_capacity, procstat);
     if (bytes <= 10)
@@ -212,49 +226,77 @@ int read_procstat(struct stats_t *stats, struct differential_t *diff) {
   return 0;
 }
 
+int read_diskstat(struct stats_t *stats, struct differential_t *diff) {
+  FILE *diskstat = fopen("/proc/diskstats", "r");
+  CHK_ERRNO("open /proc/diskstats", diskstat, NULL, -1);
+
+  ssize_t bytes;
+  long read_bytes = 0, write_bytes = 0;
+
+  do {
+    bytes = getline(&shared_buf, &buf_capacity, diskstat);
+    shared_buf[buf_capacity - 1] = '\0';
+    char *lineptr = shared_buf;
+    int idx = 0;
+    while (lineptr < shared_buf + bytes && idx < 20) {
+
+      // this is the disk name
+      if (idx == 2) {
+        while (isspace(*lineptr) && ++lineptr < shared_buf + bytes)
+          ;
+        char *name = lineptr;
+        while (++lineptr < shared_buf + bytes && !isspace(*lineptr))
+          ;
+
+        bool found = 0;
+        for (int i = 0; i < NDISKS; i++) {
+          const char *needle = DISK_ARR[i];
+          if (strncmp(name, needle, lineptr - name) == 0) {
+            found |= 1;
+            break;
+          }
+        }
+        if (!found)
+          goto nextline;
+      } else {
+        long val = strtol(lineptr, &lineptr, 10);
+        if (idx == 5)
+          read_bytes += val * 512;
+        else if (idx == 9)
+          write_bytes += val * 512;
+      }
+
+      idx++;
+    }
+  nextline:
+  } while (bytes > 0);
+
+  stats->io_diff.diskr = read_bytes - diff->io_last.diskr;
+  stats->io_diff.diskw = write_bytes - diff->io_last.diskw;
+
+  diff->io_last.diskr = read_bytes;
+  diff->io_last.diskw = write_bytes;
+  return 0;
+}
+
+int read_netdev(struct stats_t *stats, struct differential_t *diff) {
+  FILE *netdev = fopen("/proc/net/dev", "r");
+  CHK_ERRNO("open /proc/net/dev", netdev, NULL, -1);
+
+  return 0;
+}
+
 int read_stats(struct stats_t *stats, struct differential_t *diff) {
   if (shared_buf == NULL) {
     shared_buf = malloc(buf_capacity);
-    if (!shared_buf) return -1;
+    if (!shared_buf)
+      return -1;
   }
 
   int hwmon = read_hwmon(stats);
   int meminfo = read_meminfo(stats);
   int procstat = read_procstat(stats, diff);
+  int diskstat = read_diskstat(stats, diff);
 
-  return hwmon * meminfo * procstat;
+  return hwmon + meminfo + procstat + diskstat;
 }
-
-int popen2(char *name, char *argname) {
-  int pipefd[2];
-  if (pipe(pipefd) == -1)
-    return -1;
-
-  int pid = fork();
-  if (pid == 0) {
-    close(pipefd[0]); // read pipe
-    if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-      _exit(-1);
-
-    close(pipefd[1]);
-
-    char *argv[] = {argname, 0};
-    execve(name, argv, NULL);
-    _exit(-1);
-  } else if (pid > 0) {
-    close(pipefd[1]); // write pipe
-    
-    int status;
-    if (waitpid(pid, &status, 0) == -1 || status != 0) {
-      close(pipefd[0]);
-      return -1;
-    }
-
-    return pipefd[0];
-  }
-
-  close(pipefd[0]);
-  close(pipefd[1]);
-  return -1;
-}
-
