@@ -13,7 +13,7 @@ if [ ! -f vmlinux.h ]; then
         exit 1
     fi
 fi
-$BPF_CLANG -g -Os \
+$BPF_CLANG -g -O3 \
       -target bpf -D__TARGET_ARCH_$ARCH \
       -mcpu=$BPF_CPU \
       -fno-asynchronous-unwind-tables \

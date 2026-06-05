@@ -49,15 +49,15 @@ int BPF_PROG(block_rq_complete, struct request *rq, int error, unsigned int nr_b
 	// // Skip virtual devices to avoid double-counting (e.g. counting both LV and PV).
 	// // Physical disks typically start with sd, nvme, vd, hd.
 	// // We specifically exclude dm- (LVM/LUKS), loop, and md (RAID).
-	// char c0 = q->disk->disk_name[0];
-	// char c1 = q->disk->disk_name[1];
-	// char c2 = q->disk->disk_name[2];
+	char c0 = q->disk->disk_name[0];
+	char c1 = q->disk->disk_name[1];
+	char c2 = q->disk->disk_name[2];
 
-	// if (c0 == 'd' && c1 == 'm' && c2 == '-') return 0; // dm-X
-	// if (c0 == 'l' && c1 == 'o' && c2 == 'o') return 0; // loopX
-	// if (c0 == 'm' && c1 == 'd') {
-	//    if (c2 >= '0' && c2 <= '9') return 0; // mdX
-	// }
+	if (c0 == 'd' && c1 == 'm' && c2 == '-') return 0; // dm-X
+	if (c0 == 'l' && c1 == 'o' && c2 == 'o') return 0; // loopX
+	if (c0 == 'm' && c1 == 'd') {
+	   if (c2 >= '0' && c2 <= '9') return 0; // mdX
+	}
 
 	blk_opf_t op = rq->cmd_flags & 255;
 	if (op == REQ_OP_WRITE) // || op == REQ_OP_WRITE_ZEROES || op == REQ_OP_ZONE_APPEND)
