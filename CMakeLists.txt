@@ -12,10 +12,20 @@ set(STATLOG_FLAGS -Wall -Wextra -Os -flto -fno-asynchronous-unwind-tables -fmerg
 target_compile_options(statlog PUBLIC ${STATLOG_FLAGS})
 target_link_options(statlog PUBLIC ${STATLOG_FLAGS} -s)
 
-set(DISKS "{\"nvme0n1\"}")
+set(NDISKS  1 CACHE STRING "number of disks")
+set(DISKS "{\"nvme0n1\"}" CACHE STRING
+       "disks in /dev/ to monitor for diskr diskw")
+
+set(NCPU  16 CACHE STRING "number of cpus")
+
+set(NDEVS  1 CACHE STRING "number of network devices")
+set(DEVS "{\"enp191s0\"}" CACHE STRING
+       "network devices (see /proc/net/dev) to monitor for tx rx")
+
 
 target_compile_definitions(statlog PUBLIC
-  -DNCPU=16
-  -DNDISKS=1 -DDISKS=${DISKS})
+  -DNCPU=${NCPU}
+  -DNDISKS=${NDISKS} -DDISKS=${DISKS}
+  -DNDEVS=${NDEVS} -DDEVS=${DEVS})
 
 install(TARGETS statlog DESTINATION bin)

@@ -1,5 +1,4 @@
 #define _GNU_SOURCE
-#include <bpf/libbpf.h>
 #include <signal.h>
 #include <sys/timerfd.h>
 #include <time.h>
@@ -97,7 +96,8 @@ int main(int argc, char **argv) {
                    : "\trpm %d\twatts %.2f\ttemps %.2f %.2f\n",
            stats.fan_rpm, stats.wattage, stats.min_temp, stats.max_temp);
 
-    printf(csvmode ? "%lu,%lu" : "\tr %lu w %lu\n", stats.io_diff.diskr,
+    printf(csvmode ? "%lu,%lu,%lu,%lu" : "\ttx %lu rx %lu r %lu w %lu\n",
+           stats.io_diff.nettx, stats.io_diff.netrx, stats.io_diff.diskr,
            stats.io_diff.diskw);
 
   cont:
