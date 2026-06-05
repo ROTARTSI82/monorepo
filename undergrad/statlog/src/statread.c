@@ -10,15 +10,16 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "parseline.c"
-
 // expect defines:
 // #define NCPU 16
 // #define NDISKS 1
 // #define DISKS {"nvme0n1"}
+// #define NDEVS 1
+// #define DEVS {"enp191s0"}
 
 // disks to include in the count
 const char *DISK_ARR[NDISKS] = DISKS;
+const char *DEVS_ARR[NDEVS] = DEVS;
 
 #define CHK_ERRNO(msg, expr, chk, ret)                                         \
   if ((expr) == (chk)) {                                                       \
@@ -52,6 +53,48 @@ struct stats_t {
   long newproc_diff;
   struct iostat_t io_diff;
 };
+
+enum { ITEM_INT, ITEM_STR };
+
+struct parseline_t {
+  int type;
+  int idx;
+  union {
+    long int_val;
+    struct {
+      char *str;
+      size_t len;
+    };
+  };
+};
+
+void parseline(struct parseline_t *spec, int nspec, char *line, ssize_t size) {
+  char *lineptr = line;
+  struct parseline_t *specptr = spec;
+  int idx = 0;
+  while (lineptr < line + size && specptr < spec + nspec) {
+    while (isspace(*lineptr) && ++lineptr < line + size)
+      ;
+    if (lineptr >= line + size)
+      break;
+
+    if (idx == specptr->idx) {
+      if (specptr->type == ITEM_INT) {
+        specptr->int_val = strtol(lineptr, &lineptr, 10);
+      } else if (specptr->type == ITEM_STR) {
+        specptr->str = lineptr;
+        while (++lineptr < line + size && !isspace(*lineptr))
+          ;
+        specptr->len = lineptr - specptr->str;
+      }
+      specptr++;
+    } else {
+      while (++lineptr < line + size && !isspace(*lineptr))
+        ;
+    }
+    idx++;
+  }
+}
 
 int opendirat(DIR *dir, char *pathname) {
   int dfd = dirfd(dir);
@@ -230,52 +273,42 @@ int read_diskstat(struct stats_t *stats, struct differential_t *diff) {
   FILE *diskstat = fopen("/proc/diskstats", "r");
   CHK_ERRNO("open /proc/diskstats", diskstat, NULL, -1);
 
-  ssize_t bytes;
   long read_bytes = 0, write_bytes = 0;
+  struct parseline_t linespec[] = {
+    { .type = ITEM_STR, .idx = 2 }, // drive name
+    { .type = ITEM_INT, .idx = 5 }, // bytes read
+    { .type = ITEM_INT, .idx = 9 }  // bytes written
+  };
 
-  do {
-    bytes = getline(&shared_buf, &buf_capacity, diskstat);
+  ssize_t bytes = getline(&shared_buf, &buf_capacity, diskstat);
+  while (bytes > 0) {
     shared_buf[buf_capacity - 1] = '\0';
-    char *lineptr = shared_buf;
-    int idx = 0;
-    while (lineptr < shared_buf + bytes && idx < 20) {
+    parseline(linespec, 3, shared_buf, bytes);
 
-      // this is the disk name
-      if (idx == 2) {
-        while (isspace(*lineptr) && ++lineptr < shared_buf + bytes)
-          ;
-        char *name = lineptr;
-        while (++lineptr < shared_buf + bytes && !isspace(*lineptr))
-          ;
-
-        bool found = 0;
-        for (int i = 0; i < NDISKS; i++) {
-          const char *needle = DISK_ARR[i];
-          if (strncmp(name, needle, lineptr - name) == 0) {
-            found |= 1;
-            break;
-          }
-        }
-        if (!found)
-          goto nextline;
-      } else {
-        long val = strtol(lineptr, &lineptr, 10);
-        if (idx == 5)
-          read_bytes += val * 512;
-        else if (idx == 9)
-          write_bytes += val * 512;
+    bool found = 0;
+    for (int i = 0; i < NDISKS; i++) {
+      const char *needle = DISK_ARR[i];
+      if (strncmp(linespec[0].str, needle, linespec[0].len) == 0) {
+        found |= 1;
+        break;
       }
-
-      idx++;
     }
-  nextline:
-  } while (bytes > 0);
+
+    if (found) {
+      read_bytes += linespec[1].int_val * 512;
+      write_bytes += linespec[2].int_val * 512;
+    }
+
+    bytes = getline(&shared_buf, &buf_capacity, diskstat);
+  };
 
   stats->io_diff.diskr = read_bytes - diff->io_last.diskr;
   stats->io_diff.diskw = write_bytes - diff->io_last.diskw;
 
   diff->io_last.diskr = read_bytes;
   diff->io_last.diskw = write_bytes;
+
+  fclose(diskstat);
   return 0;
 }
 
@@ -283,6 +316,45 @@ int read_netdev(struct stats_t *stats, struct differential_t *diff) {
   FILE *netdev = fopen("/proc/net/dev", "r");
   CHK_ERRNO("open /proc/net/dev", netdev, NULL, -1);
 
+  // skip first line
+  ssize_t bytes = getline(&shared_buf, &buf_capacity, netdev);
+
+  struct parseline_t linespec[] = {
+    { .type = ITEM_STR, .idx = 0 }, // interface
+    { .type = ITEM_INT, .idx = 1 }, // bytes rx
+    { .type = ITEM_INT, .idx = 9 }, // bytes tx
+  };
+
+  bytes = getline(&shared_buf, &buf_capacity, netdev);
+  long tx_bytes = 0, rx_bytes = 0;
+  while (bytes > 0) {
+    shared_buf[buf_capacity - 1] = '\0';
+    parseline(linespec, 3, shared_buf, bytes);
+
+    bool found = 0;
+    for (int i = 0; i < NDEVS; i++) {
+      const char *needle = DEVS_ARR[i];
+      if (strncmp(linespec[0].str, needle, linespec[0].len - 1) == 0) {
+        found |= 1;
+        break;
+      }
+    }
+
+    if (found) {
+      rx_bytes += linespec[1].int_val;
+      tx_bytes += linespec[2].int_val;
+    }
+
+    bytes = getline(&shared_buf, &buf_capacity, netdev);
+  }
+
+  stats->io_diff.nettx = tx_bytes - diff->io_last.nettx;
+  stats->io_diff.netrx = rx_bytes - diff->io_last.netrx;
+
+  diff->io_last.nettx = tx_bytes;
+  diff->io_last.netrx = rx_bytes;
+
+  fclose(netdev);
   return 0;
 }
 
@@ -297,6 +369,7 @@ int read_stats(struct stats_t *stats, struct differential_t *diff) {
   int meminfo = read_meminfo(stats);
   int procstat = read_procstat(stats, diff);
   int diskstat = read_diskstat(stats, diff);
+  int dev = read_netdev(stats, diff);
 
-  return hwmon + meminfo + procstat + diskstat;
+  return hwmon + meminfo + procstat + diskstat + dev;
 }
