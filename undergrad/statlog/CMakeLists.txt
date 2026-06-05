@@ -5,42 +5,17 @@ project(statlog LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-find_library(LIBBPF bpf REQUIRED)
-find_library(LIBELF elf REQUIRED)
-find_library(LIBZ z REQUIRED)
-
-# Detect architecture for BPF
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-    set(BPF_ARCH "x86")
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-    set(BPF_ARCH "arm64")
-else()
-    set(BPF_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
-endif()
-
-# BPF build step
-set(BPF_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/bpf")
-add_custom_command(
-  OUTPUT "${BPF_SRC_DIR}/statlog.skel.h" "${BPF_SRC_DIR}/statlog.bpf.o" "${BPF_SRC_DIR}/vmlinux.h"
-  COMMAND ${CMAKE_COMMAND} -E env ARCH=${BPF_ARCH} ./compile.sh
-  WORKING_DIRECTORY ${BPF_SRC_DIR}
-  MAIN_DEPENDENCY ${BPF_SRC_DIR}/statlog.bpf.c
-  DEPENDS "${BPF_SRC_DIR}/compile.sh"
-  COMMENT "Generating BPF skeleton for ${BPF_ARCH} from statlog.bpf.c using ${VMLINUX_BTF_PATH}"
-  VERBATIM
-)
-
-add_executable(statlog src/main.c src/bpf/statlog.skel.h)
-target_include_directories(statlog PUBLIC src src/bpf)
+add_executable(statlog src/main.c)
+target_include_directories(statlog PUBLIC src src)
 
 set(STATLOG_FLAGS -Wall -Wextra -Os -flto -fno-asynchronous-unwind-tables -fmerge-all-constants)
 target_compile_options(statlog PUBLIC ${STATLOG_FLAGS})
 target_link_options(statlog PUBLIC ${STATLOG_FLAGS} -s)
 
-target_link_libraries(statlog ${LIBBPF} ${LIBELF} ${LIBZ})
+set(DISKS "{\"nvme0n1\"}")
+
+target_compile_definitions(statlog PUBLIC
+  -DNCPU=16
+  -DNDISKS=1 -DDISKS=${DISKS})
 
 install(TARGETS statlog DESTINATION bin)
-
-set_property(TARGET statlog APPEND PROPERTY
-  ADDITIONAL_CLEAN_FILES
-  "${BPF_SRC_DIR}/statlog.skel.h" "${BPF_SRC_DIR}/statlog.bpf.o" "${BPF_SRC_DIR}/vmlinux.h")
