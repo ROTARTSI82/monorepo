@@ -1,0 +1,32 @@
+body {
+    background-color: gray;
+}
+
+
+.pad {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.center {
+    text-align: center !important;
+    align-content: center !important;
+    align-items: center !important;
+    align-self: center !important;
+}
+
+.align-left {
+    text-align: left !important;
+}
+
+.dark-theme {
+    color: #e2e2e2;
+}
+
+.disp {
+    color: orange;
+}
+
+.col-font {
+    font-size: 1.75rem;
+}
