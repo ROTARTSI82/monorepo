@@ -1,0 +1,15 @@
+[submodule "dep/glfw"]
+	path = dep/glfw
+	url = git@github.com:glfw/glfw.git
+[submodule "dep/glm"]
+	path = dep/glm
+	url = git@github.com:g-truc/glm.git
+[submodule "dep/stb"]
+	path = dep/stb
+	url = git@github.com:nothings/stb.git
+[submodule "dep/tinyobjloader"]
+	path = dep/tinyobjloader
+	url = git@github.com:tinyobjloader/tinyobjloader.git
+[submodule "dep/imgui"]
+	path = dep/imgui
+	url = git@github.com:ocornut/imgui.git
