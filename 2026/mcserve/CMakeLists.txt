@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(mcserve)
+file(GLOB_RECURSE MC_SOURCES src/**.cpp)
+add_executable(mcserve ${MC_SOURCES})
+target_include_directories(mcserve PUBLIC include)
+target_include_directories(mcserve PRIVATE src)
+
+target_link_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra -fno-exceptions)
+target_compile_options(mcserve PUBLIC -march=native -mtune=native -Wall -Wextra -fno-exceptions)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  target_link_options(mcserve PUBLIC -Os -ffast-math -s -flto)
+  target_compile_options(mcserve PUBLIC -Os -ffast-math -flto)
+else()
+  target_link_options(mcserve PUBLIC -O0 -g3 -glldb -fno-omit-frame-pointer)
+  target_compile_options(mcserve PUBLIC -O0 -g3 -glldb -fno-omit-frame-pointer)
+  target_compile_options(mcserve PUBLIC -fsanitize=thread)
+  target_link_options(mcserve PUBLIC -fsanitize=thread)
+endif()
