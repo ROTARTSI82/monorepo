@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/c0" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/c1" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/p0" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/p1" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/c2" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/p2" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/p3" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/c3" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/src/c3/venv" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="junit-platform-console-standalone-1.13.0-M3" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/annotations-26.0.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>

@@ -1,0 +1,13 @@
+Feature: here
+Threshold: 0.125
+Feature: are
+Threshold: 0.16666666666666666
+Feature: for
+Threshold: 0.16666666666666666
+Feature: our
+Threshold: 0.0625
+ham
+spam
+ham
+ham
+ham
