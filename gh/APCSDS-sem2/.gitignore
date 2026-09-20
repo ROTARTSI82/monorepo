@@ -1,0 +1,12 @@
+*.zip
+.vscode/
+out/
+*.class
+*.jar
+*/.DS_Store
+.DS_Store
+*.ctxt
+*.d
+*/target
+cmake-build-debug
+*.o
