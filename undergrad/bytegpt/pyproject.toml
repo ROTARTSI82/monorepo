@@ -1,0 +1,42 @@
+[project]
+name = "llm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # "torch==2.11.0a0+rocm7.11.0a20260106",
+    # "torchaudio==2.10.0+rocm7.12.0a20260311",
+    # "torchvision==0.25.0+rocm7.12.0a20260311",
+    "torch",
+    "torchaudio",
+    "torchvision",
+    "datasets",
+    "opencv-python",
+    "torchviz",
+    "discord.py",
+]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+prerelease="allow"
+
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://rocm.nightlies.amd.com/v2/gfx1151/"
+# explicit = true
+
+[tool.uv.sources]
+# ROCm6 support relies on `pytorch-triton-rocm`, which should also be installed from the PyTorch index
+# (and included in `project.dependencies`).
+pytorch-triton-rocm = { index = "pytorch-rocm" }
+triton-rocm = { index = "pytorch-rocm" }
+triton = { index = "pytorch-rocm" }
+rocm = { index = "pytorch-rocm" }
+rocm-sdk = { index = "pytorch-rocm" }
+rocm-sdk-core = { index = "pytorch-rocm" }
+rocm-sdk-devel = { index = "pytorch-rocm" }
+rocm-sdk-libraries-gfx1151 = { index = "pytorch-rocm" }
+torch = { index = "pytorch-rocm" }
+torchvision = { index = "pytorch-rocm" }
+torchaudio = { index = "pytorch-rocm" }
