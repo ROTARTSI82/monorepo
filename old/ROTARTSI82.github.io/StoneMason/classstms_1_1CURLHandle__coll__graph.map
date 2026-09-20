@@ -1,0 +1,10 @@
+<map id="stms::CURLHandle" name="stms::CURLHandle">
+<area shape="rect" id="node1" title="An object representing a connection/operation. See libCurl docs for curl_easy_init()" alt="" coords="795,93,937,120"/>
+<area shape="rect" id="node2" href="$classstms_1_1ThreadPool.html" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool." alt="" coords="575,93,709,120"/>
+<area shape="rect" id="node3" title=" " alt="" coords="211,82,405,123"/>
+<area shape="rect" id="node4" title="STL class." alt="" coords="262,12,354,39"/>
+<area shape="rect" id="node5" title=" " alt="" coords="213,148,403,175"/>
+<area shape="rect" id="node6" title="STL class." alt="" coords="5,148,97,175"/>
+<area shape="rect" id="node7" title="STL class." alt="" coords="599,185,685,212"/>
+<area shape="rect" id="node8" title="STL class." alt="" coords="239,199,377,241"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="stms::ThreadPool" name="stms::ThreadPool">
+<area shape="rect" id="node1" title="A thread pool. Submitted tasks will be automagically executed by a thread in the pool." alt="" coords="203,228,338,255"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node3" title="STL class." alt="" coords="225,102,317,129"/>
+<area shape="rect" id="node4" title=" " alt="" coords="341,102,531,129"/>
+<area shape="rect" id="node5" title="STL class." alt="" coords="390,5,482,32"/>
+</map>
