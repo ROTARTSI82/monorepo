@@ -1,0 +1,3 @@
+[submodule "chessfiles/Scacus"]
+	path = chessfiles/Scacus
+	url = https://github.com/ROTARTSI82/Chess
