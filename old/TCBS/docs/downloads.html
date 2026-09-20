@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>TCBS Website</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/TCBS/images/icon.ico">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+          <a class="navbar-brand" href="/TCBS">TCBS</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                  aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS/downloads.html">Downloads</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/TCBS/gallery.html">Gallery</a>
+                </li>
+              </ul>
+          </div>
+        </nav>
+
+        <div class="container">
+            <iframe id="my_iframe" style="display:none;"></iframe>
+            <script>
+            function Download(url) {
+                document.getElementById('my_iframe').src = url;
+            };
+            </script>
+            <div class="jumbotron text-center">
+                <h1>Downloads</h1>
+            </div>
+            <div class="jumbotron text-left">
+                <h1>How to Install and Run</h1>
+                <ol>
+                    <li>
+                        Download&nbsp;<strong>TCBS for Mac</strong> from&nbsp;<strong>itch.io</strong>
+                        <p>
+                            <iframe src="https://itch.io/embed/299835" height="167" width="552" frameborder="0"></iframe>
+                        </p>
+                    </li>
+
+                    <li>Unzip it, and drag&nbsp;<strong>TCBS.app</strong> out of your downloads folder.</li>
+
+                    <li>
+                        Right click (Two-finger click or <strong>ctrl+click</strong>) on&nbsp;<strong>TCBS.app</strong>
+                        and select "Open"
+                    </li>
+
+                    <li>
+                        A window would pop up saying&nbsp;<strong>TCBS&nbsp;</strong>was downloaded form the internet.
+                        Select the "Open" option.
+                    </li>
+
+                    <li>
+                        You're all set! Next time you want to play <strong>TCBS</strong>, just double
+                        click on&nbsp;<strong>TCBS.app</strong>.
+                    </li>
+                </ol>
+            </div>
+            <div class="jumbotron text-left">
+                <h1>Download Source Code </h1>
+                <p class="lead">
+                    Click to download Totally Customizable Battle Simulator's source code!
+                </p>
+                <button onclick="Download('https://github.com/ROTARTSI82/TCBS/archive/master.zip')">
+                    Download TCBS
+                </button>
+                <div>
+                    <br/>
+                    <br/>
+                    <strong>NOTE:</strong> the source code doest not include the virtual environment. TCBS
+                    was written in Python 2.7. It requires pygame==1.9.4, and PodSixNet==0.9.4<br/>
+                    It is very important that you install PodSixNet==0.9.4 and not PodSixNet==0.10.0<br/>
+                    To install these packages, run<br/>
+                    <code>
+                        pip install pygame==1.9.4<br/>
+                        pip install PodSixNet==0.9.4
+                    </code>
+                </div>
+                </p>
+            </div>
+        </div>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    </body>
+</html>
