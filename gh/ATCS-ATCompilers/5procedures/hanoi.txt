@@ -1,0 +1,49 @@
+/* Author:    Tao Yue
+   Date:      13 July 2000
+   Description:
+      Solves the Towers of Hanoi
+   Version:
+      1.0 - original version
+*/
+
+
+/********************************************************/
+
+PROCEDURE DoTowers (NumDiscs, OrigPeg, NewPeg, TempPeg);
+/* Explanation of variables:
+      Number of discs -- number of discs on Orig Peg
+      OrigPeg -- peg number of the tower
+      NewPeg -- peg number to move the tower to
+      TempPeg -- peg to use for temporary storage
+*/
+
+BEGIN
+   /* Take care of the base case -- one disc */
+   IF NumDiscs = 1 THEN
+      BEGIN WRITELN(OrigPeg); WRITELN(' ---> '); WRITLELN(NewPeg); END;
+   /* Take care of all other cases */
+   ELSE
+      BEGIN
+         /* First, move all discs except the bottom disc
+            to TempPeg, using NewPeg as the temporary peg
+            for this transfer */
+         DoTowers (NumDiscs-1, OrigPeg, TempPeg, NewPeg);
+         /* Now, move the bottommost disc from OrigPeg
+            to NewPeg */
+         WRITELN (OrigPeg); WRITELN(' ---> '); WRITELN(NewPeg);
+         /* Finally, move the discs which are currently on
+            TempPeg to NewPeg, using OrigPeg as the temporary
+            peg for this transfer */
+         DoTowers (NumDiscs-1, TempPeg, NewPeg, OrigPeg);
+      END;
+END;
+
+/********************************************************/
+
+
+BEGIN    /* Main */
+   WRITELN ('Please enter the number of discs in the tower ===> ');
+   READLN (numdiscs);
+   WRITELN("");
+   DoTowers (numdiscs, 1, 3, 2);
+END;.

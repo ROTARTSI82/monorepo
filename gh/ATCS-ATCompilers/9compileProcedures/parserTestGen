@@ -1,0 +1,48 @@
+BEGIN
+	VAR min := 0;
+	WRITELN("Please enter an upper bound on integers.\n");
+	VAR max := READLN();
+	WHILE max <= 0 DO
+	BEGIN
+		WRITELN("Please enter a valid maximum (>= 1).\n");
+		max := READLN();
+	END;
+	WRITELN("Now think of a number between 0 and ");
+	WRITELN(max);
+	WRITELN("Press enter to continue");
+	READLN();
+	VAR guess := -1;
+	VAR response := -1;
+	WHILE min <= max DO
+	BEGIN
+		guess := (max + min + 1)/2;
+		WRITELN("My guess is ");
+		WRITELN(guess);
+		WRITELN("Enter 0 (correct), 1 (too high), or 2 (too low).\n");
+		response := READLN();
+		WHILE response > 2 || response < 0 DO
+		BEGIN
+			WRITELN("Invalid response key.\n");
+			WRITELN("Enter 0 (correct), 1 (too high), or 2 (too low).\n");
+			response := READLN();
+		END;
+		IF response == 1 THEN
+		BEGIN
+			WRITELN("Time to try a little lower...\n");
+			max := guess - 1;
+		END;
+		IF response == 2 THEN
+		BEGIN
+			WRITELN("Time to try a little higher...\n");
+			min := guess + 1;
+		END;
+		IF min > max THEN
+			WRITELN("Wait a minute, I sense cheating, I don't want to play with you anymore!\n");
+		IF response == 0 THEN
+		BEGIN
+			WRITELN("I got it right, yay!\n");
+			min := (max := guess) + 1;
+		END;
+	END;
+END;
+.

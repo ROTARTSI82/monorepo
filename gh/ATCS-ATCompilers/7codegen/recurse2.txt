@@ -1,0 +1,18 @@
+PROCEDURE fib(n, m);
+BEGIN
+    local1 := 12 + n;
+    local2 := 3 + m;
+
+    WRITELN(n, " ", m);
+    IF n > m THEN
+        WRITELN("DONE");
+    ELSE
+        fib(n + 3, m);
+    m := n + m;
+    WRITELN(n, " - ", m, " ", m - n);
+END;
+
+BEGIN
+    fib(1, 10);
+END;
+.
