@@ -16,6 +16,7 @@ class ModelArgs:
     n_layers: int = 24
     hidden_dim: int = 768
     max_seq_len: int = 4096
+    dropout: float = 0.0
 
 def dump_tensor(tens, name = "unknown"):
     nparr = tens.detach().cpu().numpy()
@@ -72,6 +73,7 @@ class Attention(nn.Module):
         super().__init__()
         self.n_heads = args.n_heads
         self.head_dim = args.d_model // args.n_heads
+        self.dropout_p = args.dropout
         
         self.wq = nn.Linear(args.d_model, args.d_model, bias=False)
         self.wk = nn.Linear(args.d_model, args.d_model, bias=False)
@@ -101,7 +103,7 @@ class Attention(nn.Module):
         xv = xv.transpose(1, 2)
 
         # Flash attention or standard scaled dot product with causal mask
-        output = F.scaled_dot_product_attention(xq, xk, xv, is_causal=True)
+        output = F.scaled_dot_product_attention(xq, xk, xv, is_causal=True, dropout_p=self.dropout_p if self.training else 0.0)
         
         # Reshape back to (B, T, C)
         output = output.transpose(1, 2).contiguous().view(B, T, C)
@@ -131,6 +133,7 @@ class TransformerBlock(nn.Module):
         self.attention = Attention(args)
         self.mlp_norm = RMSNorm(args.d_model)
         self.mlp = MLP(args)
+        self.dropout = nn.Dropout(args.dropout)
 
     def dump_bytes(self):
         return self.attention_norm.dump_bytes() + self.attention.dump_bytes() + \
@@ -138,8 +141,8 @@ class TransformerBlock(nn.Module):
 
     def forward(self, x, freqs_cis):
         # Pre-norm architecture
-        x = x + self.attention(self.attention_norm(x), freqs_cis)
-        x = x + self.mlp(self.mlp_norm(x))
+        x = x + self.dropout(self.attention(self.attention_norm(x), freqs_cis))
+        x = x + self.dropout(self.mlp(self.mlp_norm(x)))
         return x
 
 class CharModel(nn.Module):
@@ -147,6 +150,7 @@ class CharModel(nn.Module):
         super().__init__()
         self.args = args
         self.tok_embeddings = nn.Embedding(args.vocab_size, args.d_model)
+        self.dropout = nn.Dropout(args.dropout)
         
         self.layers = nn.ModuleList([TransformerBlock(args) for _ in range(args.n_layers)])
         self.norm = RMSNorm(args.d_model)
@@ -177,6 +181,7 @@ class CharModel(nn.Module):
     def forward(self, tokens, targets=None):
         B, T = tokens.shape
         h = self.tok_embeddings(tokens)
+        h = self.dropout(h)
         
         freqs_cis = self.freqs_cis[:T]
         
@@ -189,7 +194,7 @@ class CharModel(nn.Module):
         loss = None
         if targets is not None:
             # Flatten predictions to calculate cross entropy loss
-            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), label_smoothing=0.01)
             
         return logits, loss
 

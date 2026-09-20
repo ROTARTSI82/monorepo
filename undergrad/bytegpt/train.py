@@ -13,10 +13,10 @@ learning_rate = 1e-3
 weight_decay = 0.1
 beta1 = 0.9
 beta2 = 0.95
-max_iters = 5000
-eval_interval = 200
+max_iters = 15000
+eval_interval = 1000
 eval_iters = 50
-warmup_iters = 200
+warmup_iters = 1000
 compile_model = True
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -40,7 +40,7 @@ print(f"Loaded data: ({len(train_data)} train")
 
 def get_batch():
     data_source = train_data
-    max_idx = len(data_source) - max_seq_len - 1
+    max_idx = len(data_source) - max_seq_len
     
     if max_idx <= 0:
         # Fallback if the dataset is smaller than context length
@@ -48,14 +48,14 @@ def get_batch():
     else:
         ix = torch.randint(max_idx, (batch_size,))
     
-    x = torch.stack([data_source[i : i + max_seq_len] for i in ix])
-    y = torch.stack([data_source[i + 1 : i + 1 + max_seq_len] for i in ix])
+    y = torch.stack([data_source[i : i + max_seq_len] for i in ix])
+    x = torch.cat([torch.zeros(batch_size, 1, dtype=torch.long), y[:, :-1]], dim=1)
     return x.to(device), y.to(device)
 
 # ==============================================================================
 # Model Initialization
 # ==============================================================================
-args = ModelArgs(max_seq_len=max_seq_len, n_layers=24)
+args = ModelArgs(max_seq_len=max_seq_len, n_layers=24, dropout=0.05)
 model = CharModel(args)
 model.to(device)
 
