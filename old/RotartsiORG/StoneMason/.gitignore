@@ -1,0 +1,48 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# custom
+build
+cmake-build-debug
+stms_logs
+Doxyfile
+latest.log
+
+sphinx-out/_build
+sphinx-out/api
+
+imgui.ini
+cov-int
+myproject.tgz
+
+*.foz
