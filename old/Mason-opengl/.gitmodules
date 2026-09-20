@@ -1,0 +1,33 @@
+[submodule "vendor/glfw"]
+	path = vendor/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "vendor/glew"]
+	path = vendor/glew
+	url = https://github.com/nigels-com/glew.git
+[submodule "vendor/glm"]
+	path = vendor/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "vendor/gl3w"]
+	path = vendor/gl3w
+	url = https://github.com/skaslev/gl3w.git
+[submodule "vendor/OpenCL-CLHPP"]
+	path = vendor/OpenCL-CLHPP
+	url = https://github.com/KhronosGroup/OpenCL-CLHPP
+[submodule "vendor/freetype2"]
+	path = vendor/freetype2
+	url = https://github.com/aseprite/freetype2
+[submodule "vendor/assimp"]
+	path = vendor/assimp
+	url = https://github.com/assimp/assimp.git
+[submodule "vendor/boost"]
+	path = vendor/boost
+	url = https://github.com/boostorg/boost.git
