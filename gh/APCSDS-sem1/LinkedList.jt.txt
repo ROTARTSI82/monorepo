@@ -1,0 +1,143 @@
+
+/// This represents a single node in a linked list
+/// @author Grant Yang
+/// @version 2021.09.27
+public class ListNode
+{
+    /// The value stored in this node
+    private value;
+    /// The next node in the list or null if this node is the tail.
+    private next;
+
+    /// Construct a new ListNode as specified
+    /// @param initVal The initial value to initiate the instance variable `value` to
+    /// @param initNext The initial value to initiate the instance variable `next` to
+    public ListNode(initVal, initNext)
+    {
+        value = initVal;
+        next = initNext;
+    }
+
+    /// Gets the current value stored in the node
+    /// @return The value stored
+    public getValue() { return value; }
+
+    /// Gets the next node in the list
+    /// @return The next node
+    public getNext() { return next; }
+
+    /// Updates the value stored
+    /// @param nval The new value to store
+    /// @postcondition The value has been updated accordingly
+    public setValue(nval) { value = nval; }
+
+    /// Updates the next node this is pointing to
+    /// @param nnext The new node to point to as the next
+    /// @postcondition The pointer has been updated accordingly
+    public setNext(nnext) { next = nnext; }
+}
+
+/// This class provides utility functions for performing various operations on linked lists.
+/// @author Grant Yang
+/// @version 2021.09.27
+public class ListUtil
+{
+    /// This function computes the size of a list in O(n)
+    /// @param ls The list to size up
+    /// @return The size of the list as an integer
+    public size(ls)
+    {
+        if (ls == null) return 0;
+        return 1 + this.size(ls.getNext());
+    }
+
+    /// This function gets the value of the nth element in the list in O(n)
+    /// @precondition n is in bounds. n MUST be less than the number of elements in the list.
+    /// @param ls The list to index into
+    /// @param n the index of the element to retrieve (zero indexed)
+    /// @return The value of the element at index n (zero indexed)
+    public get(ls, n)
+    {
+        if (n == 0) return ls.getValue();
+        return this.get(ls.getNext(), n - 1);
+    }
+
+    /// Constructs a list consisting of n of the same value
+    /// @param n The number of elements in the desired list.
+    /// @param val The value of all the elements in the desired list
+    /// @return A ListNode to the desired list.
+    public makeList(n, val)
+    {
+        if (n == 0) return null;
+        return new ListNode(val, this.makeList(n - 1, val));
+    }
+
+    /// Adds an element at the end of a list in O(n)
+    /// @postcondition An element was added to the end of ls
+    /// @param ls The list to add to
+    /// @param val The value to add at the end
+    /// @return The list that was passed in, or a new ListNode if ls was null
+    public add(ls, val)
+    {
+        if (ls == null) return new ListNode(val, null);
+        ls.setNext(this.add(ls.getNext(), val));
+        return ls;
+    }
+
+    /// Removes all occurences of a specific value from a list
+    /// @postcondition The list originally pointed to by ls is invalidated
+    /// @param ls The list to remove values from
+    /// @param val The values to remove from the list
+    /// @return A ListNode pointing to the new first element of the list.
+    public remove(ls, val)
+    {
+        if (ls == null) return null;
+        if (ls.getValue() == val) return this.remove(ls.getNext(), val);
+        ls.setNext(this.remove(ls.getNext(), val));
+        return ls;
+    }
+
+    /// Reverses a given list.
+    /// @postcondition The list originally pointed to by ls is invalidated
+    /// @param ls The list to reverse
+    /// @return A ListNode of the reversed list.
+    public reverse(ls)
+    {
+        if (ls == null || ls.getNext() == null) return ls;
+        ret = this.reverse(ls.getNext());
+        ls.getNext().setNext(ls);
+        ls.setNext(null);
+        return ret;
+    }
+}
+
+/// Instances of this class are able to recall whether they have `seen` a value before or not.
+/// @author Grant Yang
+/// @version 2021.09.27
+public class Memorizer
+{
+    /// Linked list of all values seen previously
+    private brain;
+
+    /// Checks if a value appears in a linked list
+    /// @param val Value to check for
+    /// @param ls List to search
+    /// @return True if the value is found, false otherwise
+    private doesContain(val, ls)
+    {
+        return ls != null && (ls.getValue() == val || this.doesContain(val, ls.getNext()));
+    }
+
+    /// Queries if a value has been seen before by this Memorizer.
+    /// The first invocation with a new value will return false, and subsequent invocations will return true.
+    /// @postcondition The Memorizer "memorizes" the value supplied
+    /// @param val The value in question
+    /// @return True if seen(val) has been called before with the same value.
+    public seen(val)
+    {
+        if (this.doesContain(val, brain)) return true;
+        brain = new ListNode(val, brain);
+        return false;
+    }
+}
+

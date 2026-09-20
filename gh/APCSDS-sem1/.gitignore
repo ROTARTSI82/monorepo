@@ -1,0 +1,15 @@
+*.zip
+JavaTown/
+.vscode/
+out/
+*.class
+*.jar
+*/.DS_Store
+.DS_Store
+StacksPractice/doc
+
+
+Solitaire (2)/cards/
+Solitaire (2)/some.wav
+Solitaire (2)/tmpsec.wav
+Solitaire (2)/yay.wav

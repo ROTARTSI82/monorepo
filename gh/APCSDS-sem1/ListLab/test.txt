@@ -1,0 +1,50 @@
+/**
+
+* Creates a list with names of all the janky robots.
+
+* @return a list with names of all the janky robots
+
+*/
+
+public List<String> generateListOfJankyNames()
+
+{
+    ArrayList<String> ret = new ArrayList<>();
+    for (Robot r : robots)
+    {
+        if (r.isJanky())
+        {
+            ret.add(r.getName());
+        }
+    }
+
+    return ret; 
+}
+
+/**
+
+* Removes the robots with janky names from the list.
+
+*/
+
+public void removeJankyRobots()
+
+{
+    List<String> janks = generateListOfJankyNames();
+    Iterator<Robot> it = robots.iterator();
+    while (it.hasNext())
+    {
+        Robot cur = it.next();
+        boolean removed = false;
+
+        for (String name : janks)
+        {
+            if (cur.getName().equals(name) && !removed)
+            {
+                removed = true;
+                it.remove();
+            }
+        }
+    } 
+}
+
