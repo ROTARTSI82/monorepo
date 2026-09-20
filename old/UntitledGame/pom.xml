@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rotartsi.untitledgame</groupId>
+    <artifactId>UntitledGame</artifactId>
+    <version>dev2019.06.07</version>
+
+    <!--        <repositories>-->
+    <!--            <repository>-->
+    <!--                <id>GitHub</id>-->
+    <!--                <url>https://www.github.com/ROTARTSI82/JGame</url>-->
+    <!--            </repository>-->
+    <!--        </repositories>-->
+
+    <!--        <url>https://rotartsi82.github.io/JGame</url>-->
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.rotartsi.jgame</groupId>
+            <artifactId>JGame</artifactId>
+            <version>latestBuild</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.0.0-beta3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+
+                    <!--                    <excludes>-->
+                    <!--                        <exclude>**/tests/window/*.java</exclude>-->
+                    <!--                    </excludes>-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+                <!--                <configuration>-->
+                <!--                    <excludes>-->
+                <!--                        <exclude>**/tests/window/*.java</exclude>-->
+                <!--                    </excludes>-->
+                <!--                </configuration>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <source>11</source>
+                    <!--                    <excludes>-->
+                    <!--                        <exclude>**/tests/window/*.java</exclude>-->
+                    <!--                    </excludes>-->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+                <!--                <configuration>-->
+                <!--                    <excludes>-->
+                <!--                        <exclude>**/tests/window/*.java</exclude>-->
+                <!--                    </excludes>-->
+                <!--                </configuration>-->
+            </plugin>
+
+            <!--            Comment this plugin out if you don't want fat jars containing dependencies.-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <!-- put your configurations here -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <outputDirectory>${basedir}/target/site</outputDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+
+</project>
