@@ -1,0 +1,8 @@
+build/
+compile_commands.json
+src/bpf/*.o
+src/bpf/statlog.skel.h
+src/bpf/vmlinux.h
+
+# nix
+result
