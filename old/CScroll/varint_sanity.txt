@@ -1,0 +1,114 @@
+[0m]: [1mVarInt module sanity check:[0m
+[0m]: [1mdec0 = 0x0 (Expected 0x00)[0m
+[0m]: [1mdecInt(0x00) = 0 (Expected 0)[0m
+[0m]: [1mdec0 = 0x1 (Expected 0x01)[0m
+[0m]: [1mdecInt(dec0) = 1 (Expected 1)[0m
+[0m]: [1mdec0 = 0x2 (Expected 0x02)[0m
+[0m]: [1mdecInt(dec0) = 2 (Expected 2)[0m
+[0m]: [1mdec0 = 0x7f (Expected 0x7f)[0m
+[0m]: [1mdecInt(dec0) = 127 (Expected 127)[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0x80 0x01[0m
+[0m]: [1mdecInt(^^^) = 128 (Expected 128)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0xff 0x01[0m
+[0m]: [1mdecInt(^^^) = 255 (Expected 255)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x7f[0m
+[0m]: [1mExpected: 0xff 0xff 0x7f[0m
+[0m]: [1mdecInt(^^^) = 2097151 (Expected 2097151)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x7[0m
+[0m]: [1mExpected: 0xff 0xff 0xff 0xff 0x07[0m
+[0m]: [1mdecInt(^^^) = 2147483647 (Expected 2147483647)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xf[0m
+[0m]: [1mExpected: 0xff 0xff 0xff 0xff 0x0f[0m
+[0m]: [1mdecInt(^^^) = -1 (Expected -1)[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x8[0m
+[0m]: [1mExpected: 0x80 0x80 0x80 0x80 0x08[0m
+[0m]: [1mdecInt(^^^) = -2147483648 (Expected -2147483648)[0m
+[0m]: [1mdec0 = 0x0 (Expected 0x00)[0m
+[0m]: [1mdecLong(dec0) = 0 (Expected 0)[0m
+[0m]: [1mdec0 = 0x1 (Expected 0x01)[0m
+[0m]: [1mdecLong(dec0) = 1 (Expected 1)[0m
+[0m]: [1mdec0 = 0x2 (Expected 0x02)[0m
+[0m]: [1mdecLong(dec0) = 2 (Expected 2)[0m
+[0m]: [1m0x7f[0m
+[0m]: [1mExpected: 0x7f[0m
+[0m]: [1mdecLong(^^^) = 127 (Expected 127)[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0x80 0x01[0m
+[0m]: [1mdecLong(^^^) = 128 (Expected 128)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0xff 0x01[0m
+[0m]: [1mdecLong(^^^) = 255 (Expected 255)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x7[0m
+[0m]: [1mExpected: 0xff 0xff 0xff 0xff 0x07[0m
+[0m]: [1mdecLong(^^^) = 2147483647 (Expected 2147483647)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x7f[0m
+[0m]: [1mExpected: 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0x7f[0m
+[0m]: [1mdecLong(^^^) = 9223372036854775807 (Expected 9223372036854775807)[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0x01[0m
+[0m]: [1mdecLong(^^^) = -1 (Expected -1)[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0xf8[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0xff[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0x80 0x80 0x80 0x80 0xf8 0xff 0xff 0xff 0xff 0x01[0m
+[0m]: [1mdecLong(^^^) = -2147483648 (Expected -2147483648)[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x80[0m
+[0m]: [1m0x1[0m
+[0m]: [1mExpected: 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x01[0m
+[0m]: [1mdecLong(^^^) = -9223372036854775808 (Expected 9223372036854775808)[0m
