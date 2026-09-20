@@ -1,0 +1,21 @@
+PROCEDURE nest1(a, b);
+BEGIN
+    local := a * b;
+    local2 := b + a;
+    test2 := a + b - b - a + local2;
+END;
+
+PROCEDURE add1(n);
+BEGIN
+    local1 := n;
+    local2 := 8;
+    nest1(10, 11);
+    test := n * 2;
+END;
+
+BEGIN
+    test2 := 5;
+    test := 10;
+    add1(12);
+END;
+.
