@@ -1,0 +1,19 @@
+<project name="JGame Website">
+    <publishDate position="right"/>
+    <version position="right"/>
+    <poweredBy>
+        <logo name="Maven" href="https://maven.apache.org/"
+              img="https://maven.apache.org/images/logos/maven-feather.png"/>
+    </poweredBy>
+    <body>
+        <menu name="Overview" inherit="top">
+            <item name="GitHub" href="https://www.github.com/ROTARTSI82/JGame"/>
+            <item name="JavaDoc" href="apidocs/index.html"/>
+            <item name="Contact Me" href="mailto:rotartsi0482@gmail.com"/>
+            <!--            <item name="Archive (Old website)" href="archive/index.html"/>-->
+        </menu>
+        <menu ref="parent" inherit="bottom"/>
+        <menu ref="reports" inherit="bottom"/>
+        <menu ref="modules" inherit="bottom"/>
+    </body>
+</project>

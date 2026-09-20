@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="All JGame Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+    <listeners>
+        <listener class-name="com.rotartsi.jgame.testListeners.InvokedMethodListener"/>
+        <listener class-name="com.rotartsi.jgame.testListeners.SuiteListener"/>
+        <listener class-name="com.rotartsi.jgame.testListeners.TestListener"/>
+    </listeners>
+
+    <test name="Crypto Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.crypto.RSATest"/>
+            <class name="com.rotartsi.jgame.crypto.UserDatabaseTest"/>
+        </classes>
+    </test>
+
+    <test name="Image Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.image.SurfaceMapTest"/>
+        </classes>
+    </test>
+
+    <test name="Math Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.math.Vector2Test"/>
+        </classes>
+    </test>
+
+    <test name="Mixer Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.mixer.SoundGeneratorTest"/>
+        </classes>
+    </test>
+
+    <test name="Net Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.net.UDPTest"/>
+            <class name="com.rotartsi.jgame.net.TCPTest"/>
+            <class name="com.rotartsi.jgame.net.NetUtilsTest"/>
+        </classes>
+    </test>
+
+    <test name="Sprite Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.sprite.SpriteTest"/>
+        </classes>
+    </test>
+
+    <test name="Utility Tests" thread-count="4" parallel="tests" verbose="2" preserve-order="false">
+        <classes>
+            <class name="com.rotartsi.jgame.util.ScrapUtilsTest"/>
+            <class name="com.rotartsi.jgame.util.VersionTest"/>
+            <class name="com.rotartsi.jgame.util.SettingsBundleTest"/>
+            <class name="com.rotartsi.jgame.util.ResourceManagerTest"/>
+        </classes>
+    </test>
+</suite>
