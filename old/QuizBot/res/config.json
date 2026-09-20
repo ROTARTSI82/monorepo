@@ -1,0 +1,15 @@
+{
+  "presence": {
+    "status": "online",
+    "status_comment": "can be 'online', 'idle', 'invisible', or 'dnd'",
+    "afk": false,
+
+    "activity": {
+      "name": "QuizBowl [$help]",
+      "type": "PLAYING",
+      "type_comment": "can be 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING', or 'COMPETING' ",
+      "url": "https://github.com/ROTARTSI82",
+      "shardID": 0
+    }
+  }
+}
