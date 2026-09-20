@@ -1,0 +1,7 @@
+.rTextGrid {
+    @apply grid grid-cols-3 text-center
+}
+
+.rTextGrid div {
+    display: inline-block; /* oh well idk */
+}
