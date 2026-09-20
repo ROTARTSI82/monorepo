@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <link href="apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57">
+    <link href="apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60">
+    <link href="apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76">
+    <link href="apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
+    <link href="apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120">
+    <link href="apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144">
+    <link href="apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152">
+    <link href="apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png">
+    <link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link href="manifest.json" rel="manifest">
+    <meta content="#ffffff" name="msapplication-TileColor">
+    <meta content="ms-icon-144x144.png" name="msapplication-TileImage">
+    <meta content="#ffffff" name="theme-color">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Harker MS Virtual Bell - Customize Schedule" />
+    <meta property="og:site_name" content="Harker MS Virtual Bell" />
+    <meta property="og:description" content="Settings for Harker Virtual Bell: Create a custom schedule!" />
+    <meta property="og:url" content="https://rotartsi82.github.io/VirtualBell/customize-schedule.html" />
+    <meta property="og:image" content="https://rotartsi82.github.io/VirtualBell/favicon-96x96.png" />
+
+    <title>Harker MS Virtual Bell</title>
+</head>
+<body>
+
+<div class="alert alert-primary fixed-top ml-5 mr-5 mt-2" role="alert">
+    <span class="lead">
+    <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+        Hey! This page is for creating your own schedule and adding your own events to the schedule,
+        like extracurricular activities. Use the <a href="settings.html">Settings page</a> for adding custom links and names!
+    </span>
+</div>
+
+<div class="modal fade" id="cantSave" tabindex="-1" role="dialog" aria-labelledby="cantSaveLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cantSaveLabel">Can't Save Schedule!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please supply a valid time for every event, or delete empty events.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="noMoveup" tabindex="-1" role="dialog" aria-labelledby="noMoveupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noMoveupLabel">Can't Move Event!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You can't move the topmost event up! I've thought of that edge case already >:]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="noMovedown" tabindex="-1" role="dialog" aria-labelledby="noMovedownLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noMovedownLabel">Can't Move Event!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You can't move the bottommost event down! I've thought of that edge case already >:]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eventLater" tabindex="-1" role="dialog" aria-labelledby="eventLaterLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventLaterLabel">Can't Save Schedule!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                No, no no! Every event must be at a later time than the previous events!
+
+                You were trying to make my code crash and burn, weren't you >:[
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saved" tabindex="-1" role="dialog" aria-labelledby="savedLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="savedLabel">Success!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Operation was successful.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clearData" tabindex="-1" role="dialog" aria-labelledby="clearLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clearLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset the schedule for this day to the default?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="localStorage.removeItem(getDayStr(targetedDay) + '-schedule'); $('#saved').modal('show'); updateDisplayedSched();">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clearDataAll" tabindex="-1" role="dialog" aria-labelledby="clearAllLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clearAllLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset ALL schedules to their default?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetAllScheds(); $('#saved').modal('show'); updateDisplayedSched();">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="clearMotd" tabindex="-1" role="dialog" aria-labelledby="motdClabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="motdClabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset the Message of the Day for this day to the default?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="localStorage.removeItem(getDayStr(targetedDay) + '-motd'); $('#saved').modal('show'); updateDisplayedSched();">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="allMotdClear" tabindex="-1" role="dialog" aria-labelledby="clearAllMotdLab" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clearAllMotdLab">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset ALL Messages of the Day to their defaults?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetAllMotds(); $('#saved').modal('show'); updateDisplayedSched();">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="pad center">
+    <div class="pad center dark-theme bg-dark">
+        <h1>Harker MS Virtual Bell - Customize Schedule</h1>
+
+        <hr>
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary" onclick="prevDay();">&leftarrow; Previous Day</button>
+            </div>
+            <div class="col-sm">
+                <h2 class="disp" id="disp-day">ERROR</h2>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary" onclick="nextDay();">Next Day &rightarrow;</button>
+            </div>
+        </div>
+        <hr>
+
+        <div class="inner-center w-50">
+            <label class="w-100">
+                Message of the Day
+                <input class="form-control form-control" id="motd" type="text" placeholder="Default input">
+            </label>
+
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-danger" id="reset-all-motd" type="button" onclick="$('#allMotdClear').modal('show');">Reset ALL MOTDs</button>
+                </div>
+                <div class="col-sm">
+                    <button class="btn btn-danger" id="reset-motd" type="button" onclick="$('#clearMotd').modal('show');">Reset MOTD</button>
+                </div>
+                <div class="col-sm">
+                <button class="btn btn-primary" id="save-motd" type="button" onclick="localStorage.setItem(getDayStr(targetedDay) + '-motd', document.getElementById('motd').value); $('#saved').modal('show'); ">Save MOTD</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <table class="table table-striped table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody id="schedule-custom-body"></tbody>
+        </table>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary" onclick="addRow();">Add An Event</button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-danger" onclick="$('#clearDataAll').modal('show');">Reset <b class="disp">ALL</b> Schedules</button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-danger" onclick="$('#clearData').modal('show');">Reset Schedule for <span id="disp-day-btn2" class="disp">ERROR</span></button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary" onclick="saveCustomSched(true);">Save Schedule for <span id="disp-day-btn" class="disp">ERROR</span></button>
+            </div>
+        </div>
+
+        <hr>
+        <h5><a href="index.html">← Back to the Bell</a></h5>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script crossorigin="anonymous" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="scripts/default-schedules.js"></script>
+<script src="scripts/customize-logic.js"></script>
+
+</body>
+</html>

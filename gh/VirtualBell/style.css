@@ -1,0 +1,37 @@
+body {
+    background-color: darkgreen;
+}
+
+
+.pad {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.center {
+    text-align: center !important;
+    align-content: center !important;
+    align-items: center !important;
+    align-self: center !important;
+    justify-content: center;
+}
+
+.inner-center {
+    margin: 0 auto !important;
+}
+
+.align-left {
+    text-align: left !important;
+}
+
+.dark-theme {
+    color: #e2e2e2;
+}
+
+.disp {
+    color: greenyellow;
+}
+
+.col-font {
+    font-size: 1.75rem;
+}

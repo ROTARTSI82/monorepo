@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <link href="apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57">
+    <link href="apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60">
+    <link href="apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76">
+    <link href="apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
+    <link href="apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120">
+    <link href="apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144">
+    <link href="apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152">
+    <link href="apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png">
+    <link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link href="manifest.json" rel="manifest">
+    <meta content="#ffffff" name="msapplication-TileColor">
+    <meta content="ms-icon-144x144.png" name="msapplication-TileImage">
+    <meta content="#ffffff" name="theme-color">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Harker MS Virtual Bell - Settings" />
+    <meta property="og:site_name" content="Harker MS Virtual Bell" />
+    <meta property="og:description" content="Settings for Harker Virtual Bell: Customize your bell" />
+    <meta property="og:url" content="https://rotartsi82.github.io/VirtualBell/settings.html" />
+    <meta property="og:image" content="https://rotartsi82.github.io/VirtualBell/favicon-96x96.png" />
+
+    <title>Harker MS Virtual Bell - Settings</title>
+</head>
+<body>
+
+<div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="successLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successLabel">Success!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Operation was successful.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="selectSomething" tabindex="-1" role="dialog" aria-labelledby="selSomLab" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="selSomLab">Can't Save Custom Names/Links!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You must select a valid event to modify for each row!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="expMLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="expMLabel">Exported Settings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Here are your exported settings! This includes your custom schedules, custom MOTDs,
+                and custom names and links. Save this somewhere!
+                <hr>
+                <!-- Target -->
+                <div class="input-group mb-3">
+                    <input id="exportOut" class="form-control" value="ERROR" type="text" placeholder="ERROR" readonly>
+                    <div class="input-group-append">
+                        <button class="clip-btn input-group-text" data-clipboard-target="#exportOut">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="importModal" tabindex="-1" role="dialog" aria-labelledby="impMLab"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="impMLab">Import Settings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Paste your exported settings string into the box below and hit Import!
+                <hr>
+                <div class="alert alert-warning" role="alert">
+                    <b>WARNING: </b> Imported Settings will override existing settings!
+                </div>
+                <input id="importIn" class="form-control" type="text" placeholder="Paste Exported Settings String Here...">
+                <button class="btn btn-primary mt-2" type="button" data-dismiss="modal" onclick="importSettings();">Import!</button>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="resetAllSettings" tabindex="-1" role="dialog" aria-labelledby="resetAllLab"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resetAllLab">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset ALL settings to their defaults? This includes your
+                custom schedules, custom names/links, and custom MOTDs.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        onclick="localStorage.clear(); loadSettingsOntoPage(); $('#success').modal('show');">Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pad center">
+    <div class="pad center dark-theme bg-dark">
+        <h1>Harker MS Virtual Bell - Settings</h1>
+
+        <hr>
+        <div class="form-group">
+            <h4><label for="sound-select">Bell Sound:</label></h4>
+            <select class="form-control" id="sound-select">
+                <option value="bellSounds/bell2.wav">Xylophone Scale</option>
+                <option value="bellSounds/bell.wav">Classic School Bell</option>
+                <option value="bellSounds/ThemeSong.mp3">Trumpet Theme Song</option>
+                <option value="bellSounds/bellrick.wav">Good Music</option>
+                <option value="bellSounds/bellooeee.mp3">OO EE OO AH AH TING TANG WALA WALA BING BANG</option>
+                <option value="bellSounds/bellgadget.mp3">Inspector Gadget</option>
+                <option value="bellSounds/bellgoogoogjoob.mp3">Goo Goo G'joob</option>
+                <option value="bellSounds/belldad.mp3">Grandad</option>
+                <option value="bellSounds/terror.wav">terror.wav (Volume Warning: This can make you deaf)</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" id="save-bell" type="button" onclick="saveBellFunc(true);">Save Bell Sound &
+            Play
+        </button>
+        <hr>
+        <h1><a href="customize-schedule.html">Customize Schedule</a></h1>
+
+        <hr>
+
+        <h6>You can enter custom names to replace the generic "Period X". For example, you might enter
+            "P1 Rocket Science (Mr. Jeb Kerman)" in this field. You can also enter a list of links seperated by
+            spaces to display too. You can use this to store your flipgrid or zoom links. For example, you might
+            enter "https://harker.zoom.us/j/123 https://flipgrid.com/abc" in this field.</h6>
+
+        <table class="table table-striped table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Custom Name</th>
+                <th scope="col">Links & Notes</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody id="tcust-names-bod">
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-sm">
+                <button class="btn btn-primary" type="button" id="add-custom-row" onclick="addCustRow();">Add Custom
+                    Row
+                </button>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary" id="save-sched" type="button" onclick="saveSchedFunc(true);">Save Custom
+                    Schedule
+                </button>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary" id="open-popup" type="button" onclick="window.open('index.html', '', 'width=800,height=700');document.write('Opened in popup.');window.close();")
+    window.close()">Open in popup
+                </button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm">
+                <button class="btn btn-primary" type="button" onclick="$('#importModal').modal('show');">Import Settings</button>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-danger" type="button" onclick="$('#resetAllSettings').modal('show');">Reset ALL
+                    Settings
+                </button>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary" type="button" onclick="showExport();">Export Settings</button>
+            </div>
+        </div>
+        <hr>
+        <h5><a href="index.html">← Back to the Bell</a></h5>
+
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+
+<script crossorigin="anonymous" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="scripts/default-schedules.js"></script>
+<script src="scripts/settings-logic.js"></script>
+
+</body>
+</html>
+
