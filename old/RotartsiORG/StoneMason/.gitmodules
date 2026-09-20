@@ -1,0 +1,27 @@
+[submodule "dep/stb"]
+	path = dep/stb
+	url = https://github.com/nothings/stb
+[submodule "dep/glfw"]
+	path = dep/glfw
+	url = https://github.com/glfw/glfw
+[submodule "dep/googletest"]
+	path = dep/googletest
+	url = https://github.com/google/googletest
+[submodule "dep/glm"]
+	path = dep/glm
+	url = https://github.com/g-truc/glm
+[submodule "dep/glew"]
+	path = dep/glew
+	url = https://github.com/nigels-com/glew
+[submodule "dep/imgui"]
+	path = dep/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "dep/freetype2"]
+	path = dep/freetype2
+	url = git://git.sv.nongnu.org/freetype/freetype2.git
+[submodule "dep/fmt"]
+	path = dep/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "dep/vma"]
+	path = dep/vma
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator

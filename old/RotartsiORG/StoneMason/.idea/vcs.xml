@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/fmt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/freetype2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/glew" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/glm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/stb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dep/vma" vcs="Git" />
+  </component>
+</project>

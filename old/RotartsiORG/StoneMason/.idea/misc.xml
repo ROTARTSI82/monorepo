@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="CidrRootsConfiguration">
+    <sourceRoots>
+      <file path="$PROJECT_DIR$/include" />
+      <file path="$PROJECT_DIR$/proto" />
+      <file path="$PROJECT_DIR$/samples" />
+      <file path="$PROJECT_DIR$/src" />
+      <file path="$PROJECT_DIR$/tests" />
+    </sourceRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/build" />
+      <file path="$PROJECT_DIR$/cov-int" />
+      <file path="$PROJECT_DIR$/dep" />
+      <file path="$PROJECT_DIR$/sphinx-out/_build" />
+      <file path="$PROJECT_DIR$/sphinx-out/_static" />
+      <file path="$PROJECT_DIR$/sphinx-out/_templates" />
+      <file path="$PROJECT_DIR$/sphinx-out/api" />
+      <file path="$PROJECT_DIR$/tests/build" />
+    </excludeRoots>
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+</project>
