@@ -1,0 +1,12 @@
+[submodule "dep/glfw"]
+	path = dep/glfw
+	url = https://github.com/glfw/glfw
+[submodule "dep/fmt"]
+	path = dep/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "dep/stb"]
+	path = dep/stb
+	url = https://github.com/nothings/stb
+[submodule "dep/imgui"]
+	path = dep/imgui
+	url = https://github.com/ocornut/imgui
