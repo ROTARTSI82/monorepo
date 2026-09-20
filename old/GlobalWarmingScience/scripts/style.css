@@ -1,0 +1,204 @@
+/* Agg's stuff */
+
+.limit-img {
+    width: 5rem;
+    height: 5rem;
+}
+
+.power {
+    background-color: yellow;
+}
+
+.ungreenhousify {
+    background-color: greenyellow;
+}
+
+.description {
+    color: blue;
+}
+
+/* end aggs stuff */
+
+.citation-img {
+    /* display: none; */
+    width: 10rem;
+    height: 10rem;
+}
+
+body {
+    margin: 0;
+    background-color: lightcyan;
+}
+
+.nopadmargin {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+.navbar {
+    /* Remove the bullets, margins, and paddings from the list */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    position: fixed;
+    width: 100%;
+    overflow: auto;
+    border: black 3px solid;
+    background:darkblue;
+}
+
+.barcontainer {
+    padding: 1rem;
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.container {
+    text-align: center;
+    padding: 5rem 1rem 1rem 1rem;
+}
+
+.game-container {
+    text-align: center;
+    margin: 1rem 1rem 1rem 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.div-visible {
+    border: 3px black solid;
+    border-radius: 5rem;
+}
+
+.same-line {
+    display: inline-block;
+    float: left;
+    margin: 1rem;
+    padding: 0.5rem;
+}
+
+.item-category { /* inner same-line */
+    text-align: center;
+    margin: 0 !important;
+    max-width: 40%;
+    width: 40%;
+    padding: 3rem;
+    background-color: lightblue;
+    border-radius: 5rem;
+    border: 3px black solid;
+    float: left;
+}
+
+.nomarginpad {
+    margin-bottom: 0;
+}
+
+.nrg-source { /* inner same-line */
+    border-radius: 1rem !important;
+    padding: 0.5rem !important;
+    margin: 0.5rem !important;
+    float: left;
+    max-width: 25%;
+    height: 125%;
+    background-color: lightblue;
+    border: 3px black solid;
+    text-align: center;
+}
+
+.question {
+    background-color: lightskyblue;
+    border-radius: 1rem;
+    border: 3px solid black;
+    margin: 1rem 1rem 1rem 1rem;
+}
+
+.pad {
+    padding: 1rem;
+}
+
+.center {
+    text-align: center;
+}
+
+.big {
+    color: red;
+    font-size: 50px;
+}
+
+.pro {
+    background-color: #aaffaa;
+    border: darkgreen 1px solid;
+    border-radius: 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.con {
+    background-color: #ffaaaa;
+    border: darkred 1px solid;
+    border-radius: 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.noncenter {
+    text-align: left !important;
+    padding: 1rem 1rem 1rem 1rem;
+}
+
+.noround {
+    border-radius: 1rem !important;
+    border: 3px solid black !important;
+    padding-bottom: 1rem;
+}
+
+.highlight {
+    background-color: red;
+    border: darkred 1px solid;
+    border-radius: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.inner {
+    background-color: lightblue;
+    border-radius: 5rem;
+    border: 3px black solid;
+    text-align: center;
+    margin: 1rem 2rem 1rem 2rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.navbar li.category a {
+    background-color: indigo;
+}
+
+.navbar li {
+    float: left;
+    text-align: center;
+    border-right: black 3px solid;
+}
+
+.navbar li:not(.category) a:hover {
+    background-color: blue;
+}
+
+.left {
+    margin-right: 60%;
+}
+
+.right {
+    margin-left: 60%;
+}
+
+.navbar li a {
+    padding: 1rem 1rem 1rem 1rem;
+    display: block;
+    color: white;
+    background-color: darkblue;
+    text-align: center;
+    text-decoration: none;
+}
