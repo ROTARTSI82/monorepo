@@ -1,0 +1,45 @@
+public class Pack implements Product
+{
+    private int quantity;
+    private Product product;
+
+    public Pack(int num, Product prod)
+    {
+        quantity = num;
+        product = prod;
+    }
+
+
+    public double getPrice()
+    {
+        return quantity * product.getPrice();
+    }
+}
+
+
+public class Bundle implements Product
+{
+    private ArrayList<Product> products = new ArrayList<>();
+
+    public Bundle()
+    {
+    }
+
+    public void add(Product p)
+    {
+        products.add(p);
+    }
+
+    public double getPrice()
+    {
+        double sum = 0;
+        for (Product p : products)
+        {
+            sum += p.getPrice();
+        }
+        return sum;
+    }
+
+}
+
+

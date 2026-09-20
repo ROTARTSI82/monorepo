@@ -1,0 +1,145 @@
+// Copied from notebook:
+//  ~10 sec to run pow(2000) if pow(1000) takes 5 sec (linear)
+//  ~6 sec to run fastPow(2000) because it is only 1 more recursive call.
+//  ~10 sec to run fib(101) [from 5s for fib(100)] because fib(100) and fib(99) are called
+// sqrt(81)
+// Guess   num / guess     Average
+//   1      81              41
+//   41     1               21
+//   21     3               12
+//   12     6               9
+//    9     9               9
+
+// FancyCalc is a class containing various recursive methods to perform mathematical operations.
+// @author Grant Yang
+// @version 2021.09.08
+public class FancyCalc
+{
+    // Calculates base^exponent recursively
+    // @precondition exponent >= 0
+    // @param base Base to exponentiate
+    // @param exponent Power to raise to
+    // @return base^exponent
+    public pow(base, exponent)
+    {
+        if (exponent == 0)
+            return 1;
+        else
+            return this.pow(base, exponent - 1) * base;
+    }
+
+    // Squares a number
+    // @param Number to square
+    // @return n^2
+    public square(n)
+    {
+        return n * n;
+    }
+
+    // Quickly calculates base^exponent by using square() whenever exponent is even.
+    // @precondition exponent >= 0
+    // @param base Base to exponentiate
+    // @param exponent Power to raise to
+    // @return base^exponent
+    public fastPow(base, exponent)
+    {
+        // base case
+        if (exponent == 0)
+            return 1;
+
+        if (exponent % 2 == 0)
+            return this.square(this.fastPow(base, exponent / 2));
+
+        return this.fastPow(base, exponent - 1) * base;
+    }
+
+    // gcd(...) recursively computes the greatest common denominator of two numbers using Euclid's method
+    // @param a First number
+    // @param b Second number
+    // @return The greatest number that both a and b are divisible by.
+    public gcd(a, b)
+    {
+        if (b == 0)
+            return a;
+
+        return this.gcd(b, a % b);
+    }
+
+    // Checks if a number is prime.
+    // @param num Number to check
+    // @return True if num is prime, False otherwise
+    public isPrime(num)
+    {
+        return this.helpPrime(num, 2);
+    }
+
+    // Recursive helper method to check if a number is prime by seeing if it is divisible by any number in [2, num)
+    // @precondition divisor != 0
+    // @param num Number to check the primeness of
+    // @param divisor The current number to check if num is divisible by
+    // @return False if num is divisible by any number in [divisor, num) or divisor > num, True otherwise.
+    private helpPrime(num, divisor)
+    {
+        if (divisor == num)
+            return true;
+        if (num % divisor == 0 || divisor > num)
+            return false;
+        return this.helpPrime(num, divisor + 1);
+    }
+
+    // This method computes n factorial
+    // @precondition n >= 0
+    // @param n Number to compute the factorial of. MUST be >= 0
+    // @return n!
+    public fact(n)
+    {
+        return this.factHelp(n, 1);
+    }
+
+    // This recursive helper method calculates the factorial of a number by multiplying n -> 1
+    // @param n Number of iterations left to multiply
+    // @param result The product so far
+    // @return The factorial. More specifically, result * n!
+    private factHelp(n, result)
+    {
+        if (n == 0)
+            return result;
+        else
+            return this.factHelp(n - 1, result * n);
+    }
+
+    // fib(n) computes the nth fibonacci number in the sequence.
+    // @param n Number of the sequence to computer. f(0) = 0, f(1) = 1, f(2) = 1, ...
+    // @return The number in the fibonacci sequence at the specified position
+    public fib(n)
+    {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return this.fib(n - 1) + this.fib(n - 2);
+    }
+
+    // This method iterates newton's method starting with `guess`.
+    // @precondition num >= 0, guess != 0
+    // @param num Number to compute the square root of
+    // @param guess Initial guess
+    // @return The square root of n, rounded down to the nearest integer.
+    private newtonsMethod(num, guess)
+    {
+        targ = num / guess;
+        diff = targ - guess;
+        if (diff == 0 || diff == 1)
+            return guess;
+        if (diff == -1)
+            return guess - 1;
+        return this.newtonsMethod(num, (guess + targ) / 2);
+    }
+
+    // This function computes the largest integer R such that R^2 <= n
+    // @precondition n >= 0
+    // @param n Number to compute the square root of. MUST be >= 0
+    // @return The square root of n, rounded down to the nearest integer.
+    public sqrt(n)
+    {
+        return this.newtonsMethod(n, 1);
+    }
+}

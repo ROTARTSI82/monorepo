@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=StringUtil
+comment0.text=\n\ String\ utilities\ to\ reverse\ strings\ and\n\ check\ for\ palindromes\ with\ stacks\n\ \n\ @author\ Anu\ Datar\n\ @author\ Grant\ Yang\n\ @version\ 10/27/2017\n\ 2021.11.08\n
+comment1.params=str
+comment1.target=java.lang.String\ reverseString(java.lang.String)
+comment1.text=\n\ Reverses\ a\ string\ with\ a\ stack\n\ @param\ str\ A\ string\ to\ reverse\n\ @return\ The\ reverse\ of\ the\ string\ such\ that\ "abc"\ ->\ "cba"\n
+comment2.params=s
+comment2.target=boolean\ isPalindrome(java.lang.String)
+comment2.text=\n\ Checks\ for\ a\ palindrome\ by\ testing\ for\ equality\n\ with\ a\ string's\ reverse.\n\ @param\ s\ String\ to\ check\ for\n\ @return\ True\ if\ s\ is\ a\ palindrome,\ false\ otherwise.\n
+comment3.params=args
+comment3.target=void\ main(java.lang.String[])
+comment3.text=\ \n\ The\ tester\ for\ checking\ that\ reverse\ and\ isPalindrome\ work\ well.\n\ @param\ args\ Command\ line\ args\n
+numComments=4
