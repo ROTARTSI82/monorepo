@@ -15,9 +15,10 @@ struct KVCache {
   num_t values[4096][24][256];
 };
 
-// 4 MB
+// 6 MB
 struct InterpStats {
   num_t attn_scores[24][8][4096];
+  num_t value_norms[24][8][4096];
   num_t layer_activ[24][256];
 };
 
@@ -188,10 +189,13 @@ inline void AttentionBlock::forward(num_t *base, InferenceState &conf, int idx) 
     softmax_ip(dots, conf.kv_cursor + 1);
 
     for (int j = 0; j <= conf.kv_cursor; j++) {
+      conf.stats->value_norms[idx][i][j] = 0;
       for (int l = 0; l < head_dim; l++) {
-        attn_valout[i*head_dim + l] +=
-          dots[j] * conf.kv_cache->values[j][idx][i * head_dim+l];
+        num_t val_x = conf.kv_cache->values[j][idx][i * head_dim+l]; 
+        conf.stats->value_norms[idx][i][j] += val_x * val_x;
+        attn_valout[i*head_dim + l] += dots[j] * val_x;
       }
+      conf.stats->value_norms[idx][i][j] = std::sqrt(conf.stats->value_norms[idx][i][j]);
     }
   }
 
