@@ -203,15 +203,8 @@ def statsof(arr):
 
 
 def visualize(params, fname="vis/"):
-    for name, param in params:
-        size = param.data.shape
-        raw = param.data.cpu().detach().numpy()
-        if len(size) == 1:
-            raw = raw.reshape(1, size[0])
-        if len(size) > 2:
-            raw = raw.reshape(-1, size[0])
+    def vis_dump(raw, name, size):
         print(f"\t{size} einsumming {name}! stats: {statsof(raw)}")
-        # print(raw)
         mask = (raw < 0).astype(float)
         negs = np.array([0, 0, 1], dtype=">f")
         pos = np.array([0, 1, 0], dtype=">f")
@@ -224,3 +217,15 @@ def visualize(params, fname="vis/"):
             name = f"{fname}{name}.png"
             print(name, os.getcwd())
             cv2.imwrite(name, images)
+    
+    for name, param in params:
+        size = param.data.shape
+        raw = param.data.cpu().detach().numpy()
+        if len(size) == 1:
+            raw = raw.reshape(1, size[0])
+        if len(size) > 2:
+            raw = raw.reshape(-1, size[0])
+        if name == "tok_embeddings.weight":
+            vis_dump(raw.T @ raw, name + ".correlation", size)
+        vis_dump(raw, name, size)
+

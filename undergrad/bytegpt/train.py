@@ -33,10 +33,10 @@ data_path = 'train.txt'
 with open(data_path, 'rb') as f:
     data = f.read()
 
-# Convert raw bytes directly to a PyTorch tensor without creating a giant Python list
-train_data = torch.frombuffer(bytearray(data), dtype=torch.uint8).long()
+# Convert raw bytes directly to a PyTorch tensor (uint8 saves memory)
+train_data = torch.frombuffer(bytearray(data), dtype=torch.uint8)
 
-print(f"Loaded data: ({len(train_data)} train")
+print(f"Loaded data: {len(train_data)} bytes")
 
 def get_batch():
     data_source = train_data
@@ -48,9 +48,12 @@ def get_batch():
     else:
         ix = torch.randint(max_idx, (batch_size,))
     
-    y = torch.stack([data_source[i : i + max_seq_len] for i in ix])
-    x = torch.cat([torch.zeros(batch_size, 1, dtype=torch.long), y[:, :-1]], dim=1)
-    return x.to(device), y.to(device)
+    # slice on CPU, move to device as uint8 (fast transfer), then cast to long on device
+    y = torch.stack([data_source[i : i + max_seq_len] for i in ix]).to(device, non_blocking=True).long()
+    
+    # prepend null byte as attention sink natively on the device
+    x = torch.cat([torch.zeros(batch_size, 1, dtype=torch.long, device=device), y[:, :-1]], dim=1)
+    return x, y
 
 # ==============================================================================
 # Model Initialization
@@ -171,6 +174,8 @@ for iter in range(max_iters):
         optimizer.zero_grad(set_to_none=True)
     
     if iter % 100 == 0 or True:
+        if device == 'cuda':
+            torch.cuda.synchronize()
         dt = time.time() - step_t0
         time_ms_per_step = dt * 1000
         tokens_per_sec = (batch_size * max_seq_len) / dt if dt > 0 else 0
