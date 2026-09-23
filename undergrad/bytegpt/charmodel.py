@@ -226,6 +226,7 @@ def visualize(params, fname="vis/"):
         if len(size) > 2:
             raw = raw.reshape(-1, size[0])
         if name == "tok_embeddings.weight":
-            vis_dump(raw.T @ raw, name + ".correlation", size)
+            vis_dump(raw.T @ raw, name + ".corr_cols", size)
+            vis_dump(raw @ raw.T, name + ".corr_rows", size)
         vis_dump(raw, name, size)
 
